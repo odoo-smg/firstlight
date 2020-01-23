@@ -41,6 +41,8 @@ class Smgproduct(models.Model):
     @api.model
     def _get_next_part(self, currpartnum):
         retvalue = ''
+        if not currpartnum:
+            currpartnum = '100000-000'
         if (currpartnum[0:1]!='1'):
             retvalue = '100001-000'
         else:
