@@ -8,15 +8,20 @@
 
     'description': """
         Customizations performed:
-        
+
         Products:
             * Product Name:       Validates unique description.
             * Internal Reference: Validates unique code. Mandatory field. Replaces the field name to Product Code.
-            
+            * New field: legacy_code - Optional field.
+            * New field: revision_code - Optional, it will compose part of the product code.
+            * revision_code_onchange - Trigger to fill out the product code.
+            * default_nextpart - Defaul pre-filled information into default_code.
+
+
         Manufacturing:
             * MRP Produce:
-                
-        
+
+
     """,
 
     'author': "Alexandre Sousa",
