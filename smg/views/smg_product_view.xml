@@ -20,7 +20,7 @@
         </record>
 
 
-        <menuitem name="smartrend" id="smg.menu_root"/>
+        <menuitem name="Smartrend" id="smg.menu_root"/>
 
         <menuitem id="smg_product" name="Products"
                   parent="smg.menu_root"
