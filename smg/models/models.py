@@ -5,7 +5,7 @@ from odoo import models, fields, api
 
 class smg(models.Model):
      _name = 'smg.smg'
-     _description = 'smg.smg'
+     _description = 'SMG'
 
      name = fields.Char()
      value = fields.Integer()
