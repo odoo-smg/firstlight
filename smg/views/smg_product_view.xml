@@ -7,6 +7,7 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <group name="group_general">
+                    <field name="default_code"  readonly="1" force_save="1"  invisible="1"/>
                     <field name="revision_code"/>
                     <field name="legacy_code"/>
                 </group>
