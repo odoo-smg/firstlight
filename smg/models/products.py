@@ -20,7 +20,7 @@ class Smgproduct(models.Model):
         return self._get_next_part(returned_registre[0])
 
     # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", default=_default_nextpart, readonly=True)
+    default_code = fields.Char(string="Internal Reference", default=_default_nextpart, readonly=True, force_save="1")
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
