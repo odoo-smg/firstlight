@@ -36,6 +36,7 @@
     # any module necessary for this one to work correctly
     'depends': ['base'],
     'depends': ['stock'],
+    'depends': ['mrp'],
 
 
     # always loaded
