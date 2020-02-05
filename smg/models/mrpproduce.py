@@ -38,7 +38,7 @@ class myproduceline(models.TransientModel):
             lot_locations = self.env['stock.location'].search([('usage', '=', 'internal'), ('active', '=', True)]).ids
             stock_id = self.env['stock.quant'].search([('product_id', '=', record.product_id.id), ('quantity', '>', 0),
                                                        ('location_id', '=', lot_locations)]).mapped("lot_id").ids
-            if record.lot_id.id
+            if record.lot_id.id:
                 if not record.lot_id.id in stock_id:
                     raise exceptions.ValidationError("The following Lot does not has quantity available in stock: %s" % record.lot_id.id)
 
