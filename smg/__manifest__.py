@@ -20,6 +20,7 @@
 
         Manufacturing:
             * MRP Produce:
+             Validates the selection of the lot and trigger a filter to only lots that have quantity available in stock.
 
 
     """,
