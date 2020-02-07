@@ -46,6 +46,7 @@
         'views/views.xml',
         'views/templates.xml',
         'views/smg_product_view.xml',
+        'views/WebAssetsBackend.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
