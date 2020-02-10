@@ -26,6 +26,6 @@
 
     # always loaded
     'data': [
-        #'views/WebAssetsBackend.xml',
+        'views/WebAssetsBackend.xml',
     ],
 }
