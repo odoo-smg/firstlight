@@ -27,7 +27,7 @@ class Smgproduct(models.Model):
 
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
-    flsp_part_suffix = fields.Char(string="Part # Suffix")
+    flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
@@ -64,26 +64,23 @@ class Smgproduct(models.Model):
         if (currpartnum[0:1]!='1'):
             retvalue = '00001'
         else:
-            retvalue = '00005'  #str(int(currpartnum[1:5])+1)
+            retvalue = str(int(currpartnum[1:5])+1)
         return retvalue
 
 
     @api.onchange('flsp_part_suffix')
     def flsp_part_suffix_onchange(self):
-        if self.default_code:
-            return_val = self.default_code[:6]
-        else:
-            return_val = self._default_nextpart()[:6]
         if not(self.flsp_part_suffix):
-            return_val = return_val+'-000'
+            suffix = '000'
         else:
-            if (len(self.flsp_part_suffix)>3):
-                return {'warning': {
-                    'title': "Revision -  Attention",
-                    'message': "The field Revision cannot be bigger than 3 characters.",
-                    },
-                }
-            return_val = return_val + '-' + ('000' + self.flsp_part_suffix.replace("_", ""))[-3:]
+            suffix = self.flsp_part_suffix
+
+        if not(self.flsp_part_prefix):
+            prefix = '00000'
+        else:
+            prefix = self.flsp_part_prefix
+
+        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
             'value': {
@@ -104,8 +101,7 @@ class Smgproduct(models.Model):
         else:
             prefix = self.flsp_part_prefix
 
-
-        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + suffix
+        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
             'value': {
