@@ -15,6 +15,13 @@ class Smgproduct(models.Model):
         self.default_code = self._get_next_part(returned_registre[0])
         return self._get_next_part(returned_registre[0])
 
+    @api.model
+    def _default_nextpart(self):
+        self._cr.execute("select max(default_code) as code from product_product where default_code like '1%' and length(default_code) = 10 ")
+        retvalue = self._cr.fetchall()
+        returned_registre = retvalue[0]
+        return self._get_next_prefix(returned_registre[0])
+
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", default=_default_nextpart, readonly=True)
 
@@ -47,6 +54,17 @@ class Smgproduct(models.Model):
             retvalue = '100001-000'
         else:
             retvalue = str(int(currpartnum[0:6])+1)+"-000"
+        return retvalue
+
+    @api.model
+    def _get_next_prefix(self, currpartnum):
+        retvalue = ''
+        if not currpartnum:
+            currpartnum = '00001'
+        if (currpartnum[0:1]!='1'):
+            retvalue = '00001'
+        else:
+            retvalue = str(int(currpartnum[1:5])+1)
         return retvalue
 
 
