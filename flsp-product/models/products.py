@@ -64,7 +64,7 @@ class Smgproduct(models.Model):
         if (currpartnum[0:1]!='1'):
             retvalue = '00001'
         else:
-            retvalue = currpartnum[1:5]
+            retvalue = str(int(currpartnum[0:6])+1)+" "
         return retvalue
 
 
@@ -90,6 +90,27 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
+
+        if not(self.flsp_part_suffix):
+            suffix = '000'
+        else:
+            suffix = self.flsp_part_suffix
+
+        if not(self.flsp_part_prefix):
+            prefix = '00000'
+        else:
+            prefix = self.flsp_part_prefix
+
+        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
+        self.default_code = return_val
+        return {
+            'value': {
+                'default_code': return_val
+            },
+        }
+
+def copy(self, defaul=None):
+    default = dict(default or {})
 
         if not(self.flsp_part_suffix):
             suffix = '000'
