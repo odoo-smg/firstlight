@@ -93,9 +93,19 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
-        prefix = '00000'
-        suffix = '000'
-        return_val = '1'+('00000' + self.flsp_part_prefix.replace("_", ""))[-5:] + '-' + ('000' + self.flsp_part_suffix.replace("_", ""))[-3:]
+
+        if not(self.flsp_part_suffix):
+            suffix = '000'
+        else:
+            suffix = self.flsp_part_suffix
+
+        if not(self.flsp_part_prefix):
+            prefix = '00000'
+        else:
+            prefix = self.flsp_part_prefix
+
+
+        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + suffix
         self.default_code = return_val
         return {
             'value': {
