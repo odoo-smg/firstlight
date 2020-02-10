@@ -42,7 +42,7 @@ Instructions:
    With the regex extension you can use any regular expression as a mask. Currently this does only input restriction. There is no further masking visualization.
 
    Example email validation::
-    
+
     <field widget="regex_mask" data-inputmask-regex="[a-zA-Z0-9._%-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}" name="name"/>
 
 - Widgets names use:
