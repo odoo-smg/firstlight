@@ -35,7 +35,7 @@ QUnit.test('mask', function (assert) {
         arch: '<form string="Partners">' +
                     '<sheet>' +
                         '<group>' +
-                            '<field name="name" widget="mask" data-inputmask-mask="99-aa-**-AA-&amp;&amp;-##" />' +
+                            '<field name="name" widget="mask" mask="99-aa-**-AA-&amp;&amp;-##" />' +
                         '</group>' +
                     '</sheet>' +
                 '</form>',
