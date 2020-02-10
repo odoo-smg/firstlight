@@ -115,7 +115,7 @@ def copy(self, defaul=None):
         if not(self.flsp_part_suffix):
             suffix = '000'
         else:
-            suffix = self.flsp_part_suffix
+            suffix = str(int(self.flsp_part_suffix)+1)+""
 
         if not(self.flsp_part_prefix):
             prefix = '00000'
@@ -124,8 +124,12 @@ def copy(self, defaul=None):
 
         return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
+        self.flsp_part_suffix = suffix
+        self.flsp_part_prefix = prefix
         return {
             'value': {
                 'default_code': return_val
+                'flsp_part_suffix': suffix
+                'flsp_part_prefix': prefix
             },
         }
