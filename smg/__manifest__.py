@@ -23,9 +23,10 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
+    'depends': ['web'],
 
     # always loaded
     'data': [
-        #'views/WebAssetsBackend.xml',
+        'views/WebAssetsBackend.xml',
     ],
 }
