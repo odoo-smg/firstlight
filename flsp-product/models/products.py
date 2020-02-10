@@ -16,7 +16,7 @@ class Smgproduct(models.Model):
         return self._get_next_part(returned_registre[0])
 
     @api.model
-    def _default_nextpart(self):
+    def _default_nextprefix(self):
         self._cr.execute("select max(default_code) as code from product_product where default_code like '1%' and length(default_code) = 10 ")
         retvalue = self._cr.fetchall()
         returned_registre = retvalue[0]
@@ -26,7 +26,7 @@ class Smgproduct(models.Model):
     default_code = fields.Char(string="Internal Reference", default=_default_nextpart, readonly=True)
 
     legacy_code = fields.Char(string="Legacy Part #")
-    flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextpart[1:5])
+    flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix")
 
     # constraints to validate code and description to be unique
