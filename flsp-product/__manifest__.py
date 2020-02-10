@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "SMG - Customizations",
+    'name': "FLSP - Product",
 
     'summary': """
         This module intend to customize the functions and list to
@@ -17,12 +17,6 @@
             * revision_code_onchange - Trigger to fill out the product code.
             * default_nextpart - Defaul pre-filled information into default_code.
 
-
-        Manufacturing:
-            * MRP Produce:
-             Validates the selection of the lot and trigger a filter to only lots that have quantity available in stock.
-
-
     """,
 
     'author': "Alexandre Sousa",
@@ -37,18 +31,11 @@
     # any module necessary for this one to work correctly
     'depends': ['base'],
     'depends': ['stock'],
-    'depends': ['mrp'],
 
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
         'views/smg_product_view.xml',
-    ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
     ],
 }

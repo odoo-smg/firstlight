@@ -24,15 +24,15 @@ class Smgproduct(models.Model):
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
-        ('default_code_name_check_flsp2',
+        ('default_code_name_check_flsp3',
          'CHECK(name != default_code)',
          "The Name of the product should not be the product code"),
 
-        ('default_code_unique_flsp2',
+        ('default_code_unique_flsp3',
          'UNIQUE(default_code)',
          "The Product Code must be unique"),
 
-        ('name_unique_flsp2',
+        ('name_unique_flsp3',
          'UNIQUE(name)',
          "The Product name must be unique"),
     ]
