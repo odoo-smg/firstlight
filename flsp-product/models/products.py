@@ -128,8 +128,8 @@ class Smgproduct(models.Model):
         self.flsp_part_prefix = prefix
         return {
             'value': {
-                'default_code': return_val
-                'flsp_part_suffix': suffix
-                'flsp_part_prefix': prefix
+                'default_code': return_val,
+                'flsp_part_suffix': suffix,
+                'flsp_part_prefix': prefix,
             },
         }
