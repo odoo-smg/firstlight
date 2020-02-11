@@ -64,7 +64,7 @@ class Smgproduct(models.Model):
         if (currpartnum[0:1]!='1'):
             retvalue = '00001'
         else:
-            retvalue = currpartnum[1:5]
+            retvalue = int(currpartnum[1:6])+1
         return retvalue
 
 
