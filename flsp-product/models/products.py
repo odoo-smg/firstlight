@@ -122,8 +122,8 @@ def copy(self, defaul=None):
         else:
             prefix = self.flsp_part_prefix
 
-        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
-        self.default_code = return_val
+        #return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
+        self.default_code = '000000-000' #return_val
         self.flsp_part_suffix = suffix
         self.flsp_part_prefix = prefix
         return {
