@@ -23,7 +23,7 @@ class Smgproduct(models.Model):
         return self._get_next_prefix(returned_registre[0])
 
     # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", default=_default_nextpart, readonly=True)
+    default_code = fields.Char(string="Internal Reference", readonly=True)
 
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
@@ -64,7 +64,7 @@ class Smgproduct(models.Model):
         if (currpartnum[0:1]!='1'):
             retvalue = '00001'
         else:
-            retvalue = currpartnum
+            retvalue = currpartnum[1:5]
         return retvalue
 
 
