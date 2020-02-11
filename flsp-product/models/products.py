@@ -109,8 +109,8 @@ class Smgproduct(models.Model):
             },
         }
 
-def copy(self, defaul=None):
-    default = dict(default or {})
+    def copy(self, defaul=None):
+        default = dict(default or {})
 
         if not(self.flsp_part_suffix):
             suffix = '000'
