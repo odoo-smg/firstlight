@@ -107,10 +107,4 @@ class Smgproduct(models.Model):
         self.default_code = '000000-000' #return_val
         self.flsp_part_suffix = suffix
         self.flsp_part_prefix = prefix
-        return {
-            'value': {
-                'default_code': return_val,
-                'flsp_part_suffix': suffix,
-                'flsp_part_prefix': prefix,
-            },
-        }
+        return super(Smgproduct, self).copy(default)
