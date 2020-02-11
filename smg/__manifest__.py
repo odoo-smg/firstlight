@@ -3,10 +3,13 @@
     'name': "SMG - Sandbox Background",
 
     'summary': """
-        This module intend to customize the functions and list to
+        This module intend to change the background color
         Smartrend Manufacturing Group""",
 
     'description': """
+        Customizations performed:
+
+        Applies only to Sandbox environment
         Change the default background color: Apply only in Sandbox environment
 
     """,
@@ -22,6 +25,12 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
+    'depends': ['web'],
+
+    # always loaded
+    'data': [
+        'views/WebAssetsBackend.xml',
+    ],
 
     # always loaded
     'data': [
