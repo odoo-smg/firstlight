@@ -8,14 +8,6 @@ class Smgproduct(models.Model):
     _check_company_auto = True
 
     @api.model
-    def _default_nextpart(self):
-        self._cr.execute("select max(default_code) as code from product_product where default_code like '1%' and length(default_code) = 10 ")
-        retvalue = self._cr.fetchall()
-        returned_registre = retvalue[0]
-        self.default_code = self._get_next_part(returned_registre[0])
-        return self._get_next_part(returned_registre[0])
-
-    @api.model
     def _default_nextprefix(self):
         self._cr.execute("select max(default_code) as code from product_product where default_code like '1%' and length(default_code) = 10 ")
         retvalue = self._cr.fetchall()
@@ -46,17 +38,6 @@ class Smgproduct(models.Model):
 
 
     @api.model
-    def _get_next_part(self, currpartnum):
-        retvalue = ''
-        if not currpartnum:
-            currpartnum = '100000-000'
-        if (currpartnum[0:1]!='1'):
-            retvalue = '100000-000'
-        else:
-            retvalue = str(int(currpartnum[0:6])+1)+"-000"
-        return retvalue
-
-    @api.model
     def _get_next_prefix(self, currpartnum):
         retvalue = ''
         if not currpartnum:
@@ -64,7 +45,7 @@ class Smgproduct(models.Model):
         if (currpartnum[0:1]!='1'):
             retvalue = '00001'
         else:
-            retvalue = ('00000'+int(currpartnum[1:6])+1)[-5:]
+            retvalue = ('00000'+str(int(currpartnum[1:6])+1))[-5:]
         return retvalue
 
 
