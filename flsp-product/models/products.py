@@ -90,7 +90,7 @@ class Smgproduct(models.Model):
             },
         }
 
-    def copy(self, defaul=None):
+    def copy(self, default=None):
         default = dict(default or {})
 
         if not(self.flsp_part_suffix):
