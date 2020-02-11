@@ -103,7 +103,7 @@ class Smgproduct(models.Model):
         else:
             prefix = self.flsp_part_prefix
 
-        suffix = ('000'+str(int(suffix)+1))[-3:]
+        suffix = ('000'+str(int(suffix)))[-3:]
 
         default['default_code'] = '1'+prefix+'-'+suffix
         default['flsp_part_suffix'] = suffix
