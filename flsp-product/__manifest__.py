@@ -36,7 +36,7 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
         'views/smg_product_view.xml',
     ],
 }
