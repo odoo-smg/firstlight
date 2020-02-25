@@ -12,6 +12,9 @@
                     <field widget="mask" data-inputmask-mask="999" name="flsp_part_suffix" placeholder="999" attrs="{'readonly': [('id', '!=', False)]}" />
                     <field name="legacy_code"/>
                 </group>
+                <group name="ECO">
+                    <field name="flsp_allow_upd"  readonly="1"/>
+                </group>
             </field>
         </record>
 
