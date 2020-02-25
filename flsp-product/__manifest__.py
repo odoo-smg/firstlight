@@ -38,5 +38,6 @@
     'data': [
         #'security/ir.model.access.csv',
         'views/smg_product_view.xml',
+        'views/producteco_view.xml',
     ],
 }
