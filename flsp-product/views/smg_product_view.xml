@@ -14,6 +14,12 @@
                     <field name="legacy_code"/>
                 </group>
             </field>
+            <field name="arch" type="xml">
+                <group name="ECO">
+                    <field name="flsp_eco_enforce" />
+                    <field name="flsp_allow_edt" />
+                </group>
+            </field>
         </record>
 
         <record model="ir.actions.act_window" id="product_list_action">
