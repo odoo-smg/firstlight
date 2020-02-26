@@ -24,7 +24,7 @@ class Smgproduct(models.Model):
 
     # New fields to control ECO enforcement
     flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False,  domain=['|', ('product_tmpl_id.id', '=', 'product.template.id'),
-                                            ('product_tmpl_id.allow_apply_change', 'ilike', "Teacher")])
+                                            ('product_tmpl_id.allow_apply_change', '=', True)])
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
