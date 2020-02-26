@@ -14,15 +14,6 @@
                     <field name="legacy_code"/>
                 </group>
             </field>
-            <field name="arch" type="xml">
-                <notebook position="inside">
-                    <page string="ECO">
-                        <group>
-                            <field name="flsp_eco_enforce"/>
-                        </group>
-                    </page>
-                </notebook>
-            </field>
         </record>
 
         <record model="ir.actions.act_window" id="product_list_action">
