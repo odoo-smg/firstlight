@@ -15,9 +15,14 @@
                 </group>
             </field>
             <field name="arch" type="xml">
-                <group name="ECO">
-                    <field name="flsp_eco_enforce" />
-                </group>
+                <notebook position="inside">
+                    <page string="ECO">
+                        <group>
+                            <field name="flsp_eco_enforce"/>
+                            <field name="flsp_allow_edt"/>
+                        </group>
+                    </page>
+                </notebook>
             </field>
         </record>
 
