@@ -23,7 +23,7 @@ class Smgproduct(models.Model):
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
     # New fields to control ECO enforcement
-    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False,  domain=[('product_tmpl_id', '=', id)])
+    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False,  domain=[('product_tmpl_id', '=', ID)])
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
