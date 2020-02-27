@@ -23,7 +23,7 @@ class Smgproduct(models.Model):
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
     # New fields to control ECO enforcement
-    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False,  domain=[('allow_apply_change', '=', True)])
+    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False,  domain=lambda self: self._get_eco_domain())
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
@@ -40,6 +40,11 @@ class Smgproduct(models.Model):
          "The Product name must be unique"),
     ]
 
+    @api.model
+    def _get_eco_domain(self):
+        eco_stage = self.env['mrp.eco.stage'].search([('allow_apply_change', '=', True)]).ids
+        eco_id = self.env['mrp.eco'].search([('product_tmpl_id.id', '=', self.id),('stage_id', '=', eco_stage)]).mapped("eco_id").ids
+        return [('id', 'in', eco_id)]
 
     @api.model
     def _get_next_prefix(self, currpartnum):
