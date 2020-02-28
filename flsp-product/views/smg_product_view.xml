@@ -13,7 +13,6 @@
                     <field widget="mask" data-inputmask-mask="999" name="flsp_part_suffix" placeholder="999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field name="legacy_code"/>
                     <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('state', '=', 'done')]"/>
-                    <field name="flsp_allow_edit" readonly="1" />
                 </group>
             </field>
         </record>
