@@ -25,7 +25,7 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-    'depends': ['sales'],
+    'depends': ['sale_management'],
 
     # always loaded
     'data': [
