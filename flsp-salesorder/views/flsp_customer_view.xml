@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_customer_form_view">
+            <field name="name">customer.template.flsp.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="customer.flsp_customer_form_view"/>
+            <page name="sales_purchases" string="Sales &amp; Purchase">
+                                       <group name="container_row_2">
+                                           <group string="Sales" name="sale" priority="1">
+                                               <field name="flsp_user_id"/>
+                                           </group>
+                                       </group>
+            </page>
+        </record>
+
+        <record model="ir.actions.act_window" id="customer_list_action">
+            <field name="name">Customer</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+</odoo>
