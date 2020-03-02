@@ -7,4 +7,4 @@ class flspcustomer(models.Model):
     _inherit = 'res.partner'
     _check_company_auto = True
 
-    flsp_user_id = Many2one('res.user', string="Salesperson 2")
+    flsp_user_id = fields.Many2one('res.user', string="Salesperson 2")
