@@ -3,7 +3,7 @@
         <record model="ir.ui.view" id="flsp_customer_form_view">
             <field name="name">res.partner.flsp.form.inherit</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="partner.flsp_customer_form_view"/>
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
               <notebook position="inside">
                   <page name="sales_purchases" string="Sales &amp; Purchase">
