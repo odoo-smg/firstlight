@@ -5,7 +5,7 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <group name="sale" POSITION="inside">
+                <group name="sale" position="inside">
                     <field name="flsp_user_id"/>
                 </group>
             </field>
