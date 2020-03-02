@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
-        <!-- Add instructor field to existing view -->
         <record model="ir.ui.view" id="flsp_customer_form_view">
-            <field name="name">customer.template.flsp.form.inherit</field>
+            <field name="name">res.partner.flsp.form.inherit</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="customer.flsp_customer_form_view"/>
+            <field name="inherit_id" ref="partner.flsp_customer_form_view"/>
             <field name="arch" type="xml">
               <notebook position="inside">
                   <page name="sales_purchases" string="Sales &amp; Purchase">
