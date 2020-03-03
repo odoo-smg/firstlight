@@ -9,7 +9,7 @@ class Smgproduct(models.Model):
 
     @api.model
     def _default_nextprefix(self):
-        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         self._cr.execute("select max(default_code) as code from product_product where default_code like '"+flsp_default_part_init+"%' and length(default_code) = 10 ")
         retvalue = self._cr.fetchall()
         returned_registre = retvalue[0]
