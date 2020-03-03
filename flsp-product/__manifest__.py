@@ -37,5 +37,6 @@
     'data': [
         'security/ir.model.access.csv',
         'views/smg_product_view.xml',
+        'views/flsp_settings_view.xml',
     ],
 }
