@@ -10,12 +10,12 @@ class ResConfigSettings(models.TransientModel):
     #default_seats = fields.Integer(default_model='openacademy.session')
     #my_setting = fields.Char(string='My Setting')
 
-    #def get_values(self):
-    #    res = super(ResConfigSettings, self).get_values()
+    def get_values(self):
+        res = super(ResConfigSettings, self).get_values()
     #    res.update(
     #        flsp_part_init=self.env['ir.config_parameter'].sudo().get_param('product_template.flsp_part_init')
     #    )
-    #    return res
+        return res
 
     #def set_values(self):
     #    super(ResConfigSettings, self).set_values()
