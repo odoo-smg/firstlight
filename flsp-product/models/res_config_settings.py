@@ -17,6 +17,6 @@ class ResConfigSettings(models.TransientModel):
         )
         return res
 
-    #def set_values(self):
-    #    super(ResConfigSettings, self).set_values()
-    #    self.env['ir.config_parameter'].sudo().set_param('product_template.flsp_part_init', self.flsp_part_init)
+    def set_values(self):
+        super(ResConfigSettings, self).set_values()
+        self.env['ir.config_parameter'].sudo().set_param('product.template.flsp_part_init', self.flsp_part_init)
