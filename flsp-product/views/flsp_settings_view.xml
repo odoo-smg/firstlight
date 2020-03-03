@@ -14,7 +14,7 @@
                         <div class="col-12 col-lg-6 o_setting_box" title="Firts Ligh Safety Products - Products.">
                           <div class="o_setting_left_pane"/>
                           <div class="o_setting_right_pane">
-                              <span class="o_form_label">First Digit</span>
+                              <span class="o_form_label">First Digit of Part #</span>
                               <div class="text-muted">
                                   First Character used for part number
                               </div>
