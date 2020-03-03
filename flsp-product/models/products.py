@@ -17,7 +17,6 @@ class Smgproduct(models.Model):
 
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
-    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
@@ -112,7 +111,9 @@ class Smgproduct(models.Model):
 
         suffix = ('000'+str(int(suffix)))[-3:]
 
-        default['default_code'] = '1'+prefix+'-'+suffix
+        default_init = self.default_code[1:1]
+
+        default['default_code'] = default_init+prefix+'-'+suffix
         default['flsp_part_suffix'] = suffix
         default['flsp_part_prefix'] = prefix
         return super(Smgproduct, self).copy(default)
