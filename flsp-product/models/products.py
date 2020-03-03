@@ -42,10 +42,11 @@ class Smgproduct(models.Model):
 
     @api.model
     def _get_next_prefix(self, currpartnum):
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         retvalue = ''
         if not currpartnum:
             currpartnum = '00001'
-        if (currpartnum[0:1]!='1'):
+        if (currpartnum[0:1]!=flsp_default_part_init):
             retvalue = '00001'
         else:
             retvalue = ('00000'+str(int(currpartnum[1:6])+1))[-5:]
@@ -54,7 +55,7 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_suffix')
     def flsp_part_suffix_onchange(self):
-        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         if not(self.flsp_part_suffix):
             suffix = '000'
         else:
@@ -75,7 +76,7 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
-        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
 
         if not(self.flsp_part_suffix):
             suffix = '000'
@@ -96,7 +97,7 @@ class Smgproduct(models.Model):
         }
 
     def copy(self, default=None):
-        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         default = dict(default or {})
 
         if not(self.flsp_part_suffix):
