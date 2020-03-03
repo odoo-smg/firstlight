@@ -9,7 +9,8 @@ class Smgproduct(models.Model):
 
     @api.model
     def _default_nextprefix(self):
-        self._cr.execute("select max(default_code) as code from product_product where default_code like '1%' and length(default_code) = 10 ")
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
+        self._cr.execute("select max(default_code) as code from product_product where default_code like '"+flsp_default_part_init+"%' and length(default_code) = 10 ")
         retvalue = self._cr.fetchall()
         returned_registre = retvalue[0]
         return self._get_next_prefix(returned_registre[0])
@@ -53,6 +54,7 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_suffix')
     def flsp_part_suffix_onchange(self):
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
         if not(self.flsp_part_suffix):
             suffix = '000'
         else:
@@ -63,7 +65,7 @@ class Smgproduct(models.Model):
         else:
             prefix = self.flsp_part_prefix
 
-        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
+        return_val = flsp_default_part_init+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
             'value': {
@@ -73,6 +75,7 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
 
         if not(self.flsp_part_suffix):
             suffix = '000'
@@ -84,7 +87,7 @@ class Smgproduct(models.Model):
         else:
             prefix = self.flsp_part_prefix
 
-        return_val = '1'+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
+        return_val = flsp_default_part_init+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
             'value': {
@@ -93,6 +96,7 @@ class Smgproduct(models.Model):
         }
 
     def copy(self, default=None):
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
         default = dict(default or {})
 
         if not(self.flsp_part_suffix):
