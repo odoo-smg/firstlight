@@ -12,6 +12,6 @@ class flspsalesorder(models.Model):
     def flsp_partner_onchange(self):
         return {
             'value': {
-                'flsp_so_user_id': self.partner_id.user_id
+                'flsp_so_user_id': self.partner_id.flsp_user_id.id
             },
         }
