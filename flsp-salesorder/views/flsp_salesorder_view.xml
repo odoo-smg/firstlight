@@ -5,8 +5,8 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-              <xpath expr="//field[@name='user_id']" position="after">
-                <field name="flsp_so_user_id" string="Salesperson 3" domain="[]"/>
+              <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="flsp_so_user_id"/>
               </xpath>
         </record>
 </odoo>
