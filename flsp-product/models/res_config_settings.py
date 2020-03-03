@@ -4,7 +4,7 @@ from odoo import api, fields, models, modules
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    flsp_part_init = fields.Char(string="First Par", realted='company_id.flsp_part_num_init')
+    flsp_part_init = fields.Char(string="First Par")
 
     #my_custom_field1_id = fields.Many2one('res.partner', string='For Customer')
     #my_custom_field2_id = fields.Many2one('res.partner', string='For Supplier')
