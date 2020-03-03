@@ -12,9 +12,9 @@ class ResConfigSettings(models.TransientModel):
 
     def get_values(self):
         res = super(ResConfigSettings, self).get_values()
-    #    res.update(
-    #        flsp_part_init=self.env['ir.config_parameter'].sudo().get_param('product_template.flsp_part_init')
-    #    )
+        res.update(
+            flsp_part_init=self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')
+        )
         return res
 
     #def set_values(self):
