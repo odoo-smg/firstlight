@@ -3,10 +3,10 @@
         <record model="ir.ui.view" id="flsp_salesorder_form_view">
             <field name="name">sales.order.flsp.form.inherit</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="inherit_id" ref="sale.order.form"/>
             <field name="arch" type="xml">
-              <group name="sales_person" string="Sales">
-                  <field name="flsp_so_user_id"/>
-              </group>
+              <xpath expr="//field[@name='user_id']" position="after">
+                <field name="flsp_so_user_id" string="Salesperson 3" domain="[]"/>
+              </xpath>
         </record>
 </odoo>
