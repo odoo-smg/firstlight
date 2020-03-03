@@ -38,7 +38,4 @@
         <field name="context">{'module' : 'purchase'}</field>
     </record>
 
-    <menuitem id="menu_purchase_general_settings" name="Settings" parent="menu_purchase_config"
-        sequence="0" action="action_purchase_configuration" groups="base.group_system"/>
-
 </odoo>
