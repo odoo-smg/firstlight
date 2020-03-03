@@ -1,6 +1,7 @@
 
 from odoo import fields, models
 
-class FLSPConfigSettings(models.TransientModel):
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
 
     flsp_part_init = fields.Char("Part Number Digit", default='1')
