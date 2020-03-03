@@ -5,4 +5,4 @@ from odoo import fields, models
 class Company(models.Model):
     _inherit = 'res.company'
 
-    #flsp_part_init = fields.Char(string="First digit part #")
+    flsp_part_num_init = fields.Char(string="First digit part #")
