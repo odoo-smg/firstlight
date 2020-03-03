@@ -17,6 +17,7 @@ class Smgproduct(models.Model):
 
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
+    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
