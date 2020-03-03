@@ -24,20 +24,6 @@
                           </div>
                         </div>
                     </div>
-                    <div class="row mt16 o_settings_container">
-                        <div class="col-12 col-lg-6 o_setting_box" title="Firts Ligh Safety Products - Products.">
-                          <div class="o_setting_left_pane"/>
-                          <div class="o_setting_right_pane">
-                              <span class="o_form_label">Second Parameter</span>
-                              <div class="text-muted">
-                                  This is another parameter
-                              </div>
-                              <div class="text-muted">
-                                  <field name="flsp_sec_param"/>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
                 </div>
             </xpath>
         </field>
