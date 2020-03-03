@@ -2,7 +2,7 @@
  <odoo>
         <record model="ir.ui.view" id="flsp_salesorder_form_view">
             <field name="name">sales.order.flsp.form.inherit</field>
-            <field name="model">sales.order</field>
+            <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <group name="sale" position="inside">
@@ -13,7 +13,7 @@
 
         <record model="ir.actions.act_window" id="salesorder_list_action">
             <field name="name">Quotation</field>
-            <field name="res_model">sales.order</field>
+            <field name="res_model">sale.order</field>
             <field name="view_mode">tree,form</field>
         </record>
 
