@@ -5,8 +5,16 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-              <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="flsp_so_user_id"/>
-              </xpath>
+                <group name="sales_person" position="inside">
+                    <field name="flsp_so_user_id"/>
+                </group>
+            </field>
         </record>
+
+        <record model="ir.actions.act_window" id="salesorder_list_action">
+            <field name="name">Quotation</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
 </odoo>
