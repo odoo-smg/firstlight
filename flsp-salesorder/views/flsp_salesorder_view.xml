@@ -5,7 +5,7 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <group name="sale" position="inside">
+                <group name="sales_person" position="inside">
                     <field name="flsp_so_user_id"/>
                 </group>
             </field>
