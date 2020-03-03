@@ -111,7 +111,7 @@ class Smgproduct(models.Model):
 
         suffix = ('000'+str(int(suffix)))[-3:]
 
-        default_init = self.default_code[1:2]
+        default_init = self.default_code[:1]
 
         default['default_code'] = default_init+prefix+'-'+suffix
         default['flsp_part_suffix'] = suffix
