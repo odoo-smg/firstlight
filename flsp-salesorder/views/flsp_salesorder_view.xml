@@ -5,9 +5,9 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <group name="sales_person" position="inside">
-                    <field name="flsp_so_user_id"/>
-                </group>
+              <xpath expr="//field[@name='user_id']" position="after">
+                <field name="flsp_so_user_id"/>
+              </xpath>
             </field>
         </record>
 
