@@ -31,5 +31,6 @@
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_customer_view.xml',
+        'views/flsp_salesorder_view.xml',
     ],
 }
