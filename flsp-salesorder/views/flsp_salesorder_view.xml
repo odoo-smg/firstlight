@@ -5,12 +5,8 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-              <notebook position="inside">
-                  <page string="Sessions">
-                      <group>
-                          <field name="flsp_so_user_id"/>
-                      </group>
-                  </page>
-              </notebook>
+              <group name="sales_person" string="Sales">
+                  <field name="flsp_so_user_id"/>
+              </group>
         </record>
 </odoo>
