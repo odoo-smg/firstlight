@@ -17,9 +17,14 @@ class Smgproduct(models.Model):
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
 
+    # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
+
+    # New fields to control ECO enforcement
+    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
+    flsp_allow_edit  = fields.Boolean(string="Allow Edit", store=False )
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
