@@ -5,10 +5,13 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <group name="sales_person" position="inside">
-                    <field name="flsp_so_user_id"/>
-                </group>
-            </field>
+              <notebook position="inside">
+                  <page string="Sessions">
+                      <group>
+                          <field name="flsp_so_user_id"/>
+                      </group>
+                  </page>
+              </notebook>
         </record>
 
         <record model="ir.actions.act_window" id="salesorder_list_action">
