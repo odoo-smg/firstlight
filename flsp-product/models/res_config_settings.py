@@ -5,7 +5,7 @@ class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
     dafault_part_init = fields.Char(default_model='product.template')
-    flsp_part_init = fields.Char(string="First Digit Part #")
+    flsp_part_init = fields.Char(string="First Digit Part #", default='1')
 
     #default_seats = fields.Integer(default_model='openacademy.session')
     #my_setting = fields.Char(string='My Setting')
