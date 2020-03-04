@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <group name="group_general">
                     <field name="id" invisible="1"/>
-                    <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('state', '=', 'done')]"/>
+                    <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.allow_apply_change', '=', True)]"/>
                     <field name="flsp_plm_valid" />
                 </group>
             </field>
