@@ -26,6 +26,7 @@
     'depends': ['base'],
     'depends': ['stock'],
     'depends': ['mrp'],
+    'depends': ['mrp_plm'],
 
     # always loaded
     'data': [
