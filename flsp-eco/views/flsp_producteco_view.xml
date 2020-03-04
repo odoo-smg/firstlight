@@ -9,11 +9,6 @@
                 <xpath expr="//form[@name='Product Template']/sheet[1]/div[not(@name)][1]/h1[1]/field[@name='name']" position="attributes">
                   <attribute name="attrs">{"readonly": [["id","!=",False]]}</attribute>
                 </xpath>
-                <group name="group_general">
-                    <field name="id" invisible="1"/>
-                    <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
-                    <field name="flsp_plm_valid" />
-                </group>
             </field>
         </record>
 
