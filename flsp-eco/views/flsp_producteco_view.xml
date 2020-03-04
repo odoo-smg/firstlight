@@ -6,6 +6,10 @@
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
+                <xpath expr="//form[@name='Product Template']/sheet[1]/div[not(@name)][1]/h1[1]/field[@name='name']" position="attributes">
+                  <attribute name="attrs">{"readonly": [["id","!=",False]]}</attribute>
+                </xpath>
+                <field name="name" attrs="{'readonly': [('id', '!=', False)]}"/>
                 <group name="group_general">
                     <field name="id" invisible="1"/>
                     <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
