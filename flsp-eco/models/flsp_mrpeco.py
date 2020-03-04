@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+#from odoo import fields, models
 
 
-class mrpeco(models.Model):
+#class mrpeco(models.Model):
     #_inherit = 'mrp.eco'
     #_check_company_auto = True
 
