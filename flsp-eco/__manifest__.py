@@ -9,9 +9,8 @@
         Customizations performed:
 
         Products:
-            * Customer:    Add a field Salesperson 2.
-            * Sales Order: Add a field Salesperson 2.
-            * Trigger: Trigger Salesperson 2 from Customer to Sales Order.
+            * Product: Add a field ECO enforcement.
+            * Product: Add a field PLM Validated.
     """,
 
     'author': "Alexandre Sousa",
@@ -31,5 +30,6 @@
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_producteco_view.xml',
+        'views/flsp_eco_view.xml',
     ],
 }

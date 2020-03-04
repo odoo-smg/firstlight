@@ -9,4 +9,4 @@ class flspproducts(models.Model):
 
     # New fields to control ECO enforcement
     flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
-    flsp_plm_valid   = fields.Boolean(string="PLM Validated", store=False )
+    flsp_plm_valid   = fields.Boolean(string="PLM Validated", readonly=True)
