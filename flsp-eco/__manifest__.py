@@ -33,5 +33,6 @@
         'security/ir.model.access.csv',
         'views/flsp_producteco_view.xml',
         'views/flsp_eco_view.xml',
+        'views/flsp_eco_stage_view.xml',
     ],
 }
