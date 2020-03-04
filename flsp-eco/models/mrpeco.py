@@ -8,4 +8,4 @@ class flspmrpeco(models.Model):
     _check_company_auto = True
 
     # New fields to control ECO enforcement
-    #flsp_allow_change = fields.Boolean(string="Allow Change", readonly=True)
+    flsp_allow_change = fields.Boolean(string="Allow Change", readonly=True)
