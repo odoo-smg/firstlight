@@ -18,4 +18,4 @@ class flspmrpeco(models.Model):
     def _check_done_eco(self):
         for record in self:
             if record.state == "done":
-                raise exceptions.ValidationError("Your cannot change stage once the ECO is done.")
+                raise exceptions.ValidationError("You cannot change stage once the ECO is done.")
