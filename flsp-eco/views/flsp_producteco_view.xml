@@ -12,7 +12,7 @@
                 <group name="group_general">
                     <field name="id" invisible="1"/>
                     <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
-                    <field name="flsp_plm_valid" />
+                    <field name="flsp_plm_valid" force_save="1" readonly="1" />
                 </group>
             </field>
         </record>
