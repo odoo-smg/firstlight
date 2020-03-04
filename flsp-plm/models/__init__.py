@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from . import products
+from . import eco_products
