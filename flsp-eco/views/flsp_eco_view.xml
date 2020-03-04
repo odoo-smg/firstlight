@@ -3,7 +3,7 @@
         <record model="ir.ui.view" id="flsp_eco_form_view">
             <field name="name">mrp.eco.flsp.form.inherit</field>
             <field name="model">mrp.eco</field>
-            <field name="inherit_id" ref="mrp.eco_view_form"/>
+            <field name="inherit_id" ref="mrp_plm.mrp_eco_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='tag_ids']" position="after">
                   <field name="flsp_allow_change"/>
