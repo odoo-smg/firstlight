@@ -3,7 +3,7 @@
 from odoo import fields, models
 
 
-class flspeco(models.Model):
+class flsp_ecomodel(models.Model):
     _inherit = 'mrp.eco'
     _check_company_auto = True
 
