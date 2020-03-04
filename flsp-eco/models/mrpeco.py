@@ -12,4 +12,4 @@ class flspmrpeco(models.Model):
 
     @api.depends('stage_id')
     def _allow_change(self):
-        self.flsp_allow_change = self.stage_id.	allow_apply_change
+        self.flsp_allow_change = self.stage_id.allow_apply_change
