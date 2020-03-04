@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class flspproducts(models.Model):
@@ -10,3 +10,12 @@ class flspproducts(models.Model):
     # New fields to control ECO enforcement
     flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
     flsp_plm_valid   = fields.Boolean(string="PLM Validated", readonly=True)
+
+    @api.onchange('flsp_eco_enforce')
+    def flsp_part_suffix_onchange(self):
+        self.flsp_plm_valid = True
+        return {
+            'value': {
+                'flsp_plm_valid': True
+            },
+        }
