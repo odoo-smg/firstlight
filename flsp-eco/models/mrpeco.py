@@ -8,14 +8,8 @@ class flspmrpeco(models.Model):
     _check_company_auto = True
 
     # New fields to control ECO enforcement
-    flsp_allow_change = fields.Boolean(string="Allow Change", readonly=True)
+    flsp_allow_change = fields.Boolean(string="Allow Change", compute='_allow_change')
 
-    @api.onchange('stage_id')
-    def stage_id_onchange(self):
-        return_val = self.stage_id.	allow_apply_change
-        self.flsp_allow_change = return_val
-        return {
-            'value': {
-                'flsp_allow_change': return_val
-            },
-        }
+    @api.depends('stage_id')
+    def _allow_change(self):
+        self.flsp_allow_change = self.stage_id.	allow_apply_change
