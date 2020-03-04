@@ -28,6 +28,7 @@
 
     # always loaded
     'data': [
+        'security/ir.model.access.csv',
         'views/flsp_product_view.xml',
     ],
 }
