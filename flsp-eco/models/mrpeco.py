@@ -4,7 +4,7 @@ from odoo import fields, models
 
 
 class flspmrpeco(models.Model):
-    #_inherit = 'mrp.eco'
+    _inherit = 'mrp_plm.eco'
     _check_company_auto = True
 
     # New fields to control ECO enforcement
