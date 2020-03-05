@@ -13,7 +13,7 @@ class flspproducts(models.Model):
 
     @api.onchange('flsp_eco_enforce')
     def flsp_part_suffix_onchange(self):
-        self.flsp_plm_valid = True
+        self.flsp_plm_valid = False
         return {
             'value': {
                 'flsp_plm_valid': False
