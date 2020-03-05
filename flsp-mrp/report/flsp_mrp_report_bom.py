@@ -17,4 +17,4 @@ class flsp_bomstrcreport(models.AbstractModel):
             'data':data_array,
             }
 
-    return report_obj.render('flsp-mrp.flsp_mrp_report_bom', docargs)
+        return report_obj.render('flsp-mrp.flsp_mrp_report_bom', docargs)
