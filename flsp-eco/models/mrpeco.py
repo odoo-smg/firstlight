@@ -17,5 +17,5 @@ class flspmrpeco(models.Model):
     @api.constrains('stage_id')
     def _check_done_eco(self):
         for record in self:
-            if record.state == "done":
+            if record.state == "done" and self.stage_id.final_stage != True:
                 raise exceptions.ValidationError("You cannot change stage once the ECO is done.")
