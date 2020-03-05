@@ -5,7 +5,7 @@ from odoo import api, models
 class flsp_bomstrcreport(models.AbstractModel):
     _name = 'report.flsp-mrp.flsp_mrp_report_bom_view'
 
-    @api.multi
+    @api.model
     def render_html(self,data=None):
         report_obj = self.env['report']
         print('>>>>>>>>>>.....', report_obj)
