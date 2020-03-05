@@ -16,6 +16,6 @@ class flspproducts(models.Model):
         self.flsp_plm_valid = True
         return {
             'value': {
-                'flsp_plm_valid': True
+                'flsp_plm_valid': False
             },
         }
