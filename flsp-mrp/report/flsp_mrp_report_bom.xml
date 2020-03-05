@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<data>
+
+    <report
+
+        id="student_status_on_probation"
+
+        model="mrp.bom"
+
+        string="Student Status Report(Probation)"
+
+        name="obe_reports_hec.report_student_on_probation"
+
+        file="obe_reports_hec.student_status_on_probation"
+
+        report_type="qweb-html" />
+
+
+
+    <template id="report_student_on_probation">
+
+          <t t-call="report.layout">
+
+            <div class="page">
+
+                <div class="text-center">
+
+                    <h4><b>Hello This is Custom Report (Odoo QWEB)</b></h4>
+
+                </div>
+
+           </div>
+
+           </t>
+
+ </template>
+
+</data>
+
+</odoo>
