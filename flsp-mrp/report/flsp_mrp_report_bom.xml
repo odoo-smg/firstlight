@@ -5,7 +5,7 @@
         id="flsp_mrp_report_bom"
         model="mrp.bom"
         string="FLSP - *BOM Structure*"
-        name="flsp-mrp.flsp_mrp_report_bom"
+        name="flsp-mrp.flsp_mrp_report_bom_view"
         file="flsp-mrp.flsp_mrp_report_bom"
         report_type="qweb-html" />
 
