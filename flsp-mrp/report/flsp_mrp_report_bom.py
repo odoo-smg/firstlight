@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, models
+from odoo.tools import float_round
 
 class flsp_bomstrcreport(models.AbstractModel):
     _name = 'report.flsp_mrp_report_bom_view'
