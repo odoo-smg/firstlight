@@ -56,7 +56,7 @@ class flsp_bomstrcreport(models.AbstractModel):
         res['lines']['report_type'] = 'html'
         res['lines']['report_structure'] = 'all'
         res['lines']['has_attachments'] = res['lines']['attachments'] or any(component['attachments'] for component in res['lines']['components'])
-        res['lines'] = self.env.ref('mrp.report_mrp_bom').render({'data': res['lines']})
+        res['lines'] = self.env.ref('flsp_mrp_report_bom_view').render({'data': res['lines']})
         return res
 
     @api.model
