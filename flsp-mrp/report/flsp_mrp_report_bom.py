@@ -5,7 +5,7 @@ from odoo import api, models
 class flsp_bomstrcreport(models.AbstractModel):
     _name = 'report.flsp_mrp_report_bom_view'
 
-   @api.model
+    @api.model
     def _get_report_values(self, docids, data=None):
         docs = []
         for bom_id in docids:
