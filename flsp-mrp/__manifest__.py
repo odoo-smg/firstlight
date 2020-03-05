@@ -30,5 +30,6 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'report/flsp_mrp_report_bom.xml',
     ],
 }
