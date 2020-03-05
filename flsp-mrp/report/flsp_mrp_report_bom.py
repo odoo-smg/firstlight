@@ -2,26 +2,18 @@
 
 from odoo import api, models
 
-class student_status_report_probation(models.AbstractModel):
+class flsp_bomstrcreport(models.AbstractModel):
 
     @api.multi
-
    def render_html(self,data=None):
-
         report_obj = self.env['report']
-
         print('>>>>>>>>>>.....', report_obj)
-
-        report = report_obj._get_report_from_name('obe_reports_hec.report_student_on_probation')
-
+        report = report_obj._get_report_from_name('flsp-mrp.flsp_mrp_report_bom')
         print('>>>>>>>>>>', report)
-
         data_array = []
 
       docargs = {
-
             'data':data_array,
-
             }
 
-      return report_obj.render('obe_reports_hec.report_student_on_probation', docargs)
+      return report_obj.render('flsp-mrp.flsp_mrp_report_bom', docargs)
