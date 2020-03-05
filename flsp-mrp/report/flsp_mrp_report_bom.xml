@@ -9,7 +9,7 @@
         file="flsp-mrp.flsp_mrp_report_bom"
         report_type="qweb-html" />
 
-    <template id="flsp_mrp_report_bom">
+    <template id="flsp_mrp_report_bom_view">
           <t t-call="report.layout">
             <div class="page">
                 <div class="text-center">
