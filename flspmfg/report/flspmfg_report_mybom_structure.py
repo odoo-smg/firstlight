@@ -121,7 +121,7 @@ class ReportMyBomStructure(models.AbstractModel):
             'operations': operations,
             'operations_cost': sum([op['total'] for op in operations]),
             'attachments': attachments,
-            'legacy': 'legacy',
+            'legacy': product.legacy_code,
             'operations_time': sum([op['duration_expected'] for op in operations])
         }
         components, total = self._get_bom_lines(bom, bom_quantity, product, line_id, level)
@@ -157,7 +157,7 @@ class ReportMyBomStructure(models.AbstractModel):
                 'total': sub_total,
                 'child_bom': line.child_bom_id.id,
                 'phantom_bom': line.child_bom_id and line.child_bom_id.type == 'phantom' or False,
-                'legacy': 'legacy',
+                'legacy': line.product_id.legacy_code,
                 'attachments': self.env['mrp.document'].search(['|', '&',
                     ('res_model', '=', 'product.product'), ('res_id', '=', line.product_id.id), '&', ('res_model', '=', 'product.template'), ('res_id', '=', line.product_id.product_tmpl_id.id)]),
 
@@ -227,7 +227,7 @@ class ReportMyBomStructure(models.AbstractModel):
                     'level': bom_line['level'],
                     'code': bom_line['code'],
                     'child_bom': bom_line['child_bom'],
-                    'legacy': 'legacy',
+                    'legacy': bom_line['legacy'],
                     'prod_id': bom_line['prod_id']
                 })
                 if bom_line['child_bom'] and (unfolded or bom_line['child_bom'] in child_bom_ids):
@@ -240,7 +240,7 @@ class ReportMyBomStructure(models.AbstractModel):
                     'quantity': data['operations_time'],
                     'uom': _('minutes'),
                     'bom_cost': data['operations_cost'],
-                    'legacy': 'legacy',
+                    'legacy': '-',
                     'level': level,
                 })
                 for operation in data['operations']:
@@ -251,7 +251,7 @@ class ReportMyBomStructure(models.AbstractModel):
                             'quantity': operation['duration_expected'],
                             'uom': _('minutes'),
                             'bom_cost': operation['total'],
-                            'legacy': 'legacy',
+                            'legacy': '-',
                             'level': level + 1,
                         })
             return lines
