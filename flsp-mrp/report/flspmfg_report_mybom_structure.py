@@ -1,25 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, models
+import json
+
+from odoo import api, models, _
 from odoo.tools import float_round
 
-class flsp_bomstrcreport(models.AbstractModel):
-    _name = 'report.flsp_mrp_report_bom_view'
-
-
-#    @api.model
-#    def render_html(self,data=None):
-#        report_obj = self.env['report']
-#        print('>>>>>>>>>>.....', report_obj)
-#        report = report_obj._get_report_from_name('flsp_mrp_report_bom_view')
-#        print('>>>>>>>>>>', report)
-#        data_array = []
-#
-#        docargs = {
-#            'data':data_array,
-#            }
-#
-#        return report_obj.render('flsp_mrp_report_bom_view', docargs)
+class ReportMyBomStructure(models.AbstractModel):
+    _name = 'report.flspmfg.report_mybom_structure'
+    _description = 'BOM Structure Report'
 
     @api.model
     def _get_report_values(self, docids, data=None):
@@ -56,7 +44,7 @@ class flsp_bomstrcreport(models.AbstractModel):
         res['lines']['report_type'] = 'html'
         res['lines']['report_structure'] = 'all'
         res['lines']['has_attachments'] = res['lines']['attachments'] or any(component['attachments'] for component in res['lines']['components'])
-        res['lines'] = self.env.ref('flsp_mrp_report_bom_view').render({'data': res['lines']})
+        res['lines'] = self.env.ref('mrp.report_mrp_bom').render({'data': res['lines']})
         return res
 
     @api.model
@@ -133,6 +121,7 @@ class flsp_bomstrcreport(models.AbstractModel):
             'operations': operations,
             'operations_cost': sum([op['total'] for op in operations]),
             'attachments': attachments,
+            'legacy': 'legacy',
             'operations_time': sum([op['duration_expected'] for op in operations])
         }
         components, total = self._get_bom_lines(bom, bom_quantity, product, line_id, level)
@@ -168,6 +157,7 @@ class flsp_bomstrcreport(models.AbstractModel):
                 'total': sub_total,
                 'child_bom': line.child_bom_id.id,
                 'phantom_bom': line.child_bom_id and line.child_bom_id.type == 'phantom' or False,
+                'legacy': 'legacy',
                 'attachments': self.env['mrp.document'].search(['|', '&',
                     ('res_model', '=', 'product.product'), ('res_id', '=', line.product_id.id), '&', ('res_model', '=', 'product.template'), ('res_id', '=', line.product_id.product_tmpl_id.id)]),
 
@@ -237,6 +227,7 @@ class flsp_bomstrcreport(models.AbstractModel):
                     'level': bom_line['level'],
                     'code': bom_line['code'],
                     'child_bom': bom_line['child_bom'],
+                    'legacy': 'legacy',
                     'prod_id': bom_line['prod_id']
                 })
                 if bom_line['child_bom'] and (unfolded or bom_line['child_bom'] in child_bom_ids):
@@ -249,6 +240,7 @@ class flsp_bomstrcreport(models.AbstractModel):
                     'quantity': data['operations_time'],
                     'uom': _('minutes'),
                     'bom_cost': data['operations_cost'],
+                    'legacy': 'legacy',
                     'level': level,
                 })
                 for operation in data['operations']:
@@ -259,6 +251,7 @@ class flsp_bomstrcreport(models.AbstractModel):
                             'quantity': operation['duration_expected'],
                             'uom': _('minutes'),
                             'bom_cost': operation['total'],
+                            'legacy': 'legacy',
                             'level': level + 1,
                         })
             return lines
