@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from . import flsp_mrp_report_bom
+from . import flspmfg_report_mybom_structure
