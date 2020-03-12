@@ -29,5 +29,6 @@
     # always loaded
     'data': [
         'report/flspmfg_report_mybom_structure.xml',
+        'report/products_report.xml',
     ],
 }
