@@ -26,10 +26,10 @@ class Smgproduct(models.Model):
         return flsp_default_part_init+next_prefix+'-'+next_suffix
 
     # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", readonly=True)
+    default_code = fields.Char(string="Internal Reference", , default=_next_default_code, readonly=True)
 
     # New fields to compose the part number
-    legacy_code = fields.Char(string="Legacy Part #", default=_next_default_code)
+    legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
