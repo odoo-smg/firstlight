@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <group name="group_general">
                     <field name="id" invisible="1"/>
-                    <field name="default_code"  readonly="1" force_save="1"  invisible="1"/>
+                    <field name="default_code"  readonly="1" force_save="1"/>
                     <field widget="mask" data-inputmask-mask="99999" name="flsp_part_prefix" placeholder="99999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field widget="mask" data-inputmask-mask="999" name="flsp_part_suffix" placeholder="999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field name="legacy_code"/>
