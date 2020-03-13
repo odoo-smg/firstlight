@@ -55,7 +55,6 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_suffix')
     def flsp_part_suffix_onchange(self):
-        print('*************************flsp_part_suffix_onchange***************++++++++++++++++++++++=++SUFIX')
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         if not(self.flsp_part_suffix):
             suffix = '000'
@@ -75,7 +74,6 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
-        print('*************************flsp_part_prefix_onchange***************++++++++++++++++++++++=++PREFIX')
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         if not(self.flsp_part_suffix):
             suffix = '000'
