@@ -55,17 +55,16 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_suffix')
     def flsp_part_suffix_onchange(self):
+        print('*************************flsp_part_suffix_onchange***************++++++++++++++++++++++=++SUFIX')
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         if not(self.flsp_part_suffix):
             suffix = '000'
         else:
             suffix = self.flsp_part_suffix
-
         if not(self.flsp_part_prefix):
             prefix = '00000'
         else:
             prefix = self.flsp_part_prefix
-
         return_val = flsp_default_part_init+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
@@ -76,18 +75,16 @@ class Smgproduct(models.Model):
 
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
+        print('*************************flsp_part_prefix_onchange***************++++++++++++++++++++++=++PREFIX')
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
-
         if not(self.flsp_part_suffix):
             suffix = '000'
         else:
             suffix = self.flsp_part_suffix
-
         if not(self.flsp_part_prefix):
             prefix = '00000'
         else:
             prefix = self.flsp_part_prefix
-
         return_val = flsp_default_part_init+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
