@@ -12,7 +12,7 @@ class flspproducts(models.Model):
     flsp_plm_valid   = fields.Boolean(string="PLM Validated")
 
     @api.onchange('flsp_eco_enforce')
-    def flsp_part_suffix_onchange(self):
+    def flsp_eco_enforce_onchange(self):
         self.flsp_plm_valid = False
         return {
             'value': {

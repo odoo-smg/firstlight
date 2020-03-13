@@ -26,15 +26,15 @@ class Smgproduct(models.Model):
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
-        ('default_code_name_check_flsp5',
+        ('default_code_name_check_flsp6',
          'CHECK(name != default_code)',
          "The Name of the product should not be the product code"),
 
-        ('default_code_unique_flsp5',
+        ('default_code_unique_flsp6',
          'UNIQUE(default_code)',
          "The Product Code must be unique"),
 
-        ('name_unique_flsp5',
+        ('name_unique_flsp6',
          'UNIQUE(name)',
          "The Product name must be unique"),
     ]
@@ -60,12 +60,10 @@ class Smgproduct(models.Model):
             suffix = '000'
         else:
             suffix = self.flsp_part_suffix
-
         if not(self.flsp_part_prefix):
             prefix = '00000'
         else:
             prefix = self.flsp_part_prefix
-
         return_val = flsp_default_part_init+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
@@ -77,17 +75,14 @@ class Smgproduct(models.Model):
     @api.onchange('flsp_part_prefix')
     def flsp_part_prefix_onchange(self):
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
-
         if not(self.flsp_part_suffix):
             suffix = '000'
         else:
             suffix = self.flsp_part_suffix
-
         if not(self.flsp_part_prefix):
             prefix = '00000'
         else:
             prefix = self.flsp_part_prefix
-
         return_val = flsp_default_part_init+('00000' + prefix.replace("_", ""))[-5:] + '-' + ('000' + suffix.replace("_", ""))[-3:]
         self.default_code = return_val
         return {
