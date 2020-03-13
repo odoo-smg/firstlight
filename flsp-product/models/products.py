@@ -15,11 +15,21 @@ class Smgproduct(models.Model):
         returned_registre = retvalue[0]
         return self._get_next_prefix(returned_registre[0])
 
+    @api.model
+    def _next_default_code(self):
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
+        self._cr.execute("select max(default_code) as code from product_product where default_code like '"+flsp_default_part_init+"%' and length(default_code) = 10 ")
+        retvalue = self._cr.fetchall()
+        returned_registre = retvalue[0]
+        next_prefix = self._get_next_prefix(returned_registre[0])
+        next_suffix = '000'
+        return flsp_default_part_init+next_prefix+'-'+next_suffix
+
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
 
     # New fields to compose the part number
-    legacy_code = fields.Char(string="Legacy Part #")
+    legacy_code = fields.Char(string="Legacy Part #", default=_next_default_code)
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
