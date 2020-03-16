@@ -26,7 +26,7 @@ class Smgproduct(models.Model):
         return flsp_default_part_init+next_prefix+'-'+next_suffix
 
     # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", default=_next_default_code(), readonly=True, force_save=True)
+    default_code = fields.Char(string="Internal Reference", default=self._next_default_code(), readonly=True, force_save=True)
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
