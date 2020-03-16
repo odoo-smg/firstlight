@@ -15,7 +15,7 @@
             </field>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="default_code" attrs="{'readonly': True}"/>
+                <field name="default_code" attrs="{'readonly': True}" force_save="1"  invisible="1" />
               </xpath>
             </field>
         </record>
