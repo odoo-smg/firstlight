@@ -13,9 +13,11 @@
                     <field name="legacy_code"/>
                 </group>
             </field>
-            <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="default_code" force_save="1" attrs="{'readonly': 1}" />
-            </xpath>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='categ_id']" position="after">
+                  <field name="default_code" force_save="1" attrs="{'readonly': 1}" />
+              </xpath>
+            </field>
         </record>
 
         <record model="ir.actions.act_window" id="product_list_action">
