@@ -14,9 +14,8 @@
                 </group>
             </field>
             <field name="arch" type="xml">
-              <xpath expr="//field[@name='default_code']" position="attributes">
-                  <attribute name="attrs">{}</attribute>
-                  <attribute name="readonly">1</attribute>
+              <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="default_code" attrs="{'readonly': True}"/>
               </xpath>
             </field>
         </record>
