@@ -29,7 +29,7 @@ class Smgproduct(models.Model):
     default_code = fields.Char(string="Internal Reference", default=_next_default_code, force_save=True)
 
     # New fields to compose the part number
-    legacy_code = fields.Char(string="Legacy Part #")
+    legacy_code = fields.Char(string="Legacy Part #", default=_next_default_code)
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
