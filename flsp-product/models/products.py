@@ -126,6 +126,6 @@ class Smgproduct(models.Model):
         return super(Smgproduct, self).copy(default)
 
     def write(self, cr, uid, ids, vals, context=None):
-        self.refresh()
         res = super(product_template, self).write(cr, uid, ids, vals, context=context)
+        self.env['product.product'].search([('product_tmpl_id', '=', self.id)]).write({'default_code': 'done**'})
         return res
