@@ -124,3 +124,8 @@ class Smgproduct(models.Model):
         default['flsp_part_prefix'] = prefix
         default['flsp_plm_valid'] = False
         return super(Smgproduct, self).copy(default)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        self.refresh()
+        res = super(product_template, self).write(cr, uid, ids, vals, context=context)
+        return res
