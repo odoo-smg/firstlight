@@ -26,7 +26,7 @@ class Smgproduct(models.Model):
         return flsp_default_part_init+next_prefix+'-'+next_suffix
 
     # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", default=_next_default_code)
+    default_code = fields.Char(string="Internal Reference")
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #", default=_next_default_code)
@@ -124,8 +124,3 @@ class Smgproduct(models.Model):
         default['flsp_part_prefix'] = prefix
         default['flsp_plm_valid'] = False
         return super(Smgproduct, self).copy(default)
-
-    def write(self, cr, uid, ids, vals, context=None):
-        res = super(product_template, self).write(cr, uid, ids, vals, context=context)
-        # self.env['product.product'].search([('product_tmpl_id', '=', self.id)]).write({'default_code': 'done**'})
-        return res
