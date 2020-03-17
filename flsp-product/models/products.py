@@ -26,7 +26,7 @@ class Smgproduct(models.Model):
         return flsp_default_part_init+next_prefix+'-'+next_suffix
 
     # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", default=_next_default_code)
+    default_code = fields.Char(string="Internal Reference", default=_next_default_code, readonly=True, required=True)
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #", default=_next_default_code)
@@ -61,17 +61,6 @@ class Smgproduct(models.Model):
         else:
             retvalue = ('00000'+str(int(currpartnum[1:6])+1))[-5:]
         return retvalue
-
-
-    @api.onchange('legacy_code')
-    def legacy_code_onchange(self):
-        return_val = self.flsp_part_suffix+'*******testing********'
-        self.description = return_val
-        return {
-            'value': {
-                'description': return_val
-            },
-        }
 
 
     @api.onchange('flsp_part_suffix')
