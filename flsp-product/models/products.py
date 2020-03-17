@@ -65,7 +65,7 @@ class Smgproduct(models.Model):
 
     @api.onchange('legacy_code')
     def legacy_code_onchange(self):
-        return_val = '*******testing********'
+        return_val = self.flsp_part_suffix+'*******testing********'
         self.description = return_val
         return {
             'value': {
