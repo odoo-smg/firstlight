@@ -63,6 +63,17 @@ class Smgproduct(models.Model):
         return retvalue
 
 
+    @api.onchange('legacy_code')
+    def legacy_code_onchange(self):
+        return_val = '*******testing********'
+        self.description = return_val
+        return {
+            'value': {
+                'description': return_val
+            },
+        }
+
+
     @api.onchange('flsp_part_suffix')
     def flsp_part_suffix_onchange(self):
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
