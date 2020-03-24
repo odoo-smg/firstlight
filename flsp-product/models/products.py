@@ -35,20 +35,6 @@ class Smgproduct(models.Model):
     # Account review enforcement
     flsp_acc_valid   = fields.Boolean(string="Acconting Validated")
 
-    @api.onchange('flsp_acc_valid')
-    def flsp_acc_valid_onchange(self):
-        acc_validated = True
-        if (self.env.uid != 8)
-            raise exceptions.ValidationError("You cannot change this field, only authorized users.")
-            acc_validated = False
-
-        self.flsp_acc_valid = acc_validated
-        return {
-            'value': {
-                'flsp_acc_valid': acc_validated
-            },
-        }
-
     # constraints to validate code and description to be unique
     _sql_constraints = [
         ('default_code_name_check_flsp6',
@@ -63,6 +49,21 @@ class Smgproduct(models.Model):
          'UNIQUE(name)',
          "The Product name must be unique"),
     ]
+
+
+    @api.onchange('flsp_acc_valid')
+    def flsp_acc_valid_onchange(self):
+        acc_validated = True
+        if (self.env.uid != 8)
+            raise exceptions.ValidationError("You cannot change this field, only authorized users.")
+            acc_validated = False
+
+        self.flsp_acc_valid = acc_validated
+        return {
+            'value': {
+                'flsp_acc_valid': acc_validated
+            },
+        }
 
 
     @api.model
