@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models, api, exceptions
 
 
 class Smgproduct(models.Model):
@@ -33,6 +33,21 @@ class Smgproduct(models.Model):
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
+    # Account review enforcement
+    flsp_acc_valid   = fields.Boolean(string="Acconting Validated")
+
+    @api.onchange('flsp_acc_valid')
+    def flsp_acc_valid_onchange(self):
+        if self.flsp_acc_valid
+            if self.flsp_acc_valid == True
+                if self.env.uid != 8
+                    raise exceptions.ValidationError("You cannot change this field, only authorized users.")
+                    self.flsp_acc_valid = False
+        return {
+            'value': {
+                'flsp_acc_valid': False
+            },
+        }
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
