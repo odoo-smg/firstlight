@@ -32,15 +32,14 @@ class Smgproduct(models.Model):
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
-
     # Account review enforcement
     flsp_acc_valid   = fields.Boolean(string="Acconting Validated")
 
     @api.onchange('flsp_acc_valid')
     def flsp_acc_valid_onchange(self):
         acc_validated = True
-        if (self.flsp_acc_valid==True)
-            if self.env.uid != 8
+        if not(self.flsp_acc_valid)
+            if (self.env.uid != 8)
                 raise exceptions.ValidationError("You cannot change this field, only authorized users.")
                 acc_validated = False
 
