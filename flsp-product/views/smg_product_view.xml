@@ -28,7 +28,6 @@
                         <button class="oe_stat_button" type="object"
                             name="_next_default_code"
                             icon="fa-calendar"
-                            groups="sales_team.group_sale_salesman"
                             context="{}">
                             <field string="Meetings" name="legacy_code" widget="statinfo"/>
                         </button>
