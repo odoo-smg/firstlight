@@ -53,10 +53,10 @@ class Smgproduct(models.Model):
     ]
 
     def button_acc_valid(self):
-        #(self.product_template).write({
-        #    'flsp_acc_valid': True,
-        #})
         return self.write({'flsp_acc_valid': True})
+
+    def button_acc_valid_off(self):
+        return self.write({'flsp_acc_valid': False})
 
 
     @api.model
