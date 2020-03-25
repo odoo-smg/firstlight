@@ -32,7 +32,9 @@ class Smgproduct(models.Model):
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
+
     # Account review enforcement
+    #    if (self.env.uid != 8):
     flsp_acc_valid   = fields.Boolean(string="Acconting Validated")
 
     # constraints to validate code and description to be unique
@@ -49,18 +51,6 @@ class Smgproduct(models.Model):
          'UNIQUE(name)',
          "The Product name must be unique"),
     ]
-
-
-    @api.onchange('flsp_acc_valid')
-    def flsp_acc_valid_onchange(self):
-
-        raise exceptions.ValidationError("We are in....")
-
-        if (self.env.uid != 8):
-            self.flsp_acc_valid = not(self.flsp_acc_valid)
-            raise exceptions.ValidationError("You cannot change this field, only authorized users.")
-
-        return
 
     @api.model
     def _get_next_prefix(self, currpartnum):
