@@ -14,25 +14,8 @@
                     <field widget="mask" data-inputmask-mask="999" name="flsp_part_suffix" placeholder="999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field name="legacy_code"/>
                     <field name="flsp_acc_valid"/>
+                    <button name="button_mark_done" string="Mark as Done" type="object" class="oe_highlight"/>
                 </group>
-            </field>
-            <field name="arch" type="xml">
-                <data>
-                    <div name="button_box" position="inside">
-                        <button class="oe_stat_button o_res_partner_tip_opp" type="action"
-                            name="_next_default_code"
-                            icon="fa-star"
-                            context="{}">
-                            <field string="Opportunities" name="legacy_code" widget="statinfo"/>
-                        </button>
-                        <button class="oe_stat_button" type="object"
-                            name="_next_default_code"
-                            icon="fa-calendar"
-                            context="{}">
-                            <field string="Meetings" name="legacy_code" widget="statinfo"/>
-                        </button>
-                    </div>
-                </data>
             </field>
         </record>
 
