@@ -52,6 +52,13 @@ class Smgproduct(models.Model):
          "The Product name must be unique"),
     ]
 
+    def button_acc_valid(self):
+        #(self.product_template).write({
+        #    'flsp_acc_valid': True,
+        #})
+        return self.write({'flsp_acc_valid': True})
+
+
     @api.model
     def _get_next_prefix(self, currpartnum):
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
