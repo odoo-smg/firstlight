@@ -20,6 +20,9 @@
                     <field name="flsp_acc_valid"/>
                 </group>
             </field>
+            <xpath expr="//field[@name='categ_id']" position="attributes">
+                <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
+            </xpath>
         </record>
 
         <record model="ir.actions.act_window" id="product_list_action">
