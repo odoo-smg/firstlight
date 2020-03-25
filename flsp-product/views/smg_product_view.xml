@@ -20,17 +20,16 @@
                 <data>
                     <div name="button_box" position="inside">
                         <button class="oe_stat_button o_res_partner_tip_opp" type="action"
-                            name="%(crm.crm_lead_opportunities)d"
+                            name="_next_default_code"
                             icon="fa-star"
-                            groups="sales_team.group_sale_salesman"
-                            context="{'search_default_partner_id': active_id}">
+                            context="{}">
                             <field string="Opportunities" name="opportunity_count" widget="statinfo"/>
                         </button>
                         <button class="oe_stat_button" type="object"
-                            name="schedule_meeting"
+                            name="_next_default_code"
                             icon="fa-calendar"
                             groups="sales_team.group_sale_salesman"
-                            context="{'partner_id': active_id, 'partner_name': name}">
+                            context="{}">
                             <field string="Meetings" name="meeting_count" widget="statinfo"/>
                         </button>
                     </div>
