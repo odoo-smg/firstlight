@@ -55,10 +55,10 @@ class Smgproduct(models.Model):
     def flsp_acc_valid_onchange(self):
         acc_validated = True
 
-        if (self.env.uid != 8):
-            raise exceptions.ValidationError("You cannot change this field, only authorized users.")
-
-        acc_validated = False
+        if (self.flsp_acc_valid == True):
+            if (self.env.uid != 8):
+                raise exceptions.ValidationError("You cannot change this field, only authorized users.")
+                acc_validated = False
 
         self.flsp_acc_valid = acc_validated
         return {
