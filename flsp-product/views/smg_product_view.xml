@@ -7,6 +7,9 @@
             <field name="priority">98</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
+                <header>
+                  <button name="button_mark_done" string="Mark as Done" type="object" class="oe_highlight"/>
+                </header>
                 <group name="group_general">
                     <field name="id" invisible="1"/>
                     <field name="default_code"  readonly="1" force_save="1"  invisible="1"/>
@@ -14,7 +17,6 @@
                     <field widget="mask" data-inputmask-mask="999" name="flsp_part_suffix" placeholder="999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field name="legacy_code"/>
                     <field name="flsp_acc_valid"/>
-                    <button name="button_mark_done" string="Mark as Done" type="object" class="oe_highlight"/>
                 </group>
             </field>
         </record>
