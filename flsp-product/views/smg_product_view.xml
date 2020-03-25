@@ -8,7 +8,8 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <header>
-                  <button name="button_acc_valid" groups="account.group_account_manager" string="Acc Validation" type="object"/>
+                  <button name="button_acc_valid" attrs="{'invisible': [('flsp_acc_valid', '=', False)]}" groups="account.group_account_manager" string="Acc Validation" type="object" class="oe_highlight"/>
+                  <button name="button_acc_valid_off" attrs="{'invisible': [('flsp_acc_valid', '=', True)]}" groups="account.group_account_manager" string="Unvalid Acc" type="object"/>
                 </header>
                 <group name="group_general">
                     <field name="id" invisible="1"/>
