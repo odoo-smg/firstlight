@@ -3,7 +3,7 @@
 from odoo import fields, models
 
 
-class smgproductprd(models.Model)
+class smgproductprd(models.Model):
     _inherit = 'product.product'
     _check_company_auto = True
 
