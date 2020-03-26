@@ -25,9 +25,6 @@
                 <xpath expr="//field[@name='standard_price']" position="attributes">
                     <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
                 </xpath>
-                <xpath expr="//field[@name='property_account_creditor_price_difference']" position="attributes">
-                    <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
-                </xpath>
             </field>
         </record>
 
