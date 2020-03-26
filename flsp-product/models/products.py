@@ -2,6 +2,7 @@
 
 from odoo import fields, models, api, exceptions
 
+
 class Smgproduct(models.Model):
     _inherit = 'product.template'
     _check_company_auto = True
