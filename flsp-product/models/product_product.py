@@ -11,11 +11,8 @@ class smgproductprd(models.Model):
 
     def button_acc_valid(self):
         self.product_tmpl_id.flsp_acc_valid = True
-        #product_id = self.env['product.product'].browse(self.env.context['default_product_id'])
-        #current_product = self.env['product.template'].search([('id', '=', self.product_tmpl_id)])
-        #if current_product:
-        #    current_product.write({'flsp_acc_valid': True}, context=None)
         return self.write({'flsp_acc_valid': True})
 
     def button_acc_valid_off(self):
+        self.product_tmpl_id.flsp_acc_valid = False
         return self.write({'flsp_acc_valid': False})
