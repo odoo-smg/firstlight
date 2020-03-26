@@ -2,6 +2,12 @@
 
 from odoo import fields, models, api, exceptions
 
+class smgproductprd(models.Model)
+    _inherit = 'product.product'
+    _check_company_auto = True
+
+    flsp_acc_valid   = fields.Boolean(string="Acconting Validated", readonly=True)
+
 
 class Smgproduct(models.Model):
     _inherit = 'product.template'
