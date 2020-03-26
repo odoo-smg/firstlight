@@ -9,7 +9,7 @@ class flspstockpicking(models.Model):
 
     def _allow_validate(self):
         for picking in self:
-            picking.flsp_allow_validate = any(m.product_id.flsp_acc_valid == False for m in picking.move_lines)
+            picking.flsp_allow_validate = not(any(m.product_id.flsp_acc_valid == False for m in picking.move_lines))
 
     #def _compute_has_tracking(self):
         #for picking in self:
