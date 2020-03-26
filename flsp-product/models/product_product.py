@@ -10,9 +10,10 @@ class smgproductprd(models.Model):
     flsp_acc_valid   = fields.Boolean(string="Acconting Validated", readonly=True)
 
     def button_acc_valid(self):
-        assignment_ids = product.template.search(cr, uid, [('id', '=', record.id)], context=None)
-        if assignment_ids:
-            product.template.write({'flsp_acc_valid': True}, context=None)
+        #product_id = self.env['product.product'].browse(self.env.context['default_product_id'])
+        current_product = self.env['product.template'].search(cr, uid, [('id', '=', record.default_product_id)], context=None)
+        if current_product:
+            current_product.write({'flsp_acc_valid': True}, context=None)
         return self.write({'flsp_acc_valid': True})
 
     def button_acc_valid_off(self):
