@@ -7,13 +7,8 @@
             <field name="priority">101</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <header>
-                  <xpath expr="//form[1]/header[1]/button[@name='button_validate']" position="attributes">
-                      <attribute name="attrs">{"invisible": [["flsp_allow_validate","=",False]]}</attribute>
-                  </xpath>
-                </header>
                 <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="flsp_allow_validate" readonly="1" />
+                    <field name="flsp_allow_validate" readonly="1" invisible="1"/>
                 </xpath>
             </field>
         </record>
