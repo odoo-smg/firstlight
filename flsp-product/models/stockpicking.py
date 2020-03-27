@@ -6,6 +6,7 @@ class flspstockpicking(models.Model):
     _check_company_auto = True
 
     flsp_allow_validate = fields.Boolean(string="Allow Validate Button", compute='_allow_validate')
+    product_id = fields.Many2one('product.product', 'Product', related='move_lines.product_id', domain="['&',['flsp_allow_validate','=',True]['type','in',['product','consu']],'|',['company_id','=',False],['company_id','=',company_id]]", readonly=False)
 
     def _allow_validate(self):
         for picking in self:
