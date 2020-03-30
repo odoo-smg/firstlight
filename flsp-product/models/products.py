@@ -53,7 +53,7 @@ class Smgproduct(models.Model):
     ]
 
     def button_acc_valid(self):
-        prd_prd = self.env['product.product'].search([('product_tmpl_id', '=', self.product_id.id)])
+        prd_prd = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
         if prd_prd:
             prd_prd.flsp_acc_valid = True
         return self.write({'flsp_acc_valid': True})
