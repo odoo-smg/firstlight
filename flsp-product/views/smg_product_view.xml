@@ -4,15 +4,27 @@
         <record model="ir.ui.view" id="product_smg_form_view">
             <field name="name">product.template.smg.form.inherit</field>
             <field name="model">product.template</field>
+            <field name="priority">98</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
+                <header>
+                  <button name="button_acc_valid" attrs="{'invisible': [('flsp_acc_valid', '=', True)]}" groups="account.group_account_manager" string="Acc Validation" type="object" class="oe_highlight"/>
+                  <button name="button_acc_valid_off" attrs="{'invisible': [('flsp_acc_valid', '=', False)]}" groups="account.group_account_manager" string="Unvalid Acc" type="object"/>
+                </header>
                 <group name="group_general">
                     <field name="id" invisible="1"/>
                     <field name="default_code"  readonly="1" force_save="1"  invisible="1"/>
                     <field widget="mask" data-inputmask-mask="99999" name="flsp_part_prefix" placeholder="99999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field widget="mask" data-inputmask-mask="999" name="flsp_part_suffix" placeholder="999" attrs="{'readonly': [('id', '!=', False)]}"/>
                     <field name="legacy_code"/>
+                    <field name="flsp_acc_valid" readonly="1" force_save="1"/>
                 </group>
+                <xpath expr="//field[@name='categ_id']" position="attributes">
+                    <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
+                </xpath>
             </field>
         </record>
 
@@ -21,5 +33,6 @@
             <field name="res_model">product.template</field>
             <field name="view_mode">tree,form</field>
         </record>
+
 
 </odoo>
