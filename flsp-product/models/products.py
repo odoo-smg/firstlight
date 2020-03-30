@@ -59,6 +59,9 @@ class Smgproduct(models.Model):
         return self.write({'flsp_acc_valid': True})
 
     def button_acc_valid_off(self):
+        prd_prd = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
+        if prd_prd:
+            prd_prd.flsp_acc_valid = False
         return self.write({'flsp_acc_valid': False})
 
     @api.model
