@@ -7,12 +7,12 @@
             <field name="priority">98</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <sheet>
+                <form>
                   <header>
                     <button name="button_acc_valid" attrs="{'invisible': [('flsp_acc_valid', '=', True)]}" groups="account.group_account_manager" string="Acc Validation" type="object" class="oe_highlight"/>
                     <button name="button_acc_valid_off" attrs="{'invisible': [('flsp_acc_valid', '=', False)]}" groups="account.group_account_manager" string="Unvalid Acc" type="object"/>
                   </header>
-                </sheet>
+                </form>
                 <xpath expr="//field[@name='category_id']" position="after">
                     <field name="flsp_acc_valid" />
                 </xpath>
