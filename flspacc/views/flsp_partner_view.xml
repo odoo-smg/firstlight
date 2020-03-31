@@ -14,7 +14,7 @@
                   </header>
                 </sheet>
                 <xpath expr="//field[@name='category_id']" position="after">
-                    <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
+                    <field name="flsp_acc_valid" />
                 </xpath>
             </field>
         </record>
