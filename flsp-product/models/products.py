@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models, api, exceptions
 
 
 class Smgproduct(models.Model):
@@ -15,6 +15,16 @@ class Smgproduct(models.Model):
         returned_registre = retvalue[0]
         return self._get_next_prefix(returned_registre[0])
 
+    @api.model
+    def _next_default_code(self):
+        flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
+        self._cr.execute("select max(default_code) as code from product_product where default_code like '"+flsp_default_part_init+"%' and length(default_code) = 10 ")
+        retvalue = self._cr.fetchall()
+        returned_registre = retvalue[0]
+        next_prefix = self._get_next_prefix(returned_registre[0])
+        next_suffix = '000'
+        return flsp_default_part_init+next_prefix+'-'+next_suffix
+
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
 
@@ -23,6 +33,9 @@ class Smgproduct(models.Model):
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
+    # Account review enforcement
+    #    if (self.env.uid != 8):
+    flsp_acc_valid   = fields.Boolean(string="Acconting Validated", readonly=True)
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
@@ -39,6 +52,17 @@ class Smgproduct(models.Model):
          "The Product name must be unique"),
     ]
 
+    def button_acc_valid(self):
+        prd_prd = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
+        if prd_prd:
+            prd_prd.flsp_acc_valid = True
+        return self.write({'flsp_acc_valid': True})
+
+    def button_acc_valid_off(self):
+        prd_prd = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
+        if prd_prd:
+            prd_prd.flsp_acc_valid = False
+        return self.write({'flsp_acc_valid': False})
 
     @api.model
     def _get_next_prefix(self, currpartnum):
