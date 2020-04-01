@@ -8,8 +8,10 @@
     'description': """
         Customizations performed:
 
-        Production Order:
-            * Product: Filter on domain PLM Valid products.
+        BOM:
+            * Bom report showing the legacy code.
+        Scheduled Tasks:
+            * Weekly Report - New Products
     """,
 
     'author': "Alexandre Sousa",
@@ -30,5 +32,7 @@
     'data': [
         'report/flspmfg_report_mybom_structure.xml',
         'report/products_report.xml',
+        'data/mail_product.xml',
+        'data/cron.xml',
     ],
 }
