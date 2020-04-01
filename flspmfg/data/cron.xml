@@ -8,7 +8,7 @@
             <field name="state">code</field>
             <field name="code">model._notify_newproducts()</field>
             <field name="interval_number">1</field>
-            <field name="interval_type">Week</field>
+            <field name="interval_type">Weeks</field>
             <field name="numbercall">-1</field>
         </record>
     </data>
