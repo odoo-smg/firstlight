@@ -9,7 +9,7 @@ class flsppartner(models.Model):
 
     # Account review enforcement
     #    if (self.env.uid != 8):
-    flsp_acc_valid   = fields.Boolean(string="Acconting Validated", readonly=True)
+    flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True)
 
     def button_partner_acc_valid(self):
         return self.write({'flsp_acc_valid': True})

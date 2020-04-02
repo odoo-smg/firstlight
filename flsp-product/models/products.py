@@ -35,7 +35,7 @@ class Smgproduct(models.Model):
 
     # Account review enforcement
     #    if (self.env.uid != 8):
-    flsp_acc_valid   = fields.Boolean(string="Acconting Validated", readonly=True)
+    flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True)
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
