@@ -1,5 +1,5 @@
 {
-    'name': "FLSP - MFG",
+    'name': "FLSP - Accounting",
 
     'summary': """
         This module intend to customize the functions and list to
@@ -8,10 +8,10 @@
     'description': """
         Customizations performed:
 
-        BOM:
-            * Bom report showing the legacy code.
-        Scheduled Tasks:
-            * Weekly Report - New Products
+        Partner:
+            * Accounting Validated field to enforce validation.
+            * Sales Orders: Filter accounting validated partners.
+            * Purchase Orders: Filter accounting validated partners.
     """,
 
     'author': "Alexandre Sousa",
@@ -25,14 +25,12 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-    'depends': ['stock'],
-    'depends': ['mrp'],
+    'depends': ['sale'],
+    'depends': ['purchase'],
 
     # always loaded
     'data': [
-        'report/flspmfg_report_mybom_structure.xml',
-        'report/products_report.xml',
-        'data/mail_product.xml',
-        'data/cron.xml',
+        'security/ir.model.access.csv',
+        'views/flsp_partner_view.xml',
     ],
 }
