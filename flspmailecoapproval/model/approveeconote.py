@@ -35,7 +35,7 @@ class approveeconote(models.Model):
         if total_prd > 0:
             self.env['mail.mail'].create({
                 'body_html': body,
-                'subject': 'ECO Reminder - Weekly Report',
+                'subject': 'Validation Reminder - Daily Report',
                 'email_to': 'alexandresousa@smartrendmfg.com',
                 'auto_delete': True,
             }).send()

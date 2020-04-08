@@ -28,14 +28,16 @@ class newprodemail(models.Model):
         #default_company_id = self.env['res.company']._company_default_get('account.invoice')
         #products = self.env['product.template'].search([('create_date', '<=', date.today() + relativedelta(days=-7)), '|', ('company_id', '=', False), ('company_id', '=', default_company_id)])
         products = self.env['product.template'].search([('create_date', '>=', date.today() + relativedelta(days=-7))])
+        total_prd = self.env['product.template'].search_count([('create_date', '>=', date.today() + relativedelta(days=-7))])
 
         rendered_body = template.render({'products': products}, engine='ir.qweb')
         body = self.env['mail.thread']._replace_local_links(rendered_body)
 
-        self.env['mail.mail'].create({
-            'body_html': body,
-            'subject': 'New Products - Weekly Report',
-            'email_to': 'alexandresousa@smartrendmfg.com',
-            'auto_delete': True,
-        }).send()
+        if total_prd > 0:
+            self.env['mail.mail'].create({
+                'body_html': body,
+                'subject': 'New Products - Weekly Report',
+                'email_to': 'alexandresousa@smartrendmfg.com',
+                'auto_delete': True,
+            }).send()
         print('************ New Products - Weekly report - DONE ******************')
