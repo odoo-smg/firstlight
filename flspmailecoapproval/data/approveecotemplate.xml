@@ -5,7 +5,7 @@
         <template id="mail_eco_products_approve">
             <div>
                 <p>Hello,</p>
-                <p>The following is the list of products that required validation:</p><br/>
+                <p>The following is a list of products that require validation:</p><br/>
             </div>
             <div >
                 <table class="table table-md" style="padding: 0px 20px 0px 20px;">
