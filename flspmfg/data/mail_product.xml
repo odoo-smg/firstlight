@@ -12,12 +12,14 @@
                         <tr style="border:2px solid black; ">
                             <th> Internal Reference </th>
                             <th> Name </th>
+                            <th> Creation date </th>
                             <th> Created by </th>
                         </tr>
                         <div t-foreach="products" t-as="row">
                           <tr style="border:1px solid black; text-align:center">
                               <td class="pb_text_center line_left" ><span t-esc="row['default_code']"/></td>
                               <td class="pb_text_center line_left" ><a t-attf-href="https://odoo-smg-firstlight1.odoo.com/web#id={{row.id}}&amp;action=213&amp;model=product.template&amp;view_type=form&amp;cids=1&amp;menu_id=93"> <span t-esc="row['name']"/></a></td>
+                              <td class="pb_text_center line_left" ><span t-field="row.create_date"/></td>
                               <td class="pb_text_center line_left" ><span t-esc="row.create_uid.name"/></td>
                           </tr>
                         </div>
