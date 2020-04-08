@@ -7,7 +7,7 @@
                 <p>The following is the list of new products from the last 7 days:</p><br/>
             </div>
             <div style="background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
-                <table class="table table-md">
+                <table class="table table-md" style="padding: 0px 20px 0px 20px;">
                     <div>
                         <tr>
                             <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Internal Reference </th>
