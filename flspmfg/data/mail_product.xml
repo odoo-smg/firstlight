@@ -7,20 +7,20 @@
                 <p>The following is the list of new products from the last 7 days:</p><br/>
             </div>
             <div style="background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
-                <table style="width:100%;margin:15px auto;background:white;border:2px solid #e1e1e1;">
+                <table class="table table-md">
                     <div>
-                        <tr style="border:2px solid black; ">
-                            <th> Internal Reference </th>
-                            <th> Name </th>
-                            <th> Creation date </th>
-                            <th> Created by </th>
+                        <tr>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Internal Reference </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Name </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Creation date </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Created by </th>
                         </tr>
                         <div t-foreach="products" t-as="row">
-                          <tr style="border:1px solid black; text-align:center">
-                              <td class="pb_text_center line_left" ><span t-esc="row['default_code']"/></td>
-                              <td class="pb_text_center line_left" ><a t-attf-href="https://odoo-smg-firstlight1.odoo.com/web#id={{row.id}}&amp;action=213&amp;model=product.template&amp;view_type=form&amp;cids=1&amp;menu_id=93"> <span t-esc="row['name']"/></a></td>
-                              <td class="pb_text_center line_left" ><span t-field="row.create_date"/></td>
-                              <td class="pb_text_center line_left" ><span t-esc="row.create_uid.name"/></td>
+                          <tr>
+                              <td style="text-align: left;border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['default_code']"/></td>
+                              <td style="text-align: left;border-collapse:collapse; border-bottom: 1px solid"><a t-attf-href="https://odoo-smg-firstlight1.odoo.com/web#id={{row.id}}&amp;action=213&amp;model=product.template&amp;view_type=form&amp;cids=1&amp;menu_id=93"> <span t-esc="row['name']"/></a></td>
+                              <td style="text-align: center;border-collapse:collapse; border-bottom: 1px solid"><span t-field="row.create_date"/></td>
+                              <td style="text-align: center;border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row.create_uid.name"/></td>
                           </tr>
                         </div>
                     </div>
