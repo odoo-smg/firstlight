@@ -5,7 +5,7 @@
             <field name="name">product.template.smg.form.inherit</field>
             <field name="model">product.template</field>
             <field name="priority">101</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="inherit_id" ref="product.studio_customization.odoo_studio_product__89820d1d-bf11-4129-8bed-fff8b766872f"/>
             <field name="arch" type="xml">
                 <header>
                   <button name="button_acc_valid" attrs="{'invisible': [('flsp_acc_valid', '=', True)]}" groups="account.group_account_manager" string="Acc Validation" type="object" class="oe_highlight"/>
