@@ -33,6 +33,12 @@ class Smgproduct(models.Model):
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
+
+    attachment_ids = fields.Many2many('ir.attachment', 'product_attachment_rel','drawing_id', 'attachment_id',
+        string='Attachments',
+        help='Attachments are linked to a document through model / res_id and to the message '
+             'through this field.')
+
     # Account review enforcement
     #    if (self.env.uid != 8):
     flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True)
