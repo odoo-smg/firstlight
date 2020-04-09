@@ -22,7 +22,7 @@
                 <notebook position="inside">
                     <page string="Attachment">
                         <group>
-                          <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2"/>
+                          <field name="attachment_ids" widget="many2many_binary" string="Attach another file" nolabel="1" colspan="2"/>
                         </group>
                     </page>
                 </notebook>
