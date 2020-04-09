@@ -19,9 +19,9 @@
                     <field name="legacy_code"/>
                     <field name="flsp_acc_valid" readonly="1" force_save="1"/>
                 </group>
-                <group name="studio_group_3aEOj_left">
+                <xpath expr="//field[@name='x_studio_specification']" position="after">
                     <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2"/>
-                </group>
+                </xpath>
                 <xpath expr="//field[@name='categ_id']" position="attributes">
                     <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
                 </xpath>
