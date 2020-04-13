@@ -4,13 +4,18 @@
         <record model="ir.ui.view" id="bom_flsp_form_view">
             <field name="name">bom.flsp.form.inherit</field>
             <field name="model">mrp.bom</field>
-            <field name="priority">98</field>
+            <field name="priority">95</field>
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='attachments_count']" position="after">
-                  <field name="flsp_plm_valid" />
-                </xpath>
+              <xpath expr="//field[@name='attachments_count']" position="after">
+                <field name="flsp_plm_valid"/>
+              </xpath>
             </field>
         </record>
 
+        <record model="ir.actions.act_window" id="mrpbom_list_action">
+            <field name="name">BOM</field>
+            <field name="res_model">mrp.bom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
 </odoo>
