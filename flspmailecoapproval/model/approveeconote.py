@@ -36,7 +36,7 @@ class approveeconote(models.Model):
             self.env['mail.mail'].create({
                 'body_html': body,
                 'subject': 'Validation Reminder - Daily Report',
-                'email_to': 'alexandresousa@smartrendmfg.com',
+                'email_to': 'alexandresousa@smartrendmfg.com;andrewmckay@smartrendmfg.com',
                 'auto_delete': True,
             }).send()
         print('************ ECO Reminder - Weekly report - DONE ******************')

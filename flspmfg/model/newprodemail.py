@@ -37,7 +37,7 @@ class newprodemail(models.Model):
             self.env['mail.mail'].create({
                 'body_html': body,
                 'subject': 'New Products - Weekly Report',
-                'email_to': 'alexandresousa@smartrendmfg.com',
+                'email_to': 'alexandresousa@smartrendmfg.com;andrewmckay@smartrendmfg.com',
                 'auto_delete': True,
             }).send()
         print('************ New Products - Weekly report - DONE ******************')
