@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
         <!-- Add instructor field to existing view -->
-        <record model="ir.ui.view" id="bom_flsp_form_view">
-            <field name="name">bom.flsp.form.inherit</field>
+        <record model="ir.ui.view" id="flsp_bom_form_view">
+            <field name="name">flsp.bom.form.inherit</field>
             <field name="model">mrp.bom</field>
             <field name="priority">95</field>
-            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="inherit_id" ref="mrp.bom.form"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='attachments_count']" position="after">
                 <field name="flsp_plm_valid"/>
