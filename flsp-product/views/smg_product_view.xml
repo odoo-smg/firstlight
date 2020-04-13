@@ -19,6 +19,13 @@
                     <field name="legacy_code"/>
                     <field name="flsp_acc_valid" readonly="1" force_save="1"/>
                 </group>
+                <notebook position="inside">
+                    <page string="Attachment">
+                        <group>
+                          <field name="attachment_ids" widget="many2many_binary" string="Attach another file" nolabel="1" colspan="2"/>
+                        </group>
+                    </page>
+                </notebook>
                 <xpath expr="//field[@name='categ_id']" position="attributes">
                     <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
                 </xpath>
