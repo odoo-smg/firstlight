@@ -7,7 +7,15 @@ class flspmrpbomlines(models.Model):
     _inherit = 'mrp.bom.line'
     _check_company_auto = True
 
-    flsp_plm_valid = fields.Boolean(string="PLM Validated", readonly=True)
+    flsp_plm_valid = fields.Boolean(string="PLM Validated", readonly=True, compute='_calc_plm_valid')
+
+    @api.depends('product_id', 'bom_id')
+    def _calc_plm_valid(self):
+        for line in self:
+            if not line.product_id:
+                line.flsp_plm_valid = False
+            else:
+                line.flsp_plm_valid = line.product_id.flsp_plm_valid
 
     @api.onchange('product_id')
     def onchange_product_id(self):
