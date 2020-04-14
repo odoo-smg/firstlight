@@ -8,7 +8,7 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('settings')]" position="inside">
-                <div class="app_settings_block" data-string="FLSP" string="First Light" data-key="FLSP" groups="purchase.group_purchase_manager">
+                <div class="app_settings_block" data-string="flsp-product" string="First Light" data-key="flsp-product" groups="base.group_system">
                     <t t-extend="PosWidget">
                         <t t-jquery="div#branding img" t-operation="replace">
                             <img src="/flsp-product/static/description/icon.png" />
