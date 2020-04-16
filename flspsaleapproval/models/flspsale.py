@@ -57,6 +57,13 @@ class SalesOrder(models.Model):
         self.write({'flsp_approval_approved': True})
         return self.action_confirm()
 
+    def button_flsp_reject(self):
+        self.write({'flsp_state': 'draft'})
+        self.write({'state': 'draft'})
+        self.write({'flsp_approval_approved': False})
+        self.write({'flsp_approval_requested': False})
+        return self.write({'flsp_approval_requested': False})
+
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
         default = dict(default or {})
