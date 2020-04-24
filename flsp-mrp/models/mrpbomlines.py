@@ -23,8 +23,9 @@ class flspmrpbomlines(models.Model):
             self.flsp_plm_valid = self.product_id.flsp_plm_valid
 
     @api.constrains('product_id')
-    def _check_same_product(self):
+    def _check_product_id(self):
         for record in self:
+            raise exceptions.ValidationError("You cannot use the same products to produce as components.")
             if record.product_id.product_tmpl_id == self.bom_id.product_id:
                 raise exceptions.ValidationError("You cannot use the same products to produce as components.")
             if record.product_id.product_tmpl_id == record.bom_id.product_id:
