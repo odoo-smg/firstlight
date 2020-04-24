@@ -1,5 +1,5 @@
 {
-    'name': "FLSP - MRP",
+    'name': "FLSP - Sale Approval",
 
     'summary': """
         This module intend to customize the functions and list to
@@ -8,8 +8,8 @@
     'description': """
         Customizations performed:
 
-        Production Order:
-            * Product: Filter on domain PLM Valid products.
+        Sales:
+            * Discount approval.
     """,
 
     'author': "Alexandre Sousa",
@@ -23,13 +23,11 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-    'depends': ['stock'],
-    'depends': ['mrp'],
-    'depends': ['mrp_plm'],
+    'depends': ['sale'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'views/flsp_bom_view.xml',
+        'views/flsp_sale_view.xml',
+        'views/flsp_sale_settings_view.xml',
     ],
 }

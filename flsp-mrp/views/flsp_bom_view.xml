@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
         <!-- Add instructor field to existing view -->
-        <record model="ir.ui.view" id="flsp_bom_form_view">
-            <field name="name">flsp.bom.form.inherit</field>
+        <record model="ir.ui.view" id="mrp_bom_smg_form_view">
+            <field name="name">mrp.bom.smg.form.inherit</field>
             <field name="model">mrp.bom</field>
-            <field name="priority">95</field>
-            <field name="inherit_id" ref="mrp.bom.form"/>
+            <field name="priority">100</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='attachments_count']" position="after">
                 <field name="flsp_plm_valid"/>
+                <field name="parent_product_tmpl_id" attrs="{'invisible': True}"/>
+              </xpath>
+              <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('product_tmpl_id', '!=', parent_product_tmpl_id)]</attribute>
               </xpath>
             </field>
-        </record>
-
-        <record model="ir.actions.act_window" id="mrpbom_list_action">
-            <field name="name">BOM</field>
-            <field name="res_model">mrp.bom</field>
-            <field name="view_mode">tree,form</field>
         </record>
 </odoo>

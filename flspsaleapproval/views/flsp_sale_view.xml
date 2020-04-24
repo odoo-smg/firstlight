@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_sale_form_view">
+            <field name="name">sale.flsp.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <header>
+                    <field name="flsp_state" widget="statusbar" statusbar_visible="draft,sent,wait,sale" attrs="{'invisible': [('flsp_approval_required', '=', False),('flsp_approval_requested', '=', False),('flsp_approval_approved', '=', False)]}"/>
+                    <button name="button_flsp_approve" class="btn-primary" type="object" string="Approve" groups="sales_team.group_sale_manager" attrs="{'invisible': ['|', ('flsp_approval_requested', '=', False),('flsp_approval_approved', '=', True)]}"/>
+                    <button name="button_flsp_reject" class="btn-primary" type="object" string="Reject" groups="sales_team.group_sale_manager" attrs="{'invisible': ['|', ('flsp_approval_requested', '=', False),('flsp_approval_approved', '=', True)]}"/>
+                </header>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('flsp_approval_required', '=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('flsp_approval_required', '=', True),('state', 'not in', ['draft'])]}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('flsp_approval_required', '=', True),('state', 'not in', ['sent'])]}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm']" position="after">
+                    <button name="button_flsp_submit_approval" class="btn-primary" type="object" string="Submit for Approval" attrs="{'invisible': ['|', ('flsp_approval_required', '=', False), ('flsp_approval_requested', '=', True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                  <field name="flsp_approval_required" attrs="{'invisible': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                  <field name="flsp_approval_requested" attrs="{'invisible': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                  <field name="flsp_approval_approved" attrs="{'invisible': True}"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='discount']" position="attributes">
+                  <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
