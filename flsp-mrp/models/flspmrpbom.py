@@ -13,6 +13,6 @@ class flspmrpbom(models.Model):
     # constraints to validate code and description to be unique
     _sql_constraints = [
         ('default_code_unique_flsp',
-         'UNIQUE(default_code)',
+         'UNIQUE(code)',
          "The Reference must be unique"),
     ]
