@@ -5,7 +5,7 @@
             <field name="name">mrp.bom.smg.form.inherit</field>
             <field name="model">mrp.bom</field>
             <field name="priority">98</field>
-            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="inherit_id" ref="mrp_plm.mrp_bom_view_form_inherit_plm"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='attachments_count']" position="after">
                 <field name="flsp_plm_valid"/>
