@@ -25,5 +25,7 @@ class flspmrpbomlines(models.Model):
     @api.constrains('product_id')
     def _check_done_eco(self):
         for record in self:
+            if record.product_id.id == self.bom_id.product_id:
+                raise exceptions.ValidationError("You cannot use the same products to produce as components.")
             if record.product_id.id == record.bom_id.product_id:
                 raise exceptions.ValidationError("You cannot use the same products to produce as components.")
