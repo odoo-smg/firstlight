@@ -2,3 +2,4 @@
 
 from . import mrpproduction
 from . import mrpbomlines
+from . import flspmrpbom
