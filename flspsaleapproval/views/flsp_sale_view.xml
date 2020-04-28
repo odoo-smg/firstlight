@@ -24,10 +24,10 @@
                     <button name="button_flsp_submit_approval" class="btn-primary" type="object" string="Submit for Approval" attrs="{'invisible': ['|', ('flsp_approval_required', '=', False), ('flsp_approval_requested', '=', True)]}"/>
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="attributes">
-                    <attribute name="attrs">{'readonly': [('flsp_approval_requested', '=', True)]}</attribute>
+                    <attribute name="attrs">{'readonly': ['|', ('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='order_line']" position="attributes">
-                    <attribute name="attrs">{'readonly': [('flsp_approval_requested', '=', True)]}</attribute>
+                    <attribute name="attrs">{'readonly': ['|',('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='pricelist_id']" position="attributes">
                     <attribute name="attrs">{'readonly': True}</attribute>
@@ -41,7 +41,7 @@
                   <field name="flsp_approval_approved" attrs="{'invisible': True}"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
-                  <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>
+                  <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
                 </xpath>
             </field>
         </record>
