@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flspapproval_partner_form_view">
+            <field name="name">partner.flspapproval.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="priority">96</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="flsp_sale_type" attrs="{'readonly': [('flsp_acc_valid', '=', True)]}" />
+                </xpath>
+                <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
+                    <attribute name="domain">[["flsp_sale_type","=",flsp_sale_type]]</attribute>
+                    <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
