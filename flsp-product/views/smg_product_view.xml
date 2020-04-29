@@ -26,6 +26,12 @@
                         </group>
                     </page>
                 </notebook>
+                <xpath expr="//field[@name='uom_id']" position="attributes">
+                    <attribute name="attrs">{"readonly": ["|", ["bom_count",">",0],["used_in_bom_count",">",0]]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='uom_po_id']" position="attributes">
+                    <attribute name="attrs">{"readonly": ["|", ["bom_count",">",0],["used_in_bom_count",">",0]]}</attribute>
+                </xpath>
                 <xpath expr="//field[@name='categ_id']" position="attributes">
                     <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
                 </xpath>
