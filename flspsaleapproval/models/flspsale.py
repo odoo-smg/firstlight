@@ -12,21 +12,24 @@ class SalesOrder(models.Model):
     flsp_approval_approved = fields.Boolean(string="Discount Approved", readonly=True)
     flsp_state = fields.Selection([
         ('draft', 'Quotation'),
-        ('sent', 'Quotation Sent'),
         ('wait', 'Waiting Approval'),
+        ('approved', 'Approved'),
+        ('sent', 'Quotation Sent'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
 
-    state = fields.Selection([
-        ('draft', 'Quotation'),
-        ('sent', 'Quotation Sent'),
-        ('wait', 'Waiting Approval'),
-        ('sale', 'Sales Order'),
-        ('done', 'Locked'),
-        ('cancel', 'Cancelled'),
-        ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
+    sale_order_template_id = fields.Many2one(
+        'sale.order.template', 'Quotation Template',
+        readonly=True, check_company=True,
+        states={'draft': [('readonly', False)]},
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
+
+    sale_order_option_ids = fields.One2many(
+        'sale.order.option', 'order_id', 'Optional Products Lines',
+        copy=True, readonly=True,
+        states={'draft': [('readonly', False)]})
 
     @api.depends('order_line.discount')
     def _calc_sale_approval(self):
@@ -40,26 +43,29 @@ class SalesOrder(models.Model):
             total_discount += line.discount
 
     def button_flsp_submit_approval(self):
-        self.write({'flsp_state': 'wait'})
         self.write({'flsp_approval_requested': True})
-        for order in self:
-            tx = order.sudo().transaction_ids.get_last_transaction()
-            if tx and tx.state == 'pending' and tx.acquirer_id.provider == 'transfer':
-                tx._set_transaction_done()
-                tx.write({'is_processed': True})
-        return self.write({'state': 'done'})
-
-
+        return self.write({'flsp_state': 'wait'})
 
     def button_flsp_approve(self):
-        self.write({'flsp_state': 'sale'})
-        self.write({'state': 'draft'})
-        self.write({'flsp_approval_approved': True})
-        return self.action_confirm()
+        #flsp_sale_order_lines = flspsaleapproval.Saleflspwizard
+        #flsp_open_sale_wizard
+
+        action = self.env.ref('flspsaleapproval.launch_flsp_sale_wizard').read()[0]
+        return action
+
+        #return self.action_confirm()
+
+    def button_flsp_confirm(self):
+        if not self.partner_id.flsp_acc_valid:
+            action = self.env.ref('flspsaleapproval.launch_flsp_sale_message').read()[0]
+        else:
+            action = self.action_confirm()
+        return action
+
+        #return self.action_confirm()
 
     def button_flsp_reject(self):
         self.write({'flsp_state': 'draft'})
-        self.write({'state': 'draft'})
         self.write({'flsp_approval_approved': False})
         self.write({'flsp_approval_requested': False})
         return self.write({'flsp_approval_requested': False})
@@ -67,10 +73,10 @@ class SalesOrder(models.Model):
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
         default = dict(default or {})
-        default['state'] = 'draft'
         default['flsp_state'] = 'draft'
         default['flsp_approval_requested'] = False
         default['flsp_approval_approved'] = False
         default['flsp_approval_required'] = False
         return super(SalesOrder, self).copy(default=default)
+
 
