@@ -15,11 +15,11 @@ class flsppurchase(models.Model):
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         res = self.env['product.supplierinfo']
         sellers = self.product_id.seller_ids.filtered(lambda s: s.name.active).sorted(lambda s: (s.sequence, -s.min_qty, s.price))
+        quantity_uom_seller = self.product_qty
         if self.env.context.get('force_company'):
             sellers = sellers.filtered(lambda s: not s.company_id or s.company_id.id == self.env.context['force_company'])
 
         for seller in sellers:
-            quantity_uom_seller = self.product_qty
             if quantity_uom_seller and uom_id and uom_id != seller.product_uom:
                 quantity_uom_seller = uom_id._compute_quantity(quantity_uom_seller, seller.product_uom)
             if seller.date_start and seller.date_start > date:
