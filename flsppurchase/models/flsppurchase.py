@@ -27,7 +27,7 @@ class flsppurchase(models.Model):
                     continue
                 if seller.date_end and seller.date_end < date:
                     continue
-                if partner_id and seller.name not in [self.partner_id, self.partner_id.parent_id]:
+                if self.partner_id and seller.name not in [self.partner_id, self.partner_id.parent_id]:
                     continue
                 if float_compare(quantity_uom_seller, seller.min_qty, precision_digits=precision) == -1:
                     continue
