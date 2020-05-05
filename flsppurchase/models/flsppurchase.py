@@ -21,8 +21,8 @@ class flsppurchase(models.Model):
 
             for seller in sellers:
                 quantity_uom_seller = line.product_qty
-                if quantity_uom_seller and uom_id and uom_id != seller.product_uom:
-                    quantity_uom_seller = uom_id._compute_quantity(quantity_uom_seller, seller.product_uom)
+                if quantity_uom_seller and line.product_uom and line.product_uom != seller.product_uom:
+                    quantity_uom_seller = line.product_uom._compute_quantity(quantity_uom_seller, seller.product_uom)
                 if seller.date_start and seller.date_start > date:
                     continue
                 if seller.date_end and seller.date_end < date:
