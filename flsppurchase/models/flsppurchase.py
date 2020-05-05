@@ -8,10 +8,10 @@ class flsppurchase(models.Model):
     _inherit = 'purchase.order.line'
     _check_company_auto = True
 
-    flsp_vendor_code = fields.Char('Vendor Product Code', compute='_calc_vendor_code')
+    flsp_vendor_code = fields.Char('Vendor Product Code')
 
-    @api.depends('product_id')
-    def _calc_vendor_code(self):
+    @api.onchange('product_id', 'product_qty', 'product_uom')
+    def _onchange_flsp_product(self):
         for line in self:
             if not line.product_id:
                 return
@@ -22,7 +22,5 @@ class flsppurchase(models.Model):
                 date=line.order_id.date_order and self.order_id.date_order.date(),
                 uom_id=line.product_uom,
                 params=params)
-
             if vendor:
-                if line.flsp_vendor_code:
                     line.flsp_vendor_code = vendor.product_code
