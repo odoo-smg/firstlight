@@ -8,7 +8,7 @@ class flsppurchase(models.Model):
     _inherit = 'purchase.order.line'
     _check_company_auto = True
 
-    flsp_vendor_code = fields.Char('Vendor Product Code')
+    flsp_vendor_code = fields.Char('Vendor Part #')
 
     @api.onchange('product_id', 'product_qty', 'product_uom')
     def _onchange_flsp_product(self):
