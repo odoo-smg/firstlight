@@ -7,7 +7,7 @@
             <field name="priority">98</field>
             <field name="arch" type="xml">
                 <xpath expr="//tree/field[@name='name']" position="after">
-                    <field name="flsp_vendor_code" invisible="1""/>
+                    <field name="flsp_vendor_code" invisible="1" />
                 </xpath>
             </field>
         </record>
