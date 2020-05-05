@@ -12,8 +12,8 @@ class flsppurchase(models.Model):
     @api.depends('product_id')
     def _calc_vendor_code(self):
         self.flsp_vendor_code = '1'
-        for line in self:
-            if not line.flsp_vendor_code:
-                line.flsp_vendor_code = '2'
-            else:
-                line.flsp_vendor_code = '3'
+#        for line in self:
+#            if not line.flsp_vendor_code:
+#                line.flsp_vendor_code = '2'
+#            else:
+#                line.flsp_vendor_code = '3'
