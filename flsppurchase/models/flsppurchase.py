@@ -12,8 +12,7 @@ class flsppurchase(models.Model):
     @api.depends('product_qty', 'product_uom', 'product_id')
     def _calc_vendor_code(self):
         params = {'order_id': self.order_id}
-        for line in self:
-            if line.flsp_vendor_code:
-                line.flsp_vendor_code = line.flsp_vendor_code+1
-            else:
-                line.flsp_vendor_code = 1
+        if self.flsp_vendor_code:
+            self.flsp_vendor_code = self.flsp_vendor_code+1
+        else:
+            self.flsp_vendor_code = 1
