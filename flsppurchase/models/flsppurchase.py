@@ -11,6 +11,7 @@ class flsppurchase(models.Model):
 
     @api.depends('product_id')
     def _calc_vendor_code(self):
+        self.ensure_one()
         seller = self.product_id._select_seller(
             partner_id=self.partner_id,
             quantity=self.product_qty,
