@@ -14,7 +14,7 @@ class flsppurchase(models.Model):
         date = fields.Date.context_today(self)
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         res = self.env['product.supplierinfo']
-        sellers = self._prepare_sellers(False)
+        sellers = self._prepare_sellers()
         if self.env.context.get('force_company'):
             sellers = sellers.filtered(lambda s: not s.company_id or s.company_id.id == self.env.context['force_company'])
 
