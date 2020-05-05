@@ -23,4 +23,4 @@ class flsppurchase(models.Model):
                 uom_id=line.product_uom,
                 params=params)
             if vendor:
-                    line.flsp_vendor_code = vendor.product_code
+                line.flsp_vendor_code = vendor.product_code
