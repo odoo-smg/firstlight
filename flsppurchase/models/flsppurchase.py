@@ -25,4 +25,4 @@ class flsppurchase(models.Model):
 
             if vendor:
                 if line.flsp_vendor_code:
-                line.flsp_vendor_code = vendor.product_code
+                    line.flsp_vendor_code = vendor.product_code
