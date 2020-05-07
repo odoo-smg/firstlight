@@ -7,6 +7,12 @@
             <field name="priority">100</field>
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
+              <xpath expr="//field[@name='product_qty']" position="after">
+                <field name="flsp_eco_enforce" />
+              </xpath>
+              <xpath expr="//field[@name='type']" position="after">
+                <field name="flsp_bom_plm_valid" />
+              </xpath>
               <xpath expr="//field[@name='attachments_count']" position="after">
                 <field name="flsp_plm_valid" />
                 <field name="parent_product_tmpl_id" invisible="1"/>
