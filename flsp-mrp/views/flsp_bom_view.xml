@@ -8,10 +8,10 @@
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='routing_id'][1]" position="after">
-                <field name="flsp_eco_enforce" />
+                <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
               </xpath>
               <xpath expr="//field[@name='flsp_eco_enforce']" position="after">
-                <field name="flsp_bom_plm_valid" />
+                <field name="flsp_bom_plm_valid" readonly="0" />
               </xpath>
               <xpath expr="//field[@name='attachments_count']" position="after">
                 <field name="flsp_plm_valid" />
@@ -22,7 +22,7 @@
               </xpath>
 
               <xpath expr="//field[@name='version']" position="attributes">
-                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+                <attribute name="attrs">{'readonly': [(True)]}</attribute>
               </xpath>
               <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
