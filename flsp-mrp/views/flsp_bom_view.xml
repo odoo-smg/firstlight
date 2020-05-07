@@ -11,7 +11,7 @@
                 <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
               </xpath>
               <xpath expr="//field[@name='flsp_eco_enforce']" position="after">
-                <field name="flsp_bom_plm_valid" readonly="0" />
+                <field name="flsp_bom_plm_valid" readonly="1" />
               </xpath>
               <xpath expr="//field[@name='attachments_count']" position="after">
                 <field name="flsp_plm_valid" />
@@ -24,6 +24,9 @@
               <xpath expr="//field[@name='version']" position="attributes">
                 <attribute name="attrs">{'readonly': [(True)]}</attribute>
               </xpath>
+              <xpath expr="//field[@name='consumption']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
               <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
               </xpath>
@@ -34,6 +37,9 @@
                 <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
               </xpath>
               <xpath expr="//field[@name='product_qty'][1]" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_uom_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
               </xpath>
               <xpath expr="//field[@name='bom_line_ids']" position="attributes">
