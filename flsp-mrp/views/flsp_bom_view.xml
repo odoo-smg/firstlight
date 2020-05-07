@@ -7,7 +7,7 @@
             <field name="priority">100</field>
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
-              <xpath expr="//field[@name='product_qty']" position="after">
+              <xpath expr="//field[@name='routing_id'][1]" position="after">
                 <field name="flsp_eco_enforce" />
               </xpath>
               <xpath expr="//field[@name='type']" position="after">
