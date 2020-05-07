@@ -10,7 +10,7 @@
               <xpath expr="//field[@name='routing_id'][1]" position="after">
                 <field name="flsp_eco_enforce" />
               </xpath>
-              <xpath expr="//field[@name='type']" position="after">
+              <xpath expr="//field[@name='flsp_eco_enforce']" position="after">
                 <field name="flsp_bom_plm_valid" />
               </xpath>
               <xpath expr="//field[@name='attachments_count']" position="after">
@@ -20,6 +20,26 @@
               <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']" position="attributes">
                 <attribute name="domain">[('product_tmpl_id', '!=', parent_product_tmpl_id)]</attribute>
               </xpath>
+
+              <xpath expr="//field[@name='version']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_qty'][1]" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='bom_line_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+
             </field>
         </record>
 </odoo>
