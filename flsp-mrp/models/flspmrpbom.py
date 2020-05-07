@@ -9,7 +9,7 @@ class flspmrpbom(models.Model):
 
     @api.model
     def _default_nextbomref(self):
-        res = (datetime.now()).strftime('%Y%m%d(%H%M%S)')
+        res = (datetime.now()).strftime('%Y%m%d%H%M%S')
         return res
 
     code = fields.Char('Reference', required=True, default=_default_nextbomref)
