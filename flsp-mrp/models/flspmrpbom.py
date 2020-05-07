@@ -20,3 +20,7 @@ class flspmrpbom(models.Model):
          'UNIQUE(code)',
          "The Reference must be unique"),
     ]
+
+    def copy(self, default=None):
+        default['code'] = self._default_nextbomref()
+        return super(flspmrpbom, self).copy(default)
