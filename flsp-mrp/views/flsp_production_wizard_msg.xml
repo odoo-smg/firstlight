@@ -6,13 +6,13 @@
             <field name="model">flspmrp.productionflspmsg</field>
             <field name="arch" type="xml">
                 <form string="Attention">
-                    <h4>Product not validated</h4>
+                    <h4>The BOM is not yet PLM validated</h4>
                     <group>
                         <group>
-                            <field name="product_id"/>
+                            <field name="bom_id"/>
                         </group>
                     </group>
-                    <spam>In order to confirm the Quotation into a Sales Order the customer must be validated.</spam>
+                    <spam>In order to confirm the Production Order the bill of material must be validated.</spam>
                     <footer>
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
                     </footer>

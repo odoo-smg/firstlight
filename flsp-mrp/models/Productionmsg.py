@@ -17,6 +17,9 @@ class Produtionflspmsg(models.TransientModel):
         if production_order.exists():
             if 'product_id' in fields:
                 res['product_id'] = production_order.product_id.id
+            if 'bom_id' in fields:
+                res['bom_id'] = production_order.bom_id.id
         return res
 
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
+    bom_id = fields.Many2one('mrp.bom', string='Bill of Material', readonly=True)
