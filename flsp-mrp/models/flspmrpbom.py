@@ -13,6 +13,18 @@ class flspmrpbom(models.Model):
         return res
 
     code = fields.Char('Reference', required=True, default=_default_nextbomref)
+    # New fields to control ECO enforcement
+    flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
+    flsp_bom_plm_valid = fields.Boolean(string="PLM Validated")
+
+    @api.onchange('flsp_eco_enforce')
+    def flsp_eco_enforce_onchange(self):
+        self.flsp_plm_valid = False
+        return {
+            'value': {
+                'flsp_bom_plm_valid': False
+            },
+        }
 
     # constraints to validate code and description to be unique
     _sql_constraints = [
