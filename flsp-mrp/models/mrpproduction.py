@@ -19,3 +19,10 @@ class flspproduction(models.Model):
         for record in self:
             if record.product_id.flsp_plm_valid != True:
                 raise exceptions.ValidationError("You cannot use products that haven't been PLM Validated yet.")
+
+    def button_flsp_confirm(self):
+        if not self.partner_id.flsp_acc_valid:
+            action = self.env.ref('flspsaleapproval.launch_flsp_sale_message').read()[0]
+        else:
+            action = self.action_confirm()
+        return action
