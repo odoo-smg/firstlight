@@ -1,5 +1,5 @@
 {
-    'name': "FLSP - MRP",
+    'name': "FLSP - Purchase",
 
     'summary': """
         This module intend to customize the functions and list to
@@ -8,8 +8,8 @@
     'description': """
         Customizations performed:
 
-        Production Order:
-            * Product: Filter on domain PLM Valid products.
+        Purchase Order:
+            * Add a field on Quote Lines = Vendor Product Code.
     """,
 
     'author': "Alexandre Sousa",
@@ -23,13 +23,10 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-    'depends': ['stock'],
-    'depends': ['mrp'],
-    'depends': ['mrp_plm'],
+    'depends': ['purchase'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'views/flsp_bom_view.xml',
+        'views/flsp_purchase_view.xml',
     ],
 }

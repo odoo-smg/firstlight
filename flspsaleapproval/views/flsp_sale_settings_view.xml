@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_sale_view_form_flsp" model="ir.ui.view">
+        <field name="name">res.config.settings.view.sale.form.inherit.flsp</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="25"/>
+        <field name="inherit_id" ref="flsp-product.res_config_settings_view_form_flsp"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='flsp-product']" position="inside">
+                    <h2>Quotations and Orders</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" title="Managers must approve orders">
+                          <div class="o_setting_left_pane"/>
+                            <field name="flsp_sales_discount_approval"/>
+                            <span class="o_form_label">Managers must approve orders</span>
+                          <div class="o_setting_right_pane">
+                              <div class="text-muted">
+                                  Maximum % of discount allowed:
+                              </div>
+                              <field name="so_flsp_max_percent_approval" attrs="{'readonly': [['flsp_sales_discount_approval','=',False]]}" />
+                          </div>
+                        </div>
+                    </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
