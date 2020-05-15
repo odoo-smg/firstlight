@@ -55,7 +55,7 @@
                                 </div>
                                 <div style=" float:right; height:110px; width:180px; text-align: right;  padding: 0px 10px 0px 0px;" >
                                     <spam style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: 0;">Date: </spam>
-                                    <spam style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: .6;"><spam t-esc="datetime.datetime.strptime(doc.date_order, '%Y-%m-%d').strftime('%d %b %Y')"/></spam>
+                                    <spam style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: .6;"><spam t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd Y"}'/></spam>
                                     <p style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:40px; font-weight: bolder; letter-spacing:5px; line-height: 1.1;">QUOTE</p>
                                     <p style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:22px ;line-height: 0;"><span t-field="doc.name"/></p>
                                 </div>
