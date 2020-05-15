@@ -12,6 +12,7 @@ class ResConfigSettings(models.TransientModel):
         res = super(ResConfigSettings, self).get_values()
         res.update(
             flsp_sales_discount_approval=self.env['ir.config_parameter'].sudo().get_param('flsp_sales_discount_approval')
+            flsp_gst_reg_no=self.env['ir.config_parameter'].sudo().get_param('flsp_gst_reg_no')
         )
         return res
 
