@@ -3,3 +3,4 @@
 from . import mrpproduction
 from . import mrpbomlines
 from . import flspmrpbom
+from . import Productionmsg
