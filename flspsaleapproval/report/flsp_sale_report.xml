@@ -113,7 +113,9 @@
                             <t t-if="doc.flsp_ship_via">
                               <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Ship via</td>
                             </t>
-                            <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Terms</td>
+                            <t t-if="doc.payment_term_id">
+                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Terms</td>
+                            </t>
                         </tr>
                         <tr>
                             <t t-if="doc.client_order_ref">
@@ -123,7 +125,9 @@
                             <t t-if="doc.flsp_ship_via">
                               <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-field="doc.flsp_ship_via"/></td>
                             </t>
-                            <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-field="doc.payment_term_id.note"/></td>
+                            <t t-if="doc.payment_term_id">
+                              <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-field="doc.payment_term_id.note"/></td>
+                            </t>
                         </tr>
                       </tbody>
                     </table>
