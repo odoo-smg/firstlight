@@ -11,6 +11,7 @@ class SalesOrder(models.Model):
     flsp_approval_requested = fields.Boolean(string="Approval Requested", readonly=True)
     flsp_approval_approved  = fields.Boolean(string="Discount Approved", readonly=True)
     flsp_show_discount      = fields.Boolean(string="Show Disc. on Quote")
+    flsp_ship_via           = fields.Char(string="Ship Via")
     flsp_state = fields.Selection([
         ('draft', 'Quotation'),
         ('wait', 'Waiting Approval'),

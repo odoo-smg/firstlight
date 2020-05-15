@@ -44,6 +44,9 @@
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                   <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='commitment_date']" position="after">
+                  <field name="flsp_ship_via"/>
+                </xpath>
             </field>
         </record>
 
