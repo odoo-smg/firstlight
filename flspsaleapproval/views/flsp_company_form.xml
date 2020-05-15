@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flspapproval_company_form_view">
+            <field name="name">company.flspapproval.form.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="priority">99</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="flsp_gst_reg_no" />
+                </xpath>
+            </field>
+        </record>
+</odoo>
