@@ -34,6 +34,7 @@
         'views/flsp_sale_message_view.xml',
         'views/flsp_sale_partner.xml',
         'views/flsp_sale_pricelist_view.xml',
+        'views/flsp_company_form.xml',
         'report/flsp_sale_report.xml'
     ],
 }
