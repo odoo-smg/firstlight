@@ -51,7 +51,7 @@
                             <div style="border-left: 2px solid #4B5EAB ;margin:10px 0px 0px 280px; padding: 0px 0px 0px 20px; width:800px; ">
                                 <div style=" float:left; height:110px; width:550px " >
                                     <spam style="font-size:16px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif;">First Light Safety Products – A Division of Smartrend Supply Ltd.</spam>
-                                    <p style="font-size:16px; color:#ffffff; letter-spacing:5px; line-height: 1.5; font-family:'Franklin Gothic Demi', sans-serif;">6-1249 Clarence Avenue, Winnipeg, MB, Canada, R3T 1T4<br />T: 866.216.2605 | F: 1-833-866-1547<br />E: info@firstlightsafety.com</p>
+                                    <p style="font-size:16px; color:#ffffff; font-family:'Franklin Gothic Demi', sans-serif;">6-1249 Clarence Avenue, Winnipeg, MB, Canada, R3T 1T4<br />T: 866.216.2605 | F: 1-833-866-1547<br />E: info@firstlightsafety.com</p>
                                 </div>
                                 <div style=" float:right; height:110px; width:180px; text-align: right;  padding: 0px 10px 0px 0px;" >
                                     <spam style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: 0;">Date: </spam>
@@ -170,7 +170,7 @@
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.product_id.name"/></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; width:70px;"><spam t-field="line.product_uom_qty"/></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:70px;"><spam t-field="line.product_uom"/></td>
-                                    <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; width:100px;"><spam t-field="line.currency_id.name"/><spam t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/></td>
+                                    <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; width:100px;"><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><spam t-field="line.price_unit" t-options='{"widget": "monetary"}'/></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; width:100px;"><spam t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; width:110px;"><spam t-field="line.currency_id.name"/><spam t-field="line.price_total"/></td>
                                 </t>
@@ -259,4 +259,3 @@
     </template>
 
 </odoo>
-
