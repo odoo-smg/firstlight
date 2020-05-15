@@ -273,6 +273,14 @@
                 </div>
 
 
+                <div style="margin:0px 0px 0px 0px; padding: 00px 0px 0px 0px; width:100%; ">
+                        <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
+                          <t t-if="company.flsp_gst_reg_no">
+                            <span>GST Reg No. </span> <spam t-field="company.flsp_gst_reg_no"/>
+                          </t>
+                        </p>
+                </div>
+
                 <div class="oe_structure"/>
 
             </div>
