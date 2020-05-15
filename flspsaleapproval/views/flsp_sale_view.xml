@@ -39,9 +39,13 @@
                   <field name="flsp_approval_required" attrs="{'invisible': True}"/>
                   <field name="flsp_approval_requested" attrs="{'invisible': True}"/>
                   <field name="flsp_approval_approved" attrs="{'invisible': True}"/>
+                  <field name="flsp_show_discount"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                   <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
+                </xpath>
+                <xpath expr="//group[@name='sale_shipping']" position="inside">
+                  <field name="flsp_ship_via" string="Ship Via"/>
                 </xpath>
             </field>
         </record>
