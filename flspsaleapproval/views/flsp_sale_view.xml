@@ -44,7 +44,7 @@
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                   <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
                 </xpath>
-                <xpath expr="//field[@name='picking_policy']" position="before">
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_information']/group[2]/group[@name='sale_shipping']/field[@name='warehouse_id']" position="before">
                   <field name="flsp_ship_via" string="Ship Via"/>
                 </xpath>
             </field>
