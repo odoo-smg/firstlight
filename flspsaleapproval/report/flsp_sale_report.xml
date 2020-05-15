@@ -275,7 +275,7 @@
 
                 <div style="margin:40px 0px 0px 0px; padding: 00px 0px 0px 0px; width:100%; ">
                         <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
-                            <span>GST Reg No. 850213554RT0001</span>
+                            <span>GST Reg No. </span> <spam t-field="company.name"/>
                         </p>
                 </div>
 
