@@ -73,8 +73,10 @@
                         <span style=" margin-top: 3px; text-align: center; color: #4b5eab; font-family: Franklin Gothic Demi, sans-serif; line-height: 1.079; font-size: 24px;    font-style: italic;    font-weight: bolder;"><span t-field="company.report_header"/></span>
                     </div>
                     <div  style=" width:100%; border:5px solid #64b2d8; "/>
-                    <div t-if="report_type == 'pdf'" class="text-muted">
-                        Page: <span class="page"/> / <span class="topage"/>
+                    <div  style=" width:100%; text-align: center;">
+                      <div t-if="report_type == 'pdf'" class="text-muted">
+                          Page: <span class="page"/> / <span class="topage"/>
+                      </div>
                     </div>
                 </div>
             </div>
