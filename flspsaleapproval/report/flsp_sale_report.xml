@@ -55,7 +55,7 @@
                                 </div>
                                 <div style=" float:right; height:110px; width:180px; text-align: right;  padding: 0px 10px 0px 0px;" >
                                     <spam style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: 0;">Date: </spam>
-                                    <spam style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: .6;"><spam t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd Y"}'/></spam>
+                                    <spam style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: .6;"><spam t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/></spam>
                                     <p style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:40px; font-weight: bolder; letter-spacing:5px; line-height: 1.1;">QUOTE</p>
                                     <p style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:22px ;line-height: 0;"><span t-field="doc.name"/></p>
                                 </div>
@@ -82,7 +82,7 @@
                         <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
                             <span t-field="doc.partner_id.name"/><br/>
                             <span t-field="doc.partner_id.street"/><br/>
-                            <span t-field="doc.partner_id.city"/> <span t-field="doc.partner_id.state_id.code"/>, <span t-field="doc.partner_id.zip"/><br/>
+                            <span t-field="doc.partner_id.city"/>, <span t-field="doc.partner_id.state_id.code"/> <span t-field="doc.partner_id.zip"/><br/>
                             <span t-field="doc.partner_id.country_id.code"/>
                         </p>
                     </div>
@@ -178,7 +178,7 @@
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.product_id.name"/></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; "><spam t-field="line.product_uom_qty"/></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; "><spam t-field="line.product_uom"/></td>
-                                    <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; "><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><spam t-field="line.price_unit" t-options='{"widget": "monetary"}'/></td>
+                                    <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; "><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]><spam t-field="line.price_unit" /></td>
                                     <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; "><spam t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/></td>
                                     <t t-if="doc.flsp_show_discount and display_discount">
                                       <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right;"><spam t-field="line.discount"/></td>
