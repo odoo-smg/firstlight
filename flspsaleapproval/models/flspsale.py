@@ -7,9 +7,10 @@ class SalesOrder(models.Model):
     _inherit = "sale.order"
     _check_company_auto = True
 
-    flsp_approval_required = fields.Boolean(string="Approval Required", readonly=True, compute='_calc_sale_approval')
+    flsp_approval_required  = fields.Boolean(string="Approval Required", readonly=True, compute='_calc_sale_approval')
     flsp_approval_requested = fields.Boolean(string="Approval Requested", readonly=True)
-    flsp_approval_approved = fields.Boolean(string="Discount Approved", readonly=True)
+    flsp_approval_approved  = fields.Boolean(string="Discount Approved", readonly=True)
+    flsp_show_discount      = fields.Boolean(string="Show Disc. on Quote")
     flsp_state = fields.Selection([
         ('draft', 'Quotation'),
         ('wait', 'Waiting Approval'),
@@ -78,5 +79,3 @@ class SalesOrder(models.Model):
         default['flsp_approval_approved'] = False
         default['flsp_approval_required'] = False
         return super(SalesOrder, self).copy(default=default)
-
-
