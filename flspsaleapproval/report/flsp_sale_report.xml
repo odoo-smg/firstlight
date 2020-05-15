@@ -92,12 +92,11 @@
                                            or doc.partner_shipping_id != doc.partner_invoice_id">
 
                           <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic, sans-serif;">Ship To:</spam>
-                          <p> <spam style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
-                              Canada Matthews Buses, Inc. 500<br/>
-                              2900 Route 9<br/>
-                              Ballston Spa, NY 12020<br/>
-                              USA
-                              </spam>
+                          <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                            <span t-field="doc.partner_shipping_id.name"/><br/>
+                            <span t-field="doc.partner_shipping_id.street"/><br/>
+                            <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
+                            <span t-field="doc.partner_shipping_id.country_id.code"/>
                           </p>
                       </t>
                     </div>
