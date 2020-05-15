@@ -6,7 +6,6 @@ from odoo import api, fields, models
 
 class Flspcompany(models.Model):
     _inherit = "res.company"
-    _check_company_auto = True
 
     so_flsp_max_percent_approval = fields.Float(string="Max Discount Allowed", help="Minimum discount percent allowed")
-    flsp_gst_reg_no = fields.Char(string="GST Reg No.")
+    flsp_gst_reg_no = fields.Char('GST Reg No.', help="GST Reg No.", groups="base.group_system")
