@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <report
-        string="FLSP Quotation/Order"
-        id="action_flsp_quotation_order"
-        model="sale.order"
-        name="flspsaleapproval.report_quotation_order"
-        file="flspsaleapproval.report_quotation_order"
-        report_type="qweb-pdf"
-        print_report_name="'FLSP - Quotation / Order'"
-    />
-
-    <template id="report_quotation_order">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="flspsaleapproval.flsp_rep_quotation_order" t-lang="doc.partner_id.lang"/>
+    <template id="report_quotation_order" inherit_id="sale.report_saleorder">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="flspsaleapproval.flsp_rep_quotation_order" t-lang="doc.partner_id.lang"/>
+                </t>
             </t>
-        </t>
+        </xpath>
     </template>
-
 
     <template id="flsp_rep_quotation_order">
         <t t-set="data_report_margin_top" t-value="18"/>
