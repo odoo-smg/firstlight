@@ -107,13 +107,17 @@
                     <table style= "border: 2px solid #4b5eab; border-collapse: collapse;  width:100%; border-spacing: 2px;">
                       <tbody >
                         <tr  >
-                            <td style="font-size: 18px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%; ">Customer PO</td>
+                            <t t-if="doc.client_order_ref">
+                              <td style="font-size: 18px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%; ">Customer PO</td>
+                            </t>
                             <td style="font-size: 18px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Order Date</td>
                             <td style="font-size: 18px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Ship via</td>
                             <td style="font-size: 18px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Terms</td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="doc.client_order_ref"/></td>
+                            <t t-if="doc.client_order_ref">
+                              <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="doc.client_order_ref"/></td>
+                            </t>
                             <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="doc.date_order" t-options='{"widget": "date"}'/></td>
                             <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">XPO Logistics</td>
                             <td style="border: 1px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-field="doc.payment_term_id.note"/></td>
@@ -182,7 +186,8 @@
                                     <t t-if="doc.flsp_show_discount and display_discount">
                                       <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right;"><spam t-field="line.discount"/></td>
                                     </t>
-                                    <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; "><spam t-field="line.currency_id.name"/><spam t-field="line.price_total"/></td>
+                                    <td style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
+                                      <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]><spam t-field="line.price_total"/></td>
                                 </t>
                                 <t t-if="line.display_type == 'line_section'">
                                     <td name="td_section_line" colspan="99" style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
@@ -204,7 +209,6 @@
                                         <strong>Subtotal</strong>
                                         <span
                                             t-esc="current_subtotal"
-                                            t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
                                         />
                                     </td>
                                 </tr>
@@ -220,19 +224,21 @@
                                 <tr style="">
                                     <td name="td_amount_untaxed_label" style="font-size: 18px; background-color: #2ba4d1; border: 1px solid #2ba4d1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  "><strong>Subtotal</strong></td>
                                     <td name="td_amount_untaxed" style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; " >
-                                        <spam t-field="doc.currency_id.name"/><span t-field="doc.amount_untaxed"/>
+                                        <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                        <span t-field="doc.amount_untaxed"/>
                                     </td>
                                 </tr>
                                 <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
                                     <tr style="">
                                         <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
                                             <td name="td_amount_by_group_label_3" >
+                                                <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
                                                 <span t-esc="amount_by_group[0]"/>
-                                                <span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/></span>
+                                                <span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" /></span>
                                             </td>
                                             <td name="td_amount_by_group_3" class="text-right o_price_total">
-                                                <span t-esc="amount_by_group[1]"
-                                                    t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                                <span t-esc="amount_by_group[1]"/>
                                             </td>
                                         </t>
                                         <t t-else ="">
@@ -240,9 +246,8 @@
                                                 <span t-esc="amount_by_group[0]"/>
                                             </td>
                                             <td name="td_amount_by_group" style="border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
-                                                <spam t-field="doc.currency_id.name"/>
-                                                <span t-esc="amount_by_group[1]"
-                                                    t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                                <span t-esc="amount_by_group[1]"/>
                                             </td>
                                         </t>
                                     </tr>
@@ -250,7 +255,7 @@
                                 <tr class="border-black o_total">
                                     <td name="td_amount_total_label" style="font-size: 18px; background-color: #2ba4d1; border: 1px solid #2ba4d1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right; "><strong>Total</strong></td>
                                     <td name="td_amount_total" style="background-color: #9ecae4; border: 1px solid #2ba4d1; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
-                                        <spam t-field="doc.currency_id.name"/>
+                                        <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
                                         <span t-field="doc.amount_total"/>
                                     </td>
                                 </tr>
