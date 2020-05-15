@@ -18,3 +18,7 @@ class ResConfigSettings(models.TransientModel):
     def set_values(self):
         super(ResConfigSettings, self).set_values()
         self.env['ir.config_parameter'].sudo().set_param('flsp_sales_discount_approval', self.flsp_sales_discount_approval)
+
+    def set_values(self):
+        super(ResConfigSettings, self).set_values()
+        self.env['ir.config_parameter'].sudo().set_param('flsp_gst_reg_no', self.flsp_gst_reg_no)
