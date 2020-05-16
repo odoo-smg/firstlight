@@ -1,5 +1,5 @@
 {
-    'name': "FLSP - Sale Approval",
+    'name': "FLSP - GST Number",
 
     'summary': """
         This module intend to customize the functions and list to
