@@ -7,7 +7,7 @@
             <field name="priority">99</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='currency_id']" position="after">
-                    <field name="flsp_gst_reg_no" />
+                    <field name="flsp_gst_number" />
                 </xpath>
             </field>
         </record>

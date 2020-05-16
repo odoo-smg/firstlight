@@ -6,10 +6,7 @@
         First Light Safety Products""",
 
     'description': """
-        Customizations performed:
-
-        Sales:
-            * Discount approval.
+        Customizations performed: new field on company = flsp_gst_number
     """,
 
     'author': "Alexandre Sousa",
@@ -23,17 +20,9 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-    'depends': ['sale'],
 
     # always loaded
     'data': [
-        'views/flsp_sale_view.xml',
-        'views/flsp_sale_settings_view.xml',
-        'views/flsp_sale_optional_view.xml',
-        'views/flsp_sale_wizard_view.xml',
-        'views/flsp_sale_message_view.xml',
-        'views/flsp_sale_partner.xml',
-        'views/flsp_sale_pricelist_view.xml',
-        'report/flsp_sale_report.xml'
+        'views/flsp_company_form.xml',
     ],
 }
