@@ -34,15 +34,16 @@
 
                 <t t-esc="company.update_scss()"/>
                 <div class="header">
-                    <table>
-          						<tr>
-          							<td>
-          								<img  src="flspsaleapproval/static/src/img/topbar.jpg" alt="flsp-topbar" height="100%" />
-          							</td>
-          						</tr>
-          					</table>
-                  
+
                     <div class="row">
+                        <table>
+              						<tr>
+              							<td>
+              								<img  src="flspsaleapproval/static/src/img/topbar.jpg" alt="flsp-topbar" height="100%" />
+              							</td>
+              						</tr>
+              					</table>
+
                         <div  style=" width:100%; margin:0px; border:none;  padding: 0px 0px 20px 0px; background-color:#64b2d8; ">
                             <div style=" border: none; background-color:#4B5EAB; padding:17px">
                                 <img  t-attf-src="/flspsaleapproval/static/src/img/FLSPlogo.png" style="float: left;" alt="flsp-logo" height="112" />
