@@ -36,7 +36,7 @@
                 <div class="header">
                     <div class="row">
                         <div  style=" width:100%; margin:0px; border:none;  padding: 0px 0px 20px 0px; background-color:#64b2d8; ">
-                            <div style=" border: none; background-color:#4B5EAB; padding:18px">
+                            <div style=" border: none; background-color:#4B5EAB; padding:17px">
                                 <img  t-attf-src="/flspsaleapproval/static/src/img/FLSPlogo.png" style="float: left;" alt="flsp-logo" height="112" />
                             </div>
                             <div style="border-left: 2px solid #4B5EAB ;margin:10px 0px 0px 280px; padding: 0px 0px 0px 20px; width:800px; ">
