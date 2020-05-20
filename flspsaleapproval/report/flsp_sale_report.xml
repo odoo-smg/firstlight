@@ -12,7 +12,7 @@
     </template>
 
     <template id="flsp_rep_quotation_order">
-        <t t-set="data_report_margin_top" t-value="18"/>
+        <t t-set="data_report_margin_top" t-value="31"/>
         <t t-set="data_report_header_spacing" t-value="9"/>
         <t t-set="data_report_dpi" t-value="110"/>
         <t t-call="web.basic_layout">
@@ -34,6 +34,14 @@
 
                 <t t-esc="company.update_scss()"/>
                 <div class="header">
+                    <table>
+          						<tr>
+          							<td>
+          								<img  src="flspsaleapproval/static/src/img/topbar.jpg" alt="flsp-topbar" height="100%" />
+          							</td>
+          						</tr>
+          					</table>
+                  
                     <div class="row">
                         <div  style=" width:100%; margin:0px; border:none;  padding: 0px 0px 20px 0px; background-color:#64b2d8; ">
                             <div style=" border: none; background-color:#4B5EAB; padding:17px">
