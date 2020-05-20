@@ -44,27 +44,6 @@
               						</tr>
               					</table>
 
-                        <div  style=" width:100%; margin:0px; border:none;  padding: 0px 0px 20px 0px; background-color:#64b2d8; ">
-                            <div style=" border: none; background-color:#4B5EAB; padding:17px">
-                                <img  t-attf-src="/flspsaleapproval/static/src/img/FLSPlogo.png" style="float: left;" alt="flsp-logo" height="112" />
-                            </div>
-                            <div style="border-left: 2px solid #4B5EAB ;margin:10px 0px 0px 280px; padding: 0px 0px 0px 20px; width:800px; ">
-                                <div style=" float:left; height:110px; width:550px " >
-                                    <spam style="font-size:16px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif;"><spam t-field="company.name"/></spam>
-                                    <p style="font-size:16px; color:#ffffff; font-family:'Franklin Gothic Demi', sans-serif;"><spam t-field="company.street"/>, <spam t-field="company.city"/>, <spam t-field="company.state_id.code"/>, <spam t-field="company.country_id.name"/>, <spam t-field="company.zip"/><br />T: <spam t-field="company.phone"/> | F: 1-833-866-1547<br />E: <spam t-field="company.email"/></p>
-                                </div>
-                                <div style=" float:right; height:110px; width:180px; text-align: right;  padding: 0px 10px 0px 0px;" >
-                                    <spam style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: 0;">Date: </spam>
-                                    <spam style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:18px; line-height: .6;"><spam t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/></spam>
-                                    <p style="color:#4b5eab; font-family:Franklin Gothic Demi, sans-serif; font-size:40px; font-weight: bolder; letter-spacing:5px; line-height: 1.1;">
-                                      <span t-if="doc.state not in ['draft','sent']">ORDER</span>
-                                      <span t-if="doc.state in ['draft','sent']">QUOTE</span>
-                                    </p>
-                                    <p style="color:#ffffff; font-family:Franklin Gothic Demi, sans-serif; font-size:24px ;line-height: 0;"><span t-field="doc.name"/></p>
-                                </div>
-                                <div style="clear: both;"></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
