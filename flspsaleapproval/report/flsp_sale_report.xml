@@ -38,7 +38,7 @@
                     <div class="row">
                       <table style="background-image: url('flspsaleapproval/static/src/img/topbar.jpg'); height: 166px; width: 1116; border-collapse: collapse">
                         <tr>
-              						<td style="border: 1px solid black; height:33px; text-align: right" >
+              						<td style="border: 1px solid black; height:33px; width: 1116; text-align: right" >
                             v1
               						</td>
               					</tr>
