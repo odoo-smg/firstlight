@@ -68,8 +68,8 @@
 															<tr>
 																<td style="border: none; text-align:right; height:44px; padding: 0px 0px 0px 0px;">
 																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; vertical-align: middle;">
-				                            <span t-if="doc.state in ['draft','sent']">QUOTE</span>
-				                          </spam>
+                                                                        <span >ORDER</span>
+				                                                    </spam>
 																</td>
 															</tr>
 															<tr>
@@ -103,7 +103,7 @@
                     </div>
                     <div  style=" width:100%; border:5px solid #64b2d8; "/>
                     <div  style=" width:100%; text-align: center;">
-                      <div t-if="report_type == 'pdf'" class="text-muted">
+                      <div t-if="report_type == 'pdf'" style="color: #2DA4D1">
                           Page: <span class="page"/> / <span class="topage"/>
                       </div>
                     </div>
@@ -145,14 +145,14 @@
                       <tbody >
                         <tr  >
                             <t t-if="doc.client_order_ref">
-                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%; ">Customer PO</td>
+                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%; ">CUSTOMER PO</td>
                             </t>
-                            <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Order Date</td>
+                            <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">ORDER DATE</td>
                             <t t-if="doc.flsp_ship_via">
-                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Ship via</td>
+                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">SHIP VIA</td>
                             </t>
                             <t t-if="doc.payment_term_id">
-                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">Terms</td>
+                              <td style="font-size: 16px; background-color: #4b5eab; border: 1px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; width:25%;">TERMS</td>
                             </t>
                         </tr>
                         <tr>
