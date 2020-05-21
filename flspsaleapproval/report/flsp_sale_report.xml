@@ -47,15 +47,15 @@
 										<td style="border: none; padding:0px 0px 0px 369px; width:100%; ">
 											<table style="border-collapse: collapse; width:100%; height:100%; ">
 												<tr>
-													<td style="border: 1px solid blue; font-family:Calibri; font-size:12px; font-weight:bold; color:white; vertical-align: middle; ">
+													<td style="border: none; font-family:Calibri; font-size:12px; font-weight:bold; color:white; vertical-align: middle; ">
 
 														<spam style="color:#4b5eab">First Light Safety Products – A Division of Smartrend Supply Ltd.</spam>
 														<br/>6-1249 Clarence Avenue, Winnipeg, MB, Canada, R3T 1T4
-														<br/>T: 866.216.2605 | F: 1-833-866-1547
-														<br/>E: info@firstlightsafety.com
+														<br/>T: 866.216.2605 | F: 1.833.866.1547
+														<br/>E: info@firstlightsafety.com | W: www.firstlightsafety.com
 
 													</td>
-													<td style="border: 1px solid red; width:360px; padding:0px 34px 0px 0px; ">
+													<td style="border: none; width:360px; padding:0px 34px 0px 0px; ">
 														<table style="border: none; width:100%; height:100%; border-collapse: collapse; ">
 															<tr>
 																<td style="border: none; text-align:right; vertical-align: bottom; padding: 0px 0px 0px 0px;">
@@ -67,8 +67,8 @@
 															</tr>
 															<tr>
 																<td style="border: none; text-align:right; height:44px; padding: 0px 0px 0px 0px;">
-																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; ">
-				                            <span t-if="doc.state in ['draft','sent']">PURCHASE ORDER</span>
+																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; vertical-align: middle;">
+				                            <span t-if="doc.state in ['draft','sent']">QUOTE</span>
 				                          </spam>
 																</td>
 															</tr>
