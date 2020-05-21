@@ -100,7 +100,6 @@
                 <div class="footer" >
                     <div  style=" width:100%; margin:8px; text-align: center;">
                         <br/>
-                        <br/>
                         <span style=" margin-top: 93px; text-align: center; color: #4b5eab; font-family: Franklin Gothic Demi, sans-serif; line-height: 1.079; font-size: 24px;    font-style: italic;    font-weight: bolder;"><span t-field="company.report_header"/></span>
                     </div>
                     <div  style=" width:100%; border:5px solid #64b2d8; "/>
