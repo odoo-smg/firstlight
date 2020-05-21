@@ -66,14 +66,14 @@
             															</tr>
             															<tr>
             																<td style="border: 1px solid grey; text-align:right; height:44; padding: 0px 0px 0px 0px;">
-            																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; ">
+            																	<spam style="color:#4b5eab; font-family:Calibri; font-size:24px; font-weight: bolder; ">
             				                            <span t-if="doc.state in ['draft','sent']">ORDER</span>
             				                          </spam>
             																</td>
             															</tr>
             															<tr>
             																<td style="border: none; text-align:right; vertical-align: top; padding: 0px 0px 0px 0px; ">
-            																	<spam style="color:white; font-family:Calibri; font-size:20px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:0">
+            																	<spam style="color:white; font-family:Calibri; font-size:15px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:0">
             																	FLSP0001</spam>
             																</td>
             															</tr>
