@@ -36,7 +36,7 @@
                 <div class="header">
 
                     <div class="row">
-                      <img  t-attf-src="/flspsaleapproval/static/src/img/topbar.jpg" style="float: left;" alt="flsp-logo" height="100%"/>
+                      <img  t-attf-src="/flspsaleapproval/static/src/img/topbar.jpg" alt="flsp-logo" />
                     </div>
                     <br/>
                     -----
