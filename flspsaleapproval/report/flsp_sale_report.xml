@@ -37,9 +37,12 @@
                   <div class="row">
                     <img  t-attf-src="/flspsaleapproval/static/src/img/topbar.jpg" alt="flsp-logo" />
                   </div>
+                  <br/>
+                    -----
+                    <br/>
 
                     <div class="row">
-                      <table style="background-image: url('flspsaleapproval/static/src/img/topbar.jpg'); height: 166px; width: 1116; border-collapse: collapse">
+                      <table style="background-image: url('flspsaleapproval/static/src/img/topbar.jpg'); height: 166px; width: 1116px; border-collapse: collapse">
             						<tr>
             							<td style="border: none; height:33px; text-align: right" >
             							</td>
@@ -68,7 +71,7 @@
             																</td>
             															</tr>
             															<tr>
-            																<td style="border: none; text-align:right; height:44; padding: 0px 0px 0px 0px;">
+            																<td style="border: none; text-align:right; height:44px; padding: 0px 0px 0px 0px;">
             																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; ">
             				                            <span t-if="doc.state in ['draft','sent']">PURCHASE ORDER</span>
             				                          </spam>
@@ -76,7 +79,7 @@
             															</tr>
             															<tr>
             																<td style="border: none; text-align:right; vertical-align: top; padding: 0px 0px 0px 0px; ">
-            																	<spam style="color:white; font-family:Calibri; font-size:20px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:0">
+            																	<spam style="color:white; font-family:Calibri; font-size:20px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:00px">
             																	FLSP0001</spam>
             																</td>
             															</tr>
