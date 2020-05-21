@@ -235,8 +235,8 @@
                                       <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]><spam t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
                                 </t>
                                 <t t-if="line.display_type == 'line_section'">
-                                    <td name="td_section_line" colspan="99" style="border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
-                                        <span  t-field="line.name"/>
+                                    <td name="td_section_line" colspan="99" style="background-color: #6bbfde; border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; color: white; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                        <span t-field="line.name"/>
                                     </td>
                                     <t t-set="current_section" t-value="line"/>
                                     <t t-set="current_subtotal" t-value="0"/>
@@ -249,8 +249,8 @@
                             </tr>
 
                             <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
-                                <tr class="is-subtotal text-right">
-                                    <td name="td_section_subtotal" colspan="99" style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">
+                                <tr>
+                                    <td name="td_section_subtotal" colspan="99" style="font-size: 16px; background-color: #bfe3f2; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">
                                         <strong>Subtotal</strong>
                                         <spam t-field="doc.currency_id.name"/><spam t-field="doc.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
                                         <span
