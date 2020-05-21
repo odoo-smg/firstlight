@@ -36,6 +36,12 @@
                 <div class="header">
 
                     <div class="row">
+                      <img  t-attf-src="/flspsaleapproval/static/src/img/topbar.jpg" style="float: left;" alt="flsp-logo" />
+                    </div>
+                    <br/>
+                    ---------------
+                    <br/>
+                    <div class="row">
                       <table style="border: 1px dotted blue; background-image: url('flspsaleapproval/static/src/img/topbar.jpg'); height: 166px; width: 100%; border-collapse: collapse">
                         <tr>
               						<td style="border: 1px solid black; height:33px; width: 1116px; text-align: right" >
