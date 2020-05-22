@@ -27,6 +27,8 @@ class Smgproduct(models.Model):
 
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
+    # Change default Can be Sold to False
+    sale_ok = fields.Boolean('Can be Sold', default=False)
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
