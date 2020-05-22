@@ -30,7 +30,6 @@ class Smgproduct(models.Model):
     # Change default Can be Sold to False
     sale_ok = fields.Boolean('Can be Sold', default=False)
 
-
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
