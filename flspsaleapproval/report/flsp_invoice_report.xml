@@ -180,8 +180,8 @@
                                 <tr>
                                     <!-- TODO: remove in master -->
                                     <t t-set="colspan" t-value="6"/>
-                                    <th name="th_description" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>PART NUMBER</span></th>
-                                    <th name="th_description" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; left: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; "><span>DESCRIPTION</span></th>
+                                    <th name="th_partnum" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>PART NUMBER</span></th>
+                                    <th name="th_description" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:left; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; "><span>DESCRIPTION</span></th>
                                     <th name="th_quantity" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>QTY</span></th>
                                     <th name="th_quantity" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>UofM</span></th>
                                     <th name="th_priceunit" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>UNIT PRICE</span></th>
@@ -305,9 +305,6 @@
                         </div>
                         <p t-if="o.narration" name="comment">
                             <span t-field="o.narration"/>
-                        </p>
-                        <p t-if="o.invoice_payment_term_id" name="payment_term">
-                            <span t-field="o.invoice_payment_term_id.note"/>
                         </p>
                         <p t-if="o.fiscal_position_id.note" name="note">
                             <span t-field="o.fiscal_position_id.note"/>
