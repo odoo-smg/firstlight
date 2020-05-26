@@ -277,18 +277,18 @@
                                                 <t t-if="len(o.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
                                                     <td style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span t-esc="amount_by_group[0]"/></td>
                                                     <td style="font-size: 16px; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #000000; font-family: Franklin, sans-serif; font-style: normal;  word-wrap: normal; white-space:nowrap; ">
-                                                        <spam t-field="o.currency_id.name"/><span t-esc="amount_by_group[3]" />
+                                                        <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-esc="amount_by_group[3]" />
                                                     </td>
                                                 </t>
                                                 <t t-else="">
                                                     <td style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
                                                         <span t-esc="amount_by_group[0]"/>
                                                         <span>&amp;nbsp;<span>on</span>
-                                                            <spam t-field="o.currency_id.name"/><t t-esc="amount_by_group[4]" />
+                                                            <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <t t-esc="amount_by_group[4]" />
                                                         </span>
                                                     </td>
                                                     <td style="font-size: 16px; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #000000; font-family: Franklin, sans-serif; font-style: normal;  word-wrap: normal; white-space:nowrap; ">
-                                                        <spam t-field="o.currency_id.name"/><span t-esc="amount_by_group[3]" />
+                                                        <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-esc="amount_by_group[3]" />
                                                     </td>
                                                 </t>
                                             </tr>
