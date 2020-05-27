@@ -35,6 +35,8 @@ class Smgproduct(models.Model):
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
+    # New fields for sales approval
+    flsp_min_qty = fields.Integer(string="Min. Qty Sale", default=1)
 
     attachment_ids = fields.Many2many('ir.attachment', 'product_attachment_rel','drawing_id', 'attachment_id',
         string='Attachments',

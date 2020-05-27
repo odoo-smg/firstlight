@@ -32,6 +32,11 @@
                 <xpath expr="//field[@name='standard_price']" position="attributes">
                     <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
                 </xpath>
+                <xpath expr="//group[@name='description']" position="before">
+                    <group string="Quantity to Sell" name="flsp_min_qty_sale">
+                        <field name="flsp_min_qty" string="Min. Qty"/>
+                    </group>
+                </xpath>
             </field>
         </record>
 
