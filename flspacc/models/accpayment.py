@@ -13,6 +13,8 @@ class flsp_payment(models.Model):
                                     help="Select the Quotation number to refer the 50% deposit payment for School PPE Purchase Program.")
     amount_required = fields.Float(string='Total Required', readonly=True, compute="_compute_amount_required")
 
+    credit_card_payment = fields.Boolean(string='Credit Card Payment - Add 3% ')
+
     @api.depends('flsp_quote_id')
     def _compute_amount_required(self):
         flspsppepp_category_id = self.env.company.flspsppepp_category_id
