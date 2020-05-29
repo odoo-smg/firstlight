@@ -27,7 +27,7 @@ class flsp_payment(models.Model):
                 amount_categ_total += line.price_subtotal
 
         if self.credit_card_payment:
-            self.amount_required = amount_categ_total * (flsp_percent_sppepp+3) / 100
+            self.amount_required = (amount_categ_total * flsp_percent_sppepp / 100)*3/100
         else:
             self.amount_required = amount_categ_total * flsp_percent_sppepp / 100
         self.currency_so_id = self.flsp_quote_id.currency_id.id
