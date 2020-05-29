@@ -32,5 +32,6 @@
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_partner_view.xml',
+        'views/flsp_acc_payment.xml',
     ],
 }
