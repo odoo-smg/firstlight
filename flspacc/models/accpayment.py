@@ -13,7 +13,7 @@ class flsp_payment(models.Model):
                                     help="Select the Quotation number to refer the 50% deposit payment for School PPE Purchase Program.")
     amount_required = fields.Float(string='Total Required', readonly=True, compute="_compute_amount_required")
 
-    credit_card_payment = fields.Boolean(string='Credit Card Payment - Add 3% ')
+    credit_card_payment = fields.Boolean(string='Credit Card Payment')
 
     currency_so_id = fields.Many2one('res.currency', compute='_compute_currency', string="Currency")
 
@@ -27,7 +27,8 @@ class flsp_payment(models.Model):
                 amount_categ_total += line.price_subtotal
 
         if self.credit_card_payment:
-            self.amount_required = (amount_categ_total * flsp_percent_sppepp / 100)*3/100
+            total_req_cc = amount_categ_total * flsp_percent_sppepp / 100
+            self.amount_required = total_req_cc + (total_req_cc*3/100)
         else:
             self.amount_required = amount_categ_total * flsp_percent_sppepp / 100
         self.currency_so_id = self.flsp_quote_id.currency_id.id
