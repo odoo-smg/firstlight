@@ -18,7 +18,7 @@ class flsp_payment(models.Model):
         flspsppepp_category_id = self.env.company.flspsppepp_category_id
         flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
         amount_categ_total = 0
-        for line in sale_order.order_line:
+        for line in self.flsp_quote_id.order_line:
             if line.product_id.categ_id == flspsppepp_category_id:
                 amount_categ_total += line.price_subtotal
 
