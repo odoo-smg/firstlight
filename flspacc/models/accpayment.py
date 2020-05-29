@@ -65,6 +65,6 @@ class flsp_payment(models.Model):
                     'product_id': flspsppepp_product_id.id,
                     'analytic_tag_ids': analytic_tag_ids,
             	  })
-        action = self.action_confirm()
+        action = self.post()
 
         return action
