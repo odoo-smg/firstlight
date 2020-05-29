@@ -36,17 +36,17 @@ class flsp_payment(models.Model):
 
     def button_flsp_confirm(self):
         if self.flsp_quote_id:
-            so = env['sale.order'].search([('id', '=', record.flsp_quote_id.id)])
+            so = self.flsp_quote_id
             if so:
-            	so['flsp_amount_deposit'] = record.amount
+            	so['flsp_amount_deposit'] = self.amount
               ## 3% credit card payment
-            	if record.credit_card_payment:
-            	  flspsppepp_category_id = env.company.flspsppepp_category_id
-            	  flsp_percent_sppepp = env.company.flsp_percent_sppepp
-            	  flspsppepp_product_id = env.company.flspsppepp_product_id
-            	  sale_line_obj = env['sale.order.line']
+            	if self.credit_card_payment:
+            	  flspsppepp_category_id = self.env.company.flspsppepp_category_id
+            	  flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
+            	  flspsppepp_product_id = self.env.company.flspsppepp_product_id
+            	  sale_line_obj = self.env['sale.order.line']
             	  amount_categ_total = 0
-            	  for line in record.flsp_quote_id.order_line:
+            	  for line in self.flsp_quote_id.order_line:
             	    if line.product_id.categ_id == flspsppepp_category_id:
             	      amount_categ_total += line.price_subtotal
 
