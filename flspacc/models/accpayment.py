@@ -15,7 +15,9 @@ class flsp_payment(models.Model):
 
     credit_card_payment = fields.Boolean(string='Credit Card Payment - Add 3% ')
 
-    @api.depends('flsp_quote_id')
+    currency_so_id = fields.Many2one('res.currency', compute='_compute_currency', string="Currency")
+
+    @api.depends('flsp_quote_id', 'credit_card_payment')
     def _compute_amount_required(self):
         flspsppepp_category_id = self.env.company.flspsppepp_category_id
         flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
@@ -24,4 +26,8 @@ class flsp_payment(models.Model):
             if line.product_id.categ_id == flspsppepp_category_id:
                 amount_categ_total += line.price_subtotal
 
-        self.amount_required = amount_categ_total * flsp_percent_sppepp / 100
+        if self.credit_card_payment:
+            self.amount_required = amount_categ_total * (flsp_percent_sppepp+3) / 100
+        else:
+            self.amount_required = amount_categ_total * flsp_percent_sppepp / 100
+        self.currency_so_id = self.flsp_quote_id.currency_id.id

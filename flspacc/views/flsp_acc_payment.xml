@@ -11,8 +11,25 @@
                   <group string="School PPE Program" name="utm_link" groups="base.group_no_one">
                     <field name="flsp_quote_id" options="{'no_create': True}" />
                     <field name="credit_card_payment"/>
-                    <field name="amount_required"/>
+
+                      <group name="left_column">
+                        <label for="amount_required"/>
+                        <div name="amount_div" class="o_row">
+                            <field name="amount_required"/>
+                            <field name="currency_so_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
+                        </div>
+                      </group>
                   </group>
+
+                  <group name="right_column">
+                      <label for="amount"/>
+                      <div name="amount_div" class="o_row">
+                          <field name="amount"/>
+                          <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
+                      </div>
+                      <field name="payment_date"/>
+                      <field name="communication"/>
+                </group>
                 </xpath>
             </field>
         </record>
