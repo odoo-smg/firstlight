@@ -39,6 +39,12 @@
                               </div>
                               <field name="flsp_percent_sppepp" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />
                           </div>
+                          <div class="o_setting_right_pane">
+                              <div class="text-muted">
+                                  Product Value Increase 3% Credit Card Payment:
+                              </div>
+                              <field name="flspsppepp_product_id" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />
+                          </div>
                         </div>
                     </div>
             </xpath>

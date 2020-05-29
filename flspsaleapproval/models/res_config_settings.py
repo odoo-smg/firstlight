@@ -11,6 +11,7 @@ class ResConfigSettings(models.TransientModel):
     flsp_sppepp = fields.Boolean(string="School PPE Purchase Program")
     flspsppepp_category_id = fields.Many2one('product.category', related='company_id.flspsppepp_category_id', readonly=False)
     flsp_percent_sppepp = fields.Float(related='company_id.flsp_percent_sppepp', string="Percent of Deposit", readonly=False)
+    flspsppepp_product_id = fields.Many2one('product.product', related='company_id.flspsppepp_product_id', readonly=False)
 
     def get_values(self):
         res = super(ResConfigSettings, self).get_values()
