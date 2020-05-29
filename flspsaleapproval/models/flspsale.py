@@ -61,7 +61,22 @@ class SalesOrder(models.Model):
         if not self.partner_id.flsp_acc_valid:
             action = self.env.ref('flspsaleapproval.launch_flsp_sale_message').read()[0]
         else:
-            action = self.action_confirm()
+            ## Validate deposit payment for School PPE Purchase Program
+            flsp_sppepp = self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
+            flspsppepp_category_id = self.env.company.flspsppepp_category_id
+            flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
+            if flsp_sppepp:
+                amount_categ_total = 0
+                for line in self.order_line:
+                    if line.product_id.categ_id == flspsppepp_category_id:
+                        amount_categ_total += line.price_subtotal
+                if self.flsp_amount_deposit < (amount_categ_total*flsp_percent_sppepp/100):
+                    action = self.env.ref('flspsaleapproval.launch_flsp_sppepp_message').read()[0]
+                else:
+                    action = self.action_confirm()
+            else:
+                action = self.action_confirm()
+
         return action
 
         #return self.action_confirm()

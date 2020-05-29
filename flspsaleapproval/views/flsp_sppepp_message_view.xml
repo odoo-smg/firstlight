@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_sppepp_message" model="ir.ui.view">
+            <field name="name">School PPE Purchase Program</field>
+            <field name="model">flspsaleapproval.sppeppmsg</field>
+            <field name="arch" type="xml">
+                <form string="Approve">
+                    <h4>School PPE Purchase Program</h4>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="flspsppepp_category_id"/>
+                            <field name="amount_total"/>
+                            <field name="total_required"/>
+                            <field name="flsp_percent_sppepp"/>
+                        </group>
+                    </group>
+                    <spam>In order to confirm the Quotation into a Sales Order the customer must pay the minimal percentage of the total products that are in the PPE Purchase Program.</spam>
+                    <footer>
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_sppepp_message" model="ir.actions.act_window">
+            <field name="name">FLSP - School PPE Purchase Program</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flspsaleapproval.sppeppmsg</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>
