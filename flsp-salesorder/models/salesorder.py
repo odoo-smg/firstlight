@@ -7,6 +7,7 @@ class flspsalesorder(models.Model):
     _inherit = 'sale.order'
 
     flsp_so_user_id = fields.Many2one('res.users', string="Salesperson 2")
+    flsp_amount_deposit = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
 
     @api.onchange('partner_id')
     def flsp_partner_onchange(self):
