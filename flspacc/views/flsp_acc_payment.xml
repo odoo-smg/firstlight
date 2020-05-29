@@ -11,14 +11,8 @@
                   <group string="School PPE Program">
                     <field name="flsp_quote_id" options="{'no_create': True}" />
                     <field name="credit_card_payment"/>
-                    <group name="left_column">
-                      <label for="amount_required"/>
-                      <div name="amount_div" class="o_row">
-                          <field name="amount_required"/>
-                          <field name="currency_so_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
-                      </div>
-                    </group>
-
+                    <field name="amount_required"/>
+                    <field name="currency_so_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
                   </group>
                 </xpath>
             </field>
