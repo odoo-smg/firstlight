@@ -22,6 +22,25 @@
                           </div>
                         </div>
                     </div>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" title="School PPE Purchase Program">
+                          <div class="o_setting_left_pane"/>
+                            <field name="flsp_sppepp"/>
+                            <span class="o_form_label">School PPE Purchase Program</span>
+                          <div class="o_setting_right_pane">
+                              <div class="text-muted">
+                                  Product Category Participant:
+                              </div>
+                              <field name="flspsppepp_category_id" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />
+                          </div>
+                          <div class="o_setting_right_pane">
+                              <div class="text-muted">
+                                  % of Mandatory Deposit:
+                              </div>
+                              <field name="flsp_percent_sppepp" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />
+                          </div>
+                        </div>
+                    </div>
             </xpath>
         </field>
     </record>
