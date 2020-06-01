@@ -50,10 +50,10 @@
 												<tr>
 													<td style="border: none; font-family:Calibri; font-size:12px; font-weight:bold; color:white; vertical-align: middle; ">
 
-														<spam style="color:#fcb030">First Light Safety Products – A Division of Smartrend Supply Ltd.</spam>
-														<br/>6-1249 Clarence Avenue, Winnipeg, MB, Canada, R3T 1T4
-														<br/>T: 866.216.2605 | F: 833.866.1547
-														<br/>E: info@firstlightsafety.com | W: www.firstlightsafety.com
+														<spam style="color:#fcb030"><spam t-field="company.name"/></spam>
+														<br/><spam t-field="company.street"/>, <spam t-field="company.city"/>, <spam t-field="company.state_id.code"/>, <spam t-field="company.country_id.name"/>, <spam t-field="company.zip"/>
+														<br/>T: <spam t-field="company.phone"/> | F: 833.866.1547
+														<br/>E: <spam t-field="company.email"/> | W: <spam t-field="company.website"/>
 
 													</td>
 													<td style="border: none; width:360px; padding:0px 34px 0px 0px; ">
@@ -160,12 +160,23 @@
                             </tr>
                             <tr>
                                 <t t-if="o.invoice_origin">
-                                  <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="o.invoice_origin"/></td>
+                                    <t t-set="payments_vals" t-value="o._get_sale_order_info_JSON_values()"/>
+                                    <t t-foreach="payments_vals" t-as="payment_vals">
+                                        <tr>
+                                            <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-esc="payment_vals['name']" /></td>
+                                            <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-esc="payment_vals['date_order']" t-options='{"widget": "date"}' /></td>
+                                            <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-esc="payment_vals['flsp_ship_via']" /></td>
+                                            <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-esc="payment_vals['payment_term']" /></td>
+                                        </tr>
+                                    </t>
                                 </t>
-                                <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="o.invoice_date_due" t-options='{"widget": "date"}'/></td>
-                                <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span>PTO9983</span></td>
-                                <t t-if="o.invoice_date_due">
-                                  <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span t-field="o.invoice_payment_term_id.note"/></td>
+                                <t t-else="">
+                                    <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="o.invoice_origin"/></td>
+                                    <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="o.date" t-options='{"widget": "date"}'/></td>
+                                    <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><span></span></td>
+                                    <t t-if="o.invoice_date_due">
+                                       <td style="border: 1px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="o.invoice_date_due" t-options='{"widget": "date"}'/></td>
+                                    </t>
                                 </t>
                             </tr>
                           </tbody>
