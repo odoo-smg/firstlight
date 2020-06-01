@@ -27,12 +27,16 @@ class Smgproduct(models.Model):
 
     # Change description and set it as mandatory
     default_code = fields.Char(string="Internal Reference", readonly=True)
+    # Change default Can be Sold to False
+    sale_ok = fields.Boolean('Can be Sold', default=False)
 
     # New fields to compose the part number
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
+    # New fields for sales approval
+    flsp_min_qty = fields.Integer(string="Min. Qty Sale", default=1)
 
     attachment_ids = fields.Many2many('ir.attachment', 'product_attachment_rel','drawing_id', 'attachment_id',
         string='Attachments',

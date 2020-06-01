@@ -11,7 +11,7 @@
                 <div class="app_settings_block" data-string="flsp-product" string="First Light" data-key="flsp-product" groups="base.group_system">
                     <t t-extend="PosWidget">
                         <t t-jquery="div#branding img" t-operation="replace">
-                            <img src="/flsp-product/static/description/icon.png" />
+                            <img src="/flsp-product/static/description/icon.png" alt="flsp_icon" />
                         </t>
                     </t>
                     <h2>Products</h2>

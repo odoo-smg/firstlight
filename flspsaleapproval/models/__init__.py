@@ -9,3 +9,5 @@ from . import flspsale
 from . import res_config_settings
 from . import flsporderline
 from . import res_company
+from . import flsp_sppepp
+from . import flsp_account_move
