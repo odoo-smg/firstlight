@@ -311,7 +311,7 @@
                             </td>
                         </tr>
                         <tr >
-                            <td style="align:right; padding-top: 4px; border: 1px solid blue">
+                            <td style="align:right; padding-top: 4px; border: 0.1px solid blue">
                             <div id="total" >
                                 <div>
                                     <table align='right' style="align:right; width: auto; border: none; border-collapse: collapse; padding-top: 4px;">
