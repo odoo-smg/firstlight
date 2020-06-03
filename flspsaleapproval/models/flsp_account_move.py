@@ -20,7 +20,7 @@ class flspaccountmove(models.Model):
         reconciled_vals = []
         for rec in so:
             reconciled_vals.append({
-                'name': rec.name,
+                'name': rec.client_order_ref if rec.client_order_ref else rec.name,
                 'date_order': rec.date_order,
                 'flsp_ship_via': rec.flsp_ship_via,
                 'payment_term': rec.payment_term_id.note,
