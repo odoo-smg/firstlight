@@ -216,100 +216,105 @@
                         </table>
                     </div>
 
-                    <div class="page">
+                    <div class="page" >
                         <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+                        <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 0px;" >
 
-                        <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
-                            <thead>
-                                <tr>
-                                    <!-- TODO: remove in master -->
-                                    <t t-set="colspan" t-value="6"/>
-                                    <th name="th_partnum" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>PART NUMBER</span></th>
-                                    <th name="th_description" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:left; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; "><span>DESCRIPTION</span></th>
-                                    <th name="th_quantity" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>QTY</span></th>
-                                    <th name="th_quantity" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>UofM</span></th>
-                                    <th name="th_priceunit" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>UNIT PRICE</span></th>
-                                    <th name="th_price_unit" t-if="display_discount" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
-                                        <span>DISC.%</span>
+                        <tr >
+                            <td id="main_table"  >
+                            <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
+                                <thead>
+                                    <tr>
                                         <!-- TODO: remove in master -->
-                                        <t t-set="colspan" t-value="colspan+1"/>
-                                    </th>
-                                    <t t-if="tax_ids">
-                                        <th name="th_taxes" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>TAXES</span></th>
-                                    </t>
-                                    <th name="th_subtotal" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
-                                        <span groups="account.group_show_line_subtotals_tax_excluded">AMOUNT</span>
-                                        <span groups="account.group_show_line_subtotals_tax_included">TOTAL</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="invoice_tbody">
-                                <t t-set="current_subtotal" t-value="0"/>
+                                        <t t-set="colspan" t-value="6"/>
+                                        <th name="th_partnum" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>PART NUMBER</span></th>
+                                        <th name="th_description" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:left; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; "><span>DESCRIPTION</span></th>
+                                        <th name="th_quantity" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>QTY</span></th>
+                                        <th name="th_quantity" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>UofM</span></th>
+                                        <th name="th_priceunit" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>UNIT PRICE</span></th>
+                                        <th name="th_price_unit" t-if="display_discount" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
+                                            <span>DISC.%</span>
+                                            <!-- TODO: remove in master -->
+                                            <t t-set="colspan" t-value="colspan+1"/>
+                                        </th>
+                                        <t t-if="tax_ids">
+                                            <th name="th_taxes" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>TAXES</span></th>
+                                        </t>
+                                        <th name="th_subtotal" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
+                                            <span groups="account.group_show_line_subtotals_tax_excluded">AMOUNT</span>
+                                            <span groups="account.group_show_line_subtotals_tax_included">TOTAL</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                    <t t-set="current_subtotal" t-value="0"/>
 
-                                <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
+                                    <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
 
-                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
 
-                                    <tr style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; ">
-                                        <t t-if="not line.display_type" name="account_invoice_line_accountable">
-                                            <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; " name="account_invoice_line_prd"><span t-field="line.product_id.default_code"/></td>
-                                            <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; " name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
-                                            <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
-                                                <span t-field="line.quantity" t-options='{"widget": "integer"}'/>
-                                            </td>
-                                            <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; "><span t-field="line.product_uom_id.name" /></td>
-
-                                            <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
-                                              <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_unit"/>
-                                            </td>
-                                            <td t-if="display_discount" style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
-                                                <span t-field="line.discount"/>
-                                            </td>
-                                            <t t-if="tax_ids">
+                                        <tr style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; ">
+                                            <t t-if="not line.display_type" name="account_invoice_line_accountable">
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; " name="account_invoice_line_prd"><span t-field="line.product_id.default_code"/></td>
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; " name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
-                                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>
+                                                    <span t-field="line.quantity" t-options='{"widget": "integer"}'/>
+                                                </td>
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; "><span t-field="line.product_uom_id.name" /></td>
+
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
+                                                  <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_unit"/>
+                                                </td>
+                                                <td t-if="display_discount" style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
+                                                    <span t-field="line.discount"/>
+                                                </td>
+                                                <t t-if="tax_ids">
+                                                    <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
+                                                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>
+                                                    </td>
+                                                </t>
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
+                                                    <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_excluded"></span>
+                                                    <span t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
                                                 </td>
                                             </t>
-                                            <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
-                                                <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_excluded"></span>
-                                                <span t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
-                                            </td>
-                                        </t>
-                                        <t t-if="line.display_type == 'line_section'">
-                                            <td colspan="99" style="background-color: #91a1e0; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bolder; color: #ffffff; text-align: left; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
-                                                <span  t-field="line.name"/>
-                                            </td>
-                                            <t t-set="current_section" t-value="line"/>
-                                            <t t-set="current_subtotal" t-value="0"/>
-                                        </t>
-                                        <t t-if="line.display_type == 'line_note'">
-                                            <td colspan="99">
-                                                <span t-field="line.name"/>
-                                            </td>
-                                        </t>
-                                    </tr>
-
-                                    <t t-if="current_section and (line_last or o.invoice_line_ids[line_index+1].display_type == 'line_section')">
-                                        <tr style="font-size: 16px; background-color: #cfd4e8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; word-wrap: normal; white-space:nowrap; ">
-                                            <td colspan="99" style="font-size: 16px; background-color: #cfd4e8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; word-wrap: normal; white-space:nowrap; ">
-                                                <strong class="mr16">Subtotal</strong>
-                                                <spam t-field="o.currency_id.name"><spam t-field="o.currency_id.symbol"/> </spam>
-                                                <span
-                                                    t-esc="current_subtotal"
-                                                    t-options='{"widget": "float", "decimal_precision": "2"}'
-                                                />
-                                            </td>
+                                            <t t-if="line.display_type == 'line_section'">
+                                                <td colspan="99" style="background-color: #91a1e0; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bolder; color: #ffffff; text-align: left; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                    <span  t-field="line.name"/>
+                                                </td>
+                                                <t t-set="current_section" t-value="line"/>
+                                                <t t-set="current_subtotal" t-value="0"/>
+                                            </t>
+                                            <t t-if="line.display_type == 'line_note'">
+                                                <td colspan="99">
+                                                    <span t-field="line.name"/>
+                                                </td>
+                                            </t>
                                         </tr>
-                                    </t>
-                                </t>
-                            </tbody>
-                        </table>
 
-                        <div class="clearfix">
-                            <div id="total" class="row">
-                                <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                                    <table class="table table-sm">
+                                        <t t-if="current_section and (line_last or o.invoice_line_ids[line_index+1].display_type == 'line_section')">
+                                            <tr style="font-size: 16px; background-color: #cfd4e8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; word-wrap: normal; white-space:nowrap; ">
+                                                <td colspan="99" style="font-size: 16px; background-color: #cfd4e8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; word-wrap: normal; white-space:nowrap; ">
+                                                    <strong class="mr16">Subtotal</strong>
+                                                    <spam t-field="o.currency_id.name"><spam t-field="o.currency_id.symbol"/> </spam>
+                                                    <span
+                                                        t-esc="current_subtotal"
+                                                        t-options='{"widget": "float", "decimal_precision": "2"}'
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td style="align:right;">
+                            <div id="total" >
+                                <div>
+                                    <table class="table table-sm" align='right' style="align:right; width: auto">
                                         <tr>
                                             <td style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><strong>Subtotal</strong></td>
                                             <td style="font-size: 16px; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #000000; font-family: Franklin, sans-serif; font-style: normal; white-space:nowrap;">
@@ -346,7 +351,9 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                            </td>
+                        </tr>
+                        </table>
                         <p t-if="o.narration" name="comment">
                             <span t-field="o.narration"/>
                         </p>
