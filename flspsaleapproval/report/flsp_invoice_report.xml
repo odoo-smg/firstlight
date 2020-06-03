@@ -225,7 +225,6 @@
                             <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
                                 <thead>
                                     <tr>
-                                        <!-- TODO: remove in master -->
                                         <t t-set="colspan" t-value="6"/>
                                         <th name="th_partnum" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><span>PART NUMBER</span></th>
                                         <th name="th_description" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:left; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; "><span>DESCRIPTION</span></th>
