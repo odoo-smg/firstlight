@@ -58,7 +58,7 @@ class flsp_payment(models.Model):
             	  sale_line_obj.create({
                     'name': '3% Increase CC Payment: %s',
                     'price_unit': amount_categ_total * flsp_percent_sppepp / 100 *3/100,
-                    'product_uom_qty': 0.0,
+                    'product_uom_qty': 1,
                     'order_id': so.id,
                     'discount': 0.0,
                     'product_uom': flspsppepp_product_id.product_tmpl_id.uom_id.id,

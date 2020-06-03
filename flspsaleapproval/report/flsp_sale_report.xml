@@ -49,10 +49,10 @@
 												<tr>
 													<td style="border: none; font-family:Calibri; font-size:12px; font-weight:bold; color:white; vertical-align: middle; ">
 
-														<spam style="color:#4b5eab">First Light Safety Products – A Division of Smartrend Supply Ltd.</spam>
-														<br/>6-1249 Clarence Avenue, Winnipeg, MB, Canada, R3T 1T4
-														<br/>T: 866.216.2605 | F: 833.866.1547
-														<br/>E: info@firstlightsafety.com | W: www.firstlightsafety.com
+														<spam style="color:#4b5eab"><spam t-field="company.name"/></spam>
+														<br/><spam t-field="company.street"/>, <spam t-field="company.city"/>, <spam t-field="company.state_id.code"/>, <spam t-field="company.country_id.name"/>, <spam t-field="company.zip"/>
+														<br/>T: <spam t-field="company.phone"/> | F: 833.866.1547
+														<br/>E: <spam t-field="company.email"/> | W: <a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a>
 
 													</td>
 													<td style="border: none; width:360px; padding:0px 34px 0px 0px; ">
@@ -62,20 +62,21 @@
 																	<spam style="color:#4b5eab; font-family:Calibri; font-size:18px; ">
 																	Date: </spam>
 																	<spam style="color:white; font-family:Calibri; font-size:18px; ">
-																	May 4, 2020</spam>
+																	<spam t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/></spam>
 																</td>
 															</tr>
 															<tr>
 																<td style="border: none; text-align:right; height:44px; padding: 0px 0px 0px 0px;">
 																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; vertical-align: middle;">
-                                                                        <span >ORDER</span>
-				                                                    </spam>
+                                    <span t-if="doc.state not in ['draft','sent']">ORDER</span>
+                                    <span t-if="doc.state in ['draft','sent']">QUOTE</span>
+				                          </spam>
 																</td>
 															</tr>
 															<tr>
 																<td style="border: none; text-align:right; vertical-align: top; padding: 0px 0px 0px 0px; ">
 																	<spam style="color:white; font-family:Calibri; font-size:20px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:0px">
-																	FLSP0001</spam>
+																	<span t-field="doc.name"/></spam>
 																</td>
 															</tr>
 														</table>
