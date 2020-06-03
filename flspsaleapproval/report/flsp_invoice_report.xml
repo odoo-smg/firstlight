@@ -32,7 +32,7 @@
                         <i class="oe_form_field text-right oe_payment_label">Paid on <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/></i>
                     </td>
                     <td style="font-size: 16px; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #000000; font-family: Franklin, sans-serif; font-style: normal; white-space:nowrap;" >
-                        <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-esc="payment_vals['amount']" />
+                        <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-esc="payment_vals['amount']" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                     </td>
                 </tr>
             </t>
