@@ -222,7 +222,7 @@
 
                         <tr >
                             <td id="main_table" style="border: 0.1px solid black">
-                            <table style= "border: 0.1px solid cyan; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
+                            <table align="right" style= "border: 0.1px solid cyan; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
                                 <thead>
                                     <tr>
                                         <!-- TODO: remove in master -->
