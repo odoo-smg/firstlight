@@ -221,8 +221,8 @@
                         <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 0px;" >
 
                         <tr >
-                            <td id="main_table" style="border: 0.1px solid black; padding-right:2px; ">
-                            <table align="right" style= "border: 0.1px solid cyan; border-collapse: collapse;  width:850px; border-spacing: 2px;" name="invoice_line_table">
+                            <td id="main_table" style="border: 0.1px solid black; padding-right:1px; ">
+                            <table align="right" style= "border: 0.1px solid cyan; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
                                 <thead>
                                     <tr>
                                         <!-- TODO: remove in master -->
