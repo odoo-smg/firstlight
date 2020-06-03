@@ -87,7 +87,7 @@
 														<spam style="color:#fcb030"><spam t-field="company.name"/></spam>
 														<br/><spam t-field="company.street"/>, <spam t-field="company.city"/>, <spam t-field="company.state_id.code"/>, <spam t-field="company.country_id.name"/>, <spam t-field="company.zip"/>
 														<br/>T: <spam t-field="company.phone"/> | F: 833.866.1547
-                                                        <br/>E: <spam t-field="company.email"/> | W: <a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a>
+                            <br/>E: <spam t-field="company.email"/> | W: <a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a>
 													</td>
 													<td style="border: none; width:360px; padding:0px 34px 0px 0px; ">
 														<table style="border: none; width:100%; height:100%; border-collapse: collapse; ">
