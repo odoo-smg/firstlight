@@ -314,7 +314,7 @@
                             <td style="align:right;">
                             <div id="total" >
                                 <div>
-                                    <table class="table table-sm" align='right' style="align:right; width: auto">
+                                    <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" align='right' style="align:right; width: auto">
                                         <tr>
                                             <td style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><strong>Subtotal</strong></td>
                                             <td style="font-size: 16px; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #000000; font-family: Franklin, sans-serif; font-style: normal; white-space:nowrap;">
