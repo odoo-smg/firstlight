@@ -287,14 +287,14 @@
                                                 <t t-set="col_spam" t-value="col_spam + 1"/>
                                             </t>
                                             <t t-if="line.display_type == 'line_section'">
-                                                <td colspan="t-esc='col_spam'" style="background-color: #91a1e0; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bolder; color: #ffffff; text-align: left; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                <td t-att-colspan="col_spam" style="background-color: #91a1e0; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bolder; color: #ffffff; text-align: left; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                                     <span  t-field="line.name"/>
                                                 </td>
                                                 <t t-set="current_section" t-value="line"/>
                                                 <t t-set="current_subtotal" t-value="0"/>
                                             </t>
                                             <t t-if="line.display_type == 'line_note'">
-                                                <td colspan="99">
+                                                <td t-att-colspan="col_spam">
                                                     <span t-field="line.name"/>
                                                 </td>
                                             </t>
@@ -302,7 +302,7 @@
 
                                         <t t-if="current_section and (line_last or o.invoice_line_ids[line_index+1].display_type == 'line_section')">
                                             <tr>
-                                                <td colspan="7" style="font-size: 16px; background-color: #cfd4e8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
+                                                <td t-att-colspan="col_spam" style="font-size: 16px; background-color: #cfd4e8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:right; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">
                                                     <strong>Subtotal</strong>
                                                     <spam t-field="o.currency_id.name"></spam><spam t-field="o.currency_id.symbol"/>
                                                     <span t-esc="current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
