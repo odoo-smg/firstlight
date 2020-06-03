@@ -221,7 +221,7 @@
                         <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 0px;" >
 
                         <tr >
-                            <td id="main_table" style="border: none; padding-right:1px; ">
+                            <td id="main_table" style="border: none; ">
                             <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" name="invoice_line_table">
                                 <thead>
                                     <tr>
@@ -308,7 +308,7 @@
                             </td>
                         </tr>
                         <tr >
-                            <td style="align:right; padding-top: 4px; border: none">
+                            <td style="align:right; padding-top: 4px; border: 0.1px solid blue">
                             <div id="total" >
                                 <div>
                                     <table align='right' style="align:right; width: auto; border: none; border-collapse: collapse; padding-top: 4px;">
