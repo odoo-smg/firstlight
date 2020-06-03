@@ -249,38 +249,45 @@
                                 <tbody class="invoice_tbody">
                                     <t t-set="current_subtotal" t-value="0"/>
 
-                                    <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
 
+                                    <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
+                                        <t t-set="col_spam" t-value="0"/>
                                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
                                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
 
                                         <tr style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; ">
                                             <t t-if="not line.display_type" name="account_invoice_line_accountable">
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; " name="account_invoice_line_prd"><span t-field="line.product_id.default_code"/></td>
+                                                <t t-set="col_spam" t-value="col_spam + 1"/>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; " name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
+                                                <t t-set="col_spam" t-value="col_spam + 1"/>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                     <span t-field="line.quantity" t-options='{"widget": "integer"}'/>
                                                 </td>
+                                                <t t-set="col_spam" t-value="col_spam + 1"/>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; "><span t-field="line.product_uom_id.name" /></td>
-
+                                                <t t-set="col_spam" t-value="col_spam + 1"/>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                   <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_unit"/>
                                                 </td>
                                                 <td t-if="display_discount" style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                     <span t-field="line.discount"/>
+                                                    <t t-set="col_spam" t-value="col_spam + 1"/>
                                                 </td>
                                                 <t t-if="tax_ids">
                                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                         <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>
+                                                        <t t-set="col_spam" t-value="col_spam + 1"/>
                                                     </td>
                                                 </t>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                     <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_excluded"></span>
                                                     <span t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
                                                 </td>
+                                                <t t-set="col_spam" t-value="col_spam + 1"/>
                                             </t>
                                             <t t-if="line.display_type == 'line_section'">
-                                                <td colspan="7" style="background-color: #91a1e0; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bolder; color: #ffffff; text-align: left; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                <td colspan="t-esc='col_spam'" style="background-color: #91a1e0; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bolder; color: #ffffff; text-align: left; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                                     <span  t-field="line.name"/>
                                                 </td>
                                                 <t t-set="current_section" t-value="line"/>
