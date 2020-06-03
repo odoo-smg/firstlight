@@ -314,9 +314,9 @@
                             <td style="align:right;">
                             <div id="total" >
                                 <div>
-                                    <table align='right' style="align:right; width: auto; border: none; border-collapse: collapse;">
+                                    <table align='right' style="align:right; width: auto; border: none; border-collapse: collapse; padding-top: 4px;">
                                         <tr>
-                                            <td style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><strong>Subtotal</strong></td>
+                                            <td style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "><strong>Subtotal</strong></td>
                                             <td style="font-size: 16px; border: 2px solid #4b5eab; border-top: none; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #000000; font-family: Franklin, sans-serif; font-style: normal; white-space:nowrap;">
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-field="o.amount_untaxed" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </td>
