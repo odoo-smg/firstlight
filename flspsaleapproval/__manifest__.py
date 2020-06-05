@@ -36,6 +36,7 @@
         'views/flsp_sale_pricelist_view.xml',
         'report/flsp_sale_report.xml',
         'report/flsp_invoice_report.xml',
-        'views/flsp_sppepp_message_view.xml',        
+        'report/flsp_invoice_report_withoutpay.xml',
+        'views/flsp_sppepp_message_view.xml',
     ],
 }
