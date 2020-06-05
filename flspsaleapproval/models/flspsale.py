@@ -13,7 +13,7 @@ class SalesOrder(models.Model):
     flsp_show_discount      = fields.Boolean(string="Show Disc. on Quote")
     flsp_ship_via           = fields.Char(string="Ship Via")
     flsp_amount_deposit     = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
-    flsp_products_pricelist = fields.One2many('product.template', 'id', 'Pricelist Products', compute='_calc_price_list_products')
+    flsp_products_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_price_list_products')
     flsp_SPPEPP             = fields.Boolean(string="SPPEPP Active", compute='_calc_flsp_sppepp')
     flsp_SPPEPP_so          = fields.Boolean(string="School PPE Purchase Program")
     flsp_SPPEPP_leadtime = fields.Selection([   ('4w', '4 Weeks'),
@@ -87,16 +87,16 @@ class SalesOrder(models.Model):
     def _calc_price_list_products(self):
         price_list_line = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)])
         price_list_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)]).mapped("product_tmpl_id").ids
-        product_ids = self.env['product.template'].search([('id', 'in', price_list_lines_product_id)]).ids
+        product_ids = self.env['product.product'].search([('product_tmpl_id', 'in', price_list_lines_product_id)]).ids
         for price_line in price_list_line:
             if price_line.base == 'pricelist':
                 if price_line.applied_on == '3_global':
                     base_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', price_line.base_pricelist_id.id)]).mapped("product_tmpl_id").ids
-                    product_line_ids = self.env['product.template'].search([('id', 'in', base_lines_product_id)]).ids
+                    product_line_ids = self.env['product.product'].search(['&',('product_tmpl_id', 'in', base_lines_product_id),('id','not in', product_ids)]).ids
                     product_ids = product_ids + product_line_ids
                 if price_line.applied_on == '2_product_category':
                     base_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', price_line.base_pricelist_id.id)]).mapped("product_tmpl_id").ids
-                    product_line_ids = self.env['product.template'].search(['&', ('id', 'in', base_lines_product_id), ('categ_id', '=', price_line.categ_id.id)]).ids
+                    product_line_ids = self.env['product.product'].search(['&', '&', ('product_tmpl_id', 'in', base_lines_product_id), ('categ_id', '=', price_line.categ_id.id), ('id','not in', product_ids)]).ids
                     product_ids = product_ids + product_line_ids
         self.flsp_products_pricelist = product_ids
 
