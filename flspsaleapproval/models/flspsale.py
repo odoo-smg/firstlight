@@ -13,6 +13,12 @@ class SalesOrder(models.Model):
     flsp_show_discount      = fields.Boolean(string="Show Disc. on Quote")
     flsp_ship_via           = fields.Char(string="Ship Via")
     flsp_amount_deposit     = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
+    flsp_products_pricelist = fields.One2many('product.template', 'id', 'Pricelist Products', compute='_calc_price_list_products')
+    flsp_SPPEPP             = fields.Boolean(string="SPPEPP Active", compute='_calc_flsp_sppepp')
+    flsp_SPPEPP_so          = fields.Boolean(string="School PPE Purchase Program")
+    flsp_SPPEPP_leadtime = fields.Selection([   ('4w', '4 Weeks'),
+                                                ('10w', '10 Weeks'),
+                                                ], string='Lead time', copy=False, default='10w')
     flsp_state = fields.Selection([
         ('draft', 'Quotation'),
         ('wait', 'Waiting Approval'),
@@ -33,6 +39,66 @@ class SalesOrder(models.Model):
         'sale.order.option', 'order_id', 'Optional Products Lines',
         copy=True, readonly=True,
         states={'draft': [('readonly', False)]})
+
+    @api.onchange('flsp_SPPEPP_so')
+    def flsp_SPPEPP_so_onchange(self):
+        if self.flsp_SPPEPP_so:
+            if self.flsp_SPPEPP_leadtime == '4w':
+                pricelist_id = self.env.company.flspsppepp_pricelist4w_id
+            else:
+                pricelist_id = self.env.company.flspsppepp_pricelist10w_id
+        else:
+            pricelist_id = self.partner_id.property_product_pricelist.id
+        self.pricelist_id = pricelist_id
+        self.order_line.unlink()
+        return {
+            'value': {
+                'pricelist_id': pricelist_id
+            },
+        }
+
+    @api.onchange('flsp_SPPEPP_leadtime')
+    def flsp_SPPEPP_leadtime_onchange(self):
+        if self.flsp_SPPEPP_so:
+            if self.flsp_SPPEPP_leadtime == '4w':
+                pricelist_id = self.env.company.flspsppepp_pricelist4w_id
+            else:
+                pricelist_id = self.env.company.flspsppepp_pricelist10w_id
+        else:
+            pricelist_id = self.partner_id.property_product_pricelist.id
+        self.pricelist_id = pricelist_id
+        self.order_line.unlink()
+        return {
+            'value': {
+                'pricelist_id': pricelist_id,
+            },
+        }
+
+    # To filter the domain of products based on price list
+    @api.depends('partner_id')
+    def _calc_flsp_sppepp(self):
+        if self.partner_id:
+            self.flsp_SPPEPP = self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
+        else:
+            self.flsp_SPPEPP = False
+
+    # To filter the domain of products based on price list
+    @api.depends('pricelist_id')
+    def _calc_price_list_products(self):
+        price_list_line = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)])
+        price_list_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)]).mapped("product_tmpl_id").ids
+        product_ids = self.env['product.template'].search([('id', 'in', price_list_lines_product_id)]).ids
+        for price_line in price_list_line:
+            if price_line.base == 'pricelist':
+                if price_line.applied_on == '3_global':
+                    base_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', price_line.base_pricelist_id.id)]).mapped("product_tmpl_id").ids
+                    product_line_ids = self.env['product.template'].search([('id', 'in', base_lines_product_id)]).ids
+                    product_ids = product_ids + product_line_ids
+                if price_line.applied_on == '2_product_category':
+                    base_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', price_line.base_pricelist_id.id)]).mapped("product_tmpl_id").ids
+                    product_line_ids = self.env['product.template'].search(['&', ('id', 'in', base_lines_product_id), ('categ_id', '=', price_line.categ_id.id)]).ids
+                    product_ids = product_ids + product_line_ids
+        self.flsp_products_pricelist = product_ids
 
     @api.depends('order_line.discount')
     def _calc_sale_approval(self):

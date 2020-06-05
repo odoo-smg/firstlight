@@ -41,8 +41,26 @@
                   <field name="flsp_approval_approved" attrs="{'invisible': True}"/>
                   <field name="flsp_show_discount"/>
                 </xpath>
+                <xpath expr="//notebook[1]" position="before">
+                    <group>
+                        <group>
+                            <field name="flsp_SPPEPP" attrs="{'invisible': True}"/>
+                            <field name="flsp_SPPEPP_so" attrs="{'invisible': [('flsp_SPPEPP', '=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="flsp_SPPEPP_leadtime" attrs="{'invisible': [('flsp_SPPEPP_so', '=', False)]}"/>
+                        </group>
+                    </group>
+                </xpath>
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                   <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
+                </xpath>
+                <xpath expr="//tree/field[@name='product_template_id']" position="before">
+                    <field name="flsp_products_line_pricelist" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='product_template_id']" position="attributes">
+                    <attribute name="domain">[('id', 'in', flsp_products_line_pricelist)]</attribute>
                 </xpath>
                 <xpath expr="//group[@name='sale_shipping']" position="inside">
                   <field name="flsp_ship_via" string="Ship Via"/>
