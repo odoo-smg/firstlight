@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="report_invoice_flsp" inherit_id="account.report_invoice">
-        <xpath expr="//t[@t-call='web.html_container']" position="replace">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-set="lang" t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
-                    <t t-call="flspsaleapproval.flsp_rep_invoice" t-lang="lang"/>
-                </t>
-            </t>
-        </xpath>
-    </template>
-
-    <template id="report_invoice_flsp_with_pay" inherit_id="account.report_invoice_with_payments">
-        <xpath expr="//t[@t-call='web.html_container']" position="replace">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-set="lang" t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
-                    <t t-call="flspsaleapproval.flsp_rep_invoice_with_pay" t-lang="lang"/>
-                </t>
-            </t>
-        </xpath>
-    </template>
-
     <template id="flsp_rep_invoice_with_pay" inherit_id="flspsaleapproval.flsp_rep_invoice" primary="True">
         <xpath expr="//div[@id='total']/div/table" position="inside">
             <t t-set="payments_vals" t-value="o._get_reconciled_info_JSON_values()"/>
@@ -374,6 +352,28 @@
                     </div>
             </div>
         </t>
+    </template>
+
+    <template id="report_invoice_flsp" inherit_id="account.report_invoice">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                    <t t-call="flspsaleapproval.flsp_rep_invoice" t-lang="lang"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="report_invoice_flsp_with_pay" inherit_id="account.report_invoice_with_payments">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                    <t t-call="flspsaleapproval.flsp_rep_invoice_with_pay" t-lang="lang"/>
+                </t>
+            </t>
+        </xpath>
     </template>
 
 </odoo>
