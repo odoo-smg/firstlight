@@ -35,6 +35,18 @@
                           </div>
                           <div class="o_setting_right_pane">
                               <div class="text-muted">
+                                  Price List 4 weeks lead time:
+                              </div>
+                              <field name="flspsppepp_pricelist4w_id" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />
+                          </div>
+                          <div class="o_setting_right_pane">
+                              <div class="text-muted">
+                                  Price List 10 weeks lead time:
+                              </div>
+                              <field name="flspsppepp_pricelist10w_id" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />
+                          </div>
+                          <div class="o_setting_right_pane">
+                              <div class="text-muted">
                                   % of Mandatory Deposit:
                               </div>
                               <field name="flsp_percent_sppepp" attrs="{'readonly': [['flsp_sppepp','=',False]]}" />

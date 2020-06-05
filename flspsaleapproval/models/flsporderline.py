@@ -7,6 +7,13 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     sale_order_option_ids = fields.One2many('sale.order.option', 'line_id', 'Optional Products Lines')
+    flsp_products_line_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_line_price_list_products')
+
+
+    @api.depends('order_id.pricelist_id', 'sequence')
+    def _calc_line_price_list_products(self):
+        for line in self:
+            line.flsp_products_line_pricelist = self.order_id.flsp_products_pricelist
 
 class SaleOrderOption(models.Model):
     _name = "sale.order.option"
