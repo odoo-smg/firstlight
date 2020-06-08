@@ -85,9 +85,15 @@ class SalesOrder(models.Model):
     # To filter the domain of products based on price list
     @api.depends('pricelist_id')
     def _calc_price_list_products(self):
+        product_ids = False
         price_list_line = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)])
-        price_list_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)]).mapped("product_tmpl_id").ids
-        product_ids = self.env['product.product'].search([('product_tmpl_id', 'in', price_list_lines_product_id)]).ids
+        if price_list_line:
+            price_list_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)]).mapped("product_tmpl_id").ids
+            if price_list_lines_product_id:
+                product_ids = self.env['product.product'].search([('product_tmpl_id', 'in', price_list_lines_product_id)]).ids
+        else:
+            self.flsp_products_pricelist = False
+            return
         for price_line in price_list_line:
             if price_line.base == 'pricelist':
                 if price_line.applied_on == '3_global':
@@ -98,7 +104,8 @@ class SalesOrder(models.Model):
                     base_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', price_line.base_pricelist_id.id)]).mapped("product_tmpl_id").ids
                     product_line_ids = self.env['product.product'].search(['&', '&', ('product_tmpl_id', 'in', base_lines_product_id), ('categ_id', '=', price_line.categ_id.id), ('id','not in', product_ids)]).ids
                     product_ids = product_ids + product_line_ids
-        self.flsp_products_pricelist = product_ids
+        if product_ids:
+            self.flsp_products_pricelist = product_ids
 
     @api.depends('order_line.discount')
     def _calc_sale_approval(self):
