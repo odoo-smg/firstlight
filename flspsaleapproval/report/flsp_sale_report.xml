@@ -126,18 +126,13 @@
                         </p>
                     </div>
                     <div style=" float:right; width:50%; " >
-                      <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
-                                           and doc.partner_invoice_id != doc.partner_id
-                                           or doc.partner_shipping_id != doc.partner_invoice_id">
-
-                          <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic, sans-serif;">Ship To:</spam>
-                          <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
-                            <span t-field="doc.partner_shipping_id.name"/><br/>
-                            <span t-field="doc.partner_shipping_id.street"/><br/>
-                            <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
-                            <span t-field="doc.partner_shipping_id.country_id.code"/>
-                          </p>
-                      </t>
+                        <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic, sans-serif;">Ship To:</spam>
+                        <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                          <span t-field="doc.partner_shipping_id.name"/><br/>
+                          <span t-field="doc.partner_shipping_id.street"/><br/>
+                          <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
+                          <span t-field="doc.partner_shipping_id.country_id.code"/>
+                        </p>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
