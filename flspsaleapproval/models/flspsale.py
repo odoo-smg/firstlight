@@ -50,7 +50,7 @@ class SalesOrder(models.Model):
         else:
             pricelist_id = self.partner_id.property_product_pricelist.id
         self.pricelist_id = pricelist_id
-        self.order_line.unlink()
+        
         return {
             'value': {
                 'pricelist_id': pricelist_id
@@ -67,7 +67,7 @@ class SalesOrder(models.Model):
         else:
             pricelist_id = self.partner_id.property_product_pricelist.id
         self.pricelist_id = pricelist_id
-        self.order_line.unlink()
+
         return {
             'value': {
                 'pricelist_id': pricelist_id,
