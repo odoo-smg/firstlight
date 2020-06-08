@@ -85,7 +85,7 @@ class SalesOrder(models.Model):
     # To filter the domain of products based on price list
     @api.depends('pricelist_id')
     def _calc_price_list_products(self):
-        product_ids = False
+        product_ids = []
         price_list_line = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)])
         if price_list_line:
             price_list_lines_product_id = self.env['product.pricelist.item'].search([('pricelist_id', '=', self.pricelist_id.id)]).mapped("product_tmpl_id").ids
