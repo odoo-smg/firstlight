@@ -14,7 +14,7 @@ class SaleOrderLine(models.Model):
     def _calc_line_price_list_products(self):
         if 'flsp_products_pricelist' in self.env['sale.order']._fields:
             if (self.order_id.flsp_products_pricelist==False):
-
+                return
         for line in self:
             line.flsp_products_line_pricelist = self.order_id.flsp_products_pricelist
 
