@@ -146,5 +146,7 @@ class Smgproduct(models.Model):
         default['default_code'] = default_init+prefix+'-'+suffix
         default['flsp_part_suffix'] = suffix
         default['flsp_part_prefix'] = prefix
-        default['flsp_plm_valid'] = False
+        if 'flsp_plm_valid' in self.env['product.template']._fields:
+            default['flsp_plm_valid'] = False
+
         return super(Smgproduct, self).copy(default)
