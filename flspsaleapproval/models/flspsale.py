@@ -95,6 +95,7 @@ class SalesOrder(models.Model):
 
     @api.onchange('flsp_SPPEPP_leadtime')
     def flsp_SPPEPP_leadtime_onchange(self):
+        pricelist_id = False
         if self.flsp_SPPEPP_so:
             pricelist_settings = self.env.company.flspsppepp_pricelist4w_id
             pricelist_settings10w = self.env.company.flspsppepp_pricelist10w_id
@@ -127,7 +128,8 @@ class SalesOrder(models.Model):
         else:
             pricelist_id = self.partner_id.property_product_pricelist.id
 
-        self.pricelist_id = pricelist_id
+        if pricelist_id:
+            self.pricelist_id = pricelist_id
 
         return {
             'value': {
