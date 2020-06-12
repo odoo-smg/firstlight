@@ -51,6 +51,7 @@ class SalesOrder(models.Model):
 
     @api.onchange('flsp_SPPEPP_so')
     def flsp_SPPEPP_so_onchange(self):
+        pricelist_id = False
         if self.flsp_SPPEPP_so:
             pricelist_settings = self.env.company.flspsppepp_pricelist4w_id
             pricelist_settings10w = self.env.company.flspsppepp_pricelist10w_id
