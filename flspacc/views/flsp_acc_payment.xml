@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="acc_payment_flsp_form_view">
+            <field name="name">flsp.payment.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='post']" position="replace">
+                    <button name="button_flsp_confirm" id="action_confirm" class="oe_highlight" states="draft" string="Confirm" type="object" />
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="after">
+                  <group string="School PPE Program">
+                    <field name="flsp_quote_id" options="{'no_create': True}" />
+                    <field name="credit_card_payment"/>
+                    <field name="amount_required"/>
+                    <field name="currency_so_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
+                  </group>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

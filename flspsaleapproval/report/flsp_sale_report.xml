@@ -49,10 +49,10 @@
 												<tr>
 													<td style="border: none; font-family:Calibri; font-size:12px; font-weight:bold; color:white; vertical-align: middle; ">
 
-														<spam style="color:#4b5eab">First Light Safety Products – A Division of Smartrend Supply Ltd.</spam>
-														<br/>6-1249 Clarence Avenue, Winnipeg, MB, Canada, R3T 1T4
-														<br/>T: 866.216.2605 | F: 833.866.1547
-														<br/>E: info@firstlightsafety.com | W: www.firstlightsafety.com
+														<spam style="color:#4b5eab"><spam t-field="company.name"/></spam>
+														<br/><spam t-field="company.street"/>, <spam t-field="company.city"/>, <spam t-field="company.state_id.code"/>, <spam t-field="company.country_id.name"/>, <spam t-field="company.zip"/>
+														<br/>T: <spam t-field="company.phone"/> | F: 833.866.1547
+														<br/>E: <spam t-field="company.email"/> | W: <a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a>
 
 													</td>
 													<td style="border: none; width:360px; padding:0px 34px 0px 0px; ">
@@ -62,20 +62,21 @@
 																	<spam style="color:#4b5eab; font-family:Calibri; font-size:18px; ">
 																	Date: </spam>
 																	<spam style="color:white; font-family:Calibri; font-size:18px; ">
-																	May 4, 2020</spam>
+																	<spam t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/></spam>
 																</td>
 															</tr>
 															<tr>
 																<td style="border: none; text-align:right; height:44px; padding: 0px 0px 0px 0px;">
 																	<spam style="color:#4b5eab; font-family:Calibri; font-size:34px; font-weight: bolder; vertical-align: middle;">
-                                                                        <span >ORDER</span>
-				                                                    </spam>
+                                    <span t-if="doc.state not in ['draft','sent']">ORDER</span>
+                                    <span t-if="doc.state in ['draft','sent']">QUOTE</span>
+				                          </spam>
 																</td>
 															</tr>
 															<tr>
 																<td style="border: none; text-align:right; vertical-align: top; padding: 0px 0px 0px 0px; ">
 																	<spam style="color:white; font-family:Calibri; font-size:20px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:0px">
-																	FLSP0001</spam>
+																	<span t-field="doc.name"/></spam>
 																</td>
 															</tr>
 														</table>
@@ -125,18 +126,13 @@
                         </p>
                     </div>
                     <div style=" float:right; width:50%; " >
-                      <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
-                                           and doc.partner_invoice_id != doc.partner_id
-                                           or doc.partner_shipping_id != doc.partner_invoice_id">
-
-                          <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic, sans-serif;">Ship To:</spam>
-                          <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
-                            <span t-field="doc.partner_shipping_id.name"/><br/>
-                            <span t-field="doc.partner_shipping_id.street"/><br/>
-                            <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
-                            <span t-field="doc.partner_shipping_id.country_id.code"/>
-                          </p>
-                      </t>
+                        <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin Gothic, sans-serif;">Ship To:</spam>
+                        <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                          <span t-field="doc.partner_shipping_id.name"/><br/>
+                          <span t-field="doc.partner_shipping_id.street"/><br/>
+                          <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
+                          <span t-field="doc.partner_shipping_id.country_id.code"/>
+                        </p>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
@@ -200,6 +196,7 @@
                 <table style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;">
                     <thead>
                         <tr>
+                            <t t-set="colspan" t-value="7"/>
                             <td style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">PART NUMBER</td>
                             <td style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">DESCRIPTION</td>
                             <td style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right; ">QTY</td>
@@ -208,6 +205,7 @@
                             <td style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">TAXES</td>
                             <t t-if="doc.flsp_show_discount and display_discount">
                               <td style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">DISC.%</td>
+                              <t t-set="colspan" t-value="colspan+1"/>
                             </t>
                             <td style="font-size: 16px; background-color: #2DA4D1; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">AMOUNT</td>
                         </tr>
@@ -236,14 +234,14 @@
                                       <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]><spam t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
                                 </t>
                                 <t t-if="line.display_type == 'line_section'">
-                                    <td name="td_section_line" colspan="99" style="background-color: #6bbfde; border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; color: white; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                    <td name="td_section_line" t-att-colspan="colspan" style="background-color: #6bbfde; border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; color: white; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
                                         <span t-field="line.name"/>
                                     </td>
                                     <t t-set="current_section" t-value="line"/>
                                     <t t-set="current_subtotal" t-value="0"/>
                                 </t>
                                 <t t-if="line.display_type == 'line_note'">
-                                    <td name="td_note_line" colspan="99" style="border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                    <td name="td_note_line" t-att-colspan="colspan" style="border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
                                         <span t-field="line.name"/>
                                     </td>
                                 </t>
@@ -251,7 +249,7 @@
 
                             <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
                                 <tr>
-                                    <td name="td_section_subtotal" colspan="99" style="font-size: 16px; background-color: #bfe3f2; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">
+                                    <td name="td_section_subtotal" t-att-colspan="colspan" style="font-size: 16px; background-color: #bfe3f2; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">
                                         <strong>Subtotal</strong>
                                         <spam t-field="doc.currency_id.name"/><spam t-field="doc.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
                                         <span

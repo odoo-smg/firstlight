@@ -8,6 +8,12 @@
               <xpath expr="//field[@name='user_id']" position="after">
                 <field name="flsp_so_user_id"/>
               </xpath>
+              <xpath expr="//tree/field[@name='price_unit']" position="attributes">
+                <attribute name="attrs">{'readonly': True}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="flsp_amount_deposit"/>
+              </xpath>
             </field>
         </record>
 

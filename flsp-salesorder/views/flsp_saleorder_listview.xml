@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_salesorder_list_view">
+            <field name="name">sales.order.flsp.list.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='amount_total']" position="after">
+              </xpath>
+            </field>
+        </record>
+</odoo>
