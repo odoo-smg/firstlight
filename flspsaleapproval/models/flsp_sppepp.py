@@ -28,12 +28,21 @@ class flspsppeppmsg(models.TransientModel):
                 res['amount_total'] = amount_categ_total
             if 'total_required' in fields:
                 res['total_required'] = amount_categ_total * flsp_percent_sppepp / 100
+            if 'order_id' in fields:
+                res['order_id'] = sale_order.id
 
         return res
 
+    order_id = fields.Many2one('sale.order', string='Order Reference', readonly=True)
     company_id = fields.Many2one('res.company', string="Company", default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string='Customer', readonly=True)
     amount_total = fields.Float(string='Category Total', readonly=True)
     total_required = fields.Float(string='Total Required', readonly=True)
     flspsppepp_category_id = fields.Many2one('product.category', related='company_id.flspsppepp_category_id', readonly=True, default=lambda self: self.env.company.flspsppepp_category_id)
     flsp_percent_sppepp = fields.Float(related='company_id.flsp_percent_sppepp', string="Percent of Deposit", readonly=True, default=lambda self: self.env.company.flsp_percent_sppepp)
+
+
+    def sppepp_approve(self):
+        self.ensure_one()
+        action = self.order_id.sppepp_confirm()
+        return action
