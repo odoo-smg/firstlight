@@ -83,8 +83,9 @@ class SalesOrder(models.Model):
         else:
             pricelist_id = self.partner_id.property_product_pricelist.id
 
-        self.pricelist_id = pricelist_id
-        
+        if pricelist_id
+            self.pricelist_id = pricelist_id
+
         return {
             'value': {
                 'pricelist_id': pricelist_id
