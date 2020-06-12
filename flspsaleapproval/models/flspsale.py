@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+from datetime import date, datetime, time
+from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
 
 
@@ -7,18 +8,23 @@ class SalesOrder(models.Model):
     _inherit = "sale.order"
     _check_company_auto = True
 
+    @api.model
+    def _default_sppepp(self):
+        return self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
+
     flsp_approval_required  = fields.Boolean(string="Approval Required", readonly=True, compute='_calc_sale_approval')
     flsp_approval_requested = fields.Boolean(string="Approval Requested", readonly=True)
     flsp_approval_approved  = fields.Boolean(string="Discount Approved", readonly=True)
     flsp_show_discount      = fields.Boolean(string="Show Disc. on Quote")
+    flsp_order_line_count   = fields.Integer(string="Number of lines")
     flsp_ship_via           = fields.Char(string="Ship Via")
     flsp_amount_deposit     = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
     flsp_products_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_price_list_products')
-    flsp_SPPEPP             = fields.Boolean(string="SPPEPP Active", compute='_calc_flsp_sppepp')
-    flsp_SPPEPP_so          = fields.Boolean(string="School PPE Purchase Program")
+    flsp_SPPEPP             = fields.Boolean(string="SPPEPP Active", default='_default_sppepp')
+    flsp_SPPEPP_so          = fields.Boolean(string="School PPE Purchase Program", store=True)
     flsp_SPPEPP_leadtime = fields.Selection([   ('4w', '4 Weeks'),
                                                 ('10w', '10 Weeks'),
-                                                ], string='Lead time', copy=False, default='10w')
+                                                ], string='Lead time', store=True, copy=False, default='10w')
     flsp_state = fields.Selection([
         ('draft', 'Quotation'),
         ('wait', 'Waiting Approval'),
@@ -39,16 +45,44 @@ class SalesOrder(models.Model):
         'sale.order.option', 'order_id', 'Optional Products Lines',
         copy=True, readonly=True,
         states={'draft': [('readonly', False)]})
+    validity_date = fields.Date(string="Expiration", default = date.today() + relativedelta(days=30))
+
+
 
     @api.onchange('flsp_SPPEPP_so')
     def flsp_SPPEPP_so_onchange(self):
         if self.flsp_SPPEPP_so:
+            pricelist_settings = self.env.company.flspsppepp_pricelist4w_id
+            pricelist_settings10w = self.env.company.flspsppepp_pricelist10w_id
             if self.flsp_SPPEPP_leadtime == '4w':
-                pricelist_id = self.env.company.flspsppepp_pricelist4w_id
+                if pricelist_settings:
+                    pricelist_id = pricelist_settings
+                else:
+                    sppepp_price_list_ids = self.env['product.pricelist'].search([
+                        '&','&', '&',
+                        ('flsp_SPPEPP_pl',  '=', True),
+                        ('flsp_SPPEPP_leadtime', '=', self.flsp_SPPEPP_leadtime),
+                        ('flsp_sale_type', '=', self.partner_id.flsp_sale_type),
+                        ('currency_id', '=', self.partner_id.flsp_sale_currency.id)])
+                    if sppepp_price_list_ids:
+                        for sppepp_pricelist in sppepp_price_list_ids:
+                            pricelist_id = sppepp_pricelist
             else:
-                pricelist_id = self.env.company.flspsppepp_pricelist10w_id
+                if pricelist_settings10w:
+                    pricelist_id = pricelist_settings10w
+                else:
+                    sppepp_price_list_ids = self.env['product.pricelist'].search([
+                        '&','&', '&',
+                        ('flsp_SPPEPP_pl',  '=', True),
+                        ('flsp_SPPEPP_leadtime', '=', self.flsp_SPPEPP_leadtime),
+                        ('flsp_sale_type', '=', self.partner_id.flsp_sale_type),
+                        ('currency_id', '=', self.partner_id.flsp_sale_currency.id)])
+                    if sppepp_price_list_ids:
+                        for sppepp_pricelist in sppepp_price_list_ids:
+                            pricelist_id = sppepp_pricelist
         else:
             pricelist_id = self.partner_id.property_product_pricelist.id
+
         self.pricelist_id = pricelist_id
         
         return {
@@ -60,12 +94,37 @@ class SalesOrder(models.Model):
     @api.onchange('flsp_SPPEPP_leadtime')
     def flsp_SPPEPP_leadtime_onchange(self):
         if self.flsp_SPPEPP_so:
+            pricelist_settings = self.env.company.flspsppepp_pricelist4w_id
+            pricelist_settings10w = self.env.company.flspsppepp_pricelist10w_id
             if self.flsp_SPPEPP_leadtime == '4w':
-                pricelist_id = self.env.company.flspsppepp_pricelist4w_id
+                if pricelist_settings:
+                    pricelist_id = pricelist_settings
+                else:
+                    sppepp_price_list_ids = self.env['product.pricelist'].search([
+                        '&', '&', '&',
+                        ('flsp_SPPEPP_pl', '=', True),
+                        ('flsp_SPPEPP_leadtime', '=', self.flsp_SPPEPP_leadtime),
+                        ('flsp_sale_type', '=', self.partner_id.flsp_sale_type),
+                        ('currency_id', '=', self.partner_id.flsp_sale_currency.id)])
+                    if sppepp_price_list_ids:
+                        for sppepp_pricelist in sppepp_price_list_ids:
+                            pricelist_id = sppepp_pricelist
             else:
-                pricelist_id = self.env.company.flspsppepp_pricelist10w_id
+                if pricelist_settings10w:
+                    pricelist_id = pricelist_settings10w
+                else:
+                    sppepp_price_list_ids = self.env['product.pricelist'].search([
+                        '&', '&', '&',
+                        ('flsp_SPPEPP_pl', '=', True),
+                        ('flsp_SPPEPP_leadtime', '=', self.flsp_SPPEPP_leadtime),
+                        ('flsp_sale_type', '=', self.partner_id.flsp_sale_type),
+                        ('currency_id', '=', self.partner_id.flsp_sale_currency.id)])
+                    if sppepp_price_list_ids:
+                        for sppepp_pricelist in sppepp_price_list_ids:
+                            pricelist_id = sppepp_pricelist
         else:
             pricelist_id = self.partner_id.property_product_pricelist.id
+
         self.pricelist_id = pricelist_id
 
         return {
@@ -73,14 +132,6 @@ class SalesOrder(models.Model):
                 'pricelist_id': pricelist_id,
             },
         }
-
-    # To filter the domain of products based on price list
-    @api.depends('partner_id')
-    def _calc_flsp_sppepp(self):
-        if self.partner_id:
-            self.flsp_SPPEPP = self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
-        else:
-            self.flsp_SPPEPP = False
 
     # To filter the domain of products based on price list
     @api.depends('pricelist_id')
@@ -113,7 +164,9 @@ class SalesOrder(models.Model):
         flsp_sales_discount_approval = self.env['ir.config_parameter'].sudo().get_param('flsp_sales_discount_approval')
         so_flsp_max_percent_approval = self.env.company.so_flsp_max_percent_approval
         total_discount = 0.0
+        self.flsp_order_line_count = 0
         for line in self.order_line:
+            self.flsp_order_line_count = self.flsp_order_line_count +1
             if (line.discount > so_flsp_max_percent_approval) and flsp_sales_discount_approval:
                 self.flsp_approval_required = True
             total_discount += line.discount
@@ -153,13 +206,16 @@ class SalesOrder(models.Model):
 
         return action
 
-        #return self.action_confirm()
-
     def button_flsp_reject(self):
         self.write({'flsp_state': 'draft'})
         self.write({'flsp_approval_approved': False})
         self.write({'flsp_approval_requested': False})
         return self.write({'flsp_approval_requested': False})
+
+    def sppepp_confirm(self):
+        action = self.action_confirm()
+        return action
+
 
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):

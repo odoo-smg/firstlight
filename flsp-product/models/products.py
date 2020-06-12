@@ -148,5 +148,4 @@ class Smgproduct(models.Model):
         default['flsp_part_prefix'] = prefix
         if 'flsp_plm_valid' in self.env['product.template']._fields:
             default['flsp_plm_valid'] = False
-
         return super(Smgproduct, self).copy(default)

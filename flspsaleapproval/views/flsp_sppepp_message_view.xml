@@ -9,6 +9,7 @@
                     <h4>School PPE Purchase Program</h4>
                     <group>
                         <group>
+                            <field name="order_id"/>
                             <field name="partner_id"/>
                             <field name="flspsppepp_category_id"/>
                             <field name="amount_total"/>
@@ -18,6 +19,7 @@
                     </group>
                     <spam>In order to confirm the Quotation into a Sales Order the customer must pay the minimal percentage of the total products that are in the PPE Purchase Program.</spam>
                     <footer>
+                        <button name="sppepp_approve" type="object" string="Confirm Regardless" class="btn-primary" groups="sales_team.group_sale_manager"/>
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </form>

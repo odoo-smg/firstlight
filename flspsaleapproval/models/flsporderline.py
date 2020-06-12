@@ -8,7 +8,23 @@ class SaleOrderLine(models.Model):
 
     sale_order_option_ids = fields.One2many('sale.order.option', 'line_id', 'Optional Products Lines')
     flsp_products_line_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_line_price_list_products')
+    flsp_lead_time_weeks = fields.Float(string="Lead Time (Weeks)", compute="_compute_flsp_lead_time_weeks")
 
+    @api.onchange('product_template_id')
+    def sppepp_product_template_id_onchange(self):
+        ret_val = {}
+        if self.order_id.flsp_SPPEPP_so:
+            value_ret = 70
+            if self.order_id.flsp_SPPEPP_leadtime == '4w':
+                value_ret = 28
+                self.customer_lead = value_ret
+                ret_val = {'value': {'customer_lead': value_ret}}
+        return ret_val
+
+    @api.depends('customer_lead')
+    def _compute_flsp_lead_time_weeks(self):
+        for line in self:
+            line.flsp_lead_time_weeks = line.customer_lead/7
 
     @api.depends('order_id.pricelist_id', 'sequence')
     def _calc_line_price_list_products(self):

@@ -8,6 +8,9 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="flsp_sale_type"/>
+                    <field name="flsp_SPPEPP" force_save="1" attrs="{'invisible': True}"/>
+                    <field name="flsp_SPPEPP_pl" force_save="1" attrs="{'invisible': [('flsp_SPPEPP', '=', False)]}" />
+                    <field name="flsp_SPPEPP_leadtime" force_save="1" attrs="{'invisible': [('flsp_SPPEPP_pl', '=', False)]}" />
                 </xpath>
             </field>
         </record>
