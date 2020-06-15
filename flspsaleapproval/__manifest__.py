@@ -27,9 +27,9 @@
     'depends': ['delivery'],
 
     # always loaded
+    #'views/flsp_sale_settings_view.xml',
     'data': [
         'views/flsp_sale_view.xml',
-        'views/flsp_sale_settings_view.xml',
         'views/flsp_sale_optional_view.xml',
         'views/flsp_sale_wizard_view.xml',
         'views/flsp_sale_message_view.xml',
