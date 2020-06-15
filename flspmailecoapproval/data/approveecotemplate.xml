@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Channel and moderation related data -->
+        <template id="mail_eco_products_approve">
+            <div>
+                <p>Hello,</p>
+                <p>The following is a list of products that require validation:</p><br/>
+            </div>
+            <div >
+                <table class="table table-md" style="padding: 0px 20px 0px 20px;">
+                    <div>
+                        <tr>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Internal Reference </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Name </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> PLM </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> ACC </th>
+                        </tr>
+
+                        <t t-set="show_list" t-value="True"/>
+                        <t t-set="list_count" t-value="-1"/>
+                        <div t-foreach="products" t-as="row">
+                            <t t-set="list_count" t-value="list_count+1"/>
+                            <t t-if="list_count==20">
+                                <t t-set="show_list" t-value="False"/>
+                            </t>
+                            <t t-if="show_list">
+                                <tr>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['default_code']" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['name']" /></td>
+                                    <t t-if="row.flsp_plm_valid == True" >
+                                        <td style="text-align: center;border-collapse:collapse; border-bottom: 1px solid">x</td>
+                                    </t>
+                                    <t t-else="">
+                                        <td style="text-align: center; border-collapse:collapse; border-bottom: 1px solid"></td>
+                                    </t>
+                                    <t t-if="row.flsp_acc_valid == True" >
+                                        <td style="text-align: center;border-collapse:collapse; border-bottom: 1px solid">x</td>
+                                    </t>
+                                    <t t-else="">
+                                        <td style="text-align: center; border-collapse:collapse; border-bottom: 1px solid"></td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </div>
+                    </div>
+                </table>
+            </div><br/>
+            <t t-if="totalprd > 20">
+                <p>The list above shows only the 20 first products from a total of <spam t-esc="totalprd" />, please access the complete list below:</p>
+            </t>
+            <div style="text-align: center;">
+                <a href="https://odoo-smg-firstlight1.odoo.com/web#action=213&amp;model=product.template&amp;view_type=list&amp;cids=1&amp;menu_id=93" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Products</a>
+                <br/><br/><br/>
+            </div>
+            <p>Thank you!</p>
+
+        </template>
+    </data>
+</odoo>
