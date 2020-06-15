@@ -39,5 +39,5 @@
         'report/flsp_invoice_report.xml',
         'report/flsp_invoice_report_withoutpay.xml',
         'views/flsp_sppepp_message_view.xml',
-            ],
+    ],
 }
