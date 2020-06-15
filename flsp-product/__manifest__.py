@@ -32,6 +32,8 @@
     'depends': ['base'],
     'depends': ['stock'],
     'depends': ['product'],
+    'depends': ['mrp'],
+    'depends': ['mrp.eco'],
 
 
     # always loaded
