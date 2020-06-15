@@ -27,6 +27,7 @@
 
     # always loaded
     'data': [
+    
         'views/flsp_sale_view.xml',
         'views/flsp_sale_settings_view.xml',
         'views/flsp_sale_optional_view.xml',
