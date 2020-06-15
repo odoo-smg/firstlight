@@ -33,7 +33,7 @@
     'depends': ['stock'],
     'depends': ['product'],
     'depends': ['mrp'],
-    'depends': ['plm'],
+    'depends': ['mrp_plm'],
 
 
     # always loaded
