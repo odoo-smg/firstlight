@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flspapproval_choose_delivery_form">
+            <field name="name">partner.flspapproval.form.inherit</field>
+            <field name="model">choose.delivery.carrier</field>
+            <field name="inherit_id" ref="delivery.choose_delivery_carrier_view_form"/>
+            <field name="priority">96</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_id']" position="after">
+                    <field name="manually_update"/>
+                    <label for="delivery_price"/>
+                    <div class="o_row">
+                        <field name="delivery_price" attrs="{'invisible': False, 'readonly': True}"/>
+                    </div>
+                </xpath>
+                <xpath expr="//button[@name='update_price']" position="replace">
+                    <button name="update_price" type="object" >
+                        <i class="fa fa-arrow-right mr-1"/>Update rate
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='display_price']" position="replace">
+                   <field name='display_price' string="New Price" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible': [('carrier_id','=', False)], 'readonly': False}"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>
