@@ -23,7 +23,7 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-    'depends': ['sale'],
+    #'depends': ['sale'],
 
     # always loaded
     'data': [
