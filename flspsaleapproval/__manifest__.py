@@ -28,8 +28,8 @@
     # always loaded
     'data': [
         'report/flsp_sale_report.xml',
-        'report/flsp_invoice_report.xml',
-        'report/flsp_invoice_report_withoutpay.xml',
+        #'report/flsp_invoice_report.xml',
+        #'report/flsp_invoice_report_withoutpay.xml',
 
     ],
 }
