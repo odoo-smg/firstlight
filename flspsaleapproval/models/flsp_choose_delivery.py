@@ -8,7 +8,7 @@ class flspchoosedelivery(models.TransientModel):
     _check_company_auto = True
     manually_update = fields.Boolean("Manually Update")
 
-    def _get_shipment_rate(self):
+'''    def _get_shipment_rate(self):
         vals = self.carrier_id.rate_shipment(self.order_id)
         if vals.get('success'):
             self.delivery_message = vals.get('warning_message', False)
@@ -19,3 +19,4 @@ class flspchoosedelivery(models.TransientModel):
                 self.display_price = vals['carrier_price']
             return {}
         return {'error_message': vals['error_message']}
+'''
