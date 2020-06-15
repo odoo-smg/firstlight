@@ -24,13 +24,8 @@
     # any module necessary for this one to work correctly
     'depends': ['base'],
     'depends': ['sale'],
-    'depends': ['account'],
 
     # always loaded
     'data': [
-        #'report/flsp_sale_report.xml',
-        #'report/flsp_invoice_report.xml',
-        #'report/flsp_invoice_report_withoutpay.xml',
-
     ],
 }
