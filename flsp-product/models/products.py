@@ -14,27 +14,42 @@ class Smgproduct(models.Model):
         returned_registre = retvalue[0]
         return self._get_next_prefix(returned_registre[0])
 
-    # Change description and set it as mandatory
-    default_code = fields.Char(string="Internal Reference", readonly=True)
+    @api.model
+    def _default_default_code(self):
+        if not(self.flsp_part_suffix):
+            suffix = '000'
+        else:
+            suffix = self.flsp_part_suffix
+
+        if not(self.flsp_part_prefix):
+            prefix = '00000'
+        else:
+            prefix = self.flsp_part_prefix
+
+        return '1'+prefix+'-'+suffix
 
     legacy_code = fields.Char(string="Legacy Part #")
     flsp_part_prefix = fields.Char(string="Part # Prefix", default=_default_nextprefix)
     flsp_part_suffix = fields.Char(string="Part # Suffix", default="000")
 
+    # Change description and set it as mandatory
+    default_code = fields.Char(string="Internal Reference", readonly=True, default=_default_default_code)
+
+
     # constraints to validate code and description to be unique
-    _sql_constraints = [
-        ('default_code_name_check_flsp5',
-         'CHECK(name != default_code)',
-         "The Name of the product should not be the product code"),
+    #_sql_constraints = [
+    #    ('default_code_name_check_flsp5',
+    #     'CHECK(name != default_code)',
+    #     "The Name of the product should not be the product code"),
 
-        ('default_code_unique_flsp5',
-         'UNIQUE(default_code)',
-         "The Product Code must be unique"),
+    #    ('default_code_unique_flsp5',
+    #     'UNIQUE(default_code)',
+    #     "The Product Code must be unique"),
 
-        ('name_unique_flsp5',
-         'UNIQUE(name)',
-         "The Product name must be unique"),
-    ]
+    #    ('name_unique_flsp5',
+    #     'UNIQUE(name)',
+    #     "The Product name must be unique"),
+    #]
 
 
     @api.model
