@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flsp_product,product.template,product.model_product_template,base.group_user,0,0,0,0
+access_flsp_eco,mrp.eco,mrp_plm.model_mrp_eco,base.group_user,0,0,0,0
