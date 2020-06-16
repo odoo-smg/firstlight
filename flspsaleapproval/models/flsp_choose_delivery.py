@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class flspchoosedelivery(models.TransientModel):
     _inherit = 'choose.delivery.carrier'
     _check_company_auto = True
-    manually_update = fields.Boolean("Manually Update")
+    manually_update = fields.Boolean("Manually Update", default=True)
 
     def _get_shipment_rate(self):
         vals = self.carrier_id.rate_shipment(self.order_id)
