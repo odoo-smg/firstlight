@@ -42,7 +42,7 @@ class SalesOrder(models.Model):
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
 
     sale_order_option_ids = fields.One2many(
-        'sale.order.option', 'order_id', 'Optional Products Lines',
+        'sale.order', 'order_id', 'Optional Products Lines',
         copy=True, readonly=True,
         states={'draft': [('readonly', False)]})
     validity_date = fields.Date(string="Expiration", default = date.today() + relativedelta(days=30))
