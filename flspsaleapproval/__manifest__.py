@@ -27,5 +27,6 @@
 
     # always loaded
     'data': [
+        'report/flsp_sale_report.xml',
     ],
 }
