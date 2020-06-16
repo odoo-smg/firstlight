@@ -24,6 +24,7 @@
     # any module necessary for this one to work correctly
     'depends': ['base'],
     'depends': ['sale'],
+    'depends': ['delivery'],
 
     # always loaded
     'data': [
@@ -38,5 +39,6 @@
         'report/flsp_invoice_report.xml',
         'report/flsp_invoice_report_withoutpay.xml',
         'views/flsp_sppepp_message_view.xml',
+        'views/flsp_choose_delivery.xml',
     ],
 }
