@@ -22,7 +22,7 @@ class SalesOrder(models.Model):
     flsp_products_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_price_list_products')
     flsp_SPPEPP             = fields.Boolean(string="SPPEPP Active", default=_default_sppepp)
     flsp_SPPEPP_so          = fields.Boolean(string="School PPE Purchase Program", store=True)
-    flsp_SPPEPP_leadtime = fields.Selection([   ('4w', '4 Weeks'),
+    flsp_SPPEPP_leadtime    = fields.Selection([   ('4w', '4 Weeks'),
                                                 ('10w', '10 Weeks'),
                                                 ], string='Lead time', store=True, copy=False, default='10w')
     flsp_state = fields.Selection([

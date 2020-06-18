@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
         <record model="ir.ui.view" id="flspapproval_choose_delivery_form">
-            <field name="name">partner.flspapproval.form.inherit</field>
+            <field name="name">flsp.choose.delivery.form.inherit</field>
             <field name="model">choose.delivery.carrier</field>
             <field name="inherit_id" ref="delivery.choose_delivery_carrier_view_form"/>
             <field name="priority">96</field>
