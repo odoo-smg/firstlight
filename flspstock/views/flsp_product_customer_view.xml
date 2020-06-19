@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspstock_customer_part_view">
+            <field name="name">flspstock.product.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='description']" position="after">
+                    <group string="Customer Part Number" name="flspstock_customerscode" colspan="4" >
+                        <field name="customerscode_ids" nolabel="1" context="{'tree_view_ref':'flspstock.flsp_customerscode_tree_view2', 'form_view_ref':'flspstock.flsp_customerscode_form_view'}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="flsp_customerscode_tree_view" model="ir.ui.view">
+            <field name="name">flsp.customerscode.tree.view</field>
+            <field name="model">flspstock.customerscode</field>
+            <field name="arch" type="xml">
+                <tree string="Customer's Part Number">
+                    <field name="sequence" widget="handle"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" />
+                    <field name="part_number"/>
+                    <field name="description"/>
+                    <field name="company_id" group="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="flsp_customerscode_tree_view2" model="ir.ui.view">
+            <field name="name">flsp.customerscode.tree.view2</field>
+            <field name="model">flspstock.customerscode</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="flspstock.flsp_customerscode_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="replace"/>
+                <xpath expr="//field[@name='sequence']" position="replace"/>
+            </field>
+        </record>
+
+
+        <record id="flsp_customerscode_form_view" model="ir.ui.view">
+            <field name="name">flspstock.customerscode.form.view</field>
+            <field name="model">flspstock.customerscode</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="Customer Part Number">
+                    <sheet>
+                        <label for="partner_id" string="Customer"/>
+                        <h1>
+                            <field name="partner_id"/>
+                        </h1>
+                        <group>
+                            <field name="product_id"  required='True' attrs="{'readonly': [('id', '!=', False)]}"/>
+                            <field name="part_number"/>
+                            <field name="description"/>
+                            <field name="company_id" group="base.group_multi_company"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+</odoo>
