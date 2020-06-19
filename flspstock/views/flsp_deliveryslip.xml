@@ -203,8 +203,6 @@
                                                 <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                                     <span t-field="packaging_id.qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                                 </td>
-                                            </t>
-                                            <t t-if="package_qty > 0">
                                                 <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                                     <span t-esc="package_qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                                 </td>
