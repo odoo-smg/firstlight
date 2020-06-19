@@ -202,13 +202,22 @@
 
 
                                     <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
+                                        <t t-set="product_code" t-value="line.product_id.default_code"/>
+                                        <t t-set="product_desc" t-value="line.product_id.name"/>
+                                        <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
+                                            <t t-if="customercode_id.partner_id == o.partner_id">
+                                                <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                                <t t-set="product_desc" t-value="customercode_id.description"/>
+                                            </t>
+                                        </t>
+
                                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
                                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
 
                                         <tr style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; ">
                                             <t t-if="not line.display_type" name="account_invoice_line_accountable">
-                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; " name="account_invoice_line_prd"><span t-field="line.product_id.default_code"/></td>
-                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; " name="account_invoice_line_name"><span t-field="line.product_id.name"/></td>
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; " name="account_invoice_line_prd"><span t-esc="product_code"/></td>
+                                                <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; " name="account_invoice_line_name"><span t-esc="product_desc"/></td>
                                                 <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                     <span t-field="line.quantity" t-options='{"widget": "integer"}'/>
                                                 </td>
