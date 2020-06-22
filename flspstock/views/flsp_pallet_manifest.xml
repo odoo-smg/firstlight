@@ -105,7 +105,9 @@
                         <div style=" float:left; width:50%; " >
                             <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship From:</spam>
                             <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
-                                <span t-field="o.stock_picking_id.company_id.name"/><br/>
+                                <div style=" width:235px; ">
+                                <span t-field="o.stock_picking_id.company_id.name"/>
+                                </div><br/>
                                 <span t-field="o.stock_picking_id.company_id.street"/><br/>
                                 <span t-field="o.stock_picking_id.company_id.city"/>, <span t-field="o.stock_picking_id.company_id.state_id.code"/> <span t-field="o.stock_picking_id.company_id.zip"/><br/>
                                 <span t-field="o.stock_picking_id.company_id.country_id.code"/>
