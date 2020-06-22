@@ -177,8 +177,6 @@
                                 </td>
                                 <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                     <span t-field="l.quantity"/>
-                                </td>
-                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; " groups="uom.group_uom">
                                     <span t-field="l.product_id.uom_id.name"/>
                                 </td>
                                 <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
