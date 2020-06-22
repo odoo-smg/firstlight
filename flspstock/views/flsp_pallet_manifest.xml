@@ -13,8 +13,8 @@
                         <t t-if="company_id">
                             <t t-set="company" t-value="company_id"/>
                         </t>
-                        <t t-elif="o and 'company_id' in o">
-                            <t t-set="company" t-value="o.company_id.sudo()"/>
+                        <t t-elif="o and 'company_id' in o.stock_picking_id">
+                            <t t-set="company" t-value="o.stock_picking_id.company_id.sudo()"/>
                         </t>
                         <t t-else="else">
                             <t t-set="company" t-value="res_company"/>
@@ -105,10 +105,10 @@
                         <div style=" float:left; width:50%; " >
                             <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship From:</spam>
                             <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
-                                <span t-field="o.company_id.name"/><br/>
-                                <span t-field="o.company_id.street"/><br/>
-                                <span t-field="o.company_id.city"/>, <span t-field="o.company_id.state_id.code"/> <span t-field="o.company_id.zip"/><br/>
-                                <span t-field="o.company_id.country_id.code"/>
+                                <span t-field="o.stock_picking_id.company_id.name"/><br/>
+                                <span t-field="o.stock_picking_id.company_id.street"/><br/>
+                                <span t-field="o.stock_picking_id.company_id.city"/>, <span t-field="o.stock_picking_id.company_id.state_id.code"/> <span t-field="o.stock_picking_id.company_id.zip"/><br/>
+                                <span t-field="o.stock_picking_id.company_id.country_id.code"/>
                             </p>
                         </div>
                         <div style=" float:right; width:50%; " >
