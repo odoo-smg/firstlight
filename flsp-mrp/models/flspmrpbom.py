@@ -36,4 +36,5 @@ class flspmrpbom(models.Model):
     def copy(self, default=None):
         default = dict(default or {})
         default['code'] = self._default_nextbomref()
+        default['flsp_bom_plm_valid'] = False
         return super(flspmrpbom, self).copy(default)
