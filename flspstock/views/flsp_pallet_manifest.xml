@@ -102,18 +102,16 @@
 
                 <div class="page">
                     <div style="margin:40px 0px 0px 0px; padding: 30px 0px 30px 0px; width:100%; ">
-                        <div style=" float:left; width:50%; " >
+                        <div style=" float:left; width:60%; " >
                             <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship From:</spam>
                             <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
-                                <div style=" width:235px; ">
-                                <span t-field="o.stock_picking_id.company_id.name"/>
-                                </div><br/>
+                                <span t-field="o.stock_picking_id.company_id.name"/><br/>
                                 <span t-field="o.stock_picking_id.company_id.street"/><br/>
                                 <span t-field="o.stock_picking_id.company_id.city"/>, <span t-field="o.stock_picking_id.company_id.state_id.code"/> <span t-field="o.stock_picking_id.company_id.zip"/><br/>
                                 <span t-field="o.stock_picking_id.company_id.country_id.code"/>
                             </p>
                         </div>
-                        <div style=" float:right; width:50%; " >
+                        <div style=" float:right; width:40%; " >
                             <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship To:</spam>
                             <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
                               <span t-field="o.stock_picking_id.partner_id.name"/><br/>
