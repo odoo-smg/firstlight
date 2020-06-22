@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="flsp_deliveryslip" inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-call="flspstock.flsp_rep_delivery_doc"/>
+        </xpath>
+    </template>
+
+    <template id="flsp_rep_delivery_doc">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-if="not o" t-set="o" t-value="doc"/>
+
+                    <t t-if="not company">
+                        <!-- Multicompany -->
+                        <t t-if="company_id">
+                            <t t-set="company" t-value="company_id"/>
+                        </t>
+                        <t t-elif="o and 'company_id' in o">
+                            <t t-set="company" t-value="o.company_id.sudo()"/>
+                        </t>
+                        <t t-else="else">
+                            <t t-set="company" t-value="res_company"/>
+                        </t>
+                    </t>
+
+                    <t t-esc="company.update_scss()"/>
+                    <div class="header">
+                        <div class="row">
+                        <table style="background-image: url('flspsaleapproval/static/src/img/topbar_invoice.jpg'); height: 166px; width: 1116px; border-collapse: collapse">
+                            <tr>
+                                <td style="border: none; height:33px; text-align: right" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; border-collapse: collapse" >
+                                    <table style="border-collapse: collapse; width:100%; height:100%">
+                                        <tr>
+                                            <td style="border: none; padding:0px 0px 0px 369px; width:100%; ">
+                                                <table style="border-collapse: collapse; width:100%; height:100%; ">
+                                                    <tr>
+                                                        <td style="border: none; font-family:Calibri; font-size:12px; font-weight:bold; color:white; vertical-align: middle; ">
+                                                            <spam style="color:#fcb030"><spam t-field="company.name"/></spam>
+                                                            <br/><spam t-field="company.street"/>, <spam t-field="company.city"/>, <spam t-field="company.state_id.code"/>, <spam t-field="company.country_id.name"/>, <spam t-field="company.zip"/>
+                                                            <br/>T: <spam t-field="company.phone"/> | F: 833.866.1547
+                                <br/>E: <spam t-field="company.email"/> | W: <a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a>
+                                                        </td>
+                                                        <td style="border: none; width:360px; padding:0px 34px 0px 0px; ">
+                                                            <table style="border: none; width:100%; height:100%; border-collapse: collapse; ">
+                                                                <tr>
+                                                                    <td style="border: none; text-align:right; vertical-align: bottom; padding: 0px 0px 0px 0px;">
+                                                                        <spam style="color:#fcb030; font-family:Calibri; font-size:18px; ">
+                                                                        Date: </spam>
+                                                                        <spam style="color:white; font-family:Calibri; font-size:18px; ">
+                                                                        <spam t-field="o.date_done" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/>
+                                                                        </spam>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border: none; text-align:right; height:44px; padding: 0px 0px 0px 0px;">
+                                                                        <spam style="color:#fcb030; font-family:Calibri; font-size:34px; font-weight: bolder; vertical-align: middle;">
+                                                                        <span>PACKING SLIP</span>
+                                                                        </spam>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border: none; text-align:right; vertical-align: top; padding: 0px 0px 0px 0px; ">
+                                                                        <spam style="color:white; font-family:Calibri; font-size:20px; font-weight: bolder; padding: 0px 0px 0px 0px; margin:0px">
+                                                                        <span t-if="o.name != '/'" t-field="o.name"/>
+                                                                        </spam>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        </div>
+                    </div>
+
+                    <div class="footer" >
+                        <div  style=" width:100%; margin:8px; text-align: center;">
+                            <br/>
+                            <span style=" margin-top: 93px; text-align: center; color: #fcb030; font-family: Franklin Gothic Demi, sans-serif; line-height: 1.079; font-size: 24px;    font-style: italic;    font-weight: bolder;"><span t-field="company.report_header"/></span>
+                        </div>
+                        <div  style=" width:100%; border:5px solid #4b5eab; "/>
+                        <div  style=" width:100%; text-align: center;">
+                          <div t-if="report_type == 'pdf'" style="color: #4b5eab">
+                              Page: <span class="page"/> / <span class="topage"/>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page">
+                    <div style="margin:40px 0px 0px 0px; padding: 30px 0px 30px 0px; width:100%; ">
+                        <div style=" float:left; width:50%; " >
+                            <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship From:</spam>
+                            <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
+                                <span t-field="o.company_id.name"/><br/>
+                                <span t-field="o.company_id.street"/><br/>
+                                <span t-field="o.company_id.city"/>, <span t-field="o.company_id.state_id.code"/> <span t-field="o.company_id.zip"/><br/>
+                                <span t-field="o.company_id.country_id.code"/>
+                            </p>
+                        </div>
+                        <div style=" float:right; width:50%; " >
+                            <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship To:</spam>
+                            <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                              <span t-field="o.partner_id.name"/><br/>
+                              <span t-field="o.partner_id.street"/><br/>
+                              <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.state_id.code"/> <span t-field="o.partner_id.zip"/><br/>
+                              <span t-field="o.partner_id.country_id.code"/>
+                            </p>
+                        </div>
+                        <div style="clear: both;"></div>
+
+                        <div>
+                            <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Ship Date:</spam>
+                            <spamp style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                               <spam t-field="o.date_done" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/><br/>
+                            </spamp>
+                        </div>
+                        <div>
+                            <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Order No.:</spam>
+                            <spam style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                              <span t-field="o.origin"/><br/>
+                            </spam>
+                        </div>
+                        <div>
+                            <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Customer PO:</spam>
+                            <spam style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
+                              <span t-field="o.sale_id.client_order_ref"/><br/>
+                            </spam>
+                        </div>
+
+                    </div>
+                    <t t-set="bgcolor" t-value="'#cee2ef'"/>
+
+
+                    <div style="padding: 0px 0px 60px 0px; width:100%; ">
+                        <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.move_line_ids and o.state=='done'" name="product_package_info">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">PACKAGING INFORMATION</th>
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>PART NUMBER</strong></th>
+                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>DESCRIPTION</strong></th>
+                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>PACKAGING</strong></th>
+                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; " ><strong>CONTAINED QTY</strong></th>
+                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; " ><strong>PACKAGING COUNT</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="current_product" t-value=""/>
+                                <t t-set="package_qty" t-value="0"/>
+                                <t t-foreach="o.move_line_ids" t-as="move_line">
+                                    <t t-set="package_qty" t-value="package_qty+1"/>
+                                </t>
+
+                                <t t-foreach="o.move_line_ids" t-as="move_line">
+                                    <tr>
+                                        <t t-if="move_line.product_id.id != current_product">
+                                            <t t-set="product_code" t-value="move_line.product_id.default_code"/>
+                                            <t t-set="product_desc" t-value="move_line.product_id.name"/>
+                                            <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
+                                                <t t-if="customercode_id.partner_id == o.partner_id">
+                                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                                    <t t-set="product_desc" t-value="customercode_id.description"/>
+                                                </t>
+                                            </t>
+
+                                            <t t-foreach="move_line.product_id.packaging_ids" t-as="packaging_id">
+
+                                                <t t-if="bgcolor == '#cee2ef'">
+                                                    <t t-set="bgcolor" t-value="'#ffffff'"/>
+                                                </t>
+                                                <t t-else="else">
+                                                    <t t-set="bgcolor" t-value="'#cee2ef'"/>
+                                                </t>
+                                                <t t-set="current_product" t-value="move_line.product_id.id"/>
+                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
+                                                    <span t-esc="product_code"/>
+                                                </td>
+                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
+                                                    <span t-esc="product_desc"/>
+                                                </td>
+                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                    <span t-field="packaging_id.name"/>
+                                                </td>
+                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                    <span t-field="packaging_id.qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                </td>
+                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                    <span t-esc="package_qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                </td>
+                                            </t>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="page">
+                        <div style="padding: 40px 0px 40px 0px; width:100%; ">
+                            <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.state!='done'" name="stock_move_table">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>Product</strong></th>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>Quantity</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
+                                    <tr t-foreach="lines" t-as="move">
+                                        <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-field="move.product_id"/>
+                                            <p t-if="o.picking_type_code == 'outgoing'">
+                                                <span t-field="move.product_id.sudo().description_pickingout"/>
+                                            </p>
+                                            <p t-if="o.picking_type_code == 'incoming'">
+                                                <span t-field="move.product_id.sudo().description_pickingin"/>
+                                            </p>
+                                        </td>
+                                        <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="padding: 20px 0px 40px 0px; width:100%; ">
+                            <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.move_line_ids and o.state=='done'" name="stock_move_line_table">
+                                <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" />
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " >PART NUMBER</th>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " >DESCRIPTION</th>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; "  name="lot_serial" t-if="has_serial_number" groups="stock.group_lot_on_delivery_slip">
+                                            Lot/Serial Number
+                                        </th>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " >ORDER QTY</th>
+                                        <th style="font-size: 16px; background-color: #fcb030; border: 2px solid #fcb030; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " >SHIP QTY</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                        <t t-set="product_code" t-value="move_line.product_id.default_code"/>
+                                        <t t-set="product_desc" t-value="move_line.product_id.name"/>
+                                        <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
+                                            <t t-if="customercode_id.partner_id == o.partner_id">
+                                                <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                                <t t-set="product_desc" t-value="customercode_id.description"/>
+                                            </t>
+                                        </t>
+                                        <t t-if="bgcolor == '#fbf2d6'">
+                                            <t t-set="bgcolor" t-value="'#ffffff'"/>
+                                        </t>
+                                        <t t-else="else">
+                                            <t t-set="bgcolor" t-value="'#fbf2d6'"/>
+                                        </t>
+                                        <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-esc="product_code"/>
+                                            <p t-if="o.picking_type_code == 'outgoing'">
+                                                <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                                            </p>
+                                            <p t-if="o.picking_type_code == 'incoming'">
+                                                <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                                            </p>
+                                        </td>
+                                        <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
+                                            <span t-esc ="product_desc"/>
+                                        </td>
+                                        <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip" t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-field="move_line.lot_name"/>
+                                        </td>
+                                        <td t-elif="has_serial_number" groups="stock.group_lot_on_delivery_slip" t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-field="move_line.lot_id.name"/>
+                                        </td>
+                                        <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-field="move_line.qty_done" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                        </td>
+                                        <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                            <span t-field="move_line.qty_done" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                            <span t-field="move_line.product_uom_id"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <p>
+                        <t t-if="o.backorder_ids and o.backorder_ids.filtered(lambda x: x.state not in ('done', 'cancel'))">
+                            All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
+                        </t>
+                    </p>
+                </div>
+            </t>
+         </t>
+    </template>
+
+</odoo>
