@@ -4,7 +4,7 @@ from odoo import fields, models, api
 
 
 class customerproduct(models.Model):
-    _inherit = 'product.product'
+    _inherit = 'product.template'
     _check_company_auto = True
 
     _check_company_auto = True
