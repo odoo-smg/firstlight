@@ -246,7 +246,7 @@
                                                 <t t-set="current_subtotal" t-value="0"/>
                                             </t>
                                             <t t-if="line.display_type == 'line_note'">
-                                                <td t-att-colspan="colspan" style="border: 2px solid #2DA4D1; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                                <td t-att-colspan="colspan" style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
                                                     <span t-field="line.name"/>
                                                 </td>
                                             </t>
