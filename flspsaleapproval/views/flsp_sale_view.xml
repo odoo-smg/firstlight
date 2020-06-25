@@ -53,6 +53,13 @@
                         </group>
                     </group>
                 </xpath>
+                <xpath expr="//notebook[1]" position="inside">
+                    <page string="Attachment">
+                        <group>
+                          <field name="flsp_so_attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2"/>
+                        </group>
+                    </page>
+                </xpath>
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                   <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
                 </xpath>

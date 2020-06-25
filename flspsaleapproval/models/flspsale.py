@@ -18,6 +18,10 @@ class SalesOrder(models.Model):
     flsp_show_discount      = fields.Boolean(string="Show Disc. on Quote")
     flsp_order_line_count   = fields.Integer(string="Number of lines")
     flsp_ship_via           = fields.Char(string="Ship Via")
+    flsp_so_attachment_ids = fields.Many2many('ir.attachment', 'flsp_so_attachment_rel', 'po_id', 'so_attachment_id',
+        string='Sales Attachments',
+        help='Attachments are linked to a document through model / res_id and to the message '
+             'through this field.')
     flsp_amount_deposit     = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
     flsp_products_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_price_list_products')
     flsp_SPPEPP             = fields.Boolean(string="SPPEPP Active", default=_default_sppepp)
