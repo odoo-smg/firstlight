@@ -13,4 +13,4 @@ class flspsalespartner(models.Model):
         ('2', 'Dealer'),
         ('3', 'School'),
         ('4', 'Contractor'),
-        ], string='Sale Group',  default='4', required=True)
+        ], string='Sale Group',  required=True)
