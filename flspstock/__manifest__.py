@@ -29,7 +29,7 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/flsp_deliveryslip.xml',
+        #'views/flsp_deliveryslip.xml',
         'views/flsp_product_customer_view.xml',
         'views/flsp_pallet_manifest.xml',
         'views/flsp_stock_package_view_form.xml',
