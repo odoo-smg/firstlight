@@ -262,7 +262,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_line_ids.sorted(key=lambda r: r.lot_id)" t-as="move_line">
+                                    <tr t-foreach="o.move_line_ids.sorted(key=lambda r: r.lot_id.name)" t-as="move_line">
                                         <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                         <t t-set="product_desc" t-value="move_line.product_id.name"/>
                                         <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
