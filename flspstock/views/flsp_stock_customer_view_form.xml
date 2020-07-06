@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_stock_customer_form_view">
+            <field name="name">res.partner.flsp.stock.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='ref']" position="after">
+                <field name="flsp_show_packing"/>
+              </xpath>
+            </field>
+        </record>
+</odoo>

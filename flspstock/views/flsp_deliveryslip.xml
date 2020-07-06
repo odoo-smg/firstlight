@@ -147,75 +147,78 @@
 
                     </div>
                     <t t-set="bgcolor" t-value="'#cee2ef'"/>
+                    <t t-set="bottom_padding" t-value="10"/>
 
-
-                    <div style="padding: 0px 0px 60px 0px; width:100%; ">
-                        <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.move_line_ids and o.state=='done'" name="product_package_info">
-                            <thead>
-                                <tr>
-                                    <th colspan="5" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">PACKAGING INFORMATION</th>
-                                </tr>
-                                <tr>
-                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>PART NUMBER</strong></th>
-                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>DESCRIPTION</strong></th>
-                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>PACKAGING</strong></th>
-                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; " ><strong>CONTAINED QTY</strong></th>
-                                    <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; " ><strong>PACKAGING COUNT</strong></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-set="current_product" t-value=""/>
-                                <t t-set="package_qty" t-value="0"/>
-                                <t t-foreach="o.move_line_ids" t-as="move_line">
-                                    <t t-set="package_qty" t-value="package_qty+1"/>
-                                </t>
-
-                                <t t-foreach="o.move_line_ids" t-as="move_line">
+                    <t t-if="o.partner_id.flsp_show_packing">
+                        <t t-set="bottom_padding" t-value="40"/>
+                        <div style="padding: 0px 0px 60px 0px; width:100%; ">
+                            <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.move_line_ids and o.state=='done'" name="product_package_info">
+                                <thead>
                                     <tr>
-                                        <t t-if="move_line.product_id.id != current_product">
-                                            <t t-set="product_code" t-value="move_line.product_id.default_code"/>
-                                            <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                            <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
-                                                <t t-if="customercode_id.partner_id == o.partner_id">
-                                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
-                                                    <t t-set="product_desc" t-value="customercode_id.description"/>
-                                                </t>
-                                            </t>
-
-                                            <t t-foreach="move_line.product_id.packaging_ids" t-as="packaging_id">
-
-                                                <t t-if="bgcolor == '#cee2ef'">
-                                                    <t t-set="bgcolor" t-value="'#ffffff'"/>
-                                                </t>
-                                                <t t-else="else">
-                                                    <t t-set="bgcolor" t-value="'#cee2ef'"/>
-                                                </t>
-                                                <t t-set="current_product" t-value="move_line.product_id.id"/>
-                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
-                                                    <span t-esc="product_code"/>
-                                                </td>
-                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
-                                                    <span t-esc="product_desc"/>
-                                                </td>
-                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
-                                                    <span t-field="packaging_id.name"/>
-                                                </td>
-                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
-                                                    <span t-field="packaging_id.qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
-                                                </td>
-                                                <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
-                                                    <span t-esc="package_qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
-                                                </td>
-                                            </t>
-                                        </t>
+                                        <th colspan="5" style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">PACKAGING INFORMATION</th>
                                     </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </div>
+                                    <tr>
+                                        <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>PART NUMBER</strong></th>
+                                        <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>DESCRIPTION</strong></th>
+                                        <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; " ><strong>PACKAGING</strong></th>
+                                        <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; " ><strong>CONTAINED QTY</strong></th>
+                                        <th style="font-size: 16px; background-color: #4b5eab; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; " ><strong>PACKAGING COUNT</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="current_product" t-value=""/>
+                                    <t t-set="package_qty" t-value="0"/>
+                                    <t t-foreach="o.move_line_ids" t-as="move_line">
+                                        <t t-set="package_qty" t-value="package_qty+1"/>
+                                    </t>
 
+                                    <t t-foreach="o.move_line_ids" t-as="move_line">
+                                        <tr>
+                                            <t t-if="move_line.product_id.id != current_product">
+                                                <t t-set="product_code" t-value="move_line.product_id.default_code"/>
+                                                <t t-set="product_desc" t-value="move_line.product_id.name"/>
+                                                <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
+                                                    <t t-if="customercode_id.partner_id == o.partner_id">
+                                                        <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                                        <t t-set="product_desc" t-value="customercode_id.description"/>
+                                                    </t>
+                                                </t>
+
+                                                <t t-foreach="move_line.product_id.packaging_ids" t-as="packaging_id">
+
+                                                    <t t-if="bgcolor == '#cee2ef'">
+                                                        <t t-set="bgcolor" t-value="'#ffffff'"/>
+                                                    </t>
+                                                    <t t-else="else">
+                                                        <t t-set="bgcolor" t-value="'#cee2ef'"/>
+                                                    </t>
+                                                    <t t-set="current_product" t-value="move_line.product_id.id"/>
+                                                    <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
+                                                        <span t-esc="product_code"/>
+                                                    </td>
+                                                    <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal;">
+                                                        <span t-esc="product_desc"/>
+                                                    </td>
+                                                    <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                        <span t-field="packaging_id.name"/>
+                                                    </td>
+                                                    <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                        <span t-field="packaging_id.qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                    </td>
+                                                    <td t-attf-style="background-color: {{bgcolor}}; border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: black; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                                        <span t-esc="package_qty" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br/>
+                    </t>
                     <div class="page">
-                        <div style="padding: 40px 0px 40px 0px; width:100%; ">
+                        <div t-attf-style=" padding: {{bottom_padding}}px 0px {{bottom_padding}}px 0px; width:100%;" >
                             <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.state!='done'" name="stock_move_table">
                                 <thead>
                                     <tr>
@@ -226,7 +229,7 @@
                                 <tbody>
                                     <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
                                     <tr t-foreach="lines" t-as="move">
-                                        <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                        <td style="border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                             <span t-field="move.product_id"/>
                                             <p t-if="o.picking_type_code == 'outgoing'">
                                                 <span t-field="move.product_id.sudo().description_pickingout"/>
@@ -235,7 +238,7 @@
                                                 <span t-field="move.product_id.sudo().description_pickingin"/>
                                             </p>
                                         </td>
-                                        <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
+                                        <td style="border: 2px solid #fcb030; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:nowrap; ">
                                             <span t-field="move.product_uom_qty"/>
                                             <span t-field="move.product_uom"/>
                                         </td>
@@ -244,6 +247,7 @@
                             </table>
                         </div>
                         <div style="padding: 20px 0px 40px 0px; width:100%; ">
+
                             <table align="right" style= "border: none; border-collapse: collapse;  width:100%; border-spacing: 2px;" t-if="o.move_line_ids and o.state=='done'" name="stock_move_line_table">
                                 <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" />
                                 <thead>
@@ -258,7 +262,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                    <tr t-foreach="o.move_line_ids.sorted(key=lambda r: r.lot_id.name)" t-as="move_line">
                                         <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                         <t t-set="product_desc" t-value="move_line.product_id.name"/>
                                         <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">

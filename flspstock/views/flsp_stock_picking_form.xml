@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspstock_picking_form">
+            <field name="name">flspstock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_done']" position="attributes">
+                    <attribute name="attrs">{'readonly': False}</attribute>
+                </xpath>
+            </field>
+        </record>
+ </odoo>
