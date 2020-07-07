@@ -36,5 +36,6 @@
         'views/flsp_stock_package_view_form.xml',
         'views/flsp_stock_picking_form.xml',
         'views/flsp_stock_customer_view_form.xml',
+        'views/flsp_mrp_zebra_production.xml',
     ],
 }
