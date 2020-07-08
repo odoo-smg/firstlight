@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="flsp_package_barcode_label" inherit_id="stock.label_package_template_view">
+        <xpath expr="//t[@t-foreach='docs']" position="replace">
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o.stock_picking_id">
+                    <t t-set="company" t-value="o.stock_picking_id.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <t t-foreach="docs" t-as="package">
+                <t t-translation="off">
+                    <t t-set="product_code" t-value=""/>
+                    <t t-set="product_desc" t-value=""/>
+                    <t t-set="total_count" t-value="0"/>
+                    <t t-foreach="package.quant_ids" t-as="l">
+                        <t t-set="total_count" t-value="total_count+1"/>
+                        <t t-foreach="l.product_id.customerscode_ids" t-as="customercode_id">
+                            <t t-if="customercode_id.partner_id == package.stock_picking_id.partner_id">
+                                <t t-if="not product_code">
+                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                    <t t-set="product_desc" t-value="customercode_id.description"/>
+                                </t>
+                            </t>
+                        </t>
+                    </t>
+                    <t t-if="product_code == ''">
+                        <t t-set="product_code" t-value="l.product_id.default_code"/>
+                        <t t-set="product_desc" t-value="l.product_id.name"/>
+                    </t>
+
+^XA
+^FO2240,80
+^A0R,80,95^FDFrom:^FS
+^A0R,80,95^FO1890,80
+^FB1420,4,,
+^FD<t t-esc="company.name"/>^FS
+^FO1940,80
+^A0R,80,95^FD<t t-esc="company.street"/>^FS
+^FO1840,80
+^A0R,80,95^FD<t t-esc="company.city"/>, <t t-esc="company.state_id.code"/> <t t-esc="company.zip"/> - <t t-esc="company.country_id.name"/>^FS
+
+^FO1800,1750^GB550, 15,10,^FS
+^FO2240,1800
+^A0R,80,95^FDTo:^FS
+^FO2140,1800
+^A0R,80,95^FD<t t-esc="package.stock_picking_id.partner_id.name"/>^FS
+^FO2040,1800
+^A0R,80,95^FD<t t-esc="package.stock_picking_id.partner_id.street"/>^FS
+^FO1940,1800
+^A0R,80,95^FD<t t-esc="package.stock_picking_id.partner_id.city"/>, <t t-esc="package.stock_picking_id.partner_id.state_id.code"/> <t t-esc="package.stock_picking_id.partner_id.zip"/>^FS
+^FO1840,1800
+^A0R,80,95^FD<t t-esc="package.stock_picking_id.partner_id.country_id.code"/>^FS
+
+^FO1800,20^GB6,3580,10,^FS
+^FO1650,80
+^A0R,80,95^FDPART NO.^FS
+^FO1550,80
+^A0R,80,95^FDCUST (P)^FS
+^FO1470,930^BY9
+^BCR,300,Y,N,N
+^A0R,80,95^FD<t t-esc="product_code"/>^FS
+
+^FO1350,20^GB6,3580,10,^FS
+^FO1200,80
+^A0R,80,95^FDQUANTITY(Q)^FS
+^FO1020,930^BY9
+^BCR,300,Y,N,N
+^A0R,80,95^FD<t t-esc="total_count"/>^FS
+
+^FO900,20^GB6,3580,10,^FS
+^FO750,80
+^A0R,80,95^FDSPLR ID^FS
+^FO650,80
+^A0R,80,95^FDCUST ASSIGN (V)^FS
+^FO570,930^BY9
+^BCR,300,Y,N,N
+^A0R,80,95^FD<t t-esc="package.stock_picking_id.partner_id.flsp_supplier_id"/>^FS
+
+
+^FO450,20^GB6,3580,10,^FS
+^FO300, 80
+^A0R,80,95^FDPKG ID - UNIT^FS
+^FO200,80
+^A0R,80,95^FD(3S)^FS
+^FO120,930^BY9
+^BCR,300,Y,N,N
+^A0N,80,95^FD<t t-esc="package.name"/>^FS
+
+^XZ
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

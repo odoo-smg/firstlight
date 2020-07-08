@@ -5,8 +5,12 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+              <xpath expr="//field[@name='type']" position="before">
+                <field name="flsp_partner_code"/>
+              </xpath>
               <xpath expr="//field[@name='ref']" position="after">
                 <field name="flsp_show_packing"/>
+                <field name="flsp_supplier_id"/>
               </xpath>
             </field>
         </record>
