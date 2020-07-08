@@ -23,6 +23,7 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
+    'depends': ['mrp'],
     'depends': ['sale'],
     'depends': ['stock'],
     'depends': ['delivery'],
@@ -37,5 +38,7 @@
         'views/flsp_stock_picking_form.xml',
         'views/flsp_stock_customer_view_form.xml',
         'views/flsp_mrp_zebra_production.xml',
+        'views/flsp_customer_barcode.xml',
+        'views/flsp_stock_zebra_package.xml',
     ],
 }
