@@ -8,10 +8,12 @@
                     <t t-foreach="move.move_line_ids" t-as="move_line">
                         <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                         <t t-set="product_desc" t-value="move_line.product_id.name"/>
+                        <t t-set="customer_desc" t-value="picking.partner_id.name"/>
                         <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
                             <t t-if="customercode_id.partner_id == picking.partner_id">
                                 <t t-set="product_code" t-value="customercode_id.part_number"/>
                                 <t t-set="product_desc" t-value="customercode_id.description"/>
+                                <t t-set="customer_desc" t-value="customercode_id.label_desc"/>
                             </t>
                         </t>
                         <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit'">
@@ -24,7 +26,7 @@
                             <t t-translation="off">
 ^XA
 ^FO100,100, 0
-^A0N,80,95^FDCustomer P/N:^FS
+^A0N,80,95^FD<t t-esc="customer_desc"/>^FS
 ^A0N,80,95
 ^FO100,310^BY7
 ^BCN,220,Y,Y,N
