@@ -21,10 +21,11 @@ class flspdailysalesorder(models.Model):
             _logger.warning('Template "flspautoemails.flsp_dailysalesorder_tmpl" was not found. Cannot send Daily Sales Order Report.')
             return
 
-        daily_sales = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('create_date', '>=', date.today() + relativedelta(days=-1))])
+        daily_sales_ids = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('create_date', '>=', date.today() + relativedelta(days=-1))]).ids
+        daily_sales_line = self.env['sale.order.line'].search([('order_id', '=', daily_sales_ids)])
         total_sales = self.env['sale.order'].search_count(['&', ('state', '=', 'sale'), ('create_date', '>=', date.today() + relativedelta(days=-1))])
 
-        rendered_body = template.render({'sales': daily_sales, 'total_sales': total_sales}, engine='ir.qweb')
+        rendered_body = template.render({'sales': daily_sales_line, 'total_sales': total_sales}, engine='ir.qweb')
         body = self.env['mail.thread']._replace_local_links(rendered_body)
 
         if total_sales > 0:
