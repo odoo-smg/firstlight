@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Channel and moderation related data -->
+        <template id="flsp_dailysalesorder_tmpl">
+            <div>
+                <p><h3>Daily Sales Order Report:</h3></p><br/>
+                <p>The following Sales Orders have been created in Odoo from:07/28/2020 2:01 pm to 07/29/2020 2:00 pm:</p><br/>
+            </div>
+            <div >
+                <table class="table table-md" style="padding: 0px 20px 0px 20px;">
+                    <div>
+                        <tr>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Sales Ref</th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Customer </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Total Value </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Expected Delivery </th>
+                        </tr>
+
+                        <t t-set="show_list" t-value="True"/>
+                        <t t-set="list_count" t-value="-1"/>
+                        <div t-foreach="sales" t-as="row">
+                            <t t-set="list_count" t-value="list_count+1"/>
+                            <t t-if="list_count==50">
+                                <t t-set="show_list" t-value="False"/>
+                            </t>
+                            <t t-if="show_list">
+                                <tr>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['name']" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['partner_id']" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['amount_total']" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['expected_date']" /></td>
+                                </tr>
+                            </t>
+                        </div>
+                    </div>
+                </table>
+            </div><br/>
+            <t t-if="total_sales > 50">
+                <p>The list above shows only the 50 first sales orders from a total of <spam t-esc="total_sales" />, please access the complete list below:</p>
+            </t>
+            <div style="text-align: center;">
+                <a href="https://odoo-smg-firstlight1.odoo.com/web#action=411&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Sales Order</a>
+
+                <br/><br/><br/>
+            </div>
+            <p>Thank you!</p>
+
+        </template>
+    </data>
+</odoo>
