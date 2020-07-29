@@ -15,6 +15,9 @@
                             <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Customer </th>
                             <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Total Value </th>
                             <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Expected Delivery </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Product </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Quantity </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Lead Time (Weeks) </th>
                         </tr>
 
                         <t t-set="show_list" t-value="True"/>
@@ -26,10 +29,13 @@
                             </t>
                             <t t-if="show_list">
                                 <tr>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['name']" /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['partner_id'].name" /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="row['currency_id'].name"/><spam t-field="row['currency_id'].symbol"/><span t-esc="row['amount_total']" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['expected_date']" t-options='{"widget": "date", "format": "MMMM dd, Y"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].partner_id.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="row['order_id'].currency_id.name"/><spam t-field="row['order_id'].currency_id.symbol"/><span t-esc="row['price_subtotal']" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].expected_date" t-options='{"widget": "date", "format": "MMMM dd, Y"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['product_id'].default_code"  /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['product_uom_qty']"  /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['flsp_lead_time_weeks']"  /></td>
                                 </tr>
                             </t>
                         </div>
@@ -40,9 +46,7 @@
                 <p>The list above shows only the 50 first sales orders from a total of <spam t-esc="total_sales" />, please access the complete list below:</p>
             </t>
             <div style="text-align: center;">
-                <a href="https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&view_type=list&amp;cids=1&amp;menu_id=230" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Sales Order</a>
-
-
+              <a href="https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Sales Order</a>
                 <br/><br/><br/>
             </div>
             <p>Thank you!</p>
