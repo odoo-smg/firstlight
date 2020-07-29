@@ -27,9 +27,9 @@
                             <t t-if="show_list">
                                 <tr>
                                     <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['name']" /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['partner_id']" /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['amount_total']" /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['expected_date']" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['partner_id'].name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="row['currency_id'].name"/><spam t-field="row['currency_id'].symbol"/><span t-esc="row['amount_total']" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['expected_date']" t-options='{"widget": "date", "format": "MMMM dd, Y"}' /></td>
                                 </tr>
                             </t>
                         </div>
