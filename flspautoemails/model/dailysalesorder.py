@@ -28,7 +28,7 @@ class flspdailysalesorder(models.Model):
         daily_sales = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('flsp_email_report_ok', '=', False)])
         daily_sales_ids = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('flsp_email_report_ok', '=', False)]).ids
         daily_sales_line = self.env['sale.order.line'].search([('order_id', 'in', daily_sales_ids)])
-        total_sales = self.env['sale.order'].search_count(['&', ('state', '=', 'sale'), ('create_date', '>=', date.today() + relativedelta(days=-1))])
+        total_sales = self.env['sale.order'].search_count(['&', ('state', '=', 'sale'), ('flsp_email_report_ok', '=', False)])
 
         print('rendered_body')
         rendered_body = template.render({'sales': daily_sales_line, 'total_sales': total_sales}, engine='ir.qweb')
