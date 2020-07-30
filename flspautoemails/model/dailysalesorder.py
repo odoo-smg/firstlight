@@ -16,9 +16,10 @@ class flspdailysalesorder(models.Model):
 
     @api.model
     def _dailysalesorder_email(self):
+        print('**************************sending sales report***************************************')
         template = self.env.ref('flspautoemails.flsp_dailysalesorder_tmpl', raise_if_not_found=False)
 
-        print('**************************sending sales report***************************************')
+        print('**************************checking template***************************************')
         if not template:
             print('--------------------------template not found')
             _logger.warning('Template "flspautoemails.flsp_dailysalesorder_tmpl" was not found. Cannot send Daily Sales Order Report.')
@@ -41,6 +42,14 @@ class flspdailysalesorder(models.Model):
                 'email_to': 'alexandresousa@smartrendmfg.com',
                 'auto_delete': True,
             }).send()
+        else:
+            self.env['mail.mail'].create({
+                'body_html': 'No sales today...',
+                'subject': 'Daily Sales Order Report',
+                'email_to': 'alexandresousa@smartrendmfg.com',
+                'auto_delete': True,
+            }).send()
+
 
         ## Check the sent sales Order
         print('Check the sent sales Order')
