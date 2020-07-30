@@ -39,20 +39,12 @@ class flspdailysalesorder(models.Model):
             self.env['mail.mail'].create({
                 'body_html': body,
                 'subject': 'Daily Sales Order Report',
-                'email_to': 'alexandresousa@smartrendmfg.com',
+                'email_to': 'alexandresousa@smartrendmfg.com; camquan@smartrendmfg.com; soniastachurska@smartrendmfg.com',
                 'auto_delete': True,
             }).send()
             ## Check the sent sales Order
             for so in daily_sales:
                 so.flsp_email_report_ok = True
-        else:
-            self.env['mail.mail'].create({
-                'body_html': 'No sales today...',
-                'subject': 'Daily Sales Order Report',
-                'email_to': 'alexandresousa@smartrendmfg.com',
-                'auto_delete': True,
-            }).send()
-
 
 
         print('************ Daily Sales Order Report - DONE ******************')
