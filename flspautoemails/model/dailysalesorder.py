@@ -12,6 +12,8 @@ class flspdailysalesorder(models.Model):
     _inherit = 'sale.order'
     _check_company_auto = True
 
+    flsp_email_report_ok = fields.Boolean('Can be Sold', default=False)
+
     @api.model
     def _dailysalesorder_email(self):
         template = self.env.ref('flspautoemails.flsp_dailysalesorder_tmpl', raise_if_not_found=False)
@@ -21,7 +23,8 @@ class flspdailysalesorder(models.Model):
             _logger.warning('Template "flspautoemails.flsp_dailysalesorder_tmpl" was not found. Cannot send Daily Sales Order Report.')
             return
 
-        daily_sales_ids = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('create_date', '>=', date.today() + relativedelta(days=-1))]).ids
+        daily_sales = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('flsp_email_report_ok', '=', False)])
+        daily_sales_ids = self.env['sale.order'].search(['&', ('state', '=', 'sale'), ('flsp_email_report_ok', '=', False)]).ids
         daily_sales_line = self.env['sale.order.line'].search([('order_id', '=', daily_sales_ids)])
         total_sales = self.env['sale.order'].search_count(['&', ('state', '=', 'sale'), ('create_date', '>=', date.today() + relativedelta(days=-1))])
 
@@ -32,7 +35,12 @@ class flspdailysalesorder(models.Model):
             self.env['mail.mail'].create({
                 'body_html': body,
                 'subject': 'Daily Sales Order Report',
-                'email_to': 'alexandresousa@smartrendmfg.com; camquan@smartrendmfg.com',
+                'email_to': 'alexandresousa@smartrendmfg.com',
                 'auto_delete': True,
             }).send()
+
+        ## Check the sent sales Order
+        for so in daily_sales:
+            so.flsp_email_report_ok = True
+
         print('************ Daily Sales Order Report - DONE ******************')
