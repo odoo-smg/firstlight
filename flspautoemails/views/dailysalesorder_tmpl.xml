@@ -31,7 +31,7 @@
                                 <tr>
                                     <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].name" /></td>
                                     <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].partner_id.name" /></td>
-                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="row['order_id'].currency_id.name"/><spam t-field="row['order_id'].currency_id.symbol"/><span t-esc="row['price_subtotal']" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="row['order_id'].currency_id.name"/><spam t-field="row['order_id'].currency_id.symbol"/> <span t-esc="row['price_subtotal']" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
                                     <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].expected_date" t-options='{"widget": "date", "format": "MMMM dd, Y"}' /></td>
                                     <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['product_id'].default_code"  /></td>
                                     <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['product_uom_qty']"  /></td>
