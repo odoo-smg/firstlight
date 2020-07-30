@@ -39,7 +39,7 @@ class flspdailysalesorder(models.Model):
             self.env['mail.mail'].create({
                 'body_html': body,
                 'subject': 'Daily Sales Order Report',
-                'email_to': 'alexandresousa@smartrendmfg.com; camquan@smartrendmfg.com',
+                'email_to': 'alexandresousa@smartrendmfg.com; camquan@smartrendmfg.com; soniastachurska@smartrendmfg.com',
                 'auto_delete': True,
             }).send()
             ## Check the sent sales Order
