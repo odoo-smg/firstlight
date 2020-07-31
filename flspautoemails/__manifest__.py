@@ -29,5 +29,7 @@
     'data': [
         'views/dailysalesorder_tmpl.xml',
         'data/dailysalesorder_cron.xml',
+        'views/weeklysalesorder_tmpl.xml',
+        'data/weeklysalesorder_cron.xml',
     ],
 }

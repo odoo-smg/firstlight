@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Channel and moderation related data -->
+        <template id="flsp_weeklysalesorder_tmpl">
+            <div>
+                <p><h3>Weekly Sales Report by Sales Person:</h3></p><br/>
+            </div>
+            <div >
+
+                <table style="padding: 20px 0 20px 0px">
+                    <tr>
+                    <td>
+                        <table>
+                            <tr><td>4,290.00</td></tr>
+                            <tr><td style="padding:0px">
+                                <table style="border-collapse: collapse; padding:0px">
+                                    <tr>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding: 0px 20px 187px 0px; border:1px solid #4b5eab; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding: 0px 20px 012px 0px; border:2px solid #4b5eab; background-color:#4b5eabbd"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #64b2d8; vertical-align:bottom; "/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #64b2d8; background-color:#64b2d8b3;"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #fcb030; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #fcb030; background-color:#fcb030a1; "/></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                            <tr><td style="vertical-align:top; padding-left:3; padding-right:35px">
+                                Brett Kuchciak</td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr><td>60,111.20</td></tr>
+                            <tr><td style="padding:0px">
+                                <table style="border-collapse: collapse; padding:0px">
+                                    <tr>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding: 0px 20px 016px 0px; border:1px solid #4b5eab; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding: 0px 20px 184px 0px; border:2px solid #4b5eab; background-color:#4b5eabbd"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #64b2d8; vertical-align:bottom; "/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #64b2d8; background-color:#64b2d8b3;"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #fcb030; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #fcb030; background-color:#fcb030a1; "/></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                            <tr><td style="vertical-align:top; padding-left:3; padding-right:35px">
+                                Samantha Borges</td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr><td>21,939.00</td></tr>
+                            <tr><td style="padding:0px">
+                                <table style="border-collapse: collapse; padding:0px">
+                                    <tr>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding: 0px 20px 135px 0px; border:1px solid #4b5eab; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding: 0px 20px 064px 0px; border:2px solid #4b5eab; background-color:#4b5eabbd"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #64b2d8; vertical-align:bottom; "/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #64b2d8; background-color:#64b2d8b3;"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #fcb030; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #fcb030; background-color:#fcb030a1; "/></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                            <tr><td style="vertical-align:top; padding-left:3; padding-right:35px">
+                                Sean Soloway</td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr><td>15,000.00</td></tr>
+                            <tr><td style="padding:0px">
+                                <table style="border-collapse: collapse; padding:0px">
+                                    <tr>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding: 0px 20px 200px 0px; border:1px solid #4b5eab; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding: 0px 20px 000px 0px; border:2px solid #4b5eab; background-color:#4b5eabbd"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 154px 0px; border:1px solid #64b2d8; vertical-align:bottom; "/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 046px 0px; border:2px solid #64b2d8; background-color:#64b2d8b3;"/></tr>
+                                            </table>
+                                        </td>
+                                        <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                    <tr><td             style="padding:0px 20px 200px 0px; border:1px solid #fcb030; vertical-align:bottom"/></tr>
+                                                    <tr><td colspan="3" style="padding:0px 20px 000px 0px; border:2px solid #fcb030; background-color:#fcb030a1; "/></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                            <tr><td style="vertical-align:top; padding-left:3; padding-right:35px">
+                                Steve Gress</td></tr>
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td style="background-color: #4b5eabbd; padding-left:30px"></td>
+                        <td>School PPE Purchase Program</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #64b2d8b3; padding-left:30px"></td>
+                        <td>School Bus Signs</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #fcb030a1; padding-left:30px"></td>
+                        <td>Stop Arms</td>
+                    </tr>
+                </table>
+
+                <p>Total Sales:</p>
+                <table style="border-collapse: collapse ">
+                    <tr>
+                        <td style="padding:0px; "><svg style="width:105px; height=200px; margin:0px; padding:0px">
+                            <line x1="0" y1="148" x2="105" y2="148" style="stroke:#fcb030;stroke-width:4" /></svg></td>
+                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
+                            <line x1="0" y1="148" x2="105" y2="148" style="stroke:#fcb030;stroke-width:4" /></svg></td>
+                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
+                            <line x1="0" y1="148" x2="105" y2="128" style="stroke:#fcb030;stroke-width:4" /></svg></td>
+                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
+                            <line x1="0" y1="128" x2="105" y2="6" style="stroke:#fcb030;stroke-width:4" /></svg></td>
+                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
+                            <line x1="0" y1="6" x2="105" y2="2" style="stroke:#fcb030;stroke-width:4" /></svg></td>
+                    </tr>
+                    <tr>
+                        <td style=" border: 2px solid #4b5eab; width:100px; text-align:center; background-color:#4b5eab; color:white ">March</td>
+                        <td style=" border: 2px solid #4b5eab; width:100px; text-align:center; background-color:#4b5eab; color:white ">April</td>
+                        <td style=" border: 2px solid #4b5eab; width:100px; text-align:center; background-color:#4b5eab; color:white ">May</td>
+                        <td style=" border: 2px solid #4b5eab; width:100px; text-align:center; background-color:#4b5eab; color:white ">June</td>
+                        <td style=" border: 2px solid #4b5eab; width:100px; text-align:center; background-color:#4b5eab; color:white ">July</td>
+                    </tr>
+                    <tr>
+                        <td style=" width:100px; text-align:right; border: 2px solid #4b5eab; ">0.00</td>
+                        <td style=" width:100px; text-align:right; border: 2px solid #4b5eab; ">0.00</td>
+                        <td style=" width:100px; text-align:right; border: 2px solid #4b5eab; ">0.00</td>
+                        <td style=" width:100px; text-align:right; border: 2px solid #4b5eab; ">2,640.00</td>
+                        <td style=" width:100px; text-align:right; border: 2px solid #4b5eab; ">81,726.00</td>
+                    </tr>
+                </table>
+                <table style="border-collapse: collapse">
+
+                </table>
+
+
+            </div><br/>
+            <t t-if="total_sales > 50">
+                <p>The list above shows only the 50 first sales orders from a total of <spam t-esc="total_sales" />, please access the complete list below:</p>
+            </t>
+            <br/>
+            <br/>
+            <div style="text-align: center;">
+              <a href="https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Sales Order</a>
+                <br/><br/><br/>
+            </div>
+            <p>Thank you!</p>
+
+        </template>
+    </data>
+</odoo>
