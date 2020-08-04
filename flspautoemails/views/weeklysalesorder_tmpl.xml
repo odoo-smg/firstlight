@@ -127,15 +127,15 @@
 
                 <table>
                     <tr>
-                        <td style="background-color: #4b5eabbd; padding-left:30px"></td>
+                        <td style="background-color: #4b5eabbd; border:2px solid #4b5eab; padding-left:30px"></td>
                         <td>School PPE Purchase Program</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #64b2d8b3; padding-left:30px"></td>
+                        <td style="background-color: #64b2d8b3; border:2px solid #64b2d8; padding-left:30px"></td>
                         <td>School Bus Signs</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #fcb030a1; padding-left:30px"></td>
+                        <td style="background-color: #fcb030a1; border:2px solid #fcb030; padding-left:30px"></td>
                         <td>Stop Arms</td>
                     </tr>
                 </table>
