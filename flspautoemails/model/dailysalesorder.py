@@ -12,7 +12,8 @@ class flspdailysalesorder(models.Model):
     _inherit = 'sale.order'
     _check_company_auto = True
 
-    flsp_email_report_ok = fields.Boolean('Email Report', default=False)
+    flsp_email_report_ok = fields.Boolean('Email Report', default=False, copy=False)
+    flsp_so_date = fields.Date('SO Date', default=False, copy=False)
 
     @api.model
     def _dailysalesorder_email(self):
@@ -45,6 +46,7 @@ class flspdailysalesorder(models.Model):
             ## Check the sent sales Order
             for so in daily_sales:
                 so.flsp_email_report_ok = True
+                so.flsp_so_date = datetime.now()
 
 
         print('************ Daily Sales Order Report - DONE ******************')
