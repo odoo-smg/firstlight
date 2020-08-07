@@ -19,19 +19,21 @@ class FlattenedBomXlsx(models.AbstractModel):
         i = row
         sheet.write(i, 0, bom.product_tmpl_id.name or "")
         sheet.write(i, 1, bom.code or "")
-        sheet.write(i, 2, bom.display_name or "")
-        sheet.write(i, 3, bom.product_qty)
-        sheet.write(i, 4, bom.product_uom_id.name or "")
-        sheet.write(i, 5, bom.code or "")
-        sheet.write(i, 6, bom.product_tmpl_id.legacy_code or "")
+        sheet.write(i, 2, bom.product_tmpl_id.default_code or "")
+        sheet.write(i, 3, bom.display_name or "")
+        sheet.write(i, 4, bom.product_qty)
+        sheet.write(i, 5, bom.product_uom_id.name or "")
+        sheet.write(i, 6, bom.code or "")
+        sheet.write(i, 7, bom.product_tmpl_id.legacy_code or "")
         i += 1
         for product, total_qty in requirements.items():
             sheet.write(i, 1, product.default_code or "")
-            sheet.write(i, 2, product.display_name or "")
-            sheet.write(i, 3, total_qty or 0.0)
-            sheet.write(i, 4, product.uom_id.name or "")
-            sheet.write(i, 5, product.code or "")
-            sheet.write(i, 6, product.legacy_code or "")
+            sheet.write(i, 2, total_qty['level']*"   "+product.default_code or 0)
+            sheet.write(i, 3, product.display_name or "")
+            sheet.write(i, 4, total_qty['total'] or 0.0)
+            sheet.write(i, 5, product.uom_id.name or "")
+            sheet.write(i, 6, product.code or "")
+            sheet.write(i, 7, product.legacy_code or "")
             i += 1
         return i
 
@@ -53,6 +55,7 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet_title = [
             _("BOM Name"),
             _("Product Reference"),
+            _("Indented Part#"),
             _("Product Name"),
             _("Quantity"),
             _("Unit of Measure"),

@@ -10,7 +10,7 @@ class MrpBom(models.Model):
 
     _inherit = "mrp.bom"
 
-    def _get_flattened_totals(self, factor=1, totals=None):
+    def _get_flattened_totals(self, factor=1, totals=None, level=None):
         """Calculate the **unitary** product requirements of flattened BOM.
         *Unit* means that the requirements are computed for one unit of the
         default UoM of the product.
@@ -19,6 +19,8 @@ class MrpBom(models.Model):
         """
         print('*****************************into the flattened total')
         self.ensure_one()
+        if level is None:
+            level = 1
         if totals is None:
             totals = {}
         factor /= self.product_uom_id._compute_quantity(
@@ -30,20 +32,36 @@ class MrpBom(models.Model):
                 new_factor = factor * line.product_uom_id._compute_quantity(
                     line.product_qty, line.product_id.uom_id, round=False
                 )
-                sub_bom._get_flattened_totals(new_factor, totals)
-            else:
                 if totals.get(line.product_id):
-                    totals[line.product_id] += (
+                    totals[line.product_id]['total'] += (
                         factor
                         * line.product_uom_id._compute_quantity(
                             line.product_qty, line.product_id.uom_id, round=False
                         )
                     )
                 else:
-                    totals[line.product_id] = (
+                    totals[line.product_id] = {'total':(
+                        factor
+                        * line.product_uom_id._compute_quantity(
+                            line.product_qty, line.product_id.uom_id, round=False
+                        )
+                    ), 'level': level}
+
+                level += 1
+                sub_bom._get_flattened_totals(new_factor, totals, level)
+            else:
+                if totals.get(line.product_id):
+                    totals[line.product_id]['total'] += (
                         factor
                         * line.product_uom_id._compute_quantity(
                             line.product_qty, line.product_id.uom_id, round=False
                         )
                     )
+                else:
+                    totals[line.product_id] = {'total':(
+                        factor
+                        * line.product_uom_id._compute_quantity(
+                            line.product_qty, line.product_id.uom_id, round=False
+                        )
+                    ), 'level': level}
         return totals
