@@ -16,9 +16,10 @@ class FlattenedBomXlsx(models.AbstractModel):
     _description = "Flattened BOM XLSX"
 
     def print_flattened_bom_lines(self, bom, requirements, sheet, row):
+        print('********************print_flattened_bom_lines')
         i = row
         sheet.write(i, 0, bom.product_tmpl_id.name or "")
-        sheet.write(i, 1, bom.code or "")
+        sheet.write(i, 1, bom.product_tmpl_id.default_code or "")
         sheet.write(i, 2, bom.product_tmpl_id.default_code or "")
         sheet.write(i, 3, bom.display_name or "")
         sheet.write(i, 4, bom.product_qty)
@@ -32,12 +33,13 @@ class FlattenedBomXlsx(models.AbstractModel):
             sheet.write(i, 3, product.display_name or "")
             sheet.write(i, 4, total_qty['total'] or 0.0)
             sheet.write(i, 5, product.uom_id.name or "")
-            sheet.write(i, 6, product.code or "")
+            sheet.write(i, 6, total_qty['bom'] or "")
             sheet.write(i, 7, product.legacy_code or "")
             i += 1
         return i
 
     def generate_xlsx_report(self, workbook, data, objects):
+        print('********************generate_xlsx_report')
         workbook.set_properties(
             {"comments": "Created with Python and XlsxWriter from Odoo 13.0"}
         )
@@ -59,7 +61,7 @@ class FlattenedBomXlsx(models.AbstractModel):
             _("Product Name"),
             _("Quantity"),
             _("Unit of Measure"),
-            _("Reference"),
+            _("BOM#"),
             _("Legacy Part#"),
         ]
         sheet.set_row(0, None, None, {"collapsed": 1})
