@@ -5,7 +5,7 @@
     <report
         id="flattened_bom_xlsx"
         model="mrp.bom"
-        string="Export Flattened BOM Structure to Excel"
+        string="FLSP Mfg - BoM Structure to Excel"
         report_type="xlsx"
         name="mrp_flattened_bom_xlsx.flattened_bom_xlsx"
         file="mrp_bom"
