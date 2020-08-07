@@ -28,7 +28,7 @@ class FlattenedBomXlsx(models.AbstractModel):
         i += 1
         for product, total_qty in requirements.items():
             sheet.write(i, 1, product.default_code or "")
-            sheet.write(i, 2, total_qty['level']*"   "+product.default_code or 0)
+            sheet.write(i, 2, total_qty['level']*"|---"+product.default_code or 0)
             sheet.write(i, 3, product.display_name or "")
             sheet.write(i, 4, total_qty['total'] or 0.0)
             sheet.write(i, 5, product.uom_id.name or "")
