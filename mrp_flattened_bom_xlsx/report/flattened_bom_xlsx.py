@@ -47,21 +47,24 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.set_landscape()
         sheet.fit_to_pages(1, 0)
         sheet.set_zoom(80)
-        sheet.set_column(0, 0, 40)
-        sheet.set_column(1, 2, 20)
+        sheet.set_column(0, 0, 20)
+        sheet.set_column(1, 1, 15)
+        sheet.set_column(2, 2, 30)
         sheet.set_column(3, 3, 40)
-        sheet.set_column(4, 6, 20)
+        sheet.set_column(4, 5, 15)
+        sheet.set_column(6, 6, 25)
+        sheet.set_column(7, 7, 20)
         title_style = workbook.add_format(
             {"bold": True, "bg_color": "#FFFFCC", "bottom": 1}
         )
         sheet_title = [
             _("BOM Name"),
-            _("Product Reference"),
+            _("Part#"),
             _("Indented Part#"),
             _("Product Name"),
             _("Quantity"),
             _("Unit of Measure"),
-            _("BOM#"),
+            _("BOM Reference"),
             _("Legacy Part#"),
         ]
         sheet.set_row(0, None, None, {"collapsed": 1})
