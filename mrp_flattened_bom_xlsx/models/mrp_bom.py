@@ -17,7 +17,6 @@ class MrpBom(models.Model):
         :returns: dict: keys are components and values are aggregated quantity
         in the product default UoM.
         """
-        print('*****************************into the flattened total')
         self.ensure_one()
         if level is None:
             level = 1
@@ -49,6 +48,7 @@ class MrpBom(models.Model):
 
                 level += 1
                 sub_bom._get_flattened_totals(new_factor, totals, level)
+                level -= 1
             else:
                 if totals.get(line.product_id):
                     totals[line.product_id]['total'] += (
