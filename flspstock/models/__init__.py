@@ -8,3 +8,4 @@ from . import flsp_customer
 from . import flsp_stock_prod_lot
 from . import flsp_product_produce
 from . import flsp_stockpicking
+from . import flsp_stockpackaging

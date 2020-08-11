@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspstock_packaging_form">
+            <field name="name">flspstock.product.packaging.form.inherit</field>
+            <field name="model">product.packaging</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="product.product_packaging_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="flsp_package_set_qty" string="Qty of Boxes (set only):"/>
+                </xpath>
+            </field>
+        </record>
+ </odoo>
