@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report
+            string="FLSP - Weekly Sales by Salesperson"
+            id="flsp_weeklysalesorder_report"
+            model="report.flspautoemails.flsp_weeklysalesorder_report"
+            name="flspautoemails.flsp_weeklysalesorder_report"
+            file="flspautoemails.flsp_weeklysalesorder_report"
+            report_type="qweb-pdf"
+            groups="account.group_account_manager"
+            print_report_name="'Weekly Sales'" />
+
+    <template id="flsp_weeklysalesorder_report">
+        <t t-set="data_report_margin_top" t-value="30"/>
+        <t t-set="data_report_header_spacing" t-value="20"/>
+        <t t-set="data_report_dpi" t-value="110"/>
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <t t-call="flspautoemails.flsp_weeklysalesorder_tmpl"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="flsp_weeklysalesorder_record" model="ir.actions.server">
+    <field name="name">FLSP - Weekly Sales by Salesperson</field>
+    <field name="type">ir.actions.server</field>
+    <field name="model_id" ref="model_sale_order"/>
+    <field name="state">code</field>
+    <field name="code">action = model._weeklysalesorder_report()</field>
+    </record>
+
+    <menuitem id="flsp_weekly_sales_report"
+              name="Weekly Sales Report"
+              parent="sale.menu_sale_report"
+              sequence="210"
+              groups="account.group_account_manager"
+              action="flsp_weeklysalesorder_record"/>
+
+</odoo>

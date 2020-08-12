@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_internal_layout">
+            <field name="name">flspautoemails.internal.layout.inherit</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="web.internal_layout"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@class='header']" position="replace">
+                    <div class="header">
+                        <table style="width:100%" >
+                            <tr>
+                                <td style="background: #4B5EAB; padding: 7px 0px 0px 10px; width:20%">
+                                    <img src='/flspautoemails/static/src/img/FLSPlogowhite.png' alt="company logo"/>
+                                </td>
+                                <td style="background: #4B5EAB; padding: 15px 0px 0px 0px; width:50%; text-align:center; color:white; vertical-align: middle;">
+                                    <p><span t-esc="env['ir.actions.report'].search([('report_name', '=', xmlid)]).name"/></p>
+                                </td>
+                                <td style="background: #4B5EAB; padding: 7px 20px 0px 0px; width:30%; text-align:right; font-size:12px; color:white; vertical-align: middle;">
+                                    <span><h8>Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/> <p>Printed by: <span t-esc="request.env.user.name"/> </p></h8></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="footer" >
+                        <div  style=" width:100%; margin:8px; text-align: center;">
+                            <br/>
+                            <span style=" margin-top: 93px; text-align: center; color: #fcb030; font-family: Franklin Gothic Demi, sans-serif; line-height: 1.079; font-size: 14px;    font-style: italic;    font-weight: bolder;"><span t-field="company.report_header"/></span>
+                        </div>
+                        <div  style=" width:100%; border:5px solid #4b5eab; "/>
+                        <div  style=" width:100%; text-align: center;">
+                          <div t-if="report_type == 'pdf'" style="color: #4b5eab">
+                              Page: <span class="page"/> / <span class="topage"/>
+                          </div>
+                        </div>
+                    </div>
+
+                </xpath>
+            </field>
+        </record>
+ </odoo>
