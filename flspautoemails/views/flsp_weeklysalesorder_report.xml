@@ -33,7 +33,7 @@
     <menuitem id="flsp_weekly_sales_report"
               name="Weekly Sales Report"
               parent="sale.menu_sale_report"
-              sequence="210"
+              sequence="250"
               groups="account.group_account_manager"
               action="flsp_weeklysalesorder_record"/>
 </odoo>
