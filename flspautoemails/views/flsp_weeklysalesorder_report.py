@@ -17,6 +17,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
         d_from = date.today() + relativedelta(days=-7)
         d_to = date.today()
 
+        us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
         daily_sales = self.env['sale.order'].search(['&',
                                                      ('state', '=', 'sale'),
                                                      ('flsp_so_date', '>', date.today() + relativedelta(months=-6))])
@@ -37,15 +38,19 @@ class ReportSalesbysalesperson(models.AbstractModel):
             if sales.flsp_so_date:
                 current_month = sales.flsp_so_date.month
             if current_month in total_sales_by_month:
-                total_sales_by_month[current_month]['total'] += sales.amount_total
+                if sales.currency_id.name == 'USD':
+                    total_sales_by_month[current_month]['total'] += sales.amount_total
+                elif sales.currency_id.name == 'CAD':
+                    usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
+                    total_sales_by_month[current_month]['total'] += (float(sales.amount_total) * float(usd_rate.rate))
 
         # name plus an array of sales by product category + graph style top and bottom:
         # { 1: {'name': 'Sam',  'SBS':0, 'PPE': 6000, 'SA': 0, 'stSBS':0, 'stPPE': 0, 'stSA': 0
         #                                                    , 'sbSBS':0, 'sbPPE': 0, 'sbSA': 0},
+        sale_by_person = {}
         daily_sales = self.env['sale.order'].search(['&',
                                                      ('state', '=', 'sale'),
                                                      ('flsp_so_date', '>', date.today() + relativedelta(days=-7))])
-        sale_by_person = {}
         for sale in daily_sales:
             key = len(sale_by_person) + 1
             for x in sale_by_person:
@@ -58,12 +63,19 @@ class ReportSalesbysalesperson(models.AbstractModel):
             sa_value  = 0
             top_val = 0
             for line in order_lines:
+                current_total = 0
+                if line.currency_id.name == 'USD':
+                    current_total = line.price_total
+                elif line.currency_id.name == 'CAD':
+                    usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
+                    current_total = (float(line.price_total) * float(usd_rate.rate))
+
                 if line.product_id.categ_id.name == 'School PPE Program':
-                    ppe_value += line.price_total
+                    ppe_value += current_total
                 if line.product_id.categ_id.name == 'School Bus Signs':
-                    sbs_value += line.price_total
+                    sbs_value += current_total
                 if line.product_id.categ_id.name == 'Stop Arms':
-                    sa_value += line.price_total
+                    sa_value += current_total
 
             if key > len(sale_by_person):
                 sale_by_person[key] = {'name': sale.user_id.name, 'SBS': sbs_value, 'PPE': ppe_value, 'SA': sa_value,
