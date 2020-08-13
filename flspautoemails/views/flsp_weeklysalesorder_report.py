@@ -19,7 +19,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
 
         us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
         daily_sales = self.env['sale.order'].search(['&',
-                                                     ('state', '=', 'sale'),
+                                                     ('state', 'in', ['sale', 'done']),
                                                      ('flsp_so_date', '>', date.today() + relativedelta(months=-6))])
 
         ## Total sales by month
@@ -49,7 +49,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
         #                                                    , 'sbSBS':0, 'sbPPE': 0, 'sbSA': 0},
         sale_by_person = {}
         daily_sales = self.env['sale.order'].search(['&',
-                                                     ('state', '=', 'sale'),
+                                                     ('state', 'in', ['sale', 'done']),
                                                      ('flsp_so_date', '>', date.today() + relativedelta(days=-7))])
         for sale in daily_sales:
             key = len(sale_by_person) + 1
