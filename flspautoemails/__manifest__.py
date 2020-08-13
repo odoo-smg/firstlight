@@ -30,6 +30,8 @@
         'views/dailysalesorder_tmpl.xml',
         'data/dailysalesorder_cron.xml',
         'views/weeklysalesorder_tmpl.xml',
+        'views/flsp_weeklysalesorder_report.xml',
+        'views/flsp_internal_layout.xml',
         'data/weeklysalesorder_cron.xml',
     ],
 }

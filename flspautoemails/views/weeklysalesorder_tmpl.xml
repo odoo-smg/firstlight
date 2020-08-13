@@ -1,125 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Channel and moderation related data -->
         <template id="flsp_weeklysalesorder_tmpl">
-		  	<p>*************************************************************************************************************************</p>
-            <div>
-                <p><h3>Weekly Sales Report by Sales Person:</h3></p><br/>
-            </div>
-            <div >
+            <div class="page">
+                <div>
+                    <p><h3>Weekly Sales Report by Sales Person:</h3></p>
+                    <p>From: <span t-esc="d_from.strftime('%m/%d/%Y')"/> to <span t-esc="d_to.strftime('%m/%d/%Y')"/></p><br/>
+                </div>
+                <div >
 
-                <table style="padding: 20px 0 20px 0px">
-                    <tr>
-                        <t t-foreach="sale_by_person" t-as="key_id">
-                            <td>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <table>
+                    <table style="padding: 20px 0 20px 0px">
+                        <tr>
+                            <t t-foreach="sale_by_person" t-as="key_id">
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td style="background:#4b5eab; padding: 0 8px 0 0"></td>
+                                                        <td><t t-esc="sale_by_person[key_id]['PPE']" t-options='{"widget": "float", "decimal_precision": "2"}'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="background: #4db0e0; padding: 0 8px 0 0"></td>
+                                                        <td><t t-esc="sale_by_person[key_id]['SBS']" t-options='{"widget": "float", "decimal_precision": "2"}'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="background: #f1b550; padding: 0 8px 0 0"></td>
+                                                        <td><t t-esc="sale_by_person[key_id]['SA']" t-options='{"widget": "float", "decimal_precision": "2"}'/></td>
+                                                    </tr>
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                        <tr><td style="padding:0px">
+                                            <table style="border-collapse: collapse; padding:0px">
                                                 <tr>
-                                                    <td style="background:#4b5eab; padding: 0 8px 0 0"></td>
-                                                    <td><t t-esc="sale_by_person[key_id]['PPE']" t-options='{"widget": "float", "decimal_precision": "2"}'/></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="background: #4db0e0; padding: 0 8px 0 0"></td>
-                                                    <td><t t-esc="sale_by_person[key_id]['SBS']" t-options='{"widget": "float", "decimal_precision": "2"}'/></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="background: #f1b550; padding: 0 8px 0 0"></td>
-                                                    <td><t t-esc="sale_by_person[key_id]['SA']" t-options='{"widget": "float", "decimal_precision": "2"}'/></td>
+                                                    <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                                <tr><td             t-attf-style="padding: 0px 20px {{sale_by_person[key_id]['stPPE']}}px 0px; border:1px solid #313d6f; vertical-align:bottom" /></tr>
+                                                                <tr><td colspan="3" t-attf-style="padding: 0px 20px {{sale_by_person[key_id]['sbPPE']}}px 0px; border:2px solid #313d6f; background:#4b5eab"/></tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                                <tr><td             t-attf-style="padding:0px 20px {{sale_by_person[key_id]['stSBS']}}px 0px; border:1px solid #3a84a9; vertical-align:bottom; "/></tr>
+                                                                <tr><td colspan="3" t-attf-style="padding:0px 20px {{sale_by_person[key_id]['sbSBS']}}px 0px; border:2px solid #3a84a9; background:#4db0e0;"/></tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
+                                                                <tr><td             t-attf-style="padding:0px 20px {{sale_by_person[key_id]['stSA']}}px 0px; border:1px solid #fcb030; vertical-align:bottom"/></tr>
+                                                                <tr><td colspan="3" t-attf-style="padding:0px 20px {{sale_by_person[key_id]['sbSA']}}px 0px; border:2px solid #fcb030; background:#f1b550; "/></tr>
+                                                        </table>
+                                                    </td>
                                                 </tr>
                                             </table>
+                                        </td></tr>
+                                        <tr><td style="vertical-align:top; padding-left:3; padding-right:35px">
+                                            <t t-esc="sale_by_person[key_id]['name']"/></td></tr>
+                                    </table>
+                                </td>
+                            </t>
+                        </tr>
+                    </table>
 
-                                        </td>
-                                    </tr>
-                                    <tr><td style="padding:0px">
-                                        <table style="border-collapse: collapse; padding:0px">
-                                            <tr>
-                                                <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
-                                                            <tr><td             t-attf-style="padding: 0px 20px {{sale_by_person[key_id]['stPPE']}}px 0px; border:1px solid #313d6f; vertical-align:bottom" /></tr>
-                                                            <tr><td colspan="3" t-attf-style="padding: 0px 20px {{sale_by_person[key_id]['sbPPE']}}px 0px; border:2px solid #313d6f; background:#4b5eab"/></tr>
-                                                    </table>
-                                                </td>
-                                                <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
-                                                            <tr><td             t-attf-style="padding:0px 20px {{sale_by_person[key_id]['stSBS']}}px 0px; border:1px solid #3a84a9; vertical-align:bottom; "/></tr>
-                                                            <tr><td colspan="3" t-attf-style="padding:0px 20px {{sale_by_person[key_id]['sbSBS']}}px 0px; border:2px solid #3a84a9; background:#4db0e0;"/></tr>
-                                                    </table>
-                                                </td>
-                                                <td style="padding:1px"><table style="border-collapse: collapse; font-size:10px">
-                                                            <tr><td             t-attf-style="padding:0px 20px {{sale_by_person[key_id]['stSA']}}px 0px; border:1px solid #fcb030; vertical-align:bottom"/></tr>
-                                                            <tr><td colspan="3" t-attf-style="padding:0px 20px {{sale_by_person[key_id]['sbSA']}}px 0px; border:2px solid #fcb030; background:#f1b550; "/></tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td></tr>
-                                    <tr><td style="vertical-align:top; padding-left:3; padding-right:35px">
-                                        <t t-esc="sale_by_person[key_id]['name']"/></td></tr>
-                                </table>
-                            </td>
-                        </t>
-                    </tr>
-                </table>
-
-                <table>
-                    <tr>
-                        <td style="background: #4b5eab; border:2px solid #313d6f; padding-left:30px"></td>
-                        <td>School PPE Purchase Program</td>
-                    </tr>
-                    <tr>
-                        <td style="background: #4db0e0; border:2px solid #3a84a9; padding-left:30px"></td>
-                        <td>School Bus Signs</td>
-                    </tr>
-                    <tr>
-                        <td style="background: #f1b550; border:2px solid #fcb030; padding-left:30px"></td>
-                        <td>Stop Arms</td>
-                    </tr>
-                </table>
-                <br/>
-                <p>Total Sales:</p>
-                <table style="border-collapse: collapse ">
-                    <!--tr>
-                        <td style="padding:0px; "><svg style="width:105px; height=200px; margin:0px; padding:0px">
-                            <line x1="0" y1="148" x2="105" y2="148" style="stroke:#fcb030;stroke-width:4" /></svg></td>
-                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
-                            <line x1="0" y1="148" x2="105" y2="148" style="stroke:#fcb030;stroke-width:4" /></svg></td>
-                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
-                            <line x1="0" y1="148" x2="105" y2="128" style="stroke:#fcb030;stroke-width:4" /></svg></td>
-                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
-                            <line x1="0" y1="128" x2="105" y2="6" style="stroke:#fcb030;stroke-width:4" /></svg></td>
-                        <td style="padding:0px; "><svg style="width:105px; height=200px; ; padding:0px;">
-                            <line x1="0" y1="6" x2="105" y2="2" style="stroke:#fcb030;stroke-width:4" /></svg></td>
-                    </tr-->
-                    <tr>
-                        <t t-foreach="total_sales_by_month" t-as="current_month">
-                            <td style=" border: 2px solid #313d6f; width:100px; text-align:center; background:#4b5eab; color:white ">
-                                <spam t-esc="total_sales_by_month[current_month]['month']" />
-                            </td>
-                        </t>
-                    </tr>
-                    <tr>
-                        <t t-foreach="total_sales_by_month" t-as="current_month">
-                            <td style=" width:100px; text-align:right; border: 2px solid #313d6f; ">
-                                <spam t-esc="total_sales_by_month[current_month]['total']" t-options='{"widget": "float", "decimal_precision": "2"}' />
-                            </td>
-                        </t>
-                    </tr>
-                </table>
-                <table style="border-collapse: collapse">
-
-                </table>
+                    <table>
+                        <tr>
+                            <td style="background: #4b5eab; border:2px solid #313d6f; padding-left:30px"></td>
+                            <td>School PPE Purchase Program</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #4db0e0; border:2px solid #3a84a9; padding-left:30px"></td>
+                            <td>School Bus Signs</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #f1b550; border:2px solid #fcb030; padding-left:30px"></td>
+                            <td>Stop Arms</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <p>Total Sales:</p>
+                    <table style="border-collapse: collapse ">
+                        <tr>
+                            <t t-foreach="total_sales_by_month" t-as="current_month">
+                                <td style=" border: 2px solid #313d6f; width:100px; text-align:center; background:#4b5eab; color:white ">
+                                    <spam t-esc="total_sales_by_month[current_month]['month']" />
+                                </td>
+                            </t>
+                        </tr>
+                        <tr>
+                            <t t-foreach="total_sales_by_month" t-as="current_month">
+                                <td style=" width:100px; text-align:right; border: 2px solid #313d6f; ">
+                                    <spam t-esc="total_sales_by_month[current_month]['total']" t-options='{"widget": "float", "decimal_precision": "2"}' />
+                                </td>
+                            </t>
+                        </tr>
+                    </table>
+                    <table style="border-collapse: collapse">
+                        <p>* All values in US Dollar.</p><br/>
+                    </table>
 
 
-            </div><br/>
-            <br/>
-            <br/>
-            <div style="text-align: center;">
-              <a href="https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style="background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Sales Order</a>
-                <br/><br/><br/>
+                </div><br/>
             </div>
-            <p>Thank you!</p>
-
         </template>
     </data>
 </odoo>
