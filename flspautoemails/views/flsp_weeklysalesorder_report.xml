@@ -36,5 +36,4 @@
               sequence="210"
               groups="account.group_account_manager"
               action="flsp_weeklysalesorder_record"/>
-
 </odoo>
