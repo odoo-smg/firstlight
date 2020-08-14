@@ -94,8 +94,11 @@ class ReportSalesbysalesperson(models.AbstractModel):
             if top_val < sale_by_person[x]['SA']:
                 top_val = sale_by_person[x]['SA']
 
-        # add 5% to make the report more readable
-        top_val += (top_val*5/100)
+        # add 5% to make the report more readable / avoid zero division
+        if top_val == 0:
+            top_val = 1
+        else:
+            top_val += (top_val*5/100)
 
         for x in sale_by_person:
             sale_by_person[x]['sbSBS'] = ((sale_by_person[x]['SBS']*100)//top_val)*2
