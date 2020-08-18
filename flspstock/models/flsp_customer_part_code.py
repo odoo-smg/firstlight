@@ -12,3 +12,4 @@ class Customerscode(models.Model):
     part_number = fields.Char(string="Part Number", required=True)
     description = fields.Char(string="Description", required=True)
     company_id = fields.Many2one('res.company', 'Company', index=True)
+    label_desc = fields.Char(string="Customer Label Name", required=True)

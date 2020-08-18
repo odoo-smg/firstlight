@@ -26,6 +26,7 @@
                     <field name="part_number"/>
                     <field name="description"/>
                     <field name="company_id" group="base.group_multi_company"/>
+                    <field name="label_desc" />
                 </tree>
             </field>
         </record>
@@ -58,6 +59,7 @@
                             <field name="part_number"/>
                             <field name="description"/>
                             <field name="company_id" group="base.group_multi_company"/>
+                            <field name="label_desc" />
                         </group>
                     </sheet>
                 </form>

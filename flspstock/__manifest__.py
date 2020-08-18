@@ -40,5 +40,7 @@
         'views/flsp_mrp_zebra_production.xml',
         'views/flsp_customer_barcode.xml',
         'views/flsp_stock_zebra_package.xml',
+        'views/flsp_product_packaging_form.xml',
+        'views/flsp_mrp_set_zebra_production.xml',
     ],
 }

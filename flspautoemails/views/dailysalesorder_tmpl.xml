@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Channel and moderation related data -->
+        <template id="flsp_dailysalesorder_tmpl">
+            <div>
+                <p><h3>Daily Sales Order Report:</h3></p>
+                <p>The following Sales Orders have been created/confirmed in Odoo today:</p><br/>
+            </div>
+            <div >
+                <table class="table table-md" style="padding: 0px 20px 0px 20px;">
+                    <div>
+                        <tr>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Sales Ref</th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Customer </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Total Value </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Expected Delivery </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Product </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Quantity </th>
+                            <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;"> Lead Time (Weeks) </th>
+                        </tr>
+
+                        <div t-foreach="sales" t-as="row">
+                            <t t-if="row['product_id'].categ_id.name == 'School PPE Program'">
+                                <tr>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].partner_id.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="row['order_id'].currency_id.name"/><spam t-field="row['order_id'].currency_id.symbol"/> <span t-esc="row['price_subtotal']" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['order_id'].commitment_date" t-options='{"widget": "date", "format": "MMMM dd, Y"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['product_id'].default_code"  /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['product_uom_qty']"  /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="row['flsp_lead_time_weeks']"  /></td>
+                                </tr>
+                            </t>
+                        </div>
+                    </div>
+                </table>
+            </div><br/>
+            <div style="text-align: center;">
+              <a href="https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Access Sales Order</a>
+                <br/>
+            </div>
+            <p>Thank you!</p>
+
+        </template>
+    </data>
+</odoo>
