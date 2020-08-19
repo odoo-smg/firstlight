@@ -53,7 +53,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
                         usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
                         categ_val = line.price_total*usd_rate.rate
 
-                    if categ_val > 0
+                    if categ_val > 0:
                         if line.product_id.categ_id.id in total_sales_by_month[current_month]['category']:
                             total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total'] = total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total']+categ_val
                         else:
