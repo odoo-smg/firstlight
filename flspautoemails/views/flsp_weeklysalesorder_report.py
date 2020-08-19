@@ -53,10 +53,11 @@ class ReportSalesbysalesperson(models.AbstractModel):
                         usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
                         categ_val = line.price_total*usd_rate.rate
 
-                    if line.product_id.categ_id.id in total_sales_by_month[current_month]['category']:
-                        total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total'] = total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total']+categ_val
-                    else:
-                        total_sales_by_month[current_month]['category'][line.product_id.categ_id.id] = {'categ': line.product_id.categ_id.name, 'total': categ_val}
+                    if categ_val > 0
+                        if line.product_id.categ_id.id in total_sales_by_month[current_month]['category']:
+                            total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total'] = total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total']+categ_val
+                        else:
+                            total_sales_by_month[current_month]['category'][line.product_id.categ_id.id] = {'categ': line.product_id.categ_id.name, 'total': categ_val}
         for month in total_sales_by_month:
             for categ_id in total_sales_by_month[month]['category']:
                 if not(categ_id in total_sales_by_month[0]['category']):
@@ -111,6 +112,12 @@ class ReportSalesbysalesperson(models.AbstractModel):
                 top_val = sale_by_person[x]['PPE']
             if top_val < sale_by_person[x]['SA']:
                 top_val = sale_by_person[x]['SA']
+
+        # add 5% to make the report more readable / avoid zero division
+        if top_val == 0:
+            top_val = 1
+        else:
+            top_val += (top_val*5/100)
 
         for x in sale_by_person:
             sale_by_person[x]['sbSBS'] = ((sale_by_person[x]['SBS']*100)//top_val)*2
