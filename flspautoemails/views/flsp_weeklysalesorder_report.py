@@ -23,7 +23,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
                                                      ('flsp_so_date', '>', date.today() + relativedelta(months=-6))])
 
         ## Total sales by month
-        total_sales_by_month = {}
+        total_sales_by_month = {0: {'month': 'Category', 'total': 0, 'category': {0: {'categ': 'Total', 'total': 0}}}}
         first_month = datetime.now().month - 5
         if first_month < 1:
             first_month = 12 + first_month
@@ -32,7 +32,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
             month = x
             if month > 12:
                 month = x - 12
-            total_sales_by_month[month] = {'month': calendar.month_name[month], 'total': 0}
+            total_sales_by_month[month] = {'month': calendar.month_name[month], 'total': 0, 'category': {}}
 
         for sales in daily_sales:
             if sales.flsp_so_date:
@@ -43,6 +43,25 @@ class ReportSalesbysalesperson(models.AbstractModel):
                 elif sales.currency_id.name == 'CAD':
                     usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
                     total_sales_by_month[current_month]['total'] += (float(sales.amount_total) * float(usd_rate.rate))
+
+                order_lines = self.env['sale.order.line'].search([('order_id', '=', sales.id)])
+                for line in order_lines:
+                    categ_val = 0
+                    if line.currency_id.name == 'USD':
+                        categ_val = line.price_total
+                    elif line.currency_id.name == 'CAD':
+                        usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
+                        categ_val = line.price_total*usd_rate.rate
+
+                    if categ_val > 0:
+                        if line.product_id.categ_id.id in total_sales_by_month[current_month]['category']:
+                            total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total'] = total_sales_by_month[current_month]['category'][line.product_id.categ_id.id]['total']+categ_val
+                        else:
+                            total_sales_by_month[current_month]['category'][line.product_id.categ_id.id] = {'categ': line.product_id.categ_id.name, 'total': categ_val}
+        for month in total_sales_by_month:
+            for categ_id in total_sales_by_month[month]['category']:
+                if not(categ_id in total_sales_by_month[0]['category']):
+                    total_sales_by_month[0]['category'][categ_id] = total_sales_by_month[month]['category'][categ_id]
 
         # name plus an array of sales by product category + graph style top and bottom:
         # { 1: {'name': 'Sam',  'SBS':0, 'PPE': 6000, 'SA': 0, 'stSBS':0, 'stPPE': 0, 'stSA': 0

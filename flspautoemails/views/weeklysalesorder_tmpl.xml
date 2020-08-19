@@ -86,11 +86,37 @@
                                 </td>
                             </t>
                         </tr>
+                        <t t-foreach="total_sales_by_month[0]['category']" t-as="category_id">
+                            <tr>
+                                <t t-if="category_id > 0">
+                                    <td style=" width:100px; text-align:right; border: 2px solid #313d6f; white-space:nowrap; ">
+                                        <spam t-esc="total_sales_by_month[0]['category'][category_id]['categ']"  />
+                                    </td>
+                                    <t t-foreach="total_sales_by_month" t-as="current_month">
+                                        <t t-if="current_month > 0">
+                                            <td style=" width:100px; text-align:right; border: 2px solid #313d6f; ">
+                                                <t t-if="category_id in total_sales_by_month[current_month]['category']">
+                                                    <spam t-esc="total_sales_by_month[current_month]['category'][category_id]['total']" t-options='{"widget": "float", "decimal_precision": "2"}' />
+                                                </t>
+                                                <t t-else="">
+                                                    <spam>0</spam>
+                                                </t>
+                                            </td>
+                                        </t>
+                                    </t>
+                                </t>
+                            </tr>
+                        </t>
                         <tr>
+                            <td style=" width:100px; text-align:right; border: 2px solid #313d6f; white-space:nowrap; font-weight: bolder; ">
+                                <spam t-esc="total_sales_by_month[0]['category'][0]['categ']"/>
+                            </td>
                             <t t-foreach="total_sales_by_month" t-as="current_month">
-                                <td style=" width:100px; text-align:right; border: 2px solid #313d6f; ">
-                                    <spam t-esc="total_sales_by_month[current_month]['total']" t-options='{"widget": "float", "decimal_precision": "2"}' />
-                                </td>
+                                <t t-if="current_month > 0">
+                                    <td style=" width:100px; text-align:right; border: 2px solid #313d6f; font-weight: bolder; ">
+                                        <spam t-esc="total_sales_by_month[current_month]['total']" t-options='{"widget": "float", "decimal_precision": "2"}' />
+                                    </td>
+                                </t>
                             </t>
                         </tr>
                     </table>
