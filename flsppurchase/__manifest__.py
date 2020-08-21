@@ -10,6 +10,7 @@
 
         Purchase Order:
             * Add a field on Quote Lines = Vendor Product Code.
+            * Add a button on Products to show open POs.
     """,
 
     'author': "Alexandre Sousa",
@@ -28,5 +29,7 @@
     # always loaded
     'data': [
         'views/flsp_purchase_view.xml',
+        'views/flsp_product_view.xml',
+        'views/flsp_purchase_order_line_view.xml',
     ],
 }
