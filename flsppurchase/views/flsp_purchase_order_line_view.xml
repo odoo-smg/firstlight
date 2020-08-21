@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <tree string="Open POs" create="false" editable="top">
                 <field name="company_id" invisible="True" />
+                <field name="state" readonly="True"/>
                 <field name="order_id" readonly="True"/>
                 <field name="partner_id" readonly="True"/>
                 <field name="flsp_product_code"/>
