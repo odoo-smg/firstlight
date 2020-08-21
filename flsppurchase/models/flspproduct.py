@@ -13,3 +13,14 @@ class flsppurchaseproductprd(models.Model):
             ('product_id', '=', self.id), ('qty_received', '=', 0),
         ]
         return action
+
+class flsppurchaseproducttmp(models.Model):
+    _inherit = 'product.template'
+    _check_company_auto = True
+
+    def action_product_open_po_report(self):
+        action = self.env.ref('flsppurchase.report_open_po_action_product').read()[0]
+        action['domain'] = [
+            ('product_tmpl_id', '=', self.id), ('qty_received', '=', 0),
+        ]
+        return action
