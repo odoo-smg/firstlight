@@ -18,4 +18,20 @@
         </field>
     </record>
 
+    <record id="action_purchase_order_line_tmp" model="ir.actions.act_window">
+        <field name="name">Open POs</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_view_po_line_tree" ></field>
+        <field name="help">No current open PO for this product.</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="action_purchase_order_line_all" model="ir.actions.act_window">
+        <field name="name">Open POs</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_view_po_line_tree" ></field>
+    </record>
+
 </odoo>
