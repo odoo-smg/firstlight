@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_product_open_po_report">
+            <field name="domain">['&amp;', ('product_id', '=', active_id), ('flsp_open_qty', '!=', 0)]</field>
+            <field name="name">Open PO</field>
+            <field name="res_model">purchase.order.line</field>
+        </record>
+
+        <record model="ir.ui.view" id="flsp_product_po_form_view">
+            <field name="name">flsp.product.po.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="priority">98</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button string="Open POs"
+                        type="action"
+                        name="%(action_product_open_po_report)d"
+                        class="oe_stat_button" icon="fa-search-plus">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

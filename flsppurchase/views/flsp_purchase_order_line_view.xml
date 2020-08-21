@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <record id="flsp_view_po_line_tree" model="ir.ui.view">
+        <field name="name">PO Lines</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Open POs" create="false" editable="top">
+                <field name="company_id" invisible="True" />
+                <field name="order_id" readonly="True"/>
+                <field name="partner_id" readonly="True"/>
+                <field name="flsp_product_code"/>
+                <field name="flsp_product_desc"/>
+                <field name="product_qty" readonly="True"/>
+                <field name="date_planned" readonly="True"/>
+                <field name="qty_received" readonly="True"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
