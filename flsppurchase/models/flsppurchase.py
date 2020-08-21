@@ -9,6 +9,9 @@ class flsppurchase(models.Model):
     _check_company_auto = True
 
     flsp_vendor_code = fields.Char('Vendor Part #')
+    flsp_open_qty = fields.Float('Open Qty', compute='_open_qty_to_receive', store=True)
+    flsp_product_code = fields.Char('Part #', compute='_product_code_purchase_line', store=True)
+    flsp_product_desc = fields.Char('Part #', compute='_product_desc_purchase_line', store=True)
 
     @api.onchange('product_id', 'product_qty', 'product_uom')
     def _onchange_flsp_product(self):
@@ -24,3 +27,16 @@ class flsppurchase(models.Model):
                 params=params)
             if vendor:
                 line.flsp_vendor_code = vendor.product_code
+
+    def _open_qty_to_receive(self):
+        for line in self:
+            line.flsp_open_qty = line.product_qty - line.qty_received
+
+
+    def _product_code_purchase_line(self):
+        for line in self:
+            line.flsp_product_code = line.product_id.default_code
+
+    def _product_desc_purchase_line(self):
+        for line in self:
+            line.flsp_product_desc = line.product_id.name
