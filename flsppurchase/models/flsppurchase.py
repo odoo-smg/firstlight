@@ -28,6 +28,7 @@ class flsppurchase(models.Model):
             if vendor:
                 line.flsp_vendor_code = vendor.product_code
 
+    @api.depends('product_qty', 'qty_received')
     def _open_qty_to_receive(self):
         for line in self:
             line.flsp_open_qty = line.product_qty - line.qty_received
