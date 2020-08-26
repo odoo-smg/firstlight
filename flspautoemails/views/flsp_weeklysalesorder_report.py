@@ -67,6 +67,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
         # { 1: {'name': 'Sam',  'SBS':0, 'PPE': 6000, 'SA': 0, 'stSBS':0, 'stPPE': 0, 'stSA': 0
         #                                                    , 'sbSBS':0, 'sbPPE': 0, 'sbSA': 0},
         sale_by_person = {}
+        top_val = 0
         daily_sales = self.env['sale.order'].search(['&',
                                                      ('state', 'in', ['sale', 'done']),
                                                      ('flsp_so_date', '>', date.today() + relativedelta(days=-7))])
@@ -80,7 +81,6 @@ class ReportSalesbysalesperson(models.AbstractModel):
             ppe_value = 0
             sbs_value = 0
             sa_value  = 0
-            top_val = 0
             for line in order_lines:
                 current_total = 0
                 if line.currency_id.name == 'USD':
