@@ -65,7 +65,7 @@
 ^A0N,64,84
 ^FO100,800^BY3
 ^BCN,200,N,N,N
-^FD834012 61176^FS
+^FD<t t-esc="lot.name.replace('_',' ')"/>^FS
 ^FO100,1010
 ^A0N,64,74^FD*<t t-esc="lot.name.replace('_',' ')"/>*^FS
 
