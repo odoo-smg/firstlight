@@ -13,6 +13,7 @@
                             <field name="flsp_linux_ethernet"/>
                             <field name="flsp_linux_powerline"/>
                             <field name="flsp_qcanum"/>
+                            <field name="flsp_partner_id"/>
                         </group>
                     </page>
 
