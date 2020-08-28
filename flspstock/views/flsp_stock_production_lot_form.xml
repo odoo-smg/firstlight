@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspstock_production_lot_form">
+            <field name="name">flspstock.serial.lot.form.inherit</field>
+            <field name="model">stock.production.lot</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='description']" position="after">
+                    <page string="EVA Charge" name="eva_charge">
+                        <group>
+                            <field name="flsp_linux_ethernet"/>
+                            <field name="flsp_linux_powerline"/>
+                            <field name="flsp_qcanum"/>
+                            <field name="flsp_partner_id"/>
+                        </group>
+                    </page>
+
+                </xpath>
+            </field>
+        </record>
+ </odoo>

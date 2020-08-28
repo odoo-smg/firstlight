@@ -42,5 +42,7 @@
         'views/flsp_stock_zebra_package.xml',
         'views/flsp_product_packaging_form.xml',
         'views/flsp_mrp_set_zebra_production.xml',
+        'views/flsp_stock_production_lot_form.xml',
+        'views/flsp_production_lot_zpl.xml',
     ],
 }

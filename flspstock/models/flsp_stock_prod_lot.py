@@ -7,6 +7,11 @@ class flspstocklot(models.Model):
     _inherit = 'stock.production.lot'
     _check_company_auto = True
 
+    flsp_linux_ethernet = fields.Char("Linux Ethernet")
+    flsp_linux_powerline = fields.Char("Linux Powerline")
+    flsp_qcanum = fields.Char("QCA7000")
+    flsp_partner_id = fields.Many2one('res.partner', 'Customer')
+
     @api.model
     def _default_nextlot(self):
 
