@@ -78,3 +78,12 @@ class flspdailysalesorder(models.Model):
     def _weeklysalesorder_report(self):
         sale_ids = self.search([], limit=1).ids
         return self.env.ref('flspautoemails.flsp_weeklysalesorder_report').report_action(sale_ids)
+
+    @api.model
+    def _soapprovreq_report(self, sale_orders=None):
+        if not sale_orders:
+            sale_orders = self.env['sale.order'].search([('flsp_state', '=', 'wait')]).ids
+            if len(sale_orders) == 0:
+                sale_orders = [0]
+
+        return self.env.ref('flspautoemails.flsp_soapprovreq_report').report_action(sale_orders)

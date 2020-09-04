@@ -34,5 +34,7 @@
         'views/flsp_internal_layout.xml',
         'views/flsp_basic_layout.xml',
         'data/weeklysalesorder_cron.xml',
+        'views/flsp_soapprovreq_report.xml',
+        'views/flsp_soapprovreq_tmpl.xml',
     ],
 }

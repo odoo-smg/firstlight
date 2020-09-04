@@ -180,8 +180,35 @@ class SalesOrder(models.Model):
             total_discount += line.discount
 
     def button_flsp_submit_approval(self):
+        self.request_approval_by_email()
         self.write({'flsp_approval_requested': True})
         return self.write({'flsp_state': 'wait'})
+
+    def request_approval_by_email(self):
+        template = self.env.ref('flspautoemails.flsp_soapprovreq_tmpl', raise_if_not_found=False)
+
+        if not template:
+            _logger.warning('Template "flspautoemails.flsp_soapprovreq_tmpl" was not found. Cannot send the approval request for Sales Order.')
+            return
+
+        d_from = date.today()
+        so_id = self.id
+        rendered_body = template.render({'docids': self.env['sale.order'].search([('id', '=', so_id)]),
+                                         'd_from': d_from}, engine='ir.qweb')
+        body = self.env['mail.thread']._replace_local_links(rendered_body)
+        body += '<br/><br/><br/>'
+        body += '<div style = "text-align: center;" >'
+        body += '  <a href = "/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>'
+        body += '  <br/><br/><br/>'
+        body += '</div>'
+        body += '<p>Thank you!</p>'
+
+        self.env['mail.mail'].create({
+            'body_html': body,
+            'subject': 'Odoo - Sales Discount Approval Request',
+            'email_to': 'camquan@smartrendmfg.com;stephanieaddy@smartrendmfg.com; '+self.user_id.login,
+            'auto_delete': True,
+        }).send()
 
     def button_flsp_approve(self):
         #flsp_sale_order_lines = flspsaleapproval.Saleflspwizard
