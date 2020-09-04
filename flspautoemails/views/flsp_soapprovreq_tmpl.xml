@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="flsp_soapprovreq_tmpl">
+            <div class="page">
+                <div>
+                    <p><h3>Approval Request</h3></p>
+                    <p>Date: <span t-esc="d_from.strftime('%m/%d/%Y')"/> </p><br/>
+                    <t t-if="len(docids) &gt; 0">
+                        <p>Action required: Review and Approval</p>
+                        <table class="table table-md" style="padding: 0px 20px 0px 20px;">
+                            <tr>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Salesperson</th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Sales Ref</th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Customer </th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Total Value </th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Approve </th>
+                            </tr>
+
+                            <t t-foreach="docids" t-as="sale_order">
+                                <tr>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sale_order.user_id.name"/></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sale_order.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sale_order.partner_id.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><spam t-field="sale_order.currency_id.name"/><spam t-field="sale_order.currency_id.symbol"/> <span t-esc="sale_order.amount_total" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><a t-att-href="'/web#id=%s&amp;action=411&amp;model=sale.order&amp;view_type=form&amp;cids=1&amp;menu_id=230' % sale_order.id" style = "background: #519dda; padding: 2px; text-decoration: none; color: #000; border-radius: 5px; font-size: 12px;" >Approve</a></td>
+                                </tr>
+                            </t>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <p>You don't have any orders to be approved at the moment.</p>
+                    </t>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>
