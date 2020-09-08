@@ -105,7 +105,7 @@ class flspdailysalesorder(models.Model):
             self.env['mail.mail'].create({
                 'body_html': body,
                 'subject': 'Odoo - Sales Discount Approval Request Reminder',
-                'email_to': 'alexandresousa@smartrendmfg.com; ',
+                'email_to': 'camquan@smartrendmfg.com;stephanieaddy@smartrendmfg.com; ',
                 'auto_delete': True,
             }).send()
 
