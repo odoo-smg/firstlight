@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from datetime import datetime
+from datetime import date, datetime
 from odoo import fields, models, api
 
 _logger = logging.getLogger(__name__)
@@ -78,6 +78,36 @@ class flspdailysalesorder(models.Model):
     def _weeklysalesorder_report(self):
         sale_ids = self.search([], limit=1).ids
         return self.env.ref('flspautoemails.flsp_weeklysalesorder_report').report_action(sale_ids)
+
+    @api.model
+    def _apprvreq_email(self):
+        template = self.env.ref('flspautoemails.flsp_soapprovreq_tmpl', raise_if_not_found=False)
+        if not template:
+            _logger.warning('Template "flspautoemails.flsp_soapprovreq_tmpl" was not found. Cannot send Approval Request Report.')
+            return
+
+        total_sales = self.env['sale.order'].search_count([('flsp_state', '=', 'wait')])
+        docids = self.env['sale.order'].search([('flsp_state', '=', 'wait')])
+        d_from = date.today()
+
+        rendered_body = template.render({'docids': docids,
+                                         'd_from': d_from}, engine='ir.qweb')
+
+        body = self.env['mail.thread']._replace_local_links(rendered_body)
+        body += '<br/><br/><br/>'
+        body += '<div style = "text-align: center;" >'
+        body += '  <a href = "/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>'
+        body += '  <br/><br/><br/>'
+        body += '</div>'
+        body += '<p>Thank you!</p>'
+
+        if total_sales > 0:
+            self.env['mail.mail'].create({
+                'body_html': body,
+                'subject': 'Odoo - Sales Discount Approval Request Reminder',
+                'email_to': 'camquan@smartrendmfg.com;stephanieaddy@smartrendmfg.com; ',
+                'auto_delete': True,
+            }).send()
 
     @api.model
     def _soapprovreq_report(self, sale_orders=None):
