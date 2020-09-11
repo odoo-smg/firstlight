@@ -25,11 +25,14 @@
     # any module necessary for this one to work correctly
     'depends': ['base'],
     'depends': ['purchase'],
+    'depends': ['sale'],
 
     # always loaded
     'data': [
+        'security/ir.model.access.csv',
         'views/flsp_purchase_view.xml',
         'views/flsp_product_view.xml',
         'views/flsp_purchase_order_line_view.xml',
+        'report/flsp_purchase_suggestion.xml',
     ],
 }
