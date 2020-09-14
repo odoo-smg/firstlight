@@ -242,10 +242,8 @@ class SalesOrder(models.Model):
         return action
 
     def button_flsp_reject(self):
-        self.write({'flsp_state': 'draft'})
-        self.write({'flsp_approval_approved': False})
-        self.write({'flsp_approval_requested': False})
-        return self.write({'flsp_approval_requested': False})
+        action = self.env.ref('flspsaleapproval.launch_flsp_reject_wizard').read()[0]
+        return action
 
     def sppepp_confirm(self):
         action = self.action_confirm()
