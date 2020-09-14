@@ -134,6 +134,7 @@ class Purcahsesuggestion(models.Model):
     def _compute_bom_level(self):
         current_level = 0
         next_level = {current_level: {}}
+        print('Level 0')
         for lines in self:
             if lines.product_id.used_in_bom_count:
                 lines.level_bom = -1
@@ -144,15 +145,19 @@ class Purcahsesuggestion(models.Model):
         complete = False
         while not complete:
             current_level += 1
+            print('Level '+str(current_level)+'******************************************************')
             complete = True
             next_level[current_level] = {}
             for lines in self:
                 if lines.level_bom < 0:
+                    print('   Product' + str(lines.product_id.id) )
                     comp_boms = self.env['mrp.bom.line'].search([('product_id', '=', lines.product_id.id)])
+                    found_level = False
                     for parent_bom in comp_boms:
+                        print('      Bom:' + str(parent_bom.bom_id.id))
                         if parent_bom.bom_id.product_tmpl_id.id in next_level[current_level-1]:
                             lines.level_bom = current_level
                             next_level[current_level][lines.product_id.product_tmpl_id.id] = lines.product_id
-            for lines in self:
-                if lines.level_bom < 0:
-                    complete = False
+                            found_level = True
+                    if not found_level:
+                        complete = found_level
