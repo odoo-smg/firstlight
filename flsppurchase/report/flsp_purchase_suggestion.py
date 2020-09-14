@@ -22,7 +22,7 @@ class Purcahsesuggestion(models.Model):
     month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
     month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
     suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
-    level_bom = fields.Integer(String="BOM Level", compute='_compute_bom_level')
+    level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     state = fields.Selection([
         ('Buy', 'Suggested to Buy'),
         ('Ok', 'Acceptable level'),
@@ -35,7 +35,7 @@ class Purcahsesuggestion(models.Model):
         CREATE or REPLACE VIEW report_purchase_suggestion AS (
         SELECT
             pp.id,
-            -1 as level_bom,
+            pp.flsp_bom_level as level_bom,
             pt.default_code,
             pp.id as product_id,
             pp.product_tmpl_id as product_tmpl_id,
@@ -132,35 +132,3 @@ class Purcahsesuggestion(models.Model):
         );
         """
         self.env.cr.execute(query)
-
-    def _compute_bom_level(self):
-        print('Calculating level')
-        current_level = 1
-        next_level = {current_level: {}}
-        print('Level 0')
-        for lines in self:
-            if lines.product_id.used_in_bom_count:
-                lines.level_bom = -1
-            else:
-                lines.level_bom = current_level
-                next_level[current_level][lines.product_tmpl_id.id] = lines.product_id
-
-        complete = False
-        while not complete and current_level < 10:
-            current_level += 1
-            print('Level '+str(current_level)+'******************************************************')
-            complete = True
-            next_level[current_level] = {}
-            for lines in self:
-                if lines.level_bom < 0:
-                    print('   Product' + str(lines.product_id.id) )
-                    comp_boms = self.env['mrp.bom.line'].search([('product_id', '=', lines.product_id.id)])
-                    found_level = False
-                    for parent_bom in comp_boms:
-                        print('      Bom:' + str(parent_bom.bom_id.id))
-                        if parent_bom.bom_id.product_tmpl_id.id in next_level[current_level-1]:
-                            lines.level_bom = current_level
-                            next_level[current_level][lines.product_id.product_tmpl_id.id] = lines.product_id
-                            found_level = True
-                    if not found_level:
-                        complete = found_level
