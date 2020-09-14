@@ -12,7 +12,7 @@
                             <field name="partner_id"/>
                         </group>
                     </group>
-                    <h4>Order Lines</h4>
+                    <h4>Let the responsible knows why you rejected it:</h4>
                     <group>
                             <field name="reject_reason"/>
                     </group>

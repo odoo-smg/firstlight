@@ -198,7 +198,7 @@ class SalesOrder(models.Model):
         body = self.env['mail.thread']._replace_local_links(rendered_body)
         body += '<br/><br/><br/>'
         body += '<div style = "text-align: center;" >'
-        body += '  <a href = "/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>'
+        body += '  <a href = "https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>'
         body += '  <br/><br/><br/>'
         body += '</div>'
         body += '<p>Thank you!</p>'
