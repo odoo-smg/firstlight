@@ -48,6 +48,7 @@
                 <field name="month1_use" string="Consumption 1"/>
                 <field name="state"/>
                 <field name="suggested_qty"/>
+                <field name="level_bom"/>
             </tree>
         </field>
     </record>
