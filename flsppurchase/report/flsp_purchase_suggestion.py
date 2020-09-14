@@ -135,10 +135,6 @@ class Purcahsesuggestion(models.Model):
 
     def _compute_bom_level(self):
         print('Calculating level')
-        for line in self:
-            line.level_bom = 0
-        print('End Calculating level *****************')
-        '''
         current_level = 1
         next_level = {current_level: {}}
         print('Level 0')
@@ -149,6 +145,7 @@ class Purcahsesuggestion(models.Model):
                 lines.level_bom = current_level
                 next_level[current_level][lines.product_tmpl_id.id] = lines.product_id
 
+        '''
         complete = False
         while not complete:
             current_level += 1
