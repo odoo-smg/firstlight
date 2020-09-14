@@ -12,3 +12,4 @@ from . import res_company
 from . import res_config_settings
 from . import res_partner
 from . import flsp_choose_delivery
+from . import flsp_reject_wizard

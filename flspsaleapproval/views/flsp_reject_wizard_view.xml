@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_reject_wizard_form_view" model="ir.ui.view">
+            <field name="name">** Discount Approval</field>
+            <field name="model">flspsaleapproval.saleflsprejectwizard</field>
+            <field name="arch" type="xml">
+                <form string="Approve">
+                    <group>
+                        <group>
+                            <field name="order_id"/>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <h4>Order Lines</h4>
+                    <group>
+                            <field name="reject_reason"/>
+                    </group>
+                    <footer>
+                        <button name="flsp_reject" type="object" string="Reject" class="btn-primary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_reject_wizard" model="ir.actions.act_window">
+            <field name="name">FLSP - Reject Discount Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flspsaleapproval.saleflsprejectwizard</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>
