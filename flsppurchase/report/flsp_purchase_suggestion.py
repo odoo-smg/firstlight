@@ -29,11 +29,13 @@ class Purcahsesuggestion(models.Model):
     ], string='State', readonly=True)
 
     def init(self):
+        print('Creating My view')
         tools.drop_view_if_exists(self._cr, 'report_purchase_suggestion')
         query = """
         CREATE or REPLACE VIEW report_purchase_suggestion AS (
         SELECT
             pp.id,
+            -1 as level_bom,
             pt.default_code,
             pp.id as product_id,
             pp.product_tmpl_id as product_tmpl_id,
@@ -132,7 +134,12 @@ class Purcahsesuggestion(models.Model):
         self.env.cr.execute(query)
 
     def _compute_bom_level(self):
-        current_level = 0
+        print('Calculating level')
+        for line in self:
+            line.level_bom = 0
+        print('End Calculating level *****************')
+        '''
+        current_level = 1
         next_level = {current_level: {}}
         print('Level 0')
         for lines in self:
@@ -161,3 +168,5 @@ class Purcahsesuggestion(models.Model):
                             found_level = True
                     if not found_level:
                         complete = found_level
+
+        '''
