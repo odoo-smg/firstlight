@@ -145,6 +145,25 @@ class Purcahsesuggestion(models.Model):
                 lines.level_bom = current_level
                 next_level[current_level][lines.product_tmpl_id.id] = lines.product_id
 
+
+        current_level += 1
+        print('Level '+str(current_level)+'******************************************************')
+        complete = True
+        next_level[current_level] = {}
+        for lines in self:
+            if lines.level_bom < 0:
+                print('   Product' + str(lines.product_id.id) )
+                comp_boms = self.env['mrp.bom.line'].search([('product_id', '=', lines.product_id.id)])
+                found_level = False
+                for parent_bom in comp_boms:
+                    print('      Bom:' + str(parent_bom.bom_id.id))
+                    if parent_bom.bom_id.product_tmpl_id.id in next_level[current_level-1]:
+                        lines.level_bom = current_level
+                        next_level[current_level][lines.product_id.product_tmpl_id.id] = lines.product_id
+                        found_level = True
+                if not found_level:
+                    complete = found_level
+
         '''
         complete = False
         while not complete:
