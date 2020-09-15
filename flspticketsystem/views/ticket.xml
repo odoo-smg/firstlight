@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--TICKET FORM VIEW-->
+    <record model="ir.ui.view" id="ticket_form_view">
+        <field name="name">ticket.form</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Ticket Form" > <!--edit="0", delete="false" delete="0">-->
+                <header>
+                    <button name="button_close" string="Close" class="btn-primary" type="object"
+                            status="close" groups="flspticketsystem.group_flspticketsystem_manager"/>
+<!--                    <button name="button_reopen" string="Reopen" class="btn-primary" type="object"-->
+<!--                            groups="flspticketsystem.group_flspticketsystem_manager"/>-->
+
+<!--                    <button name="send_mail_template" string="Send e-mail" type="object" class="oe_highlight"/>-->
+                    <field name="status"  widget="statusbar" statusbar_visible="open,inprogress,close"/>
+                </header>
+                <sheet>
+                    <group string="Requestor info">
+                        <field name="start_date"/>
+                        <field name="requestor"/>
+                        <field name="priority"/>
+                        <field name="category_id" options="{'no_open':True,'no_create': True}"/>
+                        <field name="short_description"/>
+                        <field name="detailed_description"/>
+                    </group>
+                    <group string="To be filled by ERP Developer">
+                        <field name="responsible"/>
+                        <field name="complete_date"/>
+                        <field name="analysis_solution"/>
+<!--                        <field name="active"/>-->
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--TICKET FORM VIEW: Restrict user from editing the ERP FROM-->
+    <record  id="manager_can_write"  model="ir.ui.view">
+        <field name="name">Manager fill erp only</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id" ref="flspticketsystem.ticket_form_view" /> <!--Model with the view id-->
+        <field name="groups_id"  eval="[(6, 0, [ref('flspticketsystem.group_flspticketsystem_user')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='responsible']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='complete_date']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='analysis_solution']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--TICKET FORM VIEW: Restrict user from editing once in progress:??? IS THERE AN EFFICIENT WAY???-->
+   <record  id="No_edit_once_in_progress"  model="ir.ui.view">
+        <field name="name">In progress no edit</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id"  ref="flspticketsystem.ticket_form_view" />
+        <field name="groups_id"   eval="[(6, 0, [ref('flspticketsystem.group_flspticketsystem_user')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='start_date']" position="attributes">
+               <attribute name="attrs">{'readonly':[('status','in',['inprogress'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='requestor']" position="attributes">
+               <attribute name="attrs">{'readonly':[('status','in',['inprogress','close'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="attrs">{'readonly':[('status','in',['inprogress','close'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="attrs">{'readonly':[('status','in',['inprogress','close'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='short_description']" position="attributes">
+                <attribute name="attrs">{'readonly':[('status','in',['inprogress','close'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='detailed_description']" position="attributes">
+                <attribute name="attrs">{'readonly':[('status','in',['inprogress','close'])]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--TICKET TREE VIEW-->
+    <record model="ir.ui.view" id="tickets_tree_view">
+        <field name="name">ticket.tree</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Ticket Tree"  decoration-muted="status=='close'" multi_edit="1"
+            decoration-danger="priority=='P'" decoration-info="priority=='M'" decoration-success="priority=='N'" >
+            <!--decoration adds colors : CAN REMOVE IT IF WANT TO SEE CLOSED. Other option to not show closed)-->
+                <field name="id"/>
+                <field name="start_date"/>
+                <field name="requestor"/>
+                <field name="priority"/><!--widget="color"-->
+                <field name="category_id"/>
+                <field name="short_description"/>
+                <field name="responsible" optional="show"/>
+                <field name="status"/> <!--widget="statusbar" statusbar_visible="O,C"/>-->
+                <field name="complete_date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--TICKET KANBAN VIEW-->
+    <record model="ir.ui.view" id="view_openacademy_session_kanban">
+        <field name="name">ticket.kanban</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="priority" >
+                <field name="color"/>
+                <templates>
+                     <t t-name="kanban-box">
+                        <div
+                                t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                              oe_kanban_global_click_edit oe_semantic_html_override
+                                              oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                            <div class="oe_dropdown_kanban">
+                                <!-- dropdown menu -->
+                                <div class="oe_dropdown_toggle">
+                                    <i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage"/>
+                                    <ul class="oe_dropdown_menu">
+                                        <li>
+                                            <a type="delete">Delete</a>
+                                        </li>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker"
+                                                data-field="color"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_clear"></div>
+                            </div>
+                            <div t-attf-class="oe_kanban_content">
+                                <!-- title -->
+                                Start date:
+                                <field name="start_date"/>
+                                <br/>
+                                Priority name:
+                                <field name="priority"/>
+                                <br/>
+
+                                Category ID:
+                                <field name="category_id"/>
+                                <br/>
+                                Responsible:
+                                <field name="responsible"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!--ACTION ITEM-->
+    <record model="ir.actions.act_window" id="ticket_list_action">
+        <field name="name">Tickets</field>
+        <field name="res_model">flspticketsystem.ticket</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+     <!--MENU ITEM-->
+    <menuitem name="Ticket" id="main_ticket_menu" /> <!--Top level menu-->
+
+    <menuitem name="Tickets" id="ticket_menu"
+              parent="main_ticket_menu"
+              action="ticket_list_action" />
+
+</odoo>
+
+    <!--NOT NEEDED YET, IF EVER NEEDED ADD CALANDER IN ACTION: TICKET CALENDAR VIEW-->
+<!--    <record model="ir.ui.view" id="ticket_calendar_view">-->
+<!--        <field name="name">ticket.calendar</field>-->
+<!--        <field name="model">flspticketsystem.ticket</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <calendar string="Ticket Calenar" date_start="start_date" date_stop="complete_date">-->
+<!--                <field name="priority"/> &lt;!&ndash;Need to specify how to view&ndash;&gt;-->
+<!--                <field name="start_date"/>-->
+<!--                <field name="category_id"/>-->
+<!--            </calendar>-->
+<!--        </field>-->
+<!--    </record>-->

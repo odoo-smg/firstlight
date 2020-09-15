@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <!-- Mail template are declared in a NOUPDATE block
+         so users can freely customize/delete them -->
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="ticket_email_template" model="mail.template">
+            <field name="name">Ticket: Send by email</field>
+            <field name="model_id" ref="flspticketsystem.model_flspticketsystem_ticket"/> <!--Which model this template relates to-->
+            <!--error might come from not having responsible assigned: maybe have like a default email-->
+            <field name="email_from">${object.responsible}</field>
+            <field name="partner_to">${object.requestor}</field> <!--potential error in partner-->
+            <field name="subject">Ticket (Ref ${object.id})</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear ${object.requestor}
+                        <br /><br />
+                        Here is your ticket with reference ${object.id}.
+                        <br /><br />
+                        It is currently being processed and once its solved, a follow up email will be sent to you.
+                        <br /><br />
+                        You can view the status of your ticket and once responsible is assigned, you won't be able to edit or delete the ticket.
+                        <br /><br />
+                        Do not hesitate to contact us if you have any questions.
+                    </p>
+                </div>
+            </field>
+<!--            we have no reports to add-->
+<!--            <field name="report_template" ref="account_invoices"/>-->
+<!--            <field name="report_name">Invoice_${(object.name or '').replace('/','_')}${object.state == 'draft' and '_draft' or ''}</field>-->
+<!--            <field name="lang">${object.partner_id.lang}</field>-->
+<!--            <field name="user_signature" eval="False"/>-->
+<!--            <field name="auto_delete" eval="True"/>-->
+        </record>
+    </data>
+</odoo>
