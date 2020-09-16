@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--record model="ir.ui.view" id="flsp_po_suggestion_form_view">
+        <field name="name">flsp.posuggestion.form</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <form string="Delivery Form">
+                <sheet>
+                    <group>
+                        <group name="sales" string="Sales Information" >
+                            <field name="default_code"/>
+                            <field name="name"/>
+                        </group>
+                        <group name="purchase" string="Purchase Order Information" >
+                            <field name="seller_ids"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="material_planning" string="Material Planning" >
+                            <field name="company_id" invisible="True" />
+                        </group>
+                        <group>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" string="Notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record-->
+
+
+    <record id="view_po_suggestion_tree" model="ir.ui.view">
+        <field name="name">Replenishment Suggestion</field>
+        <field name="model">report.purchase.suggestion</field>
+        <field name="arch" type="xml">
+            <tree string="Suggestion View" decoration-warning="state in ('po')" decoration-danger="state in ('buy', 'mfg')" decoration-muted="state in ('ok')" create="0" delete="0" editable="bottom" >
+                <field name="product_tmpl_id" />
+                <field name="default_code" optional="hide"/>
+                <field name="description"/>
+                <field name="product_qty"/>
+                <field name="curr_ins" string="Coming In" />
+                <field name="curr_outs" string="Going Out" />
+                <field name="product_min_qty"/>
+                <field name="month3_use" string="Consumption 3" optional="show"/>
+                <field name="month2_use" string="Consumption 2" optional="show"/>
+                <field name="month1_use" string="Consumption 1" optional="show"/>
+                <field name="level_bom" optional="hide"/>
+                <field name="state"/>
+                <field name="suggested_qty"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="purchase_suggestion_search_view" model="ir.ui.view">
+        <field name="name">purchase.suggestion.search</field>
+        <field name="model">report.purchase.suggestion</field>
+        <field name="arch" type="xml">
+            <search string="Product">
+                <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
+                <separator/>
+                <filter string="To Manufacture" name="filter_to_mfg" domain="[('state','=','mfg')]"/>
+                <filter string="To Buy" name="filter_to_purchase" domain="[('state', '=', 'buy')]"/>
+                <filter string="To Confirm PO" name="filter_to_confirm" domain="[('state', '=', 'po')]"/>
+                <filter string="Can be purchased" name="can_be_purchased" domain="[('route_buy', '=', 'buy')]"/>
+                <filter string="Can be produced" name="can_be_produced" domain="[('route_mfg', '=', 'mfg')]"/>
+                <separator/>
+                <!--group expand="1" string="Group By">
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                </group-->
+            </search>
+        </field>
+    </record>
+
+
+    <record id="purchase_suggestion_action" model="ir.actions.act_window">
+        <field name="name">Purchase Suggestion</field>
+        <field name="res_model">report.purchase.suggestion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" ref="view_po_suggestion_tree"/>
+        <field name="search_view_id" ref="purchase_suggestion_search_view"/>
+        <field name="context">{'search_default_can_be_none': 1}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Create a new product</p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="flsp_action_po_suggestion_tree_all">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_po_suggestion_tree"/>
+        <field name="act_window_id" ref="purchase_suggestion_action"/>
+    </record>
+
+    <!--record model="ir.actions.act_window.view" id="action_posuggestion_form_view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flsp_po_suggestion_form_view"/>
+        <field name="act_window_id" ref="purchase_suggestion_action"/>
+    </record-->
+
+    <record id="action_upd_prd_suggestion" model="ir.actions.server">
+        <field name="name">Update Suggestion</field>
+        <field name="model_id" ref="model_product_product" />
+        <field name="state">code</field>
+        <field name="code">action = model._flsp_call_report_wizard()</field>
+    </record>
+
+    <menuitem id="flsp_purchase_suggestion_report"
+              name="Purchase Suggestion"
+              parent="purchase.purchase_report"
+              sequence="100"
+              action="action_upd_prd_suggestion"/>
+
+    <menuitem id="flsp_production_suggestion_report"
+              name="Production Suggestion"
+              parent="mrp.menu_mrp_reporting"
+              sequence="100"
+              action="action_upd_prd_suggestion"/>
+
+    <!--
+              action="purchase_suggestion_action"
+              parent="purchase.purchase_report"
+    -->
+
+</odoo>

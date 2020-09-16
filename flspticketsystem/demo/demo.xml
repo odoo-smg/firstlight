@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--DEMO DATA LOADED IN CATEGORY MODEL-->
+    <data>
+        <record model="flspticketsystem.category" id="Admin">
+            <field name="name">Administration</field>
+            <field name="description">Administration related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="Purchase">
+            <field name="name">Purchase</field>
+            <field name="description">Purchase related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="Sales">
+            <field name="name">Sales</field>
+            <field name="description">Sales related issues</field>
+       </record>
+
+        <record model="flspticketsystem.category" id="Manufacturing">
+            <field name="name">Manufacturing</field>
+            <field name="description">Manufacturing related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="Inventory">
+            <field name="name">Inventory</field>
+            <field name="description">Inventory related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="Others">
+            <field name="name">Others</field>
+            <field name="description">Other related issues</field>
+        </record>
+    </data>
+</odoo>

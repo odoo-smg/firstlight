@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Category form view-->
+    <record model="ir.ui.view" id="category_form_view">
+        <field name="name">category.form</field>
+        <field name="model">flspticketsystem.category</field>
+        <field name="arch" type="xml">
+            <form string="Category Form">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="category_tree_view">
+        <field name="name">category.tree</field>
+        <field name="model">flspticketsystem.category</field>
+        <field name="arch" type="xml">
+            <tree string="Category Tree">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Category Action Menu-->
+    <record model="ir.actions.act_window" id="category_list_action">
+        <field name="name">Category</field>
+        <field name="res_model">flspticketsystem.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first category
+            </p>
+        </field>
+    </record>
+
+    <!--Category Menu item-->
+    <menuitem id="category_menu" name="Category"
+              parent="main_ticket_menu"
+              action="category_list_action"
+              groups="flspticketsystem.group_flspticketsystem_manager"/>
+</odoo>

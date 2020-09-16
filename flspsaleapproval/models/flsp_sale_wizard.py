@@ -62,6 +62,24 @@ class Saleflspwizard(models.TransientModel):
         self.order_id.write({'flsp_state': 'approved', })
         self.order_id.write({'flsp_approval_approved': True, })
 
+        body = '<p>Hi there, </p>'
+        body += '<br/>'
+        body += '<p>The discount approval requested for the quotation: '+self.order_id.name+' has been approved.</p>'
+        body += '<br/><br/><br/>'
+        body += '<br/><br/><br/>'
+        body += '<div style = "text-align: center;" >'
+        body += '  <a href = "/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>'
+        body += '  <br/><br/><br/>'
+        body += '</div>'
+        body += '<p>Thank you!</p>'
+
+        self.env['mail.mail'].create({
+            'body_html': body,
+            'subject': 'Odoo - Sales Discount Approved',
+            'email_to': self.order_id.user_id.login,
+            'auto_delete': True,
+        }).send()
+
         return {'type': 'ir.actions.act_window_close'}
 
         #self.order_id.write({'validity_date': self.validity_date,})
