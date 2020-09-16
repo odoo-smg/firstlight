@@ -63,6 +63,7 @@
                 <separator/>
                 <filter string="To Manufacture" name="filter_to_mfg" domain="[('state','=','mfg')]"/>
                 <filter string="To Buy" name="filter_to_purchase" domain="[('state', '=', 'buy')]"/>
+                <filter string="To Confirm PO" name="filter_to_confirm" domain="[('state', '=', 'po')]"/>
                 <filter string="Can be purchased" name="can_be_purchased" domain="[('route_buy', '=', 'buy')]"/>
                 <filter string="Can be produced" name="can_be_produced" domain="[('route_mfg', '=', 'mfg')]"/>
                 <separator/>
