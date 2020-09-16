@@ -29,7 +29,7 @@
                         <field name="responsible"/>
                         <field name="complete_date"/>
                         <field name="analysis_solution"/>
-<!--                        <field name="active"/>-->
+                        <field name="email_user_on_ticket_creation" groups="flspticketsystem.group_flspticketsystem_manager"/>
                     </group>
                 </sheet>
             </form>
