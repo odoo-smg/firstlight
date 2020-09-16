@@ -15,22 +15,27 @@ class Purcahsesuggestion(models.Model):
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     product_min_qty = fields.Float('Min. Qty', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
-    curr_ins  = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
-    curr_outs = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
+    curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
+    curr_ins = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
     average_use = fields.Float(String="Avg Use", readonly=True, help="Average usage of the past 3 months.")
     month1_use = fields.Float(String="2020-06 Usage", readonly=True, help="Total usage of last month.")
     month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
     month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
     suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
+    qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
     level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
+    route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
+    route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
     state = fields.Selection([
-        ('Buy', 'Suggested to Buy'),
-        ('Ok', 'Acceptable level'),
+        ('buy', 'To Buy'),
+        ('ok' , 'No Action'),
+        ('po' , 'Confirm PO'),
+        ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
 
     def init(self):
-        print('Creating My view')
         tools.drop_view_if_exists(self._cr, 'report_purchase_suggestion')
+
         query = """
         CREATE or REPLACE VIEW report_purchase_suggestion AS (
         SELECT
@@ -39,19 +44,22 @@ class Purcahsesuggestion(models.Model):
             pt.default_code,
             pp.id as product_id,
             pp.product_tmpl_id as product_tmpl_id,
-            'Buy' AS state,
+            pp.flsp_suggested_state as state,
             max(qty_in) as curr_ins,
             max(qty_out) as curr_outs,
             max(lm.avg_use) as month1_use,
             max(ma2.avg_use) as month2_use,
             max(ma3.avg_use) as month3_use,
             0 as average_use,
-            0 as suggested_qty,
+            max(rfq.qty_rfq) as qty_rfq,
+            pp.flsp_route_buy as route_buy,
+            pp.flsp_route_mfg as route_mfg,
+            pp.flsp_suggested_qty as suggested_qty,
             pt.name AS description,
             max(sq.quantity) AS product_qty,
             min(swo.product_min_qty) as product_min_qty
         FROM product_product pp
-        left join product_template pt
+        inner join product_template pt
         on        pp.product_tmpl_id = pt.id
         left join stock_warehouse_orderpoint swo
         on        swo.product_id = pp.id
@@ -128,7 +136,14 @@ class Purcahsesuggestion(models.Model):
                     order by product_id, month
         ) ma3 --3 months ago
         on     ma3.product_id = pp.id
-        group by  pp.id, pt.name, pt.default_code
+        left join ( select   product_id, sum(product_qty) qty_rfq  from purchase_order, purchase_order_line
+                    where    purchase_order_line.order_id = purchase_order.id
+                    and      purchase_order.state = 'draft'
+                    group by product_id) as rfq
+        on     rfq.product_id = pp.id
+        where pt.type = 'product'
+        group by  pp.id, pt.name, pt.default_code, pp.flsp_route_buy, pp.flsp_route_mfg
         );
         """
+
         self.env.cr.execute(query)

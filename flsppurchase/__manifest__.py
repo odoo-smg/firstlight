@@ -34,6 +34,5 @@
         'views/flsp_product_view.xml',
         'views/flsp_purchase_order_line_view.xml',
         'report/flsp_purchase_suggestion.xml',
-        'data/flsp_calc_bom_level_cron.xml',
     ],
 }
