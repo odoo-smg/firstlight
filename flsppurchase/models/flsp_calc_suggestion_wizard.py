@@ -23,3 +23,5 @@ class Suggestionwizard(models.TransientModel):
     def flsp_recalc(self):
         product = self.env['product.product'].search([], limit=1)
         product._flsp_calc_suggested_qty()
+        action = self.env.ref('flsppurchase.purchase_suggestion_action').read()[0]
+        return action

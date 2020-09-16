@@ -20,6 +20,20 @@ class flsppurchaseproductprd(models.Model):
     flsp_route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
     flsp_route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
 
+    flsp_curr_ins = fields.Float(string="In Coming Qty", readonly=True)
+    flsp_curr_outs = fields.Float(string="Out Going Qty", readonly=True)
+    flsp_month1_use = fields.Float(string="Las month usage", readonly=True)
+    flsp_month2_use = fields.Float(string="Two months ago usage", readonly=True)
+    flsp_month3_use = fields.Float(string="Three months ago usage", readonly=True)
+    flsp_qty_rfq = fields.Float(string="Total RFQs", readonly=True)
+    flsp_min_qty = fields.Float(string="Min Qty", readonly=True)
+    flsp_max_qty = fields.Float(string="Max Qty", readonly=True)
+    flsp_qty     = fields.Float(string="On Hand", readonly=True)
+    flsp_desc = fields.Char(string='Description', readonly=True)
+    flsp_default_code = fields.Char(string='Part #', readonly=True)
+    flsp_type = fields.Char(string='Type', readonly=True)
+
+
     def _flsp_call_report_wizard(self):
         action = self.env.ref('flsppurchase.launch_flsp_suggestion_wizard').read()[0]
         return action
@@ -33,13 +47,26 @@ class flsppurchaseproductprd(models.Model):
         route_mto = self.env.ref('stock.route_warehouse0_mto').id
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
 
-        replenish_suggestion = self.env['report.purchase.suggestion'].search([], order="level_bom")
+        replenish_suggestion = self.env['report.flsppurchase.auxview'].search([], order="level_bom")
 
         #print(' starting the calculation of suggestions| Route mfg = '+str(route_mfg)+' Route buy='+str(route_buy))
 
         for suggestion in replenish_suggestion:
+            suggestion.product_id.flsp_curr_ins = suggestion.curr_ins
+            suggestion.product_id.flsp_curr_outs = suggestion.curr_outs
+            suggestion.product_id.flsp_month1_use = suggestion.month1_use
+            suggestion.product_id.flsp_month2_use = suggestion.month2_use
+            suggestion.product_id.flsp_month3_use = suggestion.month3_use
+            suggestion.product_id.flsp_qty_rfq = suggestion.qty_rfq
+            suggestion.product_id.flsp_min_qty = suggestion.product_min_qty
+            #suggestion.product_id.flsp_max_qty = suggestion.max_qty
+            suggestion.product_id.flsp_desc = suggestion.description
+            suggestion.product_id.flsp_default_code = suggestion.default_code
+            suggestion.product_id.flsp_qty = suggestion.product_qty
+            suggestion.product_id.flsp_type = suggestion.type
             suggestion.product_id.flsp_suggested_state = 'ok'
             suggestion.product_id.flsp_suggested_qty = 0
+
             ## ignore non storable products
             if suggestion.level_bom <= 0:
                 continue
@@ -74,8 +101,6 @@ class flsppurchaseproductprd(models.Model):
                                 suggestion.product_id.flsp_suggested_state = 'buy'
             #print('level bom: '+str(suggestion.level_bom))
 
-        action = self.env.ref('flsppurchase.purchase_suggestion_action').read()[0]
-        return action
 
     def _flsp_calc_bom_level(self):
         current_level = 1

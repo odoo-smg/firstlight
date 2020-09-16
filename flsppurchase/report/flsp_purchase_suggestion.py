@@ -41,109 +41,26 @@ class Purcahsesuggestion(models.Model):
         SELECT
             pp.id,
             pp.flsp_bom_level as level_bom,
-            pt.default_code,
+            pp.flsp_default_code as default_code,
             pp.id as product_id,
             pp.product_tmpl_id as product_tmpl_id,
             pp.flsp_suggested_state as state,
-            max(qty_in) as curr_ins,
-            max(qty_out) as curr_outs,
-            max(lm.avg_use) as month1_use,
-            max(ma2.avg_use) as month2_use,
-            max(ma3.avg_use) as month3_use,
+            pp.flsp_curr_ins as curr_ins,
+            pp.flsp_curr_outs as curr_outs,
+            pp.flsp_month1_use as month1_use,
+            pp.flsp_month2_use as month2_use,
+            pp.flsp_month3_use as month3_use,
             0 as average_use,
-            max(rfq.qty_rfq) as qty_rfq,
+            pp.flsp_qty_rfq as qty_rfq,
             pp.flsp_route_buy as route_buy,
             pp.flsp_route_mfg as route_mfg,
             pp.flsp_suggested_qty as suggested_qty,
-            pt.name AS description,
-            max(sq.quantity) AS product_qty,
-            min(swo.product_min_qty) as product_min_qty
+            pp.flsp_desc AS description,
+            pp.flsp_qty AS product_qty,
+            pp.flsp_min_qty as product_min_qty
         FROM product_product pp
-        inner join product_template pt
-        on        pp.product_tmpl_id = pt.id
-        left join stock_warehouse_orderpoint swo
-        on        swo.product_id = pp.id
-        left join (select    sum(sq.quantity) as quantity, product_id
-                   from      stock_quant sq
-                   left join stock_location location_id
-                   on        sq.location_id = location_id.id
-                   where     location_id.usage = 'internal'
-                   group by product_id) sq
-         on    sq.product_id = pp.id
-        left join (
-                    select product_id, sum(qty_in) as qty_in, sum(qty_out) as qty_out from (
-                    -- purchase order confirmed
-                    select product_id, sum(product_qty) as qty_in, 0  as qty_out from stock_move_line
-                    where (location_id not in (select id
-                                               from stock_location
-                                               where usage = 'production')
-                                               and location_dest_id not in (select id from stock_location where usage = 'production') )
-                    and    location_dest_id in (select id from stock_location where usage = 'internal')
-                    and    done_move = false
-                    group by product_id
-                    union all
-                    -- sale order confirmed
-                    select product_id, 0 as qty_in, sum(product_qty) as qty_out from stock_move_line
-                    where (location_id not in (select id
-                                               from stock_location
-                                               where usage = 'production')
-                                               and location_dest_id not in (select id from stock_location where usage = 'production') )
-                    and   location_id in (select id from stock_location where usage = 'internal')
-                    and    done_move = false
-                    group by product_id
-                    union all
-                    -- production
-                    select product_id, sum(product_qty) as qty_in, 0  as qty_out
-                    from   mrp_production
-                    where  state not in ('cancel', 'done')
-                    group by product_id
-                    union all
-                    -- components for production
-                    select product_id, 0 as qty_in, sum(product_qty)  as qty_out
-                    from   stock_move
-                    where  raw_material_production_id in (select id from mrp_production where state not in ('cancel', 'done'))
-                    group by product_id
-                    ) A group by product_id
-        ) sm -- stock movement
-        on     sm.product_id = pp.id
-        left join (
-                    select product_id, sum(qty_done) as avg_use, to_char(date, 'YYYYMM') as month
-                    from stock_move_line
-                    where done_move = true
-                    and location_id in (select id from stock_location where usage = 'internal')
-                    and to_char(date, 'YYYYMM') = to_char((to_date(to_char(current_date, 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')
-                    group by product_id, month
-                    order by product_id, month
-        ) lm --last month
-        on     lm.product_id = pp.id
-        left join (
-                    select product_id, sum(qty_done) as avg_use, to_char(date, 'YYYYMM') as month
-                    from stock_move_line
-                    where done_move = true
-                    and location_id in (select id from stock_location where usage = 'internal')
-                    and to_char(date, 'YYYYMM') = to_char((to_date(to_char((to_date(to_char(current_date, 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')
-                    group by product_id, month
-                    order by product_id, month
-        ) ma2 --2 months ago
-        on     ma2.product_id = pp.id
-        left join (
-                    select product_id, sum(qty_done) as avg_use, to_char(date, 'YYYYMM') as month
-                    from stock_move_line
-                    where done_move = true
-                    and location_id in (select id from stock_location where usage = 'internal')
-                    and to_char(date, 'YYYYMM') = to_char((to_date(to_char((to_date(to_char((to_date(to_char(current_date, 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')
-                    group by product_id, month
-                    order by product_id, month
-        ) ma3 --3 months ago
-        on     ma3.product_id = pp.id
-        left join ( select   product_id, sum(product_qty) qty_rfq  from purchase_order, purchase_order_line
-                    where    purchase_order_line.order_id = purchase_order.id
-                    and      purchase_order.state = 'draft'
-                    group by product_id) as rfq
-        on     rfq.product_id = pp.id
-        where pt.type = 'product'
-        group by  pp.id, pt.name, pt.default_code, pp.flsp_route_buy, pp.flsp_route_mfg
+        where flsp_type = 'product'
+        group by  pp.id, flsp_desc, default_code, flsp_route_buy, flsp_route_mfg
         );
         """
-
         self.env.cr.execute(query)
