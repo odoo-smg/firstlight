@@ -33,7 +33,7 @@
 
 
     <record id="view_po_suggestion_tree" model="ir.ui.view">
-        <field name="name">Purchase Suggestion</field>
+        <field name="name">Replenishment Suggestion</field>
         <field name="model">report.purchase.suggestion</field>
         <field name="arch" type="xml">
             <tree string="Suggestion View" decoration-warning="state in ('po')" decoration-danger="state in ('buy', 'mfg')" decoration-muted="state in ('ok')" create="0" delete="0" editable="bottom" >
@@ -105,7 +105,7 @@
         <field name="name">Update Suggestion</field>
         <field name="model_id" ref="model_product_product" />
         <field name="state">code</field>
-        <field name="code">action = model._flsp_calc_suggested_qty()</field>
+        <field name="code">action = model._flsp_call_report_wizard()</field>
     </record>
 
     <menuitem id="flsp_purchase_suggestion_report"

@@ -20,8 +20,12 @@ class flsppurchaseproductprd(models.Model):
     flsp_route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
     flsp_route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
 
+    def _flsp_call_report_wizard(self):
+        action = self.env.ref('flsppurchase.launch_flsp_suggestion_wizard').read()[0]
+        return action
 
     def _flsp_calc_suggested_qty(self):
+
         ## First update the bom levels:
         self._flsp_calc_bom_level()
 
@@ -69,8 +73,6 @@ class flsppurchaseproductprd(models.Model):
                             elif route_buy in suggestion.product_id.route_ids.ids:
                                 suggestion.product_id.flsp_suggested_state = 'buy'
             #print('level bom: '+str(suggestion.level_bom))
-
-
 
         action = self.env.ref('flsppurchase.purchase_suggestion_action').read()[0]
         return action

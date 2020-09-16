@@ -33,6 +33,7 @@
         'views/flsp_purchase_view.xml',
         'views/flsp_product_view.xml',
         'views/flsp_purchase_order_line_view.xml',
+        'views/flsp_suggestion_wizard.xml',
         'report/flsp_purchase_suggestion.xml',
     ],
 }

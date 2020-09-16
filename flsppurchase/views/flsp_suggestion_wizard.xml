@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_suggestion_wizard_form_view" model="ir.ui.view">
+            <field name="name">Recompute Suggestion</field>
+            <field name="model">flsppurchase.suggestionwizard</field>
+            <field name="arch" type="xml">
+                <form string="Recompute Suggestion">
+                    <h4>Would you like to recalculate the suggestions?</h4>
+                    <p>This routine could take several minutes to run.</p>
+                    <footer>
+                        <button name="flsp_recalc" type="object" string="Yes" class="btn-primary" />
+                        <button name="flsp_report" type="object" string="No" class="btn-default btn-secondary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_suggestion_wizard" model="ir.actions.act_window">
+            <field name="name">FLSP - Recompute Suggestions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsppurchase.suggestionwizard</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>
