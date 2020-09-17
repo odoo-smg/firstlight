@@ -12,8 +12,6 @@
                             status="close" groups="flspticketsystem.group_flspticketsystem_manager"/>
 <!--                    <button name="button_reopen" string="Reopen" class="btn-primary" type="object"-->
 <!--                            groups="flspticketsystem.group_flspticketsystem_manager"/>-->
-
-<!--                    <button name="send_mail_template" string="Send e-mail" type="object" class="oe_highlight"/>-->
                     <field name="status"  widget="statusbar" statusbar_visible="open,inprogress,close"/>
                 </header>
                 <sheet>
@@ -22,14 +20,16 @@
                         <field name="requestor"/>
                         <field name="priority"/>
                         <field name="category_id" options="{'no_open':True,'no_create': True}"/>
+
                         <field name="short_description"/>
                         <field name="detailed_description"/>
                     </group>
                     <group string="To be filled by ERP Developer">
                         <field name="responsible"/>
                         <field name="complete_date"/>
+                        <field name="type"/>
                         <field name="analysis_solution"/>
-                        <field name="email_user_on_ticket_creation" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                        <field name="send_user_email" groups="flspticketsystem.group_flspticketsystem_manager"/>
                     </group>
                 </sheet>
             </form>
@@ -43,6 +43,10 @@
         <field name="inherit_id" ref="flspticketsystem.ticket_form_view" /> <!--Model with the view id-->
         <field name="groups_id"  eval="[(6, 0, [ref('flspticketsystem.group_flspticketsystem_user')])]" />
         <field name="arch" type="xml">
+            <!-- RESTRICT USER FROM EDITING REQUESTOR          -->
+            <xpath expr="//field[@name='requestor']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
             <xpath expr="//field[@name='responsible']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
@@ -50,7 +54,9 @@
             <xpath expr="//field[@name='complete_date']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
-
+            <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
             <xpath expr="//field[@name='analysis_solution']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
@@ -98,6 +104,7 @@
                 <field name="requestor"/>
                 <field name="priority"/><!--widget="color"-->
                 <field name="category_id"/>
+                <field name="type" optional="hide"/>
                 <field name="short_description"/>
                 <field name="responsible" optional="show"/>
                 <field name="status"/> <!--widget="statusbar" statusbar_visible="O,C"/>-->
@@ -143,9 +150,11 @@
                                 Priority name:
                                 <field name="priority"/>
                                 <br/>
-
                                 Category ID:
                                 <field name="category_id"/>
+                                <br/>
+                                Type ID:
+                                <field name="type"/>
                                 <br/>
                                 Responsible:
                                 <field name="responsible"/>
@@ -165,13 +174,21 @@
     </record>
 
      <!--MENU ITEM-->
-    <menuitem name="Ticket" id="main_ticket_menu" /> <!--Top level menu-->
+    <menuitem name="Cortex" id="main_ticket_menu"
+         web_icon="flspticketsystem,static/description/icon.png"/> <!--Top level menu-->
+<!--POTENTIAL NAMES:Zeus, The Hive, Athena, Brainy, Whiz, Cortex (prefrontal cortex manages complex problems) ,
+Socrates, Help Desk, Sherlock, Megamind, Pantomath(person who knows everything)-->
 
     <menuitem name="Tickets" id="ticket_menu"
               parent="main_ticket_menu"
               action="ticket_list_action" />
 
 </odoo>
+<!--ICON SYNTAX    -->
+<!-- <menuitem name="My Custom App"-->
+<!--              id="menu_custom_main"-->
+<!--              sequence="4"-->
+<!--              web_icon="your_module_name,static/src/img/icon.jpg"/>-->
 
     <!--NOT NEEDED YET, IF EVER NEEDED ADD CALANDER IN ACTION: TICKET CALENDAR VIEW-->
 <!--    <record model="ir.ui.view" id="ticket_calendar_view">-->

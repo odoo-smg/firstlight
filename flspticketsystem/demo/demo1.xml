@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--DEMO DATA LOADED IN TYPE MODEL: used to classify solutions-->
+    <data>
+        <record model="flspticketsystem.type" id="Configuration">
+            <field name="name">Configuration</field>
+            <field name="description">Arrangement of elements in a particular form, figure, or combination.</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Customization">
+            <field name="name">Customization</field>
+            <field name="description">Modifying something to suit a particular individual or task.</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Data Entry">
+            <field name="name">Data Entry</field>
+            <field name="description">Data entry related solutions</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Documentation">
+            <field name="name">Documentation</field>
+            <field name="description">Material that provides official information or evidence or that serves as a record.</field>
+        </record>
+
+       <record model="flspticketsystem.type" id="Error">
+            <field name="name">Error</field>
+            <field name="description">Error related solutions</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Implementation">
+            <field name="name">Implementation</field>
+            <field name="description">The process of putting a decision or plan into effect; execution.</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Improvement">
+            <field name="name">Improvement</field>
+            <field name="description">Improvements related solutions</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Inconsistency">
+            <field name="name">Inconsistency</field>
+            <field name="description">Inconsistency related solutions</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Report">
+            <field name="name">Report</field>
+            <field name="description">Report related solutions</field>
+       </record>
+
+        <record model="flspticketsystem.type" id="Support">
+            <field name="name">Support</field>
+            <field name="description">Support related solutions</field>
+       </record>
+
+        <record model="flspticketsystem.type" id="Training">
+            <field name="name">Training</field>
+            <field name="description">Training related solutions</field>
+        </record>
+
+        <record model="flspticketsystem.type" id="Validation">
+            <field name="name">Validation</field>
+            <field name="description">Validation related solutions</field>
+        </record>
+    </data>
+</odoo>

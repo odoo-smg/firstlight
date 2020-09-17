@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Type form view-->
+    <record model="ir.ui.view" id="type_form_view">
+        <field name="name">type.form</field>
+        <field name="model">flspticketsystem.type</field>
+        <field name="arch" type="xml">
+            <form string="Type Form">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="type_tree_view">
+        <field name="name">type.tree</field>
+        <field name="model">flspticketsystem.type</field>
+        <field name="arch" type="xml">
+            <tree string="Type Tree">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Type Action Menu-->
+    <record model="ir.actions.act_window" id="type_list_action">
+        <field name="name">Type</field>
+        <field name="res_model">flspticketsystem.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first Type
+            </p>
+        </field>
+    </record>
+
+    <!--Type Menu item-->
+    <menuitem id="type_menu" name="Request Type"
+              parent="main_ticket_menu"
+              action="type_list_action"
+              groups="flspticketsystem.group_flspticketsystem_manager"/>
+</odoo>
