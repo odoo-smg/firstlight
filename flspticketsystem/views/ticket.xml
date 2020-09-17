@@ -174,7 +174,7 @@
     </record>
 
      <!--MENU ITEM-->
-    <menuitem name="Cortex" id="main_ticket_menu"
+    <menuitem name="Help Desk" id="main_ticket_menu"
          web_icon="flspticketsystem,static/description/icon.png"/> <!--Top level menu-->
 <!--POTENTIAL NAMES:Zeus, The Hive, Athena, Brainy, Whiz, Cortex (prefrontal cortex manages complex problems) ,
 Socrates, Help Desk, Sherlock, Megamind, Pantomath(person who knows everything)-->
