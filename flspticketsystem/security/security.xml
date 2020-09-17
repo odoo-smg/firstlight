@@ -2,7 +2,7 @@
 <odoo>
     <!--Show groups-->
     <record model="ir.module.category" id="ticket_this">
-        <field name="name">Ticket Manager</field>
+        <field name="name">Help desk Manager</field>
         <field name="description">Choose access groups</field>
         <field name="sequence">4</field>
     </record>

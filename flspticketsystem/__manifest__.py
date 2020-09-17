@@ -8,13 +8,13 @@
             
     """,
     'author': "Sami Byaruhanga",
-    'website': "http://",
+    # 'website': "http://",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Sept_4th',
-    'version': '1.1',
+    'category': 'September 17th',
+    'version': '1.2',
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
@@ -26,7 +26,9 @@
         'security/ir.model.access.csv',
         'views/ticket.xml',
         'views/category.xml',
+        'views/type.xml',
         'demo/demo.xml',
+        'demo/demo1.xml',
         # 'views/mail_template.xml',
 
     ],
