@@ -74,7 +74,7 @@ class flsppurchaseproductprd(models.Model):
             ## minimal quantity
             total_forcasted = suggestion.product_qty+suggestion.curr_ins-suggestion.curr_outs
             if total_forcasted < suggestion.product_min_qty or total_forcasted < 0:
-                if suggestion.qty_rfq > 0 and suggestion.qty_rfq > suggestion.product_min_qty - total_forcasted:
+                if suggestion.qty_rfq > 0 and suggestion.qty_rfq >= suggestion.product_min_qty - total_forcasted:
                     suggestion.product_id.flsp_suggested_state = 'po'
                 else:
                     suggestion.product_id.flsp_suggested_qty = suggestion.product_min_qty - total_forcasted
@@ -91,7 +91,7 @@ class flsppurchaseproductprd(models.Model):
                     needed_qty = bom.product_qty*parent_product.flsp_suggested_qty
                     total_forcasted = suggestion.product_qty+suggestion.curr_ins-suggestion.curr_outs-needed_qty
                     if total_forcasted < suggestion.product_min_qty or total_forcasted < 0:
-                        if suggestion.qty_rfq > 0  and suggestion.qty_rfq > suggestion.product_min_qty - total_forcasted:
+                        if suggestion.qty_rfq > 0  and suggestion.qty_rfq >= suggestion.product_min_qty - total_forcasted:
                             suggestion.product_id.flsp_suggested_state = 'po'
                         else:
                             suggestion.product_id.flsp_suggested_qty = suggestion.product_min_qty - total_forcasted
