@@ -2,8 +2,9 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 ticket_manager,ticket manager,model_flspticketsystem_ticket,group_flspticketsystem_manager,1,1,1,1
 category_manager,category manager,model_flspticketsystem_category,group_flspticketsystem_manager,1,1,1,1
+type_manager,type manager,model_flspticketsystem_type,group_flspticketsystem_manager,1,1,1,1
 
 
 ticket_user,ticket user,model_flspticketsystem_ticket,group_flspticketsystem_user,1,1,1,1
-
 category_user,category user,model_flspticketsystem_category,group_flspticketsystem_user,1,1,1,1
+type_user,type user,model_flspticketsystem_type,group_flspticketsystem_user,1,1,1,1

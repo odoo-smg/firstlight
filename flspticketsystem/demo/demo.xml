@@ -2,9 +2,39 @@
 <odoo>
     <!--DEMO DATA LOADED IN CATEGORY MODEL-->
     <data>
+        <record model="flspticketsystem.category" id="Accounting">
+            <field name="name">Accounting</field>
+            <field name="description">Accounting related issues</field>
+        </record>
+
         <record model="flspticketsystem.category" id="Admin">
             <field name="name">Administration</field>
             <field name="description">Administration related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="HR">
+            <field name="name">Human Resource</field>
+            <field name="description">HR related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="Inventory">
+            <field name="name">Inventory</field>
+            <field name="description">Inventory related issues</field>
+        </record>
+
+       <record model="flspticketsystem.category" id="IT">
+            <field name="name">IT Support</field>
+            <field name="description">IT Support related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="Manufacturing">
+            <field name="name">Manufacturing</field>
+            <field name="description">Manufacturing related issues</field>
+        </record>
+
+        <record model="flspticketsystem.category" id="PLM">
+            <field name="name">PLM</field>
+            <field name="description">Product Lifecycle management related issues</field>
         </record>
 
         <record model="flspticketsystem.category" id="Purchase">
@@ -17,19 +47,14 @@
             <field name="description">Sales related issues</field>
        </record>
 
-        <record model="flspticketsystem.category" id="Manufacturing">
-            <field name="name">Manufacturing</field>
-            <field name="description">Manufacturing related issues</field>
-        </record>
-
-        <record model="flspticketsystem.category" id="Inventory">
-            <field name="name">Inventory</field>
-            <field name="description">Inventory related issues</field>
-        </record>
+        <record model="flspticketsystem.category" id="Sage">
+            <field name="name">Sage</field>
+            <field name="description">Sage related issues</field>
+       </record>
 
         <record model="flspticketsystem.category" id="Others">
             <field name="name">Others</field>
-            <field name="description">Other related issues</field>
+            <field name="description">Your Category not specified</field>
         </record>
     </data>
 </odoo>
