@@ -76,7 +76,7 @@
 
 
     <record id="purchase_suggestion_action" model="ir.actions.act_window">
-        <field name="name">Purchase Suggestion</field>
+        <field name="name">Replenishment Suggestion</field>
         <field name="res_model">report.purchase.suggestion</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="view_po_suggestion_tree"/>
