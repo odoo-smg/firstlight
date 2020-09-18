@@ -15,6 +15,7 @@ class flsppurchaseproductprd(models.Model):
         ('buy', 'To Buy'),
         ('ok' , 'No Action'),
         ('po' , 'Confirm PO'),
+        ('mo' , 'Confirm MO'),
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
     flsp_route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
@@ -26,6 +27,7 @@ class flsppurchaseproductprd(models.Model):
     flsp_month2_use = fields.Float(string="Two months ago usage", readonly=True)
     flsp_month3_use = fields.Float(string="Three months ago usage", readonly=True)
     flsp_qty_rfq = fields.Float(string="Total RFQs", readonly=True)
+    flsp_qty_mo = fields.Float(string="Qty MO Draft", readonly=True)
     flsp_min_qty = fields.Float(string="Min Qty", readonly=True)
     flsp_max_qty = fields.Float(string="Max Qty", readonly=True)
     flsp_qty     = fields.Float(string="On Hand", readonly=True)
@@ -58,6 +60,7 @@ class flsppurchaseproductprd(models.Model):
             suggestion.product_id.flsp_month2_use = suggestion.month2_use
             suggestion.product_id.flsp_month3_use = suggestion.month3_use
             suggestion.product_id.flsp_qty_rfq = suggestion.qty_rfq
+            suggestion.product_id.flsp_qty_mo = suggestion.qty_mo
             suggestion.product_id.flsp_min_qty = suggestion.product_min_qty
             #suggestion.product_id.flsp_max_qty = suggestion.max_qty
             suggestion.product_id.flsp_desc = suggestion.description
@@ -76,6 +79,8 @@ class flsppurchaseproductprd(models.Model):
             if total_forcasted < suggestion.product_min_qty or total_forcasted < 0:
                 if suggestion.qty_rfq > 0 and suggestion.qty_rfq >= suggestion.product_min_qty - total_forcasted:
                     suggestion.product_id.flsp_suggested_state = 'po'
+                elif suggestion.qty_mo > 0 and suggestion.qty_mo >= suggestion.product_min_qty - total_forcasted:
+                    suggestion.product_id.flsp_suggested_state = 'mo'
                 else:
                     suggestion.product_id.flsp_suggested_qty = suggestion.product_min_qty - total_forcasted
                     if route_mfg in suggestion.product_id.route_ids.ids:
@@ -91,8 +96,10 @@ class flsppurchaseproductprd(models.Model):
                     needed_qty = bom.product_qty*parent_product.flsp_suggested_qty
                     total_forcasted = suggestion.product_qty+suggestion.curr_ins-suggestion.curr_outs-needed_qty
                     if total_forcasted < suggestion.product_min_qty or total_forcasted < 0:
-                        if suggestion.qty_rfq > 0  and suggestion.qty_rfq >= suggestion.product_min_qty - total_forcasted:
+                        if suggestion.qty_rfq > 0 and suggestion.qty_rfq >= suggestion.product_min_qty - total_forcasted:
                             suggestion.product_id.flsp_suggested_state = 'po'
+                        elif suggestion.qty_mo > 0 and suggestion.qty_mo >= suggestion.product_min_qty - total_forcasted:
+                            suggestion.product_id.flsp_suggested_state = 'mo'
                         else:
                             suggestion.product_id.flsp_suggested_qty = suggestion.product_min_qty - total_forcasted
                             if route_mfg in suggestion.product_id.route_ids.ids:

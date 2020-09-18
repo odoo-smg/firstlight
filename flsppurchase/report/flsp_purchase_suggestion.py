@@ -23,6 +23,7 @@ class Purcahsesuggestion(models.Model):
     month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
     suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
     qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
+    qty_mo = fields.Float(string="Qty MO Draft", readonly=True)
     level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
     route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
@@ -30,6 +31,7 @@ class Purcahsesuggestion(models.Model):
         ('buy', 'To Buy'),
         ('ok' , 'No Action'),
         ('po' , 'Confirm PO'),
+        ('mo' , 'Confirm MO'),
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
 
@@ -52,6 +54,7 @@ class Purcahsesuggestion(models.Model):
             pp.flsp_month3_use as month3_use,
             0 as average_use,
             pp.flsp_qty_rfq as qty_rfq,
+            pp.flsp_qty_mo as qty_mo,
             pp.flsp_route_buy as route_buy,
             pp.flsp_route_mfg as route_mfg,
             pp.flsp_suggested_qty as suggested_qty,
