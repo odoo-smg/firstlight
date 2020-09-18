@@ -50,6 +50,7 @@
                 <field name="level_bom" optional="hide"/>
                 <field name="qty_rfq" optional="hide"/>
                 <field name="qty_mo" optional="hide"/>
+                <field name="qty_multiple" optional="hide"/>
                 <field name="state"/>
                 <field name="suggested_qty"/>
             </tree>
