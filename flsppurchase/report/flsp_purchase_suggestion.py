@@ -14,6 +14,7 @@ class Purcahsesuggestion(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     product_min_qty = fields.Float('Min. Qty', readonly=True)
+    qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
     curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
     curr_ins = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
@@ -23,6 +24,7 @@ class Purcahsesuggestion(models.Model):
     month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
     suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
     qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
+    qty_mo = fields.Float(string="Qty MO Draft", readonly=True)
     level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
     route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
@@ -30,6 +32,7 @@ class Purcahsesuggestion(models.Model):
         ('buy', 'To Buy'),
         ('ok' , 'No Action'),
         ('po' , 'Confirm PO'),
+        ('mo' , 'Confirm MO'),
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
 
@@ -52,12 +55,14 @@ class Purcahsesuggestion(models.Model):
             pp.flsp_month3_use as month3_use,
             0 as average_use,
             pp.flsp_qty_rfq as qty_rfq,
+            pp.flsp_qty_mo as qty_mo,
             pp.flsp_route_buy as route_buy,
             pp.flsp_route_mfg as route_mfg,
             pp.flsp_suggested_qty as suggested_qty,
             pp.flsp_desc AS description,
             pp.flsp_qty AS product_qty,
-            pp.flsp_min_qty as product_min_qty
+            pp.flsp_min_qty as product_min_qty,
+            pp.flsp_mult_qty as qty_multiple
         FROM product_product pp
         where flsp_type = 'product'
         group by  pp.id, flsp_desc, default_code, flsp_route_buy, flsp_route_mfg

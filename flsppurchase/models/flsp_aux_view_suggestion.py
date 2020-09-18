@@ -14,7 +14,9 @@ class Purcahsesupport(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     product_min_qty = fields.Float('Min. Qty', readonly=True)
+    qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
+    qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
     curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
     curr_ins = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
     average_use = fields.Float(String="Avg Use", readonly=True, help="Average usage of the past 3 months.")
@@ -30,6 +32,7 @@ class Purcahsesupport(models.Model):
         ('buy', 'To Buy'),
         ('ok' , 'No Action'),
         ('po' , 'Confirm PO'),
+        ('mo' , 'Confirm MO'),
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
     type = fields.Char(string='Type', readonly=True)
@@ -49,6 +52,7 @@ class Purcahsesupport(models.Model):
             pp.flsp_suggested_state as state,
             max(qty_in) as curr_ins,
             max(qty_out) as curr_outs,
+            max(qty_mo) as qty_mo,
             max(lm.avg_use) as month1_use,
             max(ma2.avg_use) as month2_use,
             max(ma3.avg_use) as month3_use,
@@ -59,7 +63,8 @@ class Purcahsesupport(models.Model):
             pp.flsp_suggested_qty as suggested_qty,
             pt.name AS description,
             max(sq.quantity) AS product_qty,
-            min(swo.product_min_qty) as product_min_qty
+            min(swo.product_min_qty) as product_min_qty,
+            min(swo.qty_multiple) as qty_multiple
         FROM product_product pp
         inner join product_template pt
         on        pp.product_tmpl_id = pt.id
@@ -73,9 +78,9 @@ class Purcahsesupport(models.Model):
                    group by product_id) sq
          on    sq.product_id = pp.id
         left join (
-                    select product_id, sum(qty_in) as qty_in, sum(qty_out) as qty_out from (
+                    select product_id, sum(qty_in) as qty_in, sum(qty_out) as qty_out, sum(qty_mo) as qty_mo from (
                     -- purchase order confirmed
-                    select product_id, sum(product_qty) as qty_in, 0  as qty_out from stock_move_line
+                    select product_id, sum(product_qty) as qty_in, 0  as qty_out, 0 as qty_mo from stock_move_line
                     where (location_id not in (select id
                                                from stock_location
                                                where usage = 'production')
@@ -84,27 +89,29 @@ class Purcahsesupport(models.Model):
                     and    done_move = false
                     group by product_id
                     union all
-                    -- sale order confirmed
-                    select product_id, 0 as qty_in, sum(product_qty) as qty_out from stock_move_line
-                    where (location_id not in (select id
-                                               from stock_location
-                                               where usage = 'production')
-                                               and location_dest_id not in (select id from stock_location where usage = 'production') )
-                    and   location_id in (select id from stock_location where usage = 'internal')
-                    and    done_move = false
-                    group by product_id
+                    -- sale order confirmed and production
+                    select sm.product_id, 0 as qty_in, sum(sm.product_qty) as qty_out , 0 as qty_mo
+					from      stock_move sm
+                    where sm.location_id in (select id from stock_location where usage = 'internal')
+                    and sm.state not in ('done', 'cancel')
+                    group by sm.product_id
                     union all
                     -- production
-                    select product_id, sum(product_qty) as qty_in, 0  as qty_out
+                    select product_id, sum(product_qty) as qty_in, 0  as qty_out, 0 as qty_mo
                     from   mrp_production
-                    where  state not in ('cancel', 'done')
+                    where  state not in ('cancel', 'done', 'draft')
                     group by product_id
                     union all
-                    -- components for production
-                    select product_id, 0 as qty_in, sum(product_qty)  as qty_out
-                    from   stock_move
-                    where  raw_material_production_id in (select id from mrp_production where state not in ('cancel', 'done'))
+                    select product_id, 0 as qty_in, 0  as qty_out, sum(product_qty) as qty_mo
+                    from   mrp_production
+                    where  state = 'draft'
                     group by product_id
+                    --union all
+                    -- components for production
+                    --select product_id, 0 as qty_in, sum(product_qty)  as qty_out
+                    --from   stock_move
+                    --where  raw_material_production_id in (select id from mrp_production where state not in ('cancel', 'done'))
+                    --group by product_id
                     ) A group by product_id
         ) sm -- stock movement
         on     sm.product_id = pp.id
