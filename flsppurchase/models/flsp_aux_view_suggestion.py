@@ -14,6 +14,7 @@ class Purcahsesupport(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     product_min_qty = fields.Float('Min. Qty', readonly=True)
+    qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
     curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
@@ -62,7 +63,8 @@ class Purcahsesupport(models.Model):
             pp.flsp_suggested_qty as suggested_qty,
             pt.name AS description,
             max(sq.quantity) AS product_qty,
-            min(swo.product_min_qty) as product_min_qty
+            min(swo.product_min_qty) as product_min_qty,
+            min(swo.qty_multiple) as qty_multiple
         FROM product_product pp
         inner join product_template pt
         on        pp.product_tmpl_id = pt.id

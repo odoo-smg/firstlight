@@ -14,6 +14,7 @@ class Purcahsesuggestion(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     product_min_qty = fields.Float('Min. Qty', readonly=True)
+    qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
     curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
     curr_ins = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
@@ -60,7 +61,8 @@ class Purcahsesuggestion(models.Model):
             pp.flsp_suggested_qty as suggested_qty,
             pp.flsp_desc AS description,
             pp.flsp_qty AS product_qty,
-            pp.flsp_min_qty as product_min_qty
+            pp.flsp_min_qty as product_min_qty,
+            pp.flsp_mult_qty as qty_multiple
         FROM product_product pp
         where flsp_type = 'product'
         group by  pp.id, flsp_desc, default_code, flsp_route_buy, flsp_route_mfg
