@@ -76,7 +76,7 @@ class Saleflspwizard(models.TransientModel):
         self.env['mail.mail'].create({
             'body_html': body,
             'subject': 'Odoo - Sales Discount Approved',
-            'email_to': self.order_id.user_id.login,
+            'email_to': 'alexandresousa@smartrendmfg.com; '+self.order_id.user_id.login,
             'auto_delete': True,
         }).send()
 

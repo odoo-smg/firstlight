@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="flsp_confirmed_order_email">
+            <div class="page">
+                <div>
+                    <p><h3>Sales Order Confirmed</h3></p>
+                        <p>Action required: Review and schedule production and procurement</p>
+                        <p>Material planning department must recompute the production/purchase report suggestions to include the new demand</p>
+                        <table class="table table-md" style="padding: 0px 20px 0px 20px;">
+                            <tr>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Salesperson</th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Sales Ref</th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Customer </th>
+                                <th style="border-collapse:collapse; background:#875a7b;border:3px solid #e1e1e1;">Delivery Date</th>
+                            </tr>
+
+                            <t t-foreach="docids" t-as="sale_order">
+                                <tr>
+                                    <t t-if="sale_order.user_id">
+                                        <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sale_order.user_id.name"/></td>
+                                    </t>
+                                    <t t-else="">
+                                        <td style="border-collapse:collapse; border-bottom: 1px solid"></td>
+                                    </t>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sale_order.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sale_order.partner_id.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid; text-align:center"><span t-esc="sale_order.partner_id.name" /></td>
+                                </tr>
+                            </t>
+                        </table>
+						<p style="padding: 0px 0px 0px 20px;">Items</p>
+                        <table class="table table-md" style="padding: 0px 0px 0px 20px;">
+
+                            <tr>
+                                <th style="font-size: 16px; background-color: #2ba4d1; border: 1px solid #2ba4d1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Part Number</th>
+                                <th style="font-size: 16px; background-color: #2ba4d1; border: 1px solid #2ba4d1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Description</th>
+                                <th style="font-size: 16px; background-color: #2ba4d1; border: 1px solid #2ba4d1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Qty</th>
+                                <th style="font-size: 16px; background-color: #2ba4d1; border: 1px solid #2ba4d1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">UofM</th>
+                            </tr>
+
+
+                            <t t-foreach="sale_order_line" t-as="sales_item">
+                                <tr>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sales_item.product_id.default_code"/></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sales_item.product_id.name" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid"><span t-esc="sales_item.product_uom_qty" /></td>
+                                    <td style="border-collapse:collapse; border-bottom: 1px solid; text-align:center"><span t-esc="sales_item.product_uom.name" /></td>
+                                </tr>
+                            </t>
+                        </table>
+                        <br/><br/><br/>
+                        <div style = "text-align: center;" >
+                        <a href = "/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>
+                        <br/><br/><br/>
+                        </div>
+                        <p>Thank you.</p>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>
