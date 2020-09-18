@@ -36,10 +36,10 @@
         <field name="name">Replenishment Suggestion</field>
         <field name="model">report.purchase.suggestion</field>
         <field name="arch" type="xml">
-            <tree string="Suggestion View" decoration-warning="state in ('po')" decoration-danger="state in ('buy', 'mfg')" decoration-muted="state in ('ok')" create="0" delete="0" editable="bottom" >
-                <field name="product_tmpl_id" />
-                <field name="default_code" optional="hide"/>
-                <field name="description"/>
+            <tree string="Suggestion View" decoration-warning="state in ('po', 'mo')" decoration-danger="state in ('buy', 'mfg')" decoration-muted="state in ('ok')" create="0" delete="0" editable="bottom" >
+                <field name="default_code" />
+                <field name="product_tmpl_id" optional="show" />
+                <field name="description" optional="hide"/>
                 <field name="product_qty"/>
                 <field name="curr_ins" string="Coming In" />
                 <field name="curr_outs" string="Going Out" />
@@ -48,6 +48,8 @@
                 <field name="month2_use" string="Consumption 2" optional="show"/>
                 <field name="month1_use" string="Consumption 1" optional="show"/>
                 <field name="level_bom" optional="hide"/>
+                <field name="qty_rfq" optional="hide"/>
+                <field name="qty_mo" optional="hide"/>
                 <field name="state"/>
                 <field name="suggested_qty"/>
             </tree>
@@ -62,6 +64,7 @@
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
                 <separator/>
                 <filter string="To Manufacture" name="filter_to_mfg" domain="[('state','=','mfg')]"/>
+                <filter string="To Confirm MO" name="filter_to_confirm" domain="[('state', '=', 'mo')]"/>
                 <filter string="To Buy" name="filter_to_purchase" domain="[('state', '=', 'buy')]"/>
                 <filter string="To Confirm PO" name="filter_to_confirm" domain="[('state', '=', 'po')]"/>
                 <filter string="Can be purchased" name="can_be_purchased" domain="[('route_buy', '=', 'buy')]"/>
@@ -84,7 +87,7 @@
         <field name="context">{'search_default_can_be_none': 1}</field>
         <field name="domain">[]</field>
         <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">Create a new product</p>
+          <p class="o_view_nocontent_smiling_face">Please calculate the suggestions</p>
         </field>
     </record>
 
