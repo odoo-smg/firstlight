@@ -34,6 +34,7 @@
 
                         <field name="short_description"/>
                         <field name="detailed_description"/>
+                        <field name="attachment_ids"/>
                     </group>
                     <group string="To be filled by ERP Developer">
                         <field name="responsible"/>
