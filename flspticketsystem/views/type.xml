@@ -16,6 +16,7 @@
         </field>
     </record>
 
+     <!--Type tree view-->
     <record model="ir.ui.view" id="type_tree_view">
         <field name="name">type.tree</field>
         <field name="model">flspticketsystem.type</field>
@@ -39,7 +40,7 @@
     </record>
 
     <!--Type Menu item-->
-    <menuitem id="type_menu" name="Request Type"
+    <menuitem id="type_menu" name="Classification"
               parent="main_ticket_menu"
               action="type_list_action"
               groups="flspticketsystem.group_flspticketsystem_manager"/>

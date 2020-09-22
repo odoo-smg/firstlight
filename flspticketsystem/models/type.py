@@ -13,5 +13,5 @@ class Type(models.Model):
     _name = 'flspticketsystem.type'
     _description = "Type"
 
-    name = fields.Char(string="Request type", required=True)
+    name = fields.Char(string="Classification", required=True)
     description = fields.Text()
