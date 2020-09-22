@@ -31,8 +31,10 @@
                         <field name="requestor"/>
                         <field name="priority"/>
                         <field name="category_id" options="{'no_open':True,'no_create': True}"/>
+
                         <field name="short_description"/>
                         <field name="detailed_description"/>
+                        <field name="attachment_ids" widget="many2many_binary"/>
                     </group>
                     <group string="To be filled by ERP Developer">
                         <field name="responsible"/>
@@ -196,8 +198,8 @@
                 <filter name="to_do" string="To do"
                         domain="['|', ('status','=','inprogress'), ('status','=','open')]"/>
 
-                <filter name="my_tickets" string="Responsible tickets"
-                                        domain="[('responsible', '=', uid)]"/>
+                <filter name="my_tickets" string="Tickets responsible for"
+                                        domain="[('responsible', '=', uid),('status','not in', ['close'])]"/>
                 <filter name="preventing_op" string="Preventing Operation"
                         domain="[('priority','=','P')]"/>
 
