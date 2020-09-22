@@ -206,7 +206,7 @@ class SalesOrder(models.Model):
         self.env['mail.mail'].create({
             'body_html': body,
             'subject': 'Odoo - Sales Discount Approval Request',
-            'email_to': 'camquan@smartrendmfg.com;stephanieaddy@smartrendmfg.com; '+self.user_id.login,
+            'email_to': 'camquan@smartrendmfg.com;stephanieaddy@smartrendmfg.com; alexandresousa@smartrendmfg.com; '+self.user_id.login,
             'auto_delete': True,
         }).send()
 
@@ -235,11 +235,33 @@ class SalesOrder(models.Model):
                 if self.flsp_amount_deposit < (amount_categ_total*flsp_percent_sppepp/100):
                     action = self.env.ref('flspsaleapproval.launch_flsp_sppepp_message').read()[0]
                 else:
+                    # sends an email to FLorders@firstlightsafety.com
+                    self.flsp_email_order_confirmed()
                     action = self.action_confirm()
             else:
+                # sends an email to FLorders@firstlightsafety.com
+                self.flsp_email_order_confirmed()
                 action = self.action_confirm()
 
         return action
+
+    def flsp_email_order_confirmed(self):
+        template = self.env.ref('flspsaleapproval.flsp_confirmed_order_email', raise_if_not_found=False)
+
+        if not template:
+            _logger.warning('Template "flspsaleapproval.flsp_confirmed_order_email" was not found. Cannot send the confirmation for Sales Order.')
+            return
+
+        rendered_body = template.render({'docids': self,
+                                         'sale_order_line': self.order_line}, engine='ir.qweb')
+        body = self.env['mail.thread']._replace_local_links(rendered_body)
+
+        self.env['mail.mail'].create({
+            'body_html': body,
+            'subject': 'Odoo - Sales Order Confirmed',
+            'email_to': 'FLorders@firstlightsafety.com; alexandresousa@smartrendmfg.com; '+self.user_id.login,
+            'auto_delete': True,
+        }).send()
 
     def button_flsp_reject(self):
         action = self.env.ref('flspsaleapproval.launch_flsp_reject_wizard').read()[0]
