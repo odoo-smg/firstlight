@@ -16,6 +16,7 @@
         </field>
     </record>
 
+    <!--Category tree view-->
     <record model="ir.ui.view" id="category_tree_view">
         <field name="name">category.tree</field>
         <field name="model">flspticketsystem.category</field>

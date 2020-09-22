@@ -6,10 +6,21 @@
         <field name="name">ticket.form</field>
         <field name="model">flspticketsystem.ticket</field>
         <field name="arch" type="xml">
-            <form string="Ticket Form" > <!--edit="0", delete="false" delete="0">-->
+            <form string="Ticket Form" >
                 <header>
                     <button name="button_close" string="Close" class="btn-primary" type="object"
-                            status="close" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                            status="close" groups="flspticketsystem.group_flspticketsystem_manager"
+                            attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"/>
+
+                    <button name="button_assign" string="Assign responsible" class="btn-primary" type="object"
+                            status="inprogress" groups="flspticketsystem.group_flspticketsystem_manager"
+                            attrs="{'invisible': [('status', 'not in', ['open'])]}"/>
+
+                    <!--Button to update user of the ticket status-->
+<!--                    <button name="button_update" string="Update User" class="btn-primary" type="object"-->
+<!--                            status="inprogress" groups="flspticketsystem.group_flspticketsystem_manager"-->
+<!--                            attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"/>-->
+
 <!--                    <button name="button_reopen" string="Reopen" class="btn-primary" type="object"-->
 <!--                            groups="flspticketsystem.group_flspticketsystem_manager"/>-->
                     <field name="status"  widget="statusbar" statusbar_visible="open,inprogress,close"/>
@@ -26,9 +37,10 @@
                     </group>
                     <group string="To be filled by ERP Developer">
                         <field name="responsible"/>
+                        <field name="analysis"/>
                         <field name="complete_date"/>
                         <field name="type"/>
-                        <field name="analysis_solution"/>
+                        <field name="solution"/>
                         <field name="send_user_email" groups="flspticketsystem.group_flspticketsystem_manager"/>
                     </group>
                 </sheet>
@@ -57,14 +69,17 @@
             <xpath expr="//field[@name='type']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
-            <xpath expr="//field[@name='analysis_solution']" position="attributes">
+            <xpath expr="//field[@name='solution']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='analysis']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
         </field>
     </record>
 
     <!--TICKET FORM VIEW: Restrict user from editing once in progress:??? IS THERE AN EFFICIENT WAY???-->
-   <record  id="No_edit_once_in_progress"  model="ir.ui.view">
+    <record  id="No_edit_once_in_progress"  model="ir.ui.view">
         <field name="name">In progress no edit</field>
         <field name="model">flspticketsystem.ticket</field>
         <field name="inherit_id"  ref="flspticketsystem.ticket_form_view" />
@@ -96,9 +111,11 @@
         <field name="name">ticket.tree</field>
         <field name="model">flspticketsystem.ticket</field>
         <field name="arch" type="xml">
-            <tree string="Ticket Tree"  decoration-muted="status=='close'" multi_edit="1"
-            decoration-danger="priority=='P'" decoration-info="priority=='M'" decoration-success="priority=='N'" >
-            <!--decoration adds colors : CAN REMOVE IT IF WANT TO SEE CLOSED. Other option to not show closed)-->
+            <tree string="Ticket Tree"
+                  decoration-success="status in ('open')"
+                  decoration-danger="priority=='P' and status not in ('close')"
+                  decoration-warning="status in ('inprogress')"
+                  decoration-muted="status in ('close')" multi_edit="1">
                 <field name="id"/>
                 <field name="start_date"/>
                 <field name="requestor"/>
@@ -166,6 +183,34 @@
         </field>
     </record>
 
+    <!--Search view-->
+    <record model="ir.ui.view" id="ticket_search_view">
+        <field name="name">ticket.search</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--Can search by short description and id-->
+                <field name="id"/>
+                <field name="short_description"/>
+
+                <!--Filters-->
+                <filter name="to_do" string="To do"
+                        domain="['|', ('status','=','inprogress'), ('status','=','open')]"/>
+
+                <filter name="my_tickets" string="Responsible tickets"
+                                        domain="[('responsible', '=', uid)]"/>
+                <filter name="preventing_op" string="Preventing Operation"
+                        domain="[('priority','=','P')]"/>
+
+                <group string="Grouped by">
+                    <filter name="by_responsible" string="Responsiblity"
+                        context="{'group_by': 'responsible'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
     <!--ACTION ITEM-->
     <record model="ir.actions.act_window" id="ticket_list_action">
         <field name="name">Tickets</field>
@@ -184,6 +229,9 @@ Socrates, Help Desk, Sherlock, Megamind, Pantomath(person who knows everything)-
               action="ticket_list_action" />
 
 </odoo>
+
+
+
 <!--ICON SYNTAX    -->
 <!-- <menuitem name="My Custom App"-->
 <!--              id="menu_custom_main"-->
