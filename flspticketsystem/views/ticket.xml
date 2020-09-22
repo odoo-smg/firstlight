@@ -31,10 +31,8 @@
                         <field name="requestor"/>
                         <field name="priority"/>
                         <field name="category_id" options="{'no_open':True,'no_create': True}"/>
-
                         <field name="short_description"/>
                         <field name="detailed_description"/>
-                        <field name="attachment_ids"/>
                     </group>
                     <group string="To be filled by ERP Developer">
                         <field name="responsible"/>
