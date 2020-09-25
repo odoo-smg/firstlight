@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--TICKET FORM VIEW-->
+    <record model="ir.ui.view" id="flsp_bpm_emails_log_form">
+        <field name="name">flspautoemails.bpmemailslog.form</field>
+        <field name="model">flspautoemails.bpmemailslog</field>
+        <field name="arch" type="xml">
+            <form string="Templates x Emails" >
+                <sheet>
+                    <group>
+                        <field name="date_sent"/>
+                        <field name="bpmemail_id"/>
+                        <field name="name" string="Template"/>
+                        <field name="subject"/>
+                        <field name="email_to"/>
+                    </group>
+                    <notebook>
+                        <page string="Body">
+                            <field name="body" widget="html" options="{'style-inline': true}"/>
+                        </page>
+                    </notebook>
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--TICKET TREE VIEW-->
+    <record model="ir.ui.view" id="flsp_bmpemailslog_view">
+        <field name="name">flspautoemails.bpmemailslog.tree</field>
+        <field name="model">flspautoemails.bpmemailslog</field>
+        <field name="arch" type="xml">
+            <tree string="Templates x Emails" edit="0" create="0" delete="0">
+                <field name="date_sent"/>
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--ACTION ITEM-->
+    <record model="ir.actions.act_window" id="flspautoemails_bmpemailslog_action">
+        <field name="name">Emails Log</field>
+        <field name="res_model">flspautoemails.bpmemailslog</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+     <!--MENU ITEM-->
+    <menuitem id="bpm_emailslog_menu" name="Email Log"
+              parent="flspautoemails.flsp_settings"
+              action="flspautoemails_bmpemailslog_action"/>
+
+</odoo>

@@ -38,6 +38,7 @@
         'views/flsp_soapprovreq_report.xml',
         'views/flsp_soapprovreq_tmpl.xml',
         'views/flsp_bpm_emails_view.xml',
+        'views/flsp_bpm_emails_log_view.xml',
         'security/ir.model.access.csv',
     ],
 }

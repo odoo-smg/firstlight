@@ -65,7 +65,7 @@
     </record>
 
     <!--ACTION ITEM-->
-    <record model="ir.actions.act_window" id="flspsalesapproval_bmpemails_action">
+    <record model="ir.actions.act_window" id="flspautoemails_bmpemails_action">
         <field name="name">Template x Emails</field>
         <field name="res_model">flspautoemails.bpmemails</field>
         <field name="view_mode">tree,form</field>
@@ -77,7 +77,7 @@
      <!--MENU ITEM-->
     <menuitem id="bpm_emails_menu" name="Templates x Email"
               parent="flspautoemails.flsp_settings"
-              action="flspsalesapproval_bmpemails_action"/>
+              action="flspautoemails_bmpemails_action"/>
 
 
 </odoo>
