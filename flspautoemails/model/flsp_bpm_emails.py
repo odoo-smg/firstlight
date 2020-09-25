@@ -82,7 +82,7 @@ class Flspbpmemails(models.Model):
         context = self._rule_eval(self.dict_preview, self)
         email_to = self.get_emails(self, context)
         subject = self._rule_eval(self.subject, self, context)
-        if subject
+        if subject:
             body = "<p> Subject: " + subject + "</p>"
         else:
             body = "<p> Subject: **** attention, no subject set ****</p>"
