@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--TICKET FORM VIEW-->
+    <record model="ir.ui.view" id="flsp_bpm_emails_form">
+        <field name="name">flspautoemails.bpmemails.form</field>
+        <field name="model">flspautoemails.bpmemails</field>
+        <field name="arch" type="xml">
+            <form string="Templates x Emails" >
+                <header>
+                    <button name="update_preview" string="Update Preview" class="btn-primary" type="object"/>
+                    <button name="send_test" string="Send Test" class="btn-secondary" type="object"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="id" string="Id"/>
+                        <field name="email_active"/>
+                        <field name="description" string="Description"/>
+                        <field name="name" string="Template"/>
+                        <field name="subject"/>
+                    </group>
+                    <notebook>
+                        <page string="Emails">
+                            <group>
+                                <field name="test_email"/>
+                                <field name="current_user"/>
+                                <field name="system_fields" string="Python Code" />
+                                <field name="extra_emails"/>
+                            </group>
+                            <h4>Users to Receive email:</h4>
+                            <field name="user_ids"/>
+                        </page>
+                        <page string="Dictionary">
+                            <group>
+                                <field name="dictionary"/>
+                                <field name="dict_preview"/>
+                            </group>
+                        </page>
+                        <page string="Body">
+                            <h4>Python Code for email body:</h4>
+                            <field name="email_body"/>
+                        </page>
+                        <page string="Preview">
+                            <field name="email_preview" widget="html" options="{'style-inline': true}" />
+                        </page>
+                    </notebook>
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--TICKET TREE VIEW-->
+    <record model="ir.ui.view" id="flsp_bmpemails_view">
+        <field name="name">flspautoemails.bpmemails.tree</field>
+        <field name="model">flspautoemails.bpmemails</field>
+        <field name="arch" type="xml">
+            <tree string="Templates x Emails">
+                <field name="email_active"/>
+                <field name="description"/>
+                <field name="name"/>
+                <field name="user_ids"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--ACTION ITEM-->
+    <record model="ir.actions.act_window" id="flspsalesapproval_bmpemails_action">
+        <field name="name">Template x Emails</field>
+        <field name="res_model">flspautoemails.bpmemails</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+     <!--MENU ITEM-->
+    <menuitem id="bpm_emails_menu" name="Templates x Email"
+              parent="flspautoemails.flsp_settings"
+              action="flspsalesapproval_bmpemails_action"/>
+
+    <menuitem name="FLSP" id="flspautoemails.flsp_settings"
+              parent="base.menu_administration"
+    />
+
+</odoo>

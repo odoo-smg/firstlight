@@ -37,5 +37,7 @@
         'data/weeklysalesorder_cron.xml',
         'views/flsp_soapprovreq_report.xml',
         'views/flsp_soapprovreq_tmpl.xml',
+        'views/flsp_bpm_emails_view.xml',
+        'security/ir.model.access.csv',
     ],
 }

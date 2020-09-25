@@ -185,39 +185,13 @@ class SalesOrder(models.Model):
         return self.write({'flsp_state': 'wait'})
 
     def request_approval_by_email(self):
-        template = self.env.ref('flspautoemails.flsp_soapprovreq_tmpl', raise_if_not_found=False)
-
-        if not template:
-            _logger.warning('Template "flspautoemails.flsp_soapprovreq_tmpl" was not found. Cannot send the approval request for Sales Order.')
-            return
-
-        d_from = date.today()
-        so_id = self.id
-        rendered_body = template.render({'docids': self.env['sale.order'].search([('id', '=', so_id)]),
-                                         'd_from': d_from}, engine='ir.qweb')
-        body = self.env['mail.thread']._replace_local_links(rendered_body)
-        body += '<br/><br/><br/>'
-        body += '<div style = "text-align: center;" >'
-        body += '  <a href = "https://odoo-smg-firstlight1.odoo.com/web#action=408&amp;model=sale.order&amp;view_type=list&amp;cids=1&amp;menu_id=230" style = "background: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class ="o_default_snippet_text">Access Sales Order</a>'
-        body += '  <br/><br/><br/>'
-        body += '</div>'
-        body += '<p>Thank you!</p>'
-
-        self.env['mail.mail'].create({
-            'body_html': body,
-            'subject': 'Odoo - Sales Discount Approval Request',
-            'email_to': 'camquan@smartrendmfg.com;stephanieaddy@smartrendmfg.com; alexandresousa@smartrendmfg.com; '+self.user_id.login,
-            'auto_delete': True,
-        }).send()
+        bpm_emails = self.env['flspautoemails.bpmemails'].search([('name', '=', 'SO0001')])
+        if bpm_emails.exists():
+            bpm_emails.send_email(self)
 
     def button_flsp_approve(self):
-        #flsp_sale_order_lines = flspsaleapproval.Saleflspwizard
-        #flsp_open_sale_wizard
-
         action = self.env.ref('flspsaleapproval.launch_flsp_sale_wizard').read()[0]
         return action
-
-        #return self.action_confirm()
 
     def button_flsp_confirm(self):
         if not self.partner_id.flsp_acc_valid:
@@ -246,22 +220,9 @@ class SalesOrder(models.Model):
         return action
 
     def flsp_email_order_confirmed(self):
-        template = self.env.ref('flspsaleapproval.flsp_confirmed_order_email', raise_if_not_found=False)
-
-        if not template:
-            _logger.warning('Template "flspsaleapproval.flsp_confirmed_order_email" was not found. Cannot send the confirmation for Sales Order.')
-            return
-
-        rendered_body = template.render({'docids': self,
-                                         'sale_order_line': self.order_line}, engine='ir.qweb')
-        body = self.env['mail.thread']._replace_local_links(rendered_body)
-
-        self.env['mail.mail'].create({
-            'body_html': body,
-            'subject': 'Odoo - Sales Order Confirmed',
-            'email_to': 'FLorders@firstlightsafety.com; alexandresousa@smartrendmfg.com; '+self.user_id.login,
-            'auto_delete': True,
-        }).send()
+        bpm_emails = self.env['flspautoemails.bpmemails'].search([('name', '=', 'SO0010')])
+        if bpm_emails.exists():
+            bpm_emails.send_email(self)
 
     def button_flsp_reject(self):
         action = self.env.ref('flspsaleapproval.launch_flsp_reject_wizard').read()[0]
