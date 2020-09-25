@@ -71,13 +71,13 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <menuitem name="FLSP" id="flspautoemails.flsp_settings"
+              parent="base.menu_administration"/>
+
      <!--MENU ITEM-->
     <menuitem id="bpm_emails_menu" name="Templates x Email"
               parent="flspautoemails.flsp_settings"
               action="flspsalesapproval_bmpemails_action"/>
 
-    <menuitem name="FLSP" id="flspautoemails.flsp_settings"
-              parent="base.menu_administration"
-    />
 
 </odoo>
