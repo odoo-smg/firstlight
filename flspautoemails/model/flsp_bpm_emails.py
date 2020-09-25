@@ -60,22 +60,23 @@ class Flspbpmemails(models.Model):
 
     @api.model
     def _rule_eval(self, rule, model=None, dict=None):
-        context = {'model': model,
-                   'dictionary': dict,
-            'self': self,
-            'object': self.id,
-            'pool': self.pool,
-            'cr': self._cr,
-            'uid': self._uid,
-            }
-        try:
-            safe_eval(rule,
-                      context,
-                      mode='exec',
-                      nocopy=True)  # nocopy allows to return 'result'
-        except Exception as e:
-            raise ValidationError("Wrong python code defined for BPM Emails. Code:" + rule)
-        return context.get('result', False)
+        if rule:
+            context = {'model': model,
+                       'dictionary': dict,
+                'self': self,
+                'object': self.id,
+                'pool': self.pool,
+                'cr': self._cr,
+                'uid': self._uid,
+                }
+            try:
+                safe_eval(rule,
+                          context,
+                          mode='exec',
+                          nocopy=True)  # nocopy allows to return 'result'
+            except Exception as e:
+                raise ValidationError("Wrong python code defined for BPM Emails. Code:" + rule)
+            return context.get('result', False)
 
     def update_preview(self):
         context = self._rule_eval(self.dict_preview, self)
