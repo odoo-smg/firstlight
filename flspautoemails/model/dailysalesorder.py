@@ -86,8 +86,8 @@ class flspdailysalesorder(models.Model):
             _logger.warning('Template "flspautoemails.flsp_soapprovreq_tmpl" was not found. Cannot send Approval Request Report.')
             return
 
-        total_sales = self.env['sale.order'].search_count(['&',('flsp_state', '=', 'wait'), ('state' in ['draft', 'sent'])])
-        docids = self.env['sale.order'].search(['&', ('flsp_state', '=', 'wait'), ('state' in ['draft', 'sent'])])
+        total_sales = self.env['sale.order'].search_count(['&',('flsp_state', '=', 'wait'), ('state', 'in', ['draft', 'sent'])])
+        docids = self.env['sale.order'].search(['&', ('flsp_state', '=', 'wait'), ('state', 'in', ['draft', 'sent'])])
         d_from = date.today()
 
         rendered_body = template.render({'docids': docids,
