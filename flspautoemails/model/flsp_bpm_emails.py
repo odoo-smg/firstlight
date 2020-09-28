@@ -141,6 +141,7 @@ class Flspbpmemails(models.Model):
                     })
                     result = True
                 else:
+                    log_model_id = 0
                     if model.id:
                         log_model_id = model.id
                     #create a log
