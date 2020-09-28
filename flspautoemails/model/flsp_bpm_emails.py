@@ -18,6 +18,7 @@ class Flspbpmemails(models.Model):
     email_active = fields.Boolean(string="Email Active")
     description = fields.Char(string="Description", required=True)
     subject = fields.Char(string="Subject", required=True, help='Python to use dictionary data.')
+    condition = fields.Text(string="Condition to run", help='Python code to return a condition to run.', default='result=True')
     name = fields.Char(string="Template", required=True)
     system_fields = fields.Text(string="System Fields", help='Python to use dictionary data.')
     extra_emails = fields.Char(string="Extra emails", help='Type the emails with ; to separate them.')
@@ -95,6 +96,10 @@ class Flspbpmemails(models.Model):
 
     def update_preview(self):
         context = self._rule_eval(self.dict_preview, self)
+        condition = self._rule_eval(self.condition, self, context)
+        if not condition:
+            self.email_preview = 'condition to run not met'
+            return
         email_to = self.get_emails(self, context)
         subject = self._rule_eval(self.subject, self, context)
         if subject:
@@ -118,6 +123,9 @@ class Flspbpmemails(models.Model):
         if bpm_email.exists():
             if bpm_email.email_active:
                 context = bpm_email._rule_eval(bpm_email.dictionary, model, True)
+                condition = self._rule_eval(self.condition, model, context)
+                if not condition:
+                    return result
                 email_to = bpm_email.get_emails(model, context, True)
                 subject = bpm_email._rule_eval(bpm_email.subject, model, context, True)
                 body = bpm_email._rule_eval(bpm_email.email_body, model, context, True)
@@ -164,10 +172,12 @@ class Flspbpmemails(models.Model):
         email_to = self.test_email
         subject = "Test email ("+self.name+"): "+self._rule_eval(self.subject, self, context)
         body = self._rule_eval(self.email_body, self, context)
-        if email_to:
-            self.env['mail.mail'].create({
-                'body_html': body,
-                'subject': subject,
-                'email_to': email_to,
-                'auto_delete': True,
-            }).send()
+        condition = self._rule_eval(self.condition, self, context)
+        if condition:
+            if email_to:
+                self.env['mail.mail'].create({
+                    'body_html': body,
+                    'subject': subject,
+                    'email_to': email_to,
+                    'auto_delete': True,
+                }).send()
