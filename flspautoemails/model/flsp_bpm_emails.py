@@ -122,8 +122,8 @@ class Flspbpmemails(models.Model):
         result = True
         if bpm_email.exists():
             if bpm_email.email_active:
-                context = bpm_email._rule_eval(bpm_email.dictionary, model, True)
-                condition = self._rule_eval(self.condition, model, context)
+                context = bpm_email._rule_eval(bpm_email.dictionary, model, None, True)
+                condition = self._rule_eval(self.condition, model, context, True)
                 if not condition:
                     return result
                 email_to = bpm_email.get_emails(model, context, True)
