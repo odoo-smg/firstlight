@@ -112,7 +112,7 @@ class flspdailysalesorder(models.Model):
     @api.model
     def _soapprovreq_report(self, sale_orders=None):
         if not sale_orders:
-            sale_orders = self.env['sale.order'].search([('flsp_state', '=', 'wait')]).ids
+            sale_orders = self.env['sale.order'].search(['&',('flsp_state', '=', 'wait'), ('state', 'in', ['draft', 'sent'])]).ids
             if len(sale_orders) == 0:
                 sale_orders = [0]
 
