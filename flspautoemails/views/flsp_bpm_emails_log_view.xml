@@ -19,9 +19,10 @@
                         <page string="Body">
                             <field name="body" widget="html" options="{'style-inline': true}"/>
                         </page>
+                        <page string="Error" >
+                            <field name="error_msg"/>
+                        </page>
                     </notebook>
-
-
                 </sheet>
             </form>
         </field>
