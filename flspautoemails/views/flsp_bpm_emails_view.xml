@@ -17,6 +17,7 @@
                         <field name="description" string="Description"/>
                         <field name="name" string="Template"/>
                         <field name="subject"/>
+                        <field name="condition"/>
                     </group>
                     <notebook>
                         <page string="Emails">
