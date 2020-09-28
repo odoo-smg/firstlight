@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError, UserError
+from datetime import datetime
 
 
 class Flspbpmemails(models.Model):
@@ -30,9 +31,9 @@ class Flspbpmemails(models.Model):
                     help='Include here the users that must receive email from this template.')
 
     @api.model
-    def get_emails(self, model, context):
+    def get_emails(self, model, context, save_log=False):
         emails_to = ''
-        email_to_add = self._rule_eval(self.system_fields, model, context)
+        email_to_add = self._rule_eval(self.system_fields, model, context, save_log)
         if email_to_add:
             emails_to = email_to_add
         if self.extra_emails:
@@ -59,7 +60,7 @@ class Flspbpmemails(models.Model):
         return emails_to
 
     @api.model
-    def _rule_eval(self, rule, model=None, dict=None):
+    def _rule_eval(self, rule, model=None, dict=None, save_log=False):
         if rule:
             context = {'model': model,
                        'dictionary': dict,
@@ -74,8 +75,22 @@ class Flspbpmemails(models.Model):
                           context,
                           mode='exec',
                           nocopy=True)  # nocopy allows to return 'result'
-            except Exception as e:
-                raise ValidationError("Wrong python code defined for BPM Emails. Code:" + rule)
+            except Exception:
+                if save_log:
+                    log = self.env['flspautoemails.bpmemailslog'].create({
+                        'date_sent': datetime.now(),
+                        'bpmemail_id': self.id,
+                        'name': self.name,
+                        'subject': '',
+                        'email_to': '',
+                        'body': '',
+                        'status': 'error',
+                        'error_msg': 'Error trying to evaluate the code: ' + rule,
+                    })
+                    pass
+                else:
+                    raise ValidationError("Wrong python code defined for BPM Emails="+self.name+". Code:" + rule)
+                return False
             return context.get('result', False)
 
     def update_preview(self):
@@ -97,20 +112,51 @@ class Flspbpmemails(models.Model):
 
         self.email_preview = body
 
-    def send_email(self, model):
-        if self.email_active:
-            context = self._rule_eval(self.dictionary, model)
-            email_to = self.get_emails(model, context)
-            subject = self._rule_eval(self.subject, model, context)
-            body = self._rule_eval(self.email_body, model, context)
+    def send_email(self, model, template):
+        bpm_email = self.env['flspautoemails.bpmemails'].search([('name', '=', template)])
+        result = True
+        if bpm_email.exists():
+            if bpm_email.email_active:
+                context = bpm_email._rule_eval(bpm_email.dictionary, model, True)
+                email_to = bpm_email.get_emails(model, context, True)
+                subject = bpm_email._rule_eval(bpm_email.subject, model, context, True)
+                body = bpm_email._rule_eval(bpm_email.email_body, model, context, True)
 
-            if email_to:
-                self.env['mail.mail'].create({
-                    'body_html': body,
-                    'subject': subject,
-                    'email_to': email_to,
-                    'auto_delete': True,
-                }).send()
+                if email_to and subject and body:
+                    self.env['mail.mail'].create({
+                        'body_html': body,
+                        'subject': subject,
+                        'email_to': email_to,
+                        'auto_delete': True,
+                    }).send()
+                    #create a log
+                    log = self.env['flspautoemails.bpmemailslog'].create({
+                        'date_sent': datetime.now(),
+                        'bpmemail_id': bpm_email.id,
+                        'name': bpm_email.name,
+                        'subject': subject,
+                        'email_to': email_to,
+                        'body': body,
+                        'status': 'ok',
+                    })
+                    result = True
+                else:
+                    if model.id:
+                        log_model_id = model.id
+                    #create a log
+                    log = self.env['flspautoemails.bpmemailslog'].create({
+                        'date_sent': datetime.now(),
+                        'bpmemail_id': bpm_email.id,
+                        'name': bpm_email.name,
+                        'subject': subject,
+                        'email_to': email_to,
+                        'body': body,
+                        'object_id': log_model_id,
+                        'status': 'error',
+                        'error_msg': 'some of the objects could not be processed',
+                    })
+                    result = False
+        return result
 
     def send_test(self):
         context = self._rule_eval(self.dict_preview, self)

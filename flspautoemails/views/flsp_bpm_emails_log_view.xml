@@ -13,6 +13,7 @@
                         <field name="name" string="Template"/>
                         <field name="subject"/>
                         <field name="email_to"/>
+                        <field name="object_id"/>
                     </group>
                     <notebook>
                         <page string="Body">

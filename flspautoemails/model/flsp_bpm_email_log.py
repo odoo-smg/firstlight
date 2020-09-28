@@ -7,7 +7,7 @@ from odoo.exceptions import ValidationError, UserError
 
 class Flspbpmemaillog(models.Model):
     """
-    Set log of emails processed
+    Set emails to the process
     """
     _name = 'flspautoemails.bpmemailslog'
     _description = "BPM Emails Log"
@@ -16,9 +16,10 @@ class Flspbpmemaillog(models.Model):
     id = fields.Integer(index=True)
     date_sent = fields.Datetime(string="Date Sent")
     bpmemail_id = fields.Many2one('flspautoemails.bpmemails', string="BPM email ID")
-    name = fields.Char(string="Template", required=True)
-    subject = fields.Char(string="Subject", required=True, help='Python to use dictionary data.')
-    email_to = fields.Char(string="To", required=True)
-    body = fields.Text(string="Body", required=True)
+    name = fields.Char(string="Template", )
+    subject = fields.Char(string="Subject", help='Python to use dictionary data.')
+    email_to = fields.Char(string="To", )
+    body = fields.Text(string="Body", )
     status = fields.Selection([('ok', 'success'), ('error', 'error')], string="Status")
-    erro_msg = fields.Text(string="Error message", required=True)
+    error_msg = fields.Text(string="Error message", )
+    object_id = fields.Char(string="Object ID", help='Id of the object sent, saved only in case of error.')
