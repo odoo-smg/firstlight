@@ -12,6 +12,7 @@ class flsppartner(models.Model):
     flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True)
 
     def button_partner_acc_valid(self):
+        self.env['flspautoemails.bpmemails'].send_email(self, 'SO0005')
         return self.write({'flsp_acc_valid': True})
 
     def button_partner_acc_valid_off(self):

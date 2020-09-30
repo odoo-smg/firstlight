@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_delivery_wizard_form_view" model="ir.ui.view">
+            <field name="name">Confirm Delivery Date</field>
+            <field name="model">flspstock.deliverywizard</field>
+            <field name="arch" type="xml">
+                <form string="Confirm Delivery Date">
+                    <group>
+                        <field name="flsp_stock_picking_id"/>
+                        <field name="flsp_confirmed_date" invisible="1" />
+                        <field name="flsp_confirmed_by" invisible="1" />
+                        <field name="flsp_is_updating" invisible="1"/>
+                        <field name="flsp_schedule_date"/>
+                    </group>
+                    <H4 attrs="{'invisible': [('flsp_is_updating', '=', False)]}" >Inform the reason for this change:</H4>
+                    <group>
+                        <field name="flsp_change_note" attrs="{'invisible': [('flsp_is_updating', '=', False)], 'required': [('flsp_is_updating', '=', True)]}" />
+                    </group>
+                    <H7>Be aware that this action will trigger an email to Sales and Production department.</H7>
+                    <footer>
+                        <button name="flsp_confirm" type="object" string="Confirm" class="btn-primary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+</odoo>
