@@ -46,6 +46,8 @@ class Saleflsprejectwizard(models.TransientModel):
         #self.order_id.message_post_with_view(
         #    'flspsaleapproval.flsp_salesapprv_rejected',
         #    subtype_id=self.env.ref('mail.mt_note').id)
+        self.env['flspautoemails.bpmemails'].send_email(self, 'SO0003')
+        return {'type': 'ir.actions.act_window_close'}
 
         self.order_id.write({'flsp_approval_requested': False})
 
