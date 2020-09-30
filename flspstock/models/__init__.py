@@ -10,3 +10,4 @@ from . import flsp_product_produce
 from . import flsp_stockpicking
 from . import flsp_stockpackaging
 from . import flsp_delivery_wizard
+from . import package_wizard

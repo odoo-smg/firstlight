@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="package_form_view">
+        <field name="name">package.form</field>
+        <field name="model">flspstock.package</field>
+        <field name="arch" type="xml">
+            <form string="Package Info">
+                <group string="Fill in Package info">
+                    <field name="order_id" readonly="1"/>
+                    <field name="flsp_packingdesc"/>
+                </group>
+                <footer>
+                    <button name="confirm" string="Confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_package_wizard">
+        <field name="name">Package Info</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flspstock.package</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="package_form_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

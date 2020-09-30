@@ -25,3 +25,22 @@ class flspstockpicking2(models.Model):
                 'default_stock_picking_id': self.id,
             }
         }
+
+    def package_info(self):
+        """
+            Purpose: To call the packaging info wizard so as to fill the package info and send email
+        """
+        view_id = self.env.ref('flspstock.package_form_view').id
+        name = 'Package Info'
+        return {
+            'name': name,
+            'view_mode': 'form',
+            'res_model': 'flspstock.package',
+            'view_id': view_id,
+            'views': [(view_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {
+                'default_order_id': self.id,  # getting the default id
+            }
+        }
