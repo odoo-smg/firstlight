@@ -39,7 +39,7 @@ class Deliveryflspwizard(models.TransientModel):
     def flsp_confirm(self):
         self.ensure_one()
         self.flsp_stock_picking_id.write({'flsp_confirmed_by': self._uid, })
-        self.flsp_stock_picking_id.write({'flsp_confirmed_date': self.flsp_confirmed_date, })
+        self.flsp_stock_picking_id.write({'flsp_confirmed_date': self.flsp_schedule_date, })
         if self.flsp_is_updating:
             self.env['flspautoemails.bpmemails'].send_email(self, 'SO0008')
         else:
