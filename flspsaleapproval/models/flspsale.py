@@ -180,7 +180,8 @@ class SalesOrder(models.Model):
             total_discount += line.discount
 
     def button_flsp_submit_approval(self):
-        self.request_approval_by_email()
+        #self.request_approval_by_email()
+        self.env['flspautoemails.bpmemails'].send_email(self, 'SO0001')
         self.write({'flsp_approval_requested': True})
         return self.write({'flsp_state': 'wait'})
 
