@@ -237,11 +237,13 @@ class SalesOrder(models.Model):
                     action = self.env.ref('flspsaleapproval.launch_flsp_sppepp_message').read()[0]
                 else:
                     # sends an email to FLorders@firstlightsafety.com
-                    self.flsp_email_order_confirmed()
+                    self.env['flspautoemails.bpmemails'].send_email(self, 'SO0006')
+                    #self.flsp_email_order_confirmed()
                     action = self.action_confirm()
             else:
                 # sends an email to FLorders@firstlightsafety.com
-                self.flsp_email_order_confirmed()
+                self.env['flspautoemails.bpmemails'].send_email(self, 'SO0006')
+                #self.flsp_email_order_confirmed()
                 action = self.action_confirm()
 
         return action
