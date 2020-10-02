@@ -11,18 +11,9 @@
                     <button name="button_close" string="Close" class="btn-primary" type="object"
                             status="close" groups="flspticketsystem.group_flspticketsystem_manager"
                             attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"/>
-
                     <button name="button_assign" string="Assign responsible" class="btn-primary" type="object"
                             status="inprogress" groups="flspticketsystem.group_flspticketsystem_manager"
                             attrs="{'invisible': [('status', 'not in', ['open'])]}"/>
-
-                    <!--Button to update user of the ticket status-->
-<!--                    <button name="button_update" string="Update User" class="btn-primary" type="object"-->
-<!--                            status="inprogress" groups="flspticketsystem.group_flspticketsystem_manager"-->
-<!--                            attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"/>-->
-
-<!--                    <button name="button_reopen" string="Reopen" class="btn-primary" type="object"-->
-<!--                            groups="flspticketsystem.group_flspticketsystem_manager"/>-->
                     <field name="status"  widget="statusbar" statusbar_visible="open,inprogress,close"/>
                 </header>
                 <sheet>
@@ -230,24 +221,3 @@ Socrates, Help Desk, Sherlock, Megamind, Pantomath(person who knows everything)-
               action="ticket_list_action" />
 
 </odoo>
-
-
-
-<!--ICON SYNTAX    -->
-<!-- <menuitem name="My Custom App"-->
-<!--              id="menu_custom_main"-->
-<!--              sequence="4"-->
-<!--              web_icon="your_module_name,static/src/img/icon.jpg"/>-->
-
-    <!--NOT NEEDED YET, IF EVER NEEDED ADD CALANDER IN ACTION: TICKET CALENDAR VIEW-->
-<!--    <record model="ir.ui.view" id="ticket_calendar_view">-->
-<!--        <field name="name">ticket.calendar</field>-->
-<!--        <field name="model">flspticketsystem.ticket</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <calendar string="Ticket Calenar" date_start="start_date" date_stop="complete_date">-->
-<!--                <field name="priority"/> &lt;!&ndash;Need to specify how to view&ndash;&gt;-->
-<!--                <field name="start_date"/>-->
-<!--                <field name="category_id"/>-->
-<!--            </calendar>-->
-<!--        </field>-->
-<!--    </record>-->
