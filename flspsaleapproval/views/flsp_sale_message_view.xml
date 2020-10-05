@@ -14,6 +14,7 @@
                     </group>
                     <spam>In order to confirm the Quotation into a Sales Order the customer must be validated.</spam>
                     <footer>
+                        <button name="flsp_req_valid_customer" type="object" string="Request Validation" class="btn-primary" />
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </form>

@@ -8,6 +8,7 @@ class Assign(models.TransientModel):
         Model_Name: flspticketsystem.assign
         Purpose:    To create an assign model used in the wizard to assign responsible
         Date:       sept/21st/Monday/2020
+        updated:    Oct/2nd/Friday/2020
         Author:     Sami Byaruhanga
     """
 
@@ -30,6 +31,8 @@ class Assign(models.TransientModel):
                 res['short_description'] = ticket.short_description
             if 'priority' in fields:
                 res['priority'] = ticket.priority
+            if 'assign_date' in fields:
+                res['assign_date'] = ticket.assign_date
 
         res = self._convert_to_write(res)
         return res
@@ -60,39 +63,7 @@ class Assign(models.TransientModel):
         self.ticket_id.write({'analysis': self.analysis, })
         self.ticket_id.write({'responsible': self.responsible, })
         self.ticket_id.write({'status': 'inprogress', })
+        self.ticket_id.write({'assign_date': self.assign_date, })
 
-        today = fields.Date.today()
-        assign_date = today
-        body = '<p>Hi there, </p>'
-        body += '<br/>'
-        body += '<p>The ticket containing the following information has been assigned to you:</p>'
-
-        body += '<div style="padding-left: 30px; color:red; ">'
-        body += '<br/><p>Ticket ID: ' + str(self.ticket_id.id) + '<p>'
-        body += '<p>Assign date: ' + str(assign_date) + ' <p>'
-        body += '<p>Priority level: ' + str(
-            dict(self._fields['priority'].selection).get(self.priority)) + ' <p>'
-        body += '<p>Short description: ' + self.short_description + ' <p>'
-        body += '<p>Analysis: ' + str(self.analysis) + ' <p>'
-        # body += '<p>Urgency Level: ' + str(
-        #     dict(self._fields['urgency'].selection).get(self.urgency)) + ' <p>'
-        body += '</div>'
-
-        body += '<br/><p>Thank you!</p>'
-        self.env['mail.mail'].create({
-            'body_html': body,
-            'subject': 'Assigned: Ticket ID-' + str(self.ticket_id.id),
-            'email_from': 'ithelpdesk@smgrp.com',
-            'email_to': 'ithelpdesk@smgrp.com',  # self.requestor.login,
-            'auto_delete': True,
-        }).send()
-
+        self.env['flspautoemails.bpmemails'].send_email(self, 'TKT0002')
         return {'type': 'ir.actions.act_window_close'}
-
-
-
-
-
-
-
-

@@ -7,13 +7,23 @@
             <field name="priority">94</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_cancel']" position="after">
+                    <button name="button_flsp_delivery" id="action_confirm_delivery" class="oe_highlight" string="Confirm Delivery" type="object" attrs="{'invisible': [('flsp_confirmed_date', '!=', False)]}"/>
+                    <button name="button_flsp_delivery" id="action_confirm_delivery" string="Confirm Delivery" type="object" attrs="{'invisible': [('flsp_confirmed_date', '=', False)]}"/>
+                    <button name="package_info" string="Package Info" class="btn-primary" type="object" attrs="{'invisible': [('flsp_packingdesc', '!=', False)]}"/>
+                    <button name="package_info" string="Package Info" type="object" attrs="{'invisible': [('flsp_packingdesc', '=', False)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='date_done']" position="after">
+                    <field name="flsp_confirmed_date"/>
+                    <field name="flsp_confirmed_by"/>
+                </xpath>
                 <xpath expr="//field[@name='date_done']" position="attributes">
                     <attribute name="attrs">{'readonly': False}</attribute>
                 </xpath>
                 <xpath expr="//group[@name='other_infos']" position="after">
                     <group string="Packaging Info:" name="packaging_info" >
                     </group>
-                    <field name="flsp_packingdesc" string="Packaging Information:" attrs="{'readonly': ['&amp;',('state', 'in', ('done', 'cancel')), ('is_locked', '=', True)]}"/>
+                    <field name="flsp_packingdesc" string="Packaging Information:" readonly="1" />
                 </xpath>
             </field>
         </record>
