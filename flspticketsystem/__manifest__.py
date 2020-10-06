@@ -13,7 +13,7 @@
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'September 22nd',
+    'category': 'October 6th',
     'version': '1.3',
 
     # any module necessary for this one to work correctly
@@ -25,6 +25,7 @@
         'security/ir.model.access.csv',
 
         'views/assign_wizard.xml',
+        'views/reassign_wizard.xml',
         'views/ticket.xml',
         'views/category.xml',
         'views/type.xml',

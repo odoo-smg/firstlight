@@ -14,6 +14,10 @@
                     <button name="button_assign" string="Assign responsible" class="btn-primary" type="object"
                             status="inprogress" groups="flspticketsystem.group_flspticketsystem_manager"
                             attrs="{'invisible': [('status', 'not in', ['open'])]}"/>
+
+                    <button name="button_re_assign" string="Re-Assign responsible" class="btn-primary" type="object"
+                            status="inprogress" groups="flspticketsystem.group_flspticketsystem_manager"
+                            attrs="{'invisible': [('status', 'not in', ['inprogress'])],}"/>
                     <field name="status"  widget="statusbar" statusbar_visible="open,inprogress,close"/>
                 </header>
                 <sheet>
@@ -26,6 +30,7 @@
                         <field name="short_description"/>
                         <field name="detailed_description"/>
                         <field name="attachment_ids" widget="many2many_binary"/>
+                        <field name="share" widget="many2many_tags"/>
                     </group>
                     <group string="To be filled by ERP Developer">
                         <field name="responsible"/>
@@ -39,6 +44,7 @@
             </form>
         </field>
     </record>
+
 
     <!--TICKET FORM VIEW: Restrict user from editing the ERP FROM-->
     <record  id="manager_can_write"  model="ir.ui.view">
