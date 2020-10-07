@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record model="ir.ui.view" id="assign_from_view">
-        <field name="name">assign.form</field>
-        <field name="model">flspticketsystem.assign</field>
+    <record model="ir.ui.view" id="re_assign_from_view">
+        <field name="name">reassign.form</field>
+        <field name="model">flspticketsystem.reassign</field>
         <field name="arch" type="xml">
             <form string="Assign responsible">
                 <group string="Fill in details for responsible">
@@ -12,7 +12,7 @@
                     <field name="analysis"/>
                 </group>
                 <footer>
-                    <button name="assign" string="Assign" type="object" class="btn-primary"/>
+                    <button name="reassign" string="Re Assign" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
                 </footer>
             </form>
@@ -20,11 +20,11 @@
     </record>
 
     <record model="ir.actions.act_window" id="launch_assign_wizard">
-        <field name="name">Ticket Assign Responsible</field>
+        <field name="name">Ticket Re Assign Responsible</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">flspticketsystem.assign</field>
+        <field name="res_model">flspticketsystem.reassign</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="assign_from_view"/>
+        <field name="view_id" ref="re_assign_from_view"/>
         <field name="context">{}</field>
         <field name="target">new</field>
     </record>

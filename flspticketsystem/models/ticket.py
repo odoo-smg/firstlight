@@ -9,7 +9,7 @@ class Ticket(models.Model):
         Model_Name: flspticketsystem.ticket
         Purpose:    To help in the creation of the tickets
         Date:       sept/4th/friday/2020
-        Updated:    Oct/2nd/friday/2020
+        Updated:    Oct/6th/Tuesday/2020
         Author:     Sami Byaruhanga
     """
     _name = 'flspticketsystem.ticket'
@@ -37,10 +37,10 @@ class Ticket(models.Model):
     # Admin related fields
     responsible = fields.Many2one('res.users', ondelete='set null', string="Responsible", index=True,
         domain=lambda self: [('groups_id', 'in', self.env.ref('flspticketsystem.group_flspticketsystem_manager').id)],
-        help='Once responsible assigned, ticket status is updated to in progress and no user edit is possible')
+        readonly=True, help='Once responsible assigned, ticket status is updated to in progress and no user edit is possible')
     type = fields.Many2one('flspticketsystem.type', ondelete='cascade', string="Classification",
         help='Classify solution so we can reference for future debugging')
-    complete_date = fields.Date(string="Completion Dates")
+    complete_date = fields.Date(string="Completion Dates", readonly=True)
     analysis = fields.Text(string="Analysis")
     solution = fields.Text(string="Solution")
     color = fields.Integer() #related to kanban view
@@ -51,6 +51,12 @@ class Ticket(models.Model):
         help='Add any attachments that will help in solving your request')
 
     assign_date = fields.Date(string="Assign Date")
+    re_assign_date = fields.Date(string="Re Assign Date")
+
+    # trying many2many
+    share = fields.Many2many('res.users', string="Share Ticket with",
+        domain=lambda self: [('groups_id', 'in', self.env.ref('flspticketsystem.group_flspticketsystem_user').id)],)
+
     # Methods
     @api.model
     def create(self, values):
@@ -105,3 +111,23 @@ class Ticket(models.Model):
                 r.write({'status': 'close'})
                 r.complete_date = today
                 self.env['flspautoemails.bpmemails'].send_email(self, 'TKT0003')
+
+    def button_re_assign(self):
+        """
+            Purpose: To call re-assign wizard with context for the ticket
+        """
+        view_id = self.env.ref('flspticketsystem.re_assign_from_view').id
+        name = 'Re-Assign responsible'
+        ticket_id = self.id
+        return {
+            'name': name,
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'flspticketsystem.reassign',
+            'view_id': view_id,
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': {
+                'default_ticket_id': ticket_id,
+            }
+        }
