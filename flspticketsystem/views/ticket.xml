@@ -200,6 +200,12 @@
                 <filter name="preventing_op" string="Preventing Operation"
                         domain="[('priority','=','P')]"/>
 
+                <filter name="open" string="Open Tickets"
+                        domain="[('status','=','open')]"/>
+
+                <filter name="inprogress" string="Inprogress Tickets"
+                        domain="[('status','=','inprogress')]"/>
+
                 <group string="Grouped by">
                     <filter name="by_responsible" string="Responsiblity"
                         context="{'group_by': 'responsible'}"/>
@@ -213,6 +219,7 @@
     <record model="ir.actions.act_window" id="ticket_list_action">
         <field name="name">Tickets</field>
         <field name="res_model">flspticketsystem.ticket</field>
+        <field name="context">{'search_default_to_do': 1}</field> <!--Making to do default-->
         <field name="view_mode">tree,form,kanban</field>
     </record>
 
