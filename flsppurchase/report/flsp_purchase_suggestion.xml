@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="action_compute_price_bom_product" model="ir.actions.server">
+        <field name="name">Execute Suggestions</field>
+        <!--field name="model_id" ref="product.model_product_product"/-->
+        <field name="model_id" ref="flsppurchase.model_report_purchase_suggestion"/>
+        <field name="binding_model_id" ref="flsppurchase.model_report_purchase_suggestion"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+        if records:
+            records.execute_suggestion()
+        </field>
+    </record>
+
     <!--record model="ir.ui.view" id="flsp_po_suggestion_form_view">
         <field name="name">flsp.posuggestion.form</field>
         <field name="model">product.template</field>
@@ -53,6 +67,7 @@
                 <field name="qty_multiple" optional="hide"/>
                 <field name="state"/>
                 <field name="suggested_qty"/>
+                <field name="adjusted_qty"/>
             </tree>
         </field>
     </record>

@@ -11,6 +11,7 @@ class flsppurchaseproductprd(models.Model):
     flsp_open_po_qty = fields.Float(compute='_compute_flsp_open_po_qty', string='Qty Open PO')
     flsp_bom_level = fields.Integer(string='Bom Level')
     flsp_suggested_qty = fields.Float(string="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
+    flsp_adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
     flsp_suggested_state = fields.Selection([
         ('buy', 'To Buy'),
         ('ok' , 'No Action'),
@@ -71,6 +72,7 @@ class flsppurchaseproductprd(models.Model):
             suggestion.product_id.flsp_type = suggestion.type
             suggestion.product_id.flsp_suggested_state = 'ok'
             suggestion.product_id.flsp_suggested_qty = 0
+            suggestion.product_id.flsp_adjusted_qty = 0
 
             ## ignore non storable products
             if suggestion.level_bom <= 0:
@@ -85,6 +87,7 @@ class flsppurchaseproductprd(models.Model):
                     suggestion.product_id.flsp_suggested_state = 'mo'
                 else:
                     suggestion.product_id.flsp_suggested_qty = suggestion.product_min_qty - total_forcasted
+                    suggestion.product_id.flsp_adjusted_qty = suggestion.product_id.flsp_suggested_qty
                     if route_mfg in suggestion.product_id.route_ids.ids:
                         suggestion.product_id.flsp_suggested_state = 'mfg'
                     elif route_buy in suggestion.product_id.route_ids.ids:
@@ -104,6 +107,7 @@ class flsppurchaseproductprd(models.Model):
                             suggestion.product_id.flsp_suggested_state = 'mo'
                         else:
                             suggestion.product_id.flsp_suggested_qty = suggestion.product_min_qty - total_forcasted
+                            suggestion.product_id.flsp_adjusted_qty = suggestion.product_id.flsp_suggested_qty
                             if route_mfg in suggestion.product_id.route_ids.ids:
                                 suggestion.product_id.flsp_suggested_state = 'mfg'
                             elif route_buy in suggestion.product_id.route_ids.ids:
@@ -114,7 +118,8 @@ class flsppurchaseproductprd(models.Model):
                 remaining = suggestion.product_id.flsp_suggested_qty % suggestion.qty_multiple
                 if remaining > 0:
                     suggestion.product_id.flsp_suggested_qty += suggestion.qty_multiple-remaining
-            #print('level bom: '+str(suggestion.level_bom))
+                    suggestion.product_id.flsp_adjusted_qty = suggestion.product_id.flsp_suggested_qty
+        self.env['flspautoemails.bpmemails'].send_email(self, 'P00001')
 
 
     def _flsp_calc_bom_level(self):
