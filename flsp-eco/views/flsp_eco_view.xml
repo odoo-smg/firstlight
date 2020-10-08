@@ -7,6 +7,10 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='tag_ids']" position="after">
                   <field name="flsp_allow_change"/>
+                  <field name="flsp_product_valid" invisible="1" />
+                </xpath>
+                <xpath expr="//field[@name='type_id']" position="attributes">
+                    <attribute name="domain">[["flsp_plm_valid","=",flsp_product_valid]]</attribute>
                 </xpath>
             </field>
         </record>
