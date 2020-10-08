@@ -34,5 +34,8 @@
         'views/flsp_producteco_view.xml',
         'views/flsp_eco_view.xml',
         'views/flsp_eco_stage_view.xml',
+        'views/flsp_eco_tree_search.xml',
+        'views/flsp_eco_type_form_view.xml',
+        'views/flsp_product_product_view.xml',
     ],
 }

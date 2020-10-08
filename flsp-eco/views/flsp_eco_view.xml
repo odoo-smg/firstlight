@@ -5,8 +5,16 @@
             <field name="model">mrp.eco</field>
             <field name="inherit_id" ref="mrp_plm.mrp_eco_view_form"/>
             <field name="arch" type="xml">
+              <xpath expr="//button[@name='open_new_bom']" position="attributes">
+                  <attribute name="attrs">{'invisible': ['|', '|', ('new_bom_id', '=', False), ('state', '=', 'done'), ('flsp_bom_valid', '=', False)]}</attribute>
+              </xpath>
                 <xpath expr="//field[@name='tag_ids']" position="after">
                   <field name="flsp_allow_change"/>
+                  <field name="flsp_product_valid" invisible="1" />
+                  <field name="flsp_bom_valid" invisible="1" />
+                </xpath>
+                <xpath expr="//field[@name='type_id']" position="attributes">
+                    <attribute name="domain">[["flsp_plm_valid","=",flsp_product_valid]]</attribute>
                 </xpath>
             </field>
         </record>
