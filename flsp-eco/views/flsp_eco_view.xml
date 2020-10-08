@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="mrp_plm.mrp_eco_view_form"/>
             <field name="arch" type="xml">
               <xpath expr="//button[@name='open_new_bom']" position="attributes">
-                  <attribute name="attrs">{'invisible': [('flsp_bom_valid', '=', False)]}</attribute>
+                  <attribute name="attrs">{'invisible': ['|', '|', ('new_bom_id', '=', False), ('state', '=', 'done'), ('flsp_bom_valid', '=', False)]}</attribute>
               </xpath>
                 <xpath expr="//field[@name='tag_ids']" position="after">
                   <field name="flsp_allow_change"/>
