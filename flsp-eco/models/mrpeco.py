@@ -10,6 +10,7 @@ class flspmrpeco(models.Model):
     # New fields to control ECO enforcement
     flsp_allow_change = fields.Boolean(string="Allow Product Change", compute='_allow_change')
     flsp_product_valid = fields.Boolean(string="Product Validated before", compute='_product_valid')
+    flsp_bom_valid = fields.Boolean(string="BOM Validated before", compute='_bom_valid')
 
     @api.depends('stage_id')
     def _allow_change(self):
@@ -18,6 +19,10 @@ class flspmrpeco(models.Model):
     @api.depends('product_tmpl_id')
     def _product_valid(self):
         self.flsp_product_valid = self.product_tmpl_id.flsp_plm_valid
+
+    @api.depends('bom_id')
+    def _bom_valid(self):
+        self.flsp_bom_valid = self.bom_id.flsp_bom_plm_valid
 
     @api.constrains('stage_id')
     def _check_done_eco(self):
