@@ -39,5 +39,6 @@
         'views/smg_product_view.xml',
         'views/flsp_settings_view.xml',
         'views/flsp_stockpicking_view.xml',
+        'views/flsp_product_product.xml',
     ],
 }
