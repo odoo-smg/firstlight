@@ -15,6 +15,7 @@ class smgproductprd(models.Model):
         help='Attachments are linked to a document through model / res_id and to the message '
              'through this field.')
     x_studio_specification = fields.Many2one('ir.attachment', string="Specification", store=False, compute='_get_specification_attachment')
+    x_studio_drawing = fields.Many2one('ir.attachment', string="Drawing", store=False, compute='_get_drawing_attachment')
 
     def button_acc_valid(self):
         self.product_tmpl_id.flsp_acc_valid = True
@@ -31,3 +32,7 @@ class smgproductprd(models.Model):
     def _get_specification_attachment(self):
         products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
         self.x_studio_specification = products.x_studio_specification
+
+    def _get_drawing_attachment(self):
+        products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
+        self.x_studio_drawing = products.x_studio_drawing
