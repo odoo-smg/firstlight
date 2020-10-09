@@ -14,8 +14,8 @@ class smgproductprd(models.Model):
         store=False,
         help='Attachments are linked to a document through model / res_id and to the message '
              'through this field.')
-    x_studio_specification = fields.Many2one('ir.attachment', string="Specification", store=False, compute='_get_specification_attachment')
-    x_studio_drawing = fields.Many2one('ir.attachment', string="Drawing", store=False, compute='_get_drawing_attachment')
+    x_studio_specification = fields.Binary(string='Specification', store=False, compute='_get_specification_attachment')
+    x_studio_drawing = fields.Binary(string="Drawing", store=False, compute='_get_drawing_attachment')
     x_studio_drawing_filename = fields.Char(string="Drawing Filename", store=False)
     x_studio_specification_filename = fields.Char(string="Specification Filename", store=False)
 
