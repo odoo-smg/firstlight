@@ -29,4 +29,13 @@
         <field name="groups" eval="[(4, ref('group_flspticketsystem_user'))]"/>
     </record>
 
+    <!--Rule that user can see the ticket shared with them-->
+    <record id="see_own_ticket" model="ir.rule">
+        <field name="name">See shared ticket</field>
+        <field name="model_id" ref="model_flspticketsystem_ticket" />
+        <field name="domain_force">['|',('requestor','=',user.id),('share','=',user.id)]</field>
+        <!-- Domain Helps specify the criteria-->
+        <field name="groups" eval="[(4, ref('group_flspticketsystem_user'))]"/>
+    </record>
+
 </odoo>
