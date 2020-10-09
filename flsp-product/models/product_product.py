@@ -16,6 +16,8 @@ class smgproductprd(models.Model):
              'through this field.')
     x_studio_specification = fields.Many2one('ir.attachment', string="Specification", store=False, compute='_get_specification_attachment')
     x_studio_drawing = fields.Many2one('ir.attachment', string="Drawing", store=False, compute='_get_drawing_attachment')
+    x_studio_drawing_filename = fields.Char(string="Drawing Filename", store=False)
+    x_studio_specification_filename = fields.Char(string="Specification Filename", store=False)
 
     def button_acc_valid(self):
         self.product_tmpl_id.flsp_acc_valid = True
@@ -32,7 +34,9 @@ class smgproductprd(models.Model):
     def _get_specification_attachment(self):
         products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
         self.x_studio_specification = products.x_studio_specification
+        self.x_studio_specification_filename = products.x_studio_specification_filename
 
     def _get_drawing_attachment(self):
         products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
+        self.x_studio_drawing_filename = products.x_studio_drawing_filename
         self.x_studio_drawing = products.x_studio_drawing

@@ -9,10 +9,12 @@
               <xpath expr="//sheet[1]/notebook[1]" position="after">
                 <group name="studio_group_jVxHq">
                   <group name="studio_group_3aEOj_left">
-                    <field name="x_studio_specification" string="Specification" readonly="1"/>
+                    <field filename="x_studio_specification_filename" name="x_studio_specification" string="Specification" readonly="1"/>
+                    <field invisible="1" name="x_studio_specification_filename"/>
                   </group>
                   <group name="studio_group_3aEOj_right">
-                    <field name="x_studio_drawing" string="Drawing" readonly="1"/>
+                    <field filename="x_studio_drawing_filename" name="x_studio_drawing" string="Drawing" readonly="1"/>
+                    <field invisible="1" name="x_studio_drawing_filename"/>
                   </group>
                 </group>
               </xpath>
