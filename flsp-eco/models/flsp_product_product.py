@@ -9,7 +9,7 @@ class flspproductproducts(models.Model):
 
     flsp_eco_count = flsp_open_po_qty = fields.Integer(compute='_compute_flsp_eco', string='Qty Open PO')
 
-    def _compute_flsp_open_po_qty(self):
+    def _compute_flsp_eco(self):
         domain = [
             ('product_tmpl_id', '=', self.product_tmpl_id.id)
         ]
