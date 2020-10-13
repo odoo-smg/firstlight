@@ -36,7 +36,7 @@
         <record id="action_flsp_product_eco" model="ir.actions.act_window">
             <field name="name">Engineering Change Orders</field>
             <field name="res_model">mrp.eco</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">tree, form</field>
             <field name="view_id" ref="flsp_view_eco_tree" ></field>
             <field name="help">No current ECOs for this product.</field>
             <field name="target">current</field>
