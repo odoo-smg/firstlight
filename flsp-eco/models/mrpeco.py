@@ -34,8 +34,12 @@ class flspmrpeco(models.Model):
     def _onchange_type_id(self):
         npi_stage = self.env['mrp.eco.type'].search([('name', '=', 'New Product Introduction')], limit=1).id
         pi_stage = self.env['mrp.eco.type'].search([('name', '=', 'Product Improvement')], limit=1).id
+        pi_first_stage = self.env['mrp.eco.stage'].search([('type_id', '=', pi_stage)], limit=1).id
+        npi_first_stage = self.env['mrp.eco.stage'].search([('type_id', '=', npi_stage)], limit=1).id
         for record in self:
             if record.product_tmpl_id.flsp_plm_valid:
                 record.type_id = pi_stage
+                record.stage_id = pi_first_stage
             else:
                 record.type_id = npi_stage
+                record.stage_id = npi_first_stage
