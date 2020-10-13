@@ -15,7 +15,7 @@ class flspproductproducts(models.Model):
         ]
         product_ecos = self.env['mrp.eco'].search(domain)
         for eco in product_ecos:
-            product.flsp_eco_count += 1
+            self.flsp_eco_count += 1
         if not self.flsp_eco_count:
             self.flsp_eco_count = 0
 
