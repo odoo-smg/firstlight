@@ -23,7 +23,7 @@
             <field name="name">FLSP Engineering Change Orders</field>
             <field name="model">mrp.eco</field>
             <field name="arch" type="xml">
-                <tree string="Engineering Change Orders">
+                <tree string="Engineering Change Orders" editable="bottom">
                     <field name="name"/>
                     <field name="bom_id"/>
                     <field name="user_id"/>
