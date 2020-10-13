@@ -7,8 +7,8 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='button_box']" position="inside">
-                    <button class="oe_stat_button" name="458" type="action" icon="fa-wrench" groups="mrp_plm.group_plm_user">
-                        <field string="ECOs" name="eco_count" widget="statinfo"/>
+                    <button class="oe_stat_button" name="action_flsp_view_eco" type="action" icon="fa-wrench" groups="mrp_plm.group_plm_user">
+                        <field string="ECOs" name="flsp_eco_count" widget="statinfo"/>
                     </button>
                 </xpath>
             </field>
