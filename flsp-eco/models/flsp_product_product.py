@@ -20,6 +20,6 @@ class flspproductproducts(models.Model):
             self.flsp_eco_count = 0
 
     def action_flsp_view_eco(self):
-        action = self.env.ref('action_view_eco_product').read()[0]
+        action = self.env.ref('flsp-eco.action_view_eco_product').read()[0]
         action['domain'] = [('product_tmpl_id', '=', self.product_tmpl_id.id)]
         return action
