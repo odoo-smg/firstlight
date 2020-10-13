@@ -20,6 +20,11 @@ class flspproductproducts(models.Model):
             self.flsp_eco_count = 0
 
     def action_flsp_view_eco(self):
-        action = self.env.ref('action_view_eco_product').read()[0]
-        action['domain'] = [('product_tmpl_id', '=', self.product_tmpl_id.id)]
+        product_prd = self.env['product.product'].search([('product_tmpl_id', 'in', self.ids)])
+        action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
+        action['domain'] = ['&', ('product_id', '=', product_prd.ids), ('flsp_open_qty', '>', 0)]
         return action
+
+#        action = self.env.ref('action_view_eco_product').read()[0]
+#        action['domain'] = [('product_tmpl_id', '=', self.product_tmpl_id.id)]
+#        return action
