@@ -7,8 +7,14 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='button_box']" position="inside">
-                    <button class="oe_stat_button" name="action_flsp_view_eco" type="action" icon="fa-wrench">
-                        <field string="ECOs" name="flsp_eco_count" widget="statinfo"/>
+                    <button class="oe_stat_button" name="action_flsp_view_eco"
+                        type="object" icon="fa-wrench" help="See the ECOs for this product">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="flsp_eco_count" widget="statinfo" nolabel="1" class="mr4"/>
+                            </span>
+                            <span class="o_stat_text">ECOs</span>
+                        </div>
                     </button>
                 </xpath>
             </field>
