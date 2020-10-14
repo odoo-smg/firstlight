@@ -8,6 +8,19 @@ class flspsalesorder(models.Model):
 
     flsp_so_user_id = fields.Many2one('res.users', string="Salesperson 2")
     flsp_amount_deposit = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
+    flsp_bpm_status = fields.Selection([
+        ('quote', 'Quote'),
+        ('wait', 'Waiting Approval'),
+        ('approved', 'Disc.Approved'),
+        ('sale', 'Sales Order'),
+        ('confirmed', 'Delivery Confirmed'),
+        ('packed', 'Packed'),
+        ('shipped', 'Shipped'),
+        ('partial', 'Partial Shipped'),
+        ('tracking', 'Tracking Assigned'),
+        ('delivered', 'Delivered'),
+        ('cancel', 'Cancelled'),
+        ], string='FL Status', copy=False, index=True, store=True, default='quote')
 
     @api.onchange('partner_id')
     def flsp_partner_onchange(self):
