@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_eco_type_form_view">
+            <field name="name">mrp.eco.type.flsp.form.inherit</field>
+            <field name="model">mrp.eco.type</field>
+            <field name="inherit_id" ref="mrp_plm.mrp_eco_type_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                  <field name="flsp_plm_valid"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>
