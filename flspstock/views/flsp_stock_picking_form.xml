@@ -20,6 +20,10 @@
                 <xpath expr="//field[@name='date_done']" position="attributes">
                     <attribute name="attrs">{'readonly': False}</attribute>
                 </xpath>
+                <xpath expr="//label[@for='weight']" position="before">
+                     <field name="flsp_delivery_eta" />
+                     <field name="flsp_customer_received" />
+                </xpath>
                 <xpath expr="//group[@name='other_infos']" position="after">
                     <group string="Packaging Info:" name="packaging_info" >
                     </group>

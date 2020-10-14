@@ -8,6 +8,8 @@ class flspstockpicking2(models.Model):
     flsp_packingdesc = fields.Text(string="Packing Description")
     flsp_confirmed_date = fields.Date(string="Confirmed Delivery", readonly=True)
     flsp_confirmed_by = fields.Many2one('res.users', string="Confirmed by", readonly=True)
+    flsp_delivery_eta = fields.Date(string="Delivery ETA")
+    flsp_customer_received = fields.Date(string="Received by Customer")
 
     def button_flsp_delivery(self):
         view_id = self.env.ref('flspstock.flsp_delivery_wizard_form_view').id
