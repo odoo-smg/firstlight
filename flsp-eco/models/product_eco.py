@@ -13,9 +13,10 @@ class flspproducts(models.Model):
 
     @api.onchange('flsp_eco_enforce')
     def flsp_eco_enforce_onchange(self):
-        self.flsp_plm_valid = False
-        return {
-            'value': {
-                'flsp_plm_valid': False
-            },
-        }
+        if self.flsp_eco_enforce.flsp_allow_change:
+            self.flsp_plm_valid = False
+            return {
+                'value': {
+                    'flsp_plm_valid': False
+                },
+            }
