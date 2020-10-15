@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="flsp_bpm_status"/>
+                <field name="flsp_bpm_status" invisible="1"/>
               </xpath>
               <xpath expr="//field[@name='user_id']" position="after">
                 <field name="flsp_so_user_id"/>
