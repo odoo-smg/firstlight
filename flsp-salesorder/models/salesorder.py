@@ -16,7 +16,7 @@ class flspsalesorder(models.Model):
         ('confirmed', 'Delivery Confirmed'),
         ('packed', 'Packed'),
         ('shipped', 'Shipped'),
-        ('partial', 'Partial Shipped'),
+        ('partial', 'Partially Shipped'),
         ('tracking', 'Tracking Assigned'),
         ('delivered', 'Delivered'),
         ('cancel', 'Cancelled'),
