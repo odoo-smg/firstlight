@@ -20,7 +20,18 @@ class flspsalesorder(models.Model):
         ('tracking', 'Tracking Assigned'),
         ('delivered', 'Delivered'),
         ('cancel', 'Cancelled'),
-        ], string='FL Status', copy=False, index=True, store=True, default='quote')
+        ('aa-quote', 'Quote'),
+        ('bb-wait', 'Waiting Approval'),
+        ('cc-approved', 'Disc.Approved'),
+        ('dd-sale', 'Sales Order'),
+        ('ee-confirmed', 'Shipping Confirmed'),
+        ('ff-packed', 'Packed'),
+        ('gg-partial', 'Partially Shipped'),
+        ('hh-shipped', 'Shipped'),
+        ('ii-tracking', 'Tracking Assigned'),
+        ('jj-delivered', 'Delivered'),
+        ('kk-cancel', 'Cancelled'),
+        ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
 
     @api.onchange('partner_id')
     def flsp_partner_onchange(self):
