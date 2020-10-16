@@ -15,4 +15,17 @@
               </xpath>
             </field>
         </record>
+
+        <record model="ir.ui.view" id="flsp_sale_tree_view_search">
+            <field name="name">flsp.tree.sales.search.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                    <filter string="Open Orders" domain="[('flsp_bpm_status', 'in', ['dsale', 'econfirmed', 'fpacked', 'gpartial'])]" name="flsp_open_sale_order"/>
+                    <filter string="Open Orders Non PPE" domain="['&amp;', ('flsp_SPPEPP_so', '=', False), ('flsp_bpm_status', 'in', ['dsale', 'econfirmed', 'fpacked', 'gpartial'])]" name="flsp_open_sale_order"/>
+                </xpath>
+            </field>
+        </record>
+
 </odoo>
