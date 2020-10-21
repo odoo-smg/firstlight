@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-
 from odoo import models, fields, api
 from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
-
-
+from dateutil.relativedelta import relativedelta
 class Flspbpmemails(models.Model):
     """
     Set emails to the process
     """
     _name = 'flspautoemails.bpmemails'
     _description = "BPM Emails"
-
     # User fields
     id = fields.Integer(index=True)
     email_active = fields.Boolean(string="Email Active")
@@ -30,7 +27,6 @@ class Flspbpmemails(models.Model):
     email_preview = fields.Text(string="Email Preview")
     user_ids = fields.Many2many('res.users', 'flspautoemails_bpmemails_users_rel', string="Users To receive",
                     help='Include here the users that must receive email from this template.')
-
     @api.model
     def get_emails(self, model, context, save_log=False):
         emails_to = ''
@@ -55,11 +51,9 @@ class Flspbpmemails(models.Model):
                     emails_to += '; ' + email_to_user.login
                 else:
                     emails_to = email_to_user.login
-
         if emails_to == '':
             emails_to = False
         return emails_to
-
     @api.model
     def _rule_eval(self, rule, model=None, dict=None, save_log=False):
         if rule:
@@ -70,6 +64,8 @@ class Flspbpmemails(models.Model):
                 'pool': self.pool,
                 'cr': self._cr,
                 'uid': self._uid,
+                'date': datetime.now(), #to be used to get the now date
+                'relative': relativedelta(days=-7), #to be used to get the customers created in 7 days
                 }
             try:
                 safe_eval(rule,
@@ -93,7 +89,6 @@ class Flspbpmemails(models.Model):
                     raise ValidationError("Wrong python code defined for BPM Emails="+self.name+". Code:" + rule)
                 return False
             return context.get('result', False)
-
     def update_preview(self):
         context = self._rule_eval(self.dict_preview, self)
         condition = self._rule_eval(self.condition, self, context)
@@ -114,9 +109,7 @@ class Flspbpmemails(models.Model):
         body_calc = self._rule_eval(self.email_body, self, context)
         if body_calc:
             body += self._rule_eval(self.email_body, self, context)
-
         self.email_preview = body
-
     def send_email(self, model, template):
         bpm_email = self.env['flspautoemails.bpmemails'].search([('name', '=', template)])
         result = True
@@ -129,7 +122,6 @@ class Flspbpmemails(models.Model):
                 email_to = bpm_email.get_emails(model, context, True)
                 subject = bpm_email._rule_eval(bpm_email.subject, model, context, True)
                 body = bpm_email._rule_eval(bpm_email.email_body, model, context, True)
-
                 if email_to and subject and body:
                     self.env['mail.mail'].create({
                         'body_html': body,
@@ -166,7 +158,6 @@ class Flspbpmemails(models.Model):
                     })
                     result = False
         return result
-
     def send_test(self):
         context = self._rule_eval(self.dict_preview, self)
         email_to = self.test_email

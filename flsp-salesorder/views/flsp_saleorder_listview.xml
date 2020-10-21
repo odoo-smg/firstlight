@@ -6,7 +6,26 @@
             <field name="inherit_id" ref="sale.view_quotation_tree"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="flsp_bpm_status" optional="hide"/>
+              </xpath>
+              <xpath expr="//tree" position="attributes">
+                  <attribute name="decoration-warning">flsp_bpm_status in ['dd-sale', 'ee-confirmed', 'ff-packed']</attribute>
+                  <attribute name="decoration-success">flsp_bpm_status in ['hh-shipped', 'ii-tracking', 'jj-delivered']</attribute>
+                  <attribute name="decoration-info">flsp_bpm_status == 'gg-partial'</attribute>
               </xpath>
             </field>
         </record>
+
+        <record model="ir.ui.view" id="flsp_sale_tree_view_search">
+            <field name="name">flsp.tree.sales.search.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                    <filter string="Open Orders" domain="[('flsp_bpm_status', 'in', ['dd-sale', 'ee-confirmed', 'ff-packed', 'gg-partial'])]" name="flsp_open_sale_order"/>
+                    <filter string="Open Orders Non PPE" domain="['&amp;', ('flsp_SPPEPP_so', '=', False), ('flsp_bpm_status', 'in', ['dd-sale', 'ee-confirmed', 'ff-packed', 'gg-partial'])]" name="flsp_open_sale_order"/>
+                </xpath>
+            </field>
+        </record>
+
 </odoo>
