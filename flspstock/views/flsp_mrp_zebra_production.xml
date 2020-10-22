@@ -13,7 +13,7 @@
                         </t>
                         <t t-foreach="range(qty)" t-as="item">
                             <t t-translation="off">
-~SD24
+~SD30
 ^XA
 ^FO60,10^BY3
 ^BQN,2,8, H, 7

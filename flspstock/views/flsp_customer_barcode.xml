@@ -24,6 +24,7 @@
                         </t>
                         <t t-foreach="range(qty)" t-as="item">
                             <t t-translation="off">
+~SD30
 ^XA
 ^FO100,100, 0
 ^A0N,80,95^FD<t t-esc="customer_desc"/>^FS
