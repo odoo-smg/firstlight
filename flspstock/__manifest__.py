@@ -46,5 +46,6 @@
         'views/flsp_production_lot_zpl.xml',
         'views/flsp_delivery_wizard.xml',
         'views/package_wizard.xml',
+        'views/flsp_production_form.xml',
     ],
 }
