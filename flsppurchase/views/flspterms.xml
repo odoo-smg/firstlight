@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--From view-->
+    <record model="ir.ui.view" id="flspterms_form_view">
+        <field name="name">flspterms.form </field>
+        <field name="model">flsp.terms</field>
+        <field name="arch" type="xml">
+            <form string="flspterms form">
+                <sheet>
+                    <group string="Terms and Conditions">
+                        <field name="flsp_term_name"/>
+                        <field name="flsp_terms_and_conditions" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="flspterms_tree_view">
+        <field name="name">flspterms.tree</field>
+        <field name="model">flsp.terms</field>
+        <field name="arch" type="xml">
+            <tree string="flspterms tree">
+                <field name="flsp_term_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Actions-->
+    <record model="ir.actions.act_window" id="flspterms_action">
+        <field name="name">FLSP Terms and Conditions </field>
+        <field name="res_model">flsp.terms</field>
+        <field name="view_mode">tree,form</field>
+<!--                    <field name="help" type="html">-->
+<!--                <p class="o_view_nocontent_smiling_face">Create the first course-->
+<!--                </p>-->
+<!--            </field>-->
+    </record>
+
+    <!--Menu-->
+    <menuitem id="flspterm_menu"
+              name="Terms And Conditions"
+              parent="purchase.menu_purchase_config"
+              action="flspterms_action"/>
+
+</odoo>
+
+
+<!--parent="purchase.menu_purchase_config"-->
+<!--parent="purchase.menu_purchase_root"-->
