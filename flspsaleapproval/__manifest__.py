@@ -39,9 +39,13 @@
         'report/flsp_sale_report.xml',
         'report/flsp_invoice_report.xml',
         'report/flsp_invoice_report_withoutpay.xml',
+        'report/flsp_commercial_invoice.xml',
         'views/flsp_sppepp_message_view.xml',
         'views/flsp_choose_delivery.xml',
         'views/flsp_reject_wizard_view.xml',
         'views/flsp_confirmed_order_email.xml',
+        'views/flsp_account_move_form.xml',
+        'views/flsp_product_category_form.xml',
+        'views/flsp_product_template_view_sales.xml',
     ],
 }
