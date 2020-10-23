@@ -6,7 +6,9 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='general_information']//field[@name='product_variant_id']" position="after">
-                <field name="tag_ids" widget="many2many_tags"/>
+                <field name="flsp_tag_ids" widget="many2many_tags"/>
+                <field name="flsp_manufacturer"/>
+                <field name="flsp_manufacture_part_number"/>
             </xpath>
         </field>
     </record>
@@ -18,26 +20,14 @@
         <field name="inherit_id" ref="product.product_template_search_view"/> <!--Specify which model we inherit-->
         <field name="arch" type="xml">
             <xpath expr="/search/field[@name='categ_id']" position="after"> <!--Specify where we adding content-->
-                <field name="tag_ids"/>
+                <field name="flsp_tag_ids"/>
             </xpath>
 
             <xpath expr="/search/filter[@name='services']" position="after">
-                <filter string='Product Tags' name="tag_ids" domain="[('tag_ids', '!=', False)] " />
+                <filter string='Product Tags' name="flsp_tag_ids" domain="[('flsp_tag_ids', '!=', False)] " />
             </xpath>
-
-<!--Cannot group a many2many field-->
-<!--            <xpath expr="/search/group/filter[@name='type']" position="after">-->
-<!--                <filter string='Product Tags' name="tag_ids" context="{'group_by':'tag_ids'}"/>-->
-<!--            </xpath>-->
 
         </field>
     </record>
 
 </odoo>
-
-
-
-
-
-
-

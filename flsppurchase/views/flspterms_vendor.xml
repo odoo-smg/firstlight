@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_vendor_form" model="ir.ui.view">
+        <field name="name">view.vendor.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="supplier_rank" invisible="1" /> <!--Call the supplier rank field so we can use it-->
+                <field name="terms" attrs="{'invisible': [('supplier_rank', '=', 0)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
