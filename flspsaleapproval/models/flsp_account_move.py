@@ -7,6 +7,9 @@ class flspaccountmove(models.Model):
     _inherit = 'account.move'
     _check_company_auto = True
 
+    flsp_broker_id = fields.Many2one('res.partner', string='Broker')
+    flsp_ci_notes = fields.Text(string='Notes for Commercial Invoice')
+
     #def _get_reconciled_info_JSON_values(self):
     def _get_sale_order_info_JSON_values(self):
         self.ensure_one()
