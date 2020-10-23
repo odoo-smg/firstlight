@@ -36,7 +36,7 @@
                         <t t-set="product_code" t-value="l.product_id.default_code"/>
                         <t t-set="product_desc" t-value="l.product_id.name"/>
                     </t>
-
+~SD30
 ^XA
 ^FO2240,80
 ^A0R,80,95^FDFrom:^FS

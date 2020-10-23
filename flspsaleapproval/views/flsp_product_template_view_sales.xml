@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspsaleapproval_product_tmpl_view">
+            <field name="name">flspsaleapproval.product.tmpl.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">91</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_policy']" position="after">
+                    <field name="flsp_tariff_number" string="Tariff Number" readonly="0"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

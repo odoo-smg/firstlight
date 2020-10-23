@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspsaleapproval_category_view">
+            <field name="name">flspsaleapproval.category.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="priority">96</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="flsp_tariff_number" string="Tariff Number" readonly="0"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

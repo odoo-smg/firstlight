@@ -21,6 +21,7 @@
                             <t t-foreach="range(set_qty)" t-as="current_package">
                                 <t t-set="printable_pack" t-value="current_package+1" />
                                 <t t-translation="off">
+~SD30
 ^XA
 ^FO120,120, 0
 ^A0N,95,95

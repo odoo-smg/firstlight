@@ -12,5 +12,10 @@ class product_tags(models.Model):
 class product_template(models.Model):
     _inherit = 'product.template'
 
-    tag_ids = fields.Many2many('product.tags', string='Tags')    # Can not group a many2many field
+    flsp_tag_ids = fields.Many2many('product.tags', string='Tags')    # Can not group a many2many field
 
+    flsp_manufacturer = fields.Char(string='Manufacturer',
+        help="Enter Manufacturer")
+
+    flsp_manufacture_part_number = fields.Char(string='Manufacture part #',
+        help="Enter Manufacture Part number")
