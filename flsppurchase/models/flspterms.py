@@ -32,4 +32,4 @@ class vendor_template(models.Model):
     # _inherit = 'product.template'
     _inherit = 'res.partner'
 
-#    terms = fields.Many2one('flsp.terms', string='Flsp Terms', ondelete='cascade',)
+    terms = fields.Many2one('flsp.terms', string='Flsp Terms', ondelete='cascade',)
