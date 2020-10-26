@@ -1,0 +1,5 @@
+<template xml:spacer="preserve">
+    <t t-name="ks_preview_button">
+        <button type="button" class="ks_binary_file_preview btn btn-secondary fa fa-file-text-o" style="padding: 0px 4px; color: #7C7BAD;" title="Preview" aria-label="Preview"/>
+    </t>
+</template>
