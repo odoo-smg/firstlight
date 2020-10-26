@@ -160,8 +160,7 @@
                         </div>
                         <div style=" float:right; width:50%; " >
                             <spam style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">Tax ID:</spam>
-                            <spam t-field="company.flsp_gst_number" style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"/><br/>
-                            <spam style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">Broker:</spam>
+                            <spam t-field="o.partner_id.vat" style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"/><br/>                            <spam style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">Broker:</spam>
                             <span t-field="o.flsp_broker_id.name" style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"/>
                             <p style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;">
                               <span t-field="o.flsp_broker_id.comment"/><br/>
