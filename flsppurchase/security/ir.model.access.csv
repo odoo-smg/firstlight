@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flspmp_posuggestion,flsppurchase.report.purchase.suggestion,model_report_purchase_suggestion,base.group_user,1,1,1,1
 access_flspmp_posupport,flsppurchase.report.suggestion.support,model_report_flsppurchase_auxview,base.group_user,1,1,1,1
 access_flsp_terms,flsp.terms,model_flsp_terms,base.group_user,1,1,1,1
+access_flsp_payment,flsp.payment,model_flsp_payment,base.group_user,1,1,1,1

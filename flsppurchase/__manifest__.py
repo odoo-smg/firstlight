@@ -38,5 +38,7 @@
         'views/flspterms.xml',
         'views/flspterms_vendor.xml',
         'report/flsp_po_print.xml',
+        'views/flsppayment.xml',
+        'views/flsporder.xml',
     ],
 }
