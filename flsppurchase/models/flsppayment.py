@@ -31,4 +31,4 @@ class vendor_temp(models.Model):
     # _inherit = 'product.template'
     _inherit = 'res.partner'
 
-    #payment_terms = fields.Many2one('flsp.payment', string='Payment Terms', ondelete='cascade',)
+    payment_terms = fields.Many2one('flsp.payment', string='Payment Terms', ondelete='cascade',)
