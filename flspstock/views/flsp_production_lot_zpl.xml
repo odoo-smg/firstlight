@@ -79,7 +79,7 @@
         </template>
 
         <report
-            string="Eva Charge (ZPL)"
+            string="Eva Charge 2x3 (ZPL)"
             id="flsp_eva_charge_report"
             model="stock.production.lot"
             report_type="qweb-text"
