@@ -23,15 +23,12 @@ class SummarizedBomReport(models.Model):
 
 
         query = """
-
         create table IF NOT EXISTS TMP_TABLE_CALCULATION (id Integer, description text, default_code text, product_tmpl_id Integer, product_id Integer, bom_id Integer, product_qty double precision, level_bom integer);
         TRUNCATE TMP_TABLE_CALCULATION;
         """
         self.env.cr.execute(query)
 
-        query = """
-
-        CREATE OR REPLACE PROCEDURE flsp_include_products_on_tmp(bom_id_par integer, bom_level integer, bom_factor float)
+        query = """CREATE OR REPLACE PROCEDURE flsp_include_products_on_tmp(bom_id_par integer, bom_level integer, bom_factor float)
         AS $$
 
 		declare
