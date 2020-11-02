@@ -26,7 +26,7 @@ class SummarizedBomReport(models.Model):
         AS $$
 
 		declare
-             next_id    integer; 
+             next_id    integer;
 			 product_bom_qty integer;
 			 product_bom_id  integer;
              current_bom_line   record;
@@ -41,12 +41,12 @@ class SummarizedBomReport(models.Model):
 			end if ;
 
            loop
-		   	  		   	  
+
    			  --raise notice '         %getting next...', concat(repeat('      ',bom_level),'|---   ');
 
               fetch current_bom_cursor into current_bom_line;
               exit when not found;
-			  
+
    			  --raise notice '         %inserting for product=...%', concat(repeat('      ',bom_level),'|---   '), current_bom_line.product_id;
 			  product_bom_qty := (select count(id) as TOTAL from mrp_bom where product_tmpl_id in (select product_tmpl_id from product_product where id = current_bom_line.product_id));
 			  product_bom_id := (select id from mrp_bom where product_tmpl_id in (select product_tmpl_id from product_product where id = current_bom_line.product_id) limit 1);
@@ -58,7 +58,7 @@ class SummarizedBomReport(models.Model):
 			  else
 				  next_id := (select count(id) as TOTAL from TMP_TABLE_CALCULATION);
 				  next_id := next_id + 1;
-				  INSERT INTO TMP_TABLE_CALCULATION 
+				  INSERT INTO TMP_TABLE_CALCULATION
 					select     next_id as id,
 							   product_template.name as description,
 							   product_template.default_code,
@@ -73,25 +73,29 @@ class SummarizedBomReport(models.Model):
 					where      product_product.id = current_bom_line.product_id;
 			  end if;
            end loop;
-        
+
            close current_bom_cursor;
-		   
+
         end;
         $$
         language plpgsql;
-        
+        """
+
+        self.env.cr.execute(query)
+
+        query = """
 
         CREATE OR REPLACE PROCEDURE flsp_load_boms()
         AS $$
-        
+
         declare
              bom_line   record;
-             bom_cursor cursor 
+             bom_cursor cursor
                  for select * from flsp_bom_summarized;
         begin
-        
+
            raise notice 'starting procedure: flsp_load_boms!';
-        
+
         -- open the cursor
            open bom_cursor;
            --raise notice '   opening cursor!';
@@ -103,30 +107,41 @@ class SummarizedBomReport(models.Model):
               --raise notice '   checking bom_id = %',  bom_line.bom_id;
               if bom_line.bom_id is not null then
 			    --raise notice '   calling flsp_include_products_on_tmp for bom_id = %',  bom_line.bom_id;
-                call flsp_include_products_on_tmp(bom_line.bom_id, 0, bom_line.product_qty);        
+                call flsp_include_products_on_tmp(bom_line.bom_id, 0, bom_line.product_qty);
               end if;
            end loop;
-        
+
            -- close the cursor
            close bom_cursor;
-        
+
         end;
-        
+
         $$
         language plpgsql;
 
+        """
+
+        self.env.cr.execute(query)
+
+        query = """
 
         create table IF NOT EXISTS TMP_TABLE_CALCULATION (id Integer, description text, default_code text, product_tmpl_id Integer, product_id Integer, bom_id Integer, product_qty double precision, level_bom integer);
         TRUNCATE TMP_TABLE_CALCULATION;
 
         CALL flsp_load_boms();
-        
+
+        """
+
+        self.env.cr.execute(query)
+
+        query = """
+
         CREATE or REPLACE VIEW report_flsp_summarized_bom AS (
         SELECT
             max(TMP_TABLE_CALCULATION.id) as id,
             product_template.name as description,
-            product_template.default_code as default_code, 
-            product_product.product_tmpl_id as product_tmpl_id, 
+            product_template.default_code as default_code,
+            product_product.product_tmpl_id as product_tmpl_id,
             TMP_TABLE_CALCULATION.product_id,
             max(TMP_TABLE_CALCULATION.bom_id) as bom_id,
             sum(TMP_TABLE_CALCULATION.product_qty) as product_qty,
@@ -140,4 +155,3 @@ class SummarizedBomReport(models.Model):
         """
 
         self.env.cr.execute(query)
-
