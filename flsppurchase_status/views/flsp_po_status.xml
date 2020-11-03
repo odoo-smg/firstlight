@@ -16,11 +16,12 @@
 
             <!-- Adding decorations-->
             <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-danger">flsp_po_status in ['confirmed', 'non_confirmed'] and (flsp_scheduled_date &lt; current_date)</attribute>
                 <attribute name="decoration-muted">flsp_po_status in ['cancelled']</attribute>
                 <attribute name="decoration-warning">flsp_po_status in ['request', 'non_confirmed']</attribute>
                 <attribute name="decoration-success">flsp_po_status in ['confirmed',]</attribute>
                 <attribute name="decoration-it">flsp_po_status == 'received'</attribute>
-                <attribute name="decoration-danger">flsp_po_status == 'late'</attribute>
+                <!--attribute name="decoration-danger">flsp_po_status == 'late'</attribute-->
             </xpath>
 
 
@@ -44,6 +45,3 @@
     </record>
 
 </odoo>
-
-
-
