@@ -33,8 +33,7 @@ class Flsp_PO_Status(models.Model):
         ('cancelled', 'Cancelled'),
         ('non_confirmed', 'PO Not confirmed'),
         ('confirmed', 'PO confirmed'),
-        ('received', 'Received'),
-        ('late', 'Late')],
+        ('received', 'Received')],
         string='FLSP Status',   eval=True, store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
 
     # Dates
@@ -168,6 +167,7 @@ class Flsp_PO_Status(models.Model):
                     picking.write({"state": "cancel"})
 
 # Late Status
+'''
     @api.onchange('flsp_scheduled_date')
     def _change_status_to_late(self):
         # today = datetime.today().date()
@@ -185,7 +185,7 @@ class Flsp_PO_Status(models.Model):
         elif self.state == 'purchase' and (scheduled > today + relative):
             # if(scheduled > today +relative):
             self.write({'flsp_po_status': 'non_confirmed', })
-
+'''
 # Changing to received got from PURCHASE.STOCK
     @api.depends('picking_ids', 'picking_ids.state')
     def _compute_is_shipped(self):
