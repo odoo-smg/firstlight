@@ -124,7 +124,11 @@ class Flsp_PO_Status(models.Model):
             # print("we have multiple dates with length = " + str(len(self.order_line)))
             date_list = []
             for line in self.order_line:
-                date_list.append(line.date_planned) #adding the dates to the list
+                if line.date_planned:
+                    date_list.append(line.date_planned) #adding the dates to the list
+                else:
+                    date_list.append(datetime.min) #adding the dates to the list
+
             largest_date = max(date_list)
             self.flsp_scheduled_date = largest_date
 
@@ -192,45 +196,3 @@ class Flsp_PO_Status(models.Model):
                     order.write({'flsp_po_status': 'received', })
             else:
                 order.is_shipped = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
