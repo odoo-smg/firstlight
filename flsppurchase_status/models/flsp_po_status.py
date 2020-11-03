@@ -166,26 +166,7 @@ class Flsp_PO_Status(models.Model):
                 if len(picking.move_lines) == 0:
                     picking.write({"state": "cancel"})
 
-# Late Status
-'''
-    @api.onchange('flsp_scheduled_date')
-    def _change_status_to_late(self):
-        # today = datetime.today().date()
-        today = datetime.today()
-        scheduled = self.flsp_scheduled_date
-        relative = relativedelta(days=-1) #past 1 day
-        if self.state == 'purchase' and (scheduled < today +relative):
-            # if(scheduled > today +relative):
-            self.write({'flsp_po_status': 'late', })
 
-        elif self.state == 'purchase' and (scheduled > today + relative) and self.flsp_vendor_confirmation_date:
-            # if(scheduled > today +relative):
-            self.write({'flsp_po_status': 'confirmed', })
-
-        elif self.state == 'purchase' and (scheduled > today + relative):
-            # if(scheduled > today +relative):
-            self.write({'flsp_po_status': 'non_confirmed', })
-'''
 # Changing to received got from PURCHASE.STOCK
     @api.depends('picking_ids', 'picking_ids.state')
     def _compute_is_shipped(self):
