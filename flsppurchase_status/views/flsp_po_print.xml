@@ -345,7 +345,7 @@
                         </div>
                     </div>
                 </div>
-                <t t-if="doc.partner_id.terms">
+                <t t-if="doc.partner_id.flsp_terms_and_conditions">
                     <p style = "page-break-after: always;"></p>
                     <div class="page" style="width: 1116px;">
                         <h2>Terms and Conditions</h2>
@@ -550,7 +550,7 @@
                     </tbody>
                 </table>
 
-                <t t-if="doc.partner_id.terms">
+                <t t-if="doc.partner_id.flsp_terms_and_conditions">
                     <p style = "page-break-after: always;"></p>
                     <div class="page" style="width: 1116px;">
                         <h2>Terms and Conditions</h2>
