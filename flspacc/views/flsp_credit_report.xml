@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="partner_flsp_form_view">
+            <field name="name">partner.template.flsp.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet[1]" position="before">
+                    <header/>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                      <button name="button_partner_acc_valid" attrs="{'invisible': [('flsp_acc_valid', '=', True)]}" groups="account.group_account_manager" string="Acc Validation" type="object" class="oe_highlight"/>
+                      <button name="button_partner_acc_valid_off" attrs="{'invisible': [('flsp_acc_valid', '=', False)]}" groups="account.group_account_manager" string="Unvalid Acc" type="object"/>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="flsp_acc_valid" />
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
