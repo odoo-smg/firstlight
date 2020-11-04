@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.rule" id="summarized_bom_detail_rule">
+        <field name="name">Summarized BOM detail rule</field>
+        <field name="model_id" ref="model_flsp_bom_summarized_line"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="0" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+        <field name="domain_force">[ ('id','!=',False)]</field>
+    </record>
+
+    <record id="view_flsp_summarized_bom_detail_tree" model="ir.ui.view">
+        <field name="name">Summarized BOM Components by level</field>
+        <field name="model">flsp.bom.summarized.line</field>
+        <field name="arch" type="xml">
+            <tree string="Summarized BOM Components by Level" edit="false" create="0" delete="0">
+                <field name="default_code" />
+                <field name="description" optional="show"/>
+                <field name="bom_id" optional="show"/>
+                <field name="level_bom"/>
+                <field name="product_qty"/>
+                <field name="product_uom"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_flsp_summarized_details_bom_form">
+        <field name="name">flsp.bom.summarized.line.form</field>
+        <field name="model">flsp.bom.summarized.line</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false" >
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="product_id"/></h1>
+                    </div>
+                    <group>
+                        <field name="description"/>
+                        <field name="bom_id"/>
+                        <field name="level_bom"/>
+                    </group>
+                    <group>
+                        <field name="product_qty"/>
+                        <field name="product_uom"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_summarized_bom_details_action" model="ir.actions.act_window">
+        <field name="name">Summarized BOM Components by Level</field>
+        <field name="res_model">flsp.bom.summarized.line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" ref="view_flsp_summarized_bom_detail_tree"/>
+        <!--field name="context">{'custom_search': True, 'search_default_can_be_none': 1}</field-->
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Please select at least one BOM</p>
+        </field>
+    </record>
+
+    <record id="view_flsp_summarized_bom_tree" model="ir.ui.view">
+        <field name="name">Summarized BOM</field>
+        <field name="model">report.flsp.summarized.bom</field>
+        <field name="arch" type="xml">
+            <tree string="Summarized BOM View"  create="0" delete="0"  >
+                <field name="default_code" />
+                <field name="description" optional="show"/>
+                <field name="product_qty"/>
+                <field name="product_uom"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_flsp_summarized_bom_form">
+        <field name="name">flsp.summarized.bom.form</field>
+        <field name="model">report.flsp.summarized.bom</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" position="inside">
+                        <button class="oe_stat_button" name="action_view_details"
+                            type="object" icon="fa-search-plus" help="See the how this number was calculated.">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="product_qty" widget="statinfo" nolabel="1" class="mr4"/>
+                                </span>
+                                <span class="o_stat_text">See Details</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1><field name="product_id"/></h1>
+                    </div>
+                    <group>
+                        <field name="description"/>
+                        <field name="bom_id"/>
+                    </group>
+                    <group>
+                        <field name="product_qty"/>
+                        <field name="product_uom"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="flsp_summarized_bom_search_view" model="ir.ui.view">
+        <field name="name">summarized.bom.search</field>
+        <field name="model">report.flsp.summarized.bom</field>
+        <field name="arch" type="xml">
+            <search string="Product">
+                <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
+                <separator/>
+                <!--filter string="Can be produced" name="can_be_produced" domain="[('route_mfg', '=', 'mfg')]"/-->
+                <separator/>
+                <!--group expand="1" string="Group By">
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                </group-->
+            </search>
+        </field>
+    </record>
+
+    <record id="flsp_summarized_bom_action" model="ir.actions.act_window">
+        <field name="name">Summarized BOM</field>
+        <field name="res_model">report.flsp.summarized.bom</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" ref="view_flsp_summarized_bom_tree"/>
+        <field name="search_view_id" ref="flsp_summarized_bom_search_view"/>
+        <field name="context">{'custom_search': True, 'search_default_can_be_none': 1}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Please select at least one BOM</p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="flsp_summarized_bom_tree_all">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_flsp_summarized_bom_tree"/>
+        <field name="act_window_id" ref="flsp_summarized_bom_action"/>
+    </record>
+
+</odoo>
