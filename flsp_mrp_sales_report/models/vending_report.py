@@ -59,21 +59,22 @@ class FlspMrpSalesReport(models.Model):
             rp.city as city,
             rc.id as country_id,
             sm.origin_returned_move_id as return_id
-        FROM stock_move as sm
-            inner join 	stock_move_line as sml
-            on 			sml.move_id = sm.id
-            inner join 	product_template as pt
-            on			sm.product_id = pt.id
-            left join 	stock_production_lot as spl
-            on 			sml.lot_id = spl.id
-            inner join 	stock_picking as sp
-            on 			sp.id = sm.picking_id
-            inner join 	sale_order as so
-            on 			so.id = sp.sale_id
-            inner join 	res_partner as rp
-            on 			so.partner_id = rp.id and so.state = 'sale'
-            inner join 	res_country as rc
-            on 			rp.country_id = rc.id
+        from sale_order so
+            inner join sale_order_line sol
+            on         sol.order_id = so.id
+            inner join     product_product as pp
+            on            sol.product_id = pp.id
+            inner join     product_template as pt
+            on            pt.id = pp.product_tmpl_id
+            inner join     res_partner as rp
+            on             so.partner_id = rp.id
+            inner join     stock_move as sm
+            on             sm.sale_line_id = sol.id
+            inner join     stock_move_line as sml
+            on             sml.move_id = sm.id
+            left join      stock_production_lot as spl
+            on             sml.lot_id = spl.id
+            where          so.state in ('sale', 'done');
         );
         """
         self.env.cr.execute(query)
