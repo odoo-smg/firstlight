@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <tree string="Flsp Sold Product reporting" create="false">
                 <!--Fields to display on report-->
-                <field name="partner_id"/>
+								<field name="partner_id"/>
                 <field name="order_id" />
                 <field name="date" optional="hide"/>
                 <field name="product_id"/>
@@ -15,11 +15,13 @@
                 <field name="serial_number"/>
                 <field name="qty_delivered"/>
                 <field name="commitment_date"/>
+                <field name="effective_date"/>
                 <field name="street" optional="hide"/>
                 <field name="zip" optional="hide"/>
                 <field name="city" optional="hide"/>
                 <field name="country_id"/>
-
+                <field name="return_id" optional="hide"/>
+                <field name="qty_returned" optional="hide"/>
             </tree>
         </field>
     </record>
@@ -60,4 +62,3 @@
               action="flsp_mrp_sales_report_action"
     />
 </odoo>
-

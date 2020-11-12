@@ -17,23 +17,21 @@ class FlspMrpSalesReport(models.Model):
     _auto = False
     _description = 'Mrp Sales Report'
 
-    # order_id = fields.Many2one('sale.order', 'Order #', readonly=True)
     order_id = fields.Char('Order Reference', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Customer', readonly=True)
-
     country_id = fields.Many2one('res.country', 'Customer Country', readonly=True)
     street = fields.Char('Customer Street', readonly=True)
     city = fields.Char('Customer City', readonly=True)
     zip = fields.Char('Customer Zip', readonly=True)
-
-    commitment_date = fields.Datetime('Delivery Date', readonly=True)
+    commitment_date = fields.Datetime('Scheduled Date', readonly=True)
     date = fields.Datetime('Order Date', readonly=True)
-
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
     default_code = fields.Char(string='Part #', readonly=True)
     qty_delivered = fields.Float('Qty Delivered', readonly=True)
-
     serial_number = fields.Many2one('stock.production.lot', readonly=True)
+    return_id = fields.Float('Returned id', readonly=True)
+    qty_returned = fields.Float('Qty Returned', readonly=True)
+    effective_date = fields.Datetime('Effective date', readonly=True)
 
     def init(self):
         """
@@ -49,14 +47,18 @@ class FlspMrpSalesReport(models.Model):
             so.name as order_id,
             sm.product_id as product_id,
             pt.default_code as default_code,
-            sml.qty_done as qty_delivered,
-            so.commitment_date as commitment_date,
+            case when sm.origin_returned_move_id is null then sml.qty_done else sml.qty_done*(-1) end as qty_delivered,
+            case when sm.origin_returned_move_id is not null then sml.qty_done end as qty_returned,
+            case when sm.origin_returned_move_id is null then so.commitment_date else sm.date_expected end as commitment_date,
+            sm.date as effective_date,
+            --so.commitment_date as commitment_date,
             so.date_order as date,
             spl.id as serial_number,
             rp.street as street,
             rp.zip as zip,
             rp.city as city,
-            rc.id as country_id
+            rc.id as country_id,
+            sm.origin_returned_move_id as return_id
         FROM stock_move as sm
             inner join 	stock_move_line as sml
             on 			sml.move_id = sm.id
@@ -75,4 +77,3 @@ class FlspMrpSalesReport(models.Model):
         );
         """
         self.env.cr.execute(query)
-
