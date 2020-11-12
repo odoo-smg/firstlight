@@ -74,6 +74,8 @@ class FlspMrpSalesReport(models.Model):
             on             sml.move_id = sm.id
             left join      stock_production_lot as spl
             on             sml.lot_id = spl.id
+            inner join 	res_country as rc
+            on 			rp.country_id = rc.id
             where          so.state in ('sale', 'done')
         );
         """
