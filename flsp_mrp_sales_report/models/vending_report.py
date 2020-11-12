@@ -74,7 +74,7 @@ class FlspMrpSalesReport(models.Model):
             on             sml.move_id = sm.id
             left join      stock_production_lot as spl
             on             sml.lot_id = spl.id
-            where          so.state in ('sale', 'done');
+            where          so.state in ('sale', 'done')
         );
         """
         self.env.cr.execute(query)
