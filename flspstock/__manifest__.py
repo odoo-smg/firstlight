@@ -47,5 +47,7 @@
         'views/flsp_delivery_wizard.xml',
         'views/package_wizard.xml',
         'views/flsp_production_form.xml',
+        'views/flsp_serial_label_zpl_1x34.xml',
+        'views/flsp_serial_label_zpl_2x1.xml',
     ],
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Tree view-->
+	<record id="flsp_mrp_sales_report_tree" model="ir.ui.view">
+        <field name="name">flsp.mrp.sales.report.tree</field>
+        <field name="model">flsp.mrp.sales.report</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Sold Product reporting" create="false">
+                <!--Fields to display on report-->
+								<field name="partner_id"/>
+                <field name="order_id" />
+                <field name="date" optional="hide"/>
+                <field name="product_id"/>
+                <field name="default_code"/>
+                <field name="serial_number"/>
+                <field name="qty_delivered"/>
+                <field name="commitment_date"/>
+                <field name="effective_date"/>
+                <field name="street" optional="hide"/>
+                <field name="zip" optional="hide"/>
+                <field name="city" optional="hide"/>
+                <field name="country_id"/>
+                <field name="return_id" optional="hide"/>
+                <field name="qty_returned" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!--Search-->
+    <record id="flsp_mrp_sales_report_search" model="ir.ui.view">
+        <field name="name">flsp.mrp.sales.report.search</field>
+        <field name="model">flsp.mrp.sales.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Sale Report">
+                <field name="product_id"/>
+                <field name="default_code"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product" context="{'group_by':'product_id'}"/>
+                    <filter string="Order" name="order" context="{'group_by':'order_id'}"/>
+                    <filter string="Customer" name="customer" context="{'group_by':'partner_id'}"/>
+                    <filter string="Delivery Date" name="delivery" context="{'group_by':'commitment_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record id="flsp_mrp_sales_report_action" model="ir.actions.act_window">
+        <field name="name">Flsp Sold Product report</field>
+        <field name="res_model">flsp.mrp.sales.report</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_mrp_sales_report_tree"/>
+        <field name="context">{'group_by': ['product_id']}</field>
+    </record>
+
+    <!--Menuitem-->
+    <menuitem name="Flsp Sold Product Report"
+              id="flsp_sales_report_menu"
+              parent="mrp.menu_mrp_reporting"
+              action="flsp_mrp_sales_report_action"
+    />
+</odoo>

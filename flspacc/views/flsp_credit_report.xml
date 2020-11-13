@@ -6,8 +6,10 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='category_id']" position="after">
-                <field name="supplier_rank" invisible="1" /> <!--Call the supplier rank field so we can use it-->
-                <field name="flsp_terms_and_conditions" attrs="{'invisible': [('supplier_rank', '=', 0)]}"/>
+                <field name="customer_rank" invisible="1" /> <!--Call the supplier rank field so we can use it-->
+                <field name="flsp_credit_report" widget="many2many_binary" attrs="{'invisible': [('customer_rank', '=', 0)]}"
+                    groups="account.group_account_manager"/>
+<!--                <field name="flsp_credit_report" attrs="{'invisible': [('customer_rank', '=', 0)]}"/>-->
             </xpath>
         </field>
     </record>
