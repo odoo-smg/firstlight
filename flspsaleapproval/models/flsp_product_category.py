@@ -8,3 +8,4 @@ class flspproductcategory(models.Model):
     _check_company_auto = True
 
     flsp_tariff_number = fields.Char(string='Tariff Number')
+    company_id = fields.Many2one('res.company', 'Company', readonly=True)
