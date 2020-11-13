@@ -205,12 +205,16 @@
                             <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
                                 padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
                                 font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Description</td>
-                            <!--td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
-                                padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
-                                font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Vendor Part #</td>
-                            <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
-                                padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
-                                font-style: normal; font-weight: bolder; text-align: left; ">Manufacture Part #</td-->
+
+
+<!--                            <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;-->
+<!--                                padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;-->
+<!--                                font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Vendor Part #</td>-->
+<!--                            -->
+<!--                            <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;-->
+<!--                                padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;-->
+<!--                                font-style: normal; font-weight: bolder; text-align: left; ">Manufacture Part #</td>-->
+
                             <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
                                 padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
                                 font-style: normal; font-weight: bolder; width:70px; ">Scheduled Date</td>
@@ -250,14 +254,16 @@
 
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px;
-                                        padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; "><spam t-esc="line.name"/></td>
+                                        padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; word-wrap: normal; white-space:wrap;
+                                        white-space: pre-line; "><spam t-esc="line.name"/></td>
+<!--                                        padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; "><spam t-esc="product_desc"/></td>-->
 
-                                    <!--td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
-                                        font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
-                                        padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.flsp_vendor_code"/></td>
-                                    <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
-                                        font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
-                                        padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.product_id.flsp_manufacture_part_number"/></td-->
+<!--                                    <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;-->
+<!--                                        font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;-->
+<!--                                        padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.flsp_vendor_code"/></td>-->
+<!--                                    <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;-->
+<!--                                        font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;-->
+<!--                                        padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.product_id.flsp_manufacture_part_number"/></td>-->
 
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
@@ -265,7 +271,7 @@
 
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
-                                        padding-right: 4px; vertical-align: top; text-align: left; ">
+                                        padding-right: 4px; vertical-align: top; text-align: left;  word-wrap: normal; white-space:nowrap;">
                                         <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/> <spam t-field="line.product_id.uom_po_id" /></td>
 <!--                                    t-field="line.product_id.uom_po_id"-->
 <!--                                        <spam t-field="line.product_uom_qty" t-options='{"widget": "integer"}'/> <spam t-field="line.product_uom"/></td>-->
@@ -534,7 +540,10 @@
                                 <t t-if="not line.display_type">
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px;
-                                        padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; "><spam t-esc="line.name"/></td>
+                                        padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left;
+                                        white-space: pre-line;"><spam t-esc="line.name"/></td>
+<!--                                        padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; "><spam t-esc="product_desc"/></td>-->
+
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 16px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
                                         padding-right: 4px; vertical-align: top; text-align: left; "><spam t-field="line.date_planned" t-options='{"widget": "date"}'/></td>
