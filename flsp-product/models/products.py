@@ -57,9 +57,9 @@ class Smgproduct(models.Model):
          'UNIQUE(default_code)',
          "The Product Code must be unique"),
 
-        ('name_unique_flsp6',
-         'UNIQUE(name)',
-         "The Product name must be unique"),
+        #('name_unique_flsp6',
+        # 'UNIQUE(name)',
+        # "The Product name must be unique"),
     ]
 
     def button_acc_valid(self):
