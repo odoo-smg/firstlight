@@ -134,9 +134,9 @@
                         <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Shipping Address:</spam>
                             <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
                                 <span t-field="doc.company_id.name"/><br/>
-                                <span t-field="doc.company_id.street"/><br/>
-                                <span t-field="doc.company_id.city"/>, <span t-field="doc.company_id.state_id.code"/>, <span t-field="doc.company_id.zip"/><br/>
-                                <span t-field="doc.company_id.country_id"/><br/>
+                                <span t-field="doc.company_id.flsp_street"/><br/>
+                                <span t-field="doc.company_id.flsp_city"/>, <span t-field="doc.company_id.flsp_state_id.code"/>, <span t-field="doc.company_id.flsp_zip"/><br/>
+                                <span t-field="doc.company_id.flsp_country_id"/><br/>
                                 <span t-field="doc.company_id.phone"/>
                             </p>
                     </div>
@@ -477,9 +477,9 @@
                         <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Shipping Address:</spam>
                             <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
                                 <span t-field="doc.company_id.name"/><br/>
-                                <span t-field="doc.company_id.street"/><br/>
-                                <span t-field="doc.company_id.city"/>, <span t-field="doc.company_id.state_id.code"/>, <span t-field="doc.company_id.zip"/><br/>
-                                <span t-field="doc.company_id.country_id"/><br/>
+                                <span t-field="doc.company_id.flsp_street"/><br/>
+                                <span t-field="doc.company_id.flsp_city"/>, <span t-field="doc.company_id.flsp_state_id.code"/>, <span t-field="doc.company_id.flsp_zip"/><br/>
+                                <span t-field="doc.company_id.flsp_country_id"/><br/>
                                 <span t-field="doc.company_id.phone"/>
                             </p>
                     </div>
