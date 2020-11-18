@@ -33,6 +33,12 @@ class flspsalesorder(models.Model):
         ('kk-cancel', 'Cancelled'),
         ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
 
+    flsp_shipping_method = fields.Selection([
+        ('1', 'FL account and Invoice the Customer'),
+        ('2', 'FL account and do not Invoice Customer'),
+        ('3', 'Customer carrier choice and account'),
+        ], string='Shipping Method', copy=False, store=True)
+
     @api.onchange('partner_id')
     def flsp_partner_onchange(self):
         self.flsp_so_user_id = self.partner_id.flsp_user_id.id

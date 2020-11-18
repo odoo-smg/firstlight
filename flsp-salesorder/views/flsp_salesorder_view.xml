@@ -17,6 +17,9 @@
               <xpath expr="//field[@name='amount_total']" position="after">
                 <field name="flsp_amount_deposit"/>
               </xpath>
+              <xpath expr="//label[@for='commitment_date']" position="before">
+                <field name="flsp_shipping_method"/>
+              </xpath>
             </field>
         </record>
 
