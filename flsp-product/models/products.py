@@ -167,4 +167,7 @@ class Smgproduct(models.Model):
             # print(line)
             # print("name=", line[1], "flsp_part_prefix=", line[2])
             if self.name == line[1] and self.flsp_part_prefix != line[2]:
-                raise ValidationError('Name already in use. To use this name you must use the matching prefix')
+                raise ValidationError('Name already used on product with default code: ' + line[3] +
+                      '\nTo use this name you must use the matching Part # Prefix: ' + line[2] +
+                      ' and increment the Part # Suffix'
+                      )
