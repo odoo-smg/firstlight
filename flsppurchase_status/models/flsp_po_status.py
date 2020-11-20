@@ -103,7 +103,15 @@ class Flsp_PO_Status(models.Model):
         self.write({'state': 'done'})
         # self.write({'flsp_po_status': 'received', })
 
-# DATE
+    # DATE
+    @api.onchange('flsp_vendor_confirmation_date')
+    def _change_vendor_confirm_change_scheduled(self):
+        """
+            Purpose: On changing vendor confirmation date change the flp scheduled date
+            Date:   Nov/20/2020/Friday
+        """
+        self.flsp_scheduled_date = self.flsp_vendor_confirmation_date
+
     @api.depends('date_approve', 'order_line.date_planned')
     def get_flsp_scheduled_date(self):
         """
