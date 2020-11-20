@@ -38,7 +38,7 @@
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group/field[@name='date_approve']" position="after">
-                <field name="flsp_scheduled_date" attrs="{'invisible': [('state','!=','purchase')], 'readonly': [('flsp_po_status','in','received')]}"/>
+                <field name="flsp_scheduled_date" attrs="{'invisible': 1, 'readonly': [('flsp_po_status','in','received')]}"/> <!--[('state','!=','purchase')]-->
                 <field name="flsp_vendor_confirmation_date" attrs="{'invisible': [('state','!=','purchase')], 'readonly': [('flsp_po_status','in','received')]}"/>
                 <field name="flsp_po_status" widget="selection" invisible="1"/> <!--DOING THIS SO IT REFELECTS MY STATUS CHANGE IN THE TREE VIEW-->
 <!--                <field name="flsp_button" invisible="0"/> &lt;!&ndash;DOING THIS SO IT REFELECTS MY STATUS CHANGE IN THE TREE VIEW&ndash;&gt;-->
