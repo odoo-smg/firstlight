@@ -46,7 +46,7 @@ class FlspMrpPlanningLine(models.Model):
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    def _flsp_calc_planning(self, calculate_sub_levels=False, standard_lead_time=1, standard_queue_time=1):
+    def _flsp_calc_planning(self, calculate_sub_levels=False, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1):
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
         delivery_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Delivery Orders')]).ids
@@ -61,6 +61,8 @@ class FlspMrpPlanningLine(models.Model):
 
         products_templates = self.env['product.template'].search([('type', '=', 'product')])
         for product_template in products_templates:
+            lead_time = product_template.produce_delay
+
             if route_mfg not in product_template.route_ids.ids:
                 continue
             product = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
@@ -155,14 +157,24 @@ class FlspMrpPlanningLine(models.Model):
                             rationale = 'balance on ' + str(current_day) + ' will be: ' + str(current_balance) + '<br/>'
                             rationale += 'min qty =' + str(min_qty) + '<br/>'
                             rationale += 'max qty =' + str(max_qty) + '<br/>'
+                            rationale += 'lead time on product =' + str(lead_time) + ' days <br/>'
+                            if lead_time == 0:
+                                if not production_id:
+                                    lead_time = standard_lead_time
+                                    rationale += 'Using direct demand lead time =' + str(lead_time) + ' days <br/>'
+                                else:
+                                    lead_time = indirect_lead_time
+                                    rationale += 'Using indirect demand lead time =' + str(lead_time) + ' days <br/>'
+
                             rationale += 'Qty required =' + str(suggested_qty) + '<br/>'
+
 
                             self.create({'product_tmpl_id': product_template.id,
                                          'product_id': product.id,
                                          'description': product_template.name,
                                          'default_code': product_template.default_code,
                                          'suggested_qty': suggested_qty,
-                                         'start_date': current_day + timedelta(days=-1 * standard_lead_time),
+                                         'start_date': current_day + timedelta(days=-1 * lead_time),
                                          'deadline_date': current_day,
                                          'calculated': True,
                                          'stock_picking': picking_id,
@@ -206,17 +218,26 @@ class FlspMrpPlanningLine(models.Model):
                                     production_id = y[6]
                                 source += y[4]
 
-                            rationale = 'balance on ' + str(current_day) + ' will be: ' + str(current_balance) + '<br/>'
-                            rationale += 'min qty =' + str(min_qty) + '<br/>'
-                            rationale += 'max qty =' + str(max_qty) + '<br/>'
-                            rationale += 'Qty required =' + str(suggested_qty) + '<br/>'
+                        rationale = 'balance on ' + str(current_day) + ' will be: ' + str(current_balance) + '<br/>'
+                        rationale += 'min qty =' + str(min_qty) + '<br/>'
+                        rationale += 'max qty =' + str(max_qty) + '<br/>'
+                        rationale += 'lead time on product =' + str(lead_time) + ' days <br/>'
+                        if lead_time == 0:
+                            if not production_id:
+                                lead_time = standard_lead_time
+                                rationale += 'Using direct demand lead time =' + str(lead_time) + ' days <br/>'
+                            else:
+                                lead_time = indirect_lead_time
+                                rationale += 'Using indirect demand lead time =' + str(lead_time) + ' days <br/>'
+
+                        rationale += 'Qty required =' + str(suggested_qty) + '<br/>'
 
                         self.create({'product_tmpl_id': product_template.id,
                                      'product_id': product.id,
                                      'description': product_template.name,
                                      'default_code': product_template.default_code,
                                      'suggested_qty': suggested_qty,
-                                     'start_date': current_day + timedelta(days=-1 * standard_lead_time),
+                                     'start_date': current_day + timedelta(days=-1 * lead_time),
                                      'deadline_date': current_day,
                                      'calculated': True,
                                      'stock_picking': picking_id,
@@ -492,3 +513,31 @@ class FlspMrpPlanningLine(models.Model):
 
         '''
         return ret_value
+
+
+    def execute_suggestion(self):
+        for item in self:
+            bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', item.product_tmpl_id.id)], limit=1)
+            if not bom_id:
+                continue
+
+            mo = self.env['mrp.production'].create({
+                'product_id': item.product_id.id,
+                'bom_id': bom_id.id,
+                'product_uom_id': item.product_id.uom_id.id,
+                'product_qty': item.suggested_qty,
+            })
+
+            list_move_raw = [(4, move.id) for move in mo.move_raw_ids.filtered(lambda m: not m.bom_line_id)]
+            moves_raw_values = mo._get_moves_raw_values()
+            move_raw_dict = {move.bom_line_id.id: move for move in mo.move_raw_ids.filtered(lambda m: m.bom_line_id)}
+            for move_raw_values in moves_raw_values:
+                if move_raw_values['bom_line_id'] in move_raw_dict:
+                    # update existing entries
+                    list_move_raw += [(1, move_raw_dict[move_raw_values['bom_line_id']].id, move_raw_values)]
+                else:
+                    # add new entries
+                    list_move_raw += [(0, 0, move_raw_values)]
+            mo.move_raw_ids = list_move_raw
+            item.unlink()
+

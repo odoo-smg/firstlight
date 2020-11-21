@@ -14,10 +14,23 @@
                     <h5>Please note:</h5>
 
                             <div>
-                               &#x25CF; The standard lead time to calculate the start date is:
+                               &#x25CF; The standard <b>direct</b> demand lead time to calculate the start date is:
                              <field name="standard_lead_time" class="text-center oe_inline" no_label="1" style="width: 40px !important;"/>
-                                days, unless it is set differently in the product.
+                                days only for products which have the manufacturing lead time set to zero.
                             </div>
+
+                            <div>
+                                &#x25CF; The standard <b>indirect</b> demand lead time to calculate the start date is:
+                             <field name="standard_i_lead_time" class="text-center oe_inline" no_label="1" style="width: 40px !important;"/>
+                                days only for products which have the manufacturing lead time set to zero.
+                            </div>
+
+                            <field name="orders_to_confirm" invisible="1" />
+                            <div attrs="{'invisible': [('orders_to_confirm', '=', False)]}" >
+                               &#x25CF; There are Manufacturing Orders to Confirm, please use the button below to confirm before calculate the planning.
+                                <button name="flsp_confirm_mo" type="object" attrs="{'invisible': [('orders_to_confirm', '=', False)]}" string="Confirm Manufacturing Orders" class="btn-default btn-primary" />
+                            </div>
+
 
                             <!--div>
                                &#x25CF; The standard queue time to calculate the sub-levels of the BOM is:
