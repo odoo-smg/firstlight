@@ -46,7 +46,7 @@ class FlspMrpPlanningLine(models.Model):
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    def _flsp_calc_planning(self, calculate_sub_levels=False, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1):
+    def _flsp_calc_planning(self, calculate_sub_levels=False, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1, consider_drafts=False):
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
         delivery_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Delivery Orders')]).ids
@@ -94,7 +94,10 @@ class FlspMrpPlanningLine(models.Model):
                     open_moves.append([len(open_moves)+1,'In', 'Purchase', receipt.origin, receipt.id, 0, total_moved, receipt.scheduled_date])
             # Manufacturing Orders
             if route_mfg in product_template.route_ids.ids:
-                production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel']), ('product_id', '=', product.id)])
+                if consider_drafts:
+                    production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel']), ('product_id', '=', product.id)])
+                else:
+                    production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('product_id', '=', product.id)])
                 for production in production_orders:
                     open_moves.append([len(open_moves)+1, 'In', 'Production', production.name, 0, production.id, production.product_qty, production.date_planned_finished])
 
@@ -111,7 +114,10 @@ class FlspMrpPlanningLine(models.Model):
                 open_moves.append([len(open_moves)+1, 'Out', 'Sale', delivery.origin, delivery.id, 0, total_moved, delivery.scheduled_date])
 
             #Manufacturing Orders
-            production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel']), ('move_raw_ids.product_id', '=', product.id)])
+            if consider_drafts:
+                production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel']), ('move_raw_ids.product_id', '=', product.id)])
+            else:
+                production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('move_raw_ids.product_id', '=', product.id)])
             for production in production_orders:
                 open_moves.append([len(open_moves)+1, 'Out', 'Production', production.name, 0, production.id, production.product_qty, production.date_planned_finished])
 
