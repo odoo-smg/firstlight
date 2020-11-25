@@ -11,10 +11,10 @@
                 <field name="flsp_shipping_method" string="Shipping Method"/>
                 <field name="flsp_carrier_account" string="Carrier Account"/>
               </xpath>
+              <xpath expr="//field[@name='property_delivery_carrier_id']" position="attributes">
+                <attribute name="string">Carrier</attribute>
+              </xpath>
             </field>
-            <xpath expr="//field[@name='property_delivery_carrier_id']" position="attributes">
-              <attribute name="string">Carrier</attribute>
-            </xpath>
         </record>
 
         <record model="ir.actions.act_window" id="customer_list_action">
