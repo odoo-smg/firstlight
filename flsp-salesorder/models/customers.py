@@ -16,7 +16,8 @@ class flspcustomer(models.Model):
 
     flsp_carrier_account = fields.Char(String="Carrier Account")
 
-
+    flsp_default_contact = fields.Boolean(String="Default")
+    
     _sql_constraints = [
         ('customer_name_unique_flsp',
          'UNIQUE(name)',
