@@ -134,11 +134,11 @@
               sequence="100"
               action="action_upd_prd_suggestion"/>
 
-    <menuitem id="flsp_production_suggestion_report"
+    <!--menuitem id="flsp_production_suggestion_report"
               name="Production Suggestion"
               parent="mrp.menu_mrp_reporting"
               sequence="100"
-              action="action_upd_prd_suggestion"/>
+              action="action_upd_prd_suggestion"/-->
 
     <!--
               action="purchase_suggestion_action"

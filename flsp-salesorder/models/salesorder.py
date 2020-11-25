@@ -33,12 +33,22 @@ class flspsalesorder(models.Model):
         ('kk-cancel', 'Cancelled'),
         ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
 
+    flsp_shipping_method = fields.Selection([
+        ('1', 'FL account and Invoice the Customer'),
+        ('2', 'FL account and do not Invoice Customer'),
+        ('3', 'Customer carrier choice and account'),
+        ], string='Shipping Method', copy=False, store=True)
+    flsp_carrier_account = fields.Char(String="Carrier Account")
+
     @api.onchange('partner_id')
     def flsp_partner_onchange(self):
         self.flsp_so_user_id = self.partner_id.flsp_user_id.id
         return {
             'value': {
-                'flsp_so_user_id': self.partner_id.flsp_user_id.id
+                'flsp_so_user_id': self.partner_id.flsp_user_id.id,
+                'flsp_shipping_method': self.partner_id.flsp_shipping_method,
+                'flsp_ship_via': self.partner_id.property_delivery_carrier_id.name,
+                'flsp_carrier_account': self.partner_id.flsp_carrier_account
             },
         }
 

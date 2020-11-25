@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import fields, models, api, exceptions
-
+from odoo.exceptions import ValidationError
 
 class Smgproduct(models.Model):
     _inherit = 'product.template'
@@ -57,9 +57,9 @@ class Smgproduct(models.Model):
          'UNIQUE(default_code)',
          "The Product Code must be unique"),
 
-        ('name_unique_flsp6',
-         'UNIQUE(name)',
-         "The Product name must be unique"),
+        #('name_unique_flsp6',
+        # 'UNIQUE(name)',
+        # "The Product name must be unique"),
     ]
 
     def button_acc_valid(self):
@@ -149,3 +149,25 @@ class Smgproduct(models.Model):
         if 'flsp_plm_valid' in self.env['product.template']._fields:
             default['flsp_plm_valid'] = False
         return super(Smgproduct, self).copy(default)
+
+
+    @api.constrains('name','flsp_part_prefix')
+    def _constraint_only_unique_name(self):
+        """
+            Date:    Nov/19th/2020/Thursday
+            Purpose: To create only unique names
+                     To raise exception if name is used but prefix don't match
+            Author: Sami Byaruhanga
+        """
+        self._cr.execute('''
+            SELECT id pdct_id, name, flsp_part_prefix, default_code from product_template
+        ''')
+        res = self._cr.fetchall() #returns all
+        for line in res:
+            # print(line)
+            # print("name=", line[1], "flsp_part_prefix=", line[2])
+            if self.name == line[1] and self.flsp_part_prefix != line[2]:
+                raise ValidationError('Name already used on product with default code: ' + line[3] +
+                      '\nTo use this name you must use the matching Part # Prefix: ' + line[2] +
+                      ' and increment the Part # Suffix'
+                      )

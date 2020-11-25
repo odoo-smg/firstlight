@@ -3,10 +3,16 @@
         <record model="ir.ui.view" id="flsp_customer_form_view">
             <field name="name">res.partner.flsp.form.inherit</field>
             <field name="model">res.partner</field>
+            <field name="priority">98</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
               <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="after">
                 <field name="flsp_user_id"/>
+                <field name="flsp_shipping_method" string="Shipping Method"/>
+                <field name="flsp_carrier_account" string="Carrier Account"/>
+              </xpath>
+              <xpath expr="//field[@name='property_delivery_carrier_id']" position="attributes">
+                <attribute name="string">Carrier</attribute>
               </xpath>
             </field>
         </record>
