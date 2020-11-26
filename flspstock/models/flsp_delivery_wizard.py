@@ -30,9 +30,9 @@ class Deliveryflspwizard(models.TransientModel):
         return res
 
     flsp_stock_picking_id = fields.Many2one('stock.picking', string="Delivery Order", readonly=True)
-    flsp_confirmed_date = fields.Date(string="Confirmed Delivery Date", readonly=True)
+    flsp_confirmed_date = fields.Datetime(string="Confirmed Delivery Date", readonly=True)
     flsp_confirmed_by = fields.Many2one('res.users', string="Confirmed by", readonly=True)
-    flsp_schedule_date = fields.Date(string="New Schedule Date", required=True)
+    flsp_schedule_date = fields.Datetime(string="New Schedule Date", required=True)
     flsp_change_note = fields.Text(string="Change Note")
     flsp_is_updating = fields.Boolean(string="Is Updating")
 
