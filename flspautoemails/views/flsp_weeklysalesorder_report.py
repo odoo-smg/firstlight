@@ -20,7 +20,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
         us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
         daily_sales = self.env['sale.order'].search(['&',
                                                      ('state', 'in', ['sale', 'done']),
-                                                     ('flsp_so_date', '>', date.today() + relativedelta(months=-6))])
+                                                     ('date_order', '>', date.today() + relativedelta(months=-6))])
 
         ## Total sales by month
         total_sales_by_month = {0: {'month': 'Category', 'total': 0, 'category': {0: {'categ': 'Total', 'total': 0}}}}
@@ -35,8 +35,8 @@ class ReportSalesbysalesperson(models.AbstractModel):
             total_sales_by_month[month] = {'month': calendar.month_name[month], 'total': 0, 'category': {}}
 
         for sales in daily_sales:
-            if sales.flsp_so_date:
-                current_month = sales.flsp_so_date.month
+            if sales.date_order:
+                current_month = sales.date_order.month
             if current_month in total_sales_by_month:
                 if sales.currency_id.name == 'USD':
                     total_sales_by_month[current_month]['total'] += sales.amount_total
@@ -70,7 +70,7 @@ class ReportSalesbysalesperson(models.AbstractModel):
         top_val = 0
         daily_sales = self.env['sale.order'].search(['&',
                                                      ('state', 'in', ['sale', 'done']),
-                                                     ('flsp_so_date', '>', date.today() + relativedelta(days=-7))])
+                                                     ('date_order', '>', date.today() + relativedelta(days=-7))])
         for sale in daily_sales:
             key = len(sale_by_person) + 1
             for x in sale_by_person:
