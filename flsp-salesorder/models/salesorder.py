@@ -67,9 +67,15 @@ class flspsalesorder(models.Model):
         delivery_addresses = self.env['res.partner'].search([('parent_id', '=', self.partner_id.id)])
         default_address = addr['delivery']
         default_invoice = addr['invoice']
+        default_shipping_method = self.partner_id.flsp_shipping_method
+        default_ship_via = self.partner_id.property_delivery_carrier_id.name
+        default_shipping_account = self.partner_id.flsp_carrier_account
         for delivery in delivery_addresses:
             if delivery.flsp_default_contact and delivery.type == "delivery":
                 default_address = delivery.id
+                default_shipping_method = delivery.flsp_shipping_method
+                default_ship_via = delivery.property_delivery_carrier_id.name
+                default_shipping_account = delivery.flsp_carrier_account
             if delivery.flsp_default_contact and delivery.type == "invoice":
                 default_invoice = delivery.id
 
@@ -79,9 +85,9 @@ class flspsalesorder(models.Model):
             'partner_invoice_id': default_invoice,
             'partner_shipping_id': default_address,
             'flsp_so_user_id': self.partner_id.flsp_user_id.id,
-            'flsp_shipping_method': self.partner_id.flsp_shipping_method,
-            'flsp_ship_via': self.partner_id.property_delivery_carrier_id.name,
-            'flsp_carrier_account': self.partner_id.flsp_carrier_account,
+            'flsp_shipping_method': default_shipping_method,
+            'flsp_ship_via': default_ship_via,
+            'flsp_carrier_account': default_shipping_account,
             'user_id': partner_user.id or self.env.uid
         }
         if self.env['ir.config_parameter'].sudo().get_param('account.use_invoice_terms') and self.env.company.invoice_terms:
@@ -90,6 +96,17 @@ class flspsalesorder(models.Model):
         # Use team of salesman if any otherwise leave as-is
         values['team_id'] = partner_user.team_id.id if partner_user and partner_user.team_id else self.team_id
         self.update(values)
+
+    @api.onchange('partner_shipping_id', 'partner_id')
+    def flsp_onchange_partner_shipping_id(self):
+        values = {
+            'flsp_shipping_method': self.partner_shipping_id.flsp_shipping_method,
+            'flsp_ship_via': self.partner_shipping_id.property_delivery_carrier_id.name,
+            'flsp_carrier_account': self.partner_shipping_id.flsp_carrier_account,
+        }
+
+        self.update(values)
+        return {}
 
 class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
