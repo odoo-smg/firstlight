@@ -41,16 +41,55 @@ class flspsalesorder(models.Model):
     flsp_carrier_account = fields.Char(String="Carrier Account")
 
     @api.onchange('partner_id')
-    def flsp_partner_onchange(self):
-        self.flsp_so_user_id = self.partner_id.flsp_user_id.id
-        return {
-            'value': {
-                'flsp_so_user_id': self.partner_id.flsp_user_id.id,
-                'flsp_shipping_method': self.partner_id.flsp_shipping_method,
-                'flsp_ship_via': self.partner_id.property_delivery_carrier_id.name,
-                'flsp_carrier_account': self.partner_id.flsp_carrier_account
-            },
+    def onchange_partner_id(self):
+        """
+        Update the following fields when the partner is changed:
+        - Pricelist
+        - Payment terms
+        - Invoice address
+        - Delivery address
+        """
+        if not self.partner_id:
+            self.update({
+                'partner_invoice_id': False,
+                'partner_shipping_id': False,
+                'payment_term_id': False,
+                'fiscal_position_id': False,
+                'flsp_so_user_id': False,
+                'flsp_shipping_method': False,
+                'flsp_ship_via': False,
+                'flsp_carrier_account': False,
+            })
+            return
+
+        addr = self.partner_id.address_get(['delivery', 'invoice'])
+        partner_user = self.partner_id.user_id or self.partner_id.commercial_partner_id.user_id
+        delivery_addresses = self.env['res.partner'].search([('parent_id', '=', self.partner_id.id)])
+        default_address = addr['delivery']
+        default_invoice = addr['invoice']
+        for delivery in delivery_addresses:
+            if delivery.flsp_default_contact and delivery.type == "delivery":
+                default_address = delivery.id
+            if delivery.flsp_default_contact and delivery.type == "invoice":
+                default_invoice = delivery.id
+
+        values = {
+            'pricelist_id': self.partner_id.property_product_pricelist and self.partner_id.property_product_pricelist.id or False,
+            'payment_term_id': self.partner_id.property_payment_term_id and self.partner_id.property_payment_term_id.id or False,
+            'partner_invoice_id': default_invoice,
+            'partner_shipping_id': default_address,
+            'flsp_so_user_id': self.partner_id.flsp_user_id.id,
+            'flsp_shipping_method': self.partner_id.flsp_shipping_method,
+            'flsp_ship_via': self.partner_id.property_delivery_carrier_id.name,
+            'flsp_carrier_account': self.partner_id.flsp_carrier_account,
+            'user_id': partner_user.id or self.env.uid
         }
+        if self.env['ir.config_parameter'].sudo().get_param('account.use_invoice_terms') and self.env.company.invoice_terms:
+            values['note'] = self.with_context(lang=self.partner_id.lang).env.company.invoice_terms
+
+        # Use team of salesman if any otherwise leave as-is
+        values['team_id'] = partner_user.team_id.id if partner_user and partner_user.team_id else self.team_id
+        self.update(values)
 
 class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
