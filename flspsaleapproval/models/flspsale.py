@@ -219,6 +219,12 @@ class SalesOrder(models.Model):
         return action
 
         #return self.action_confirm()
+    def button_flsp_cancel(self):
+        self.flsp_approval_requested = False
+        self.flsp_approval_approved = False
+        self.flsp_state = 'draft'
+        action = self.action_cancel()
+        return action
 
     def button_flsp_confirm(self):
         if not self.partner_id.flsp_acc_valid:
