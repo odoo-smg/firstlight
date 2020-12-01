@@ -27,7 +27,7 @@
                     <button name="button_flsp_cancel" states="draft,sent,sale" type="object" string="Cancel"/>
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="attributes">
-                    <attribute name="attrs">{'readonly': ['|', ('flsp_approval_requested', '=', True), ('state', '!=', 'draft')] 'domain': [('parent_id', '=', False)] }</attribute>
+                    <attribute name="attrs">{'readonly': ['|', ('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                     <attribute name="domain">[('parent_id', '=', False)]</attribute>
                 </xpath>
                 <xpath expr="//field[@name='order_line']" position="attributes">
