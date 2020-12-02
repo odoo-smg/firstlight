@@ -21,7 +21,7 @@
                     <button name="button_flsp_confirm" string="Confirm" type="object" attrs="{'invisible': ['|',('state', 'not in', ['draft']), '&amp;', ('flsp_approval_required', '=', True),('flsp_approval_approved', '=', False)]}"/>
                 </xpath>
                 <xpath expr="//button[@name='button_flsp_confirm']" position="after">
-                    <button name="button_flsp_submit_approval" class="btn-primary" type="object" string="Submit for Approval" attrs="{'invisible': ['|', ('flsp_approval_required', '=', False), ('flsp_approval_requested', '=', True)]}"/>
+                    <button name="button_flsp_submit_approval" class="btn-primary" type="object" string="Submit for Approval" attrs="{'invisible': ['|', '|', ('flsp_approval_required', '=', False), ('flsp_approval_requested', '=', True), ('state', '=', 'cancel')]}"/>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="replace">
                     <button name="button_flsp_cancel" states="draft,sent,sale" type="object" string="Cancel"/>
@@ -29,6 +29,12 @@
                 <xpath expr="//field[@name='partner_id']" position="attributes">
                     <attribute name="attrs">{'readonly': ['|', ('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                     <attribute name="domain">[('parent_id', '=', False)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                    <attribute name="attrs">{'invisible': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="flsp_att_to" string="Attention to" options="{'no_create': True}"/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']" position="attributes">
                     <attribute name="attrs">{'readonly': ['|',('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>

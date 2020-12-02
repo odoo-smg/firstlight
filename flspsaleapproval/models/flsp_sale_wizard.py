@@ -63,6 +63,8 @@ class Saleflspwizard(models.TransientModel):
         self.order_id.write({'flsp_approval_approved': True, })
         self.env['flspautoemails.bpmemails'].send_email(self, 'SO0002')
 
+        self.order_id.button_flsp_confirm()
+
         return {'type': 'ir.actions.act_window_close'}
 
         body = '<p>Hi there, </p>'
