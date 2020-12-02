@@ -30,6 +30,12 @@
                     <attribute name="attrs">{'readonly': ['|', ('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                     <attribute name="domain">[('parent_id', '=', False)]</attribute>
                 </xpath>
+                <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                    <attribute name="attrs">{'invisible': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="flsp_att_to" string="Attention to"/>
+                </xpath>
                 <xpath expr="//field[@name='order_line']" position="attributes">
                     <attribute name="attrs">{'readonly': ['|',('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                 </xpath>

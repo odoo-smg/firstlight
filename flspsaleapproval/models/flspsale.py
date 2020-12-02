@@ -51,6 +51,7 @@ class SalesOrder(models.Model):
         states={'draft': [('readonly', False)]})
     validity_date = fields.Date(string="Expiration", default = date.today() + relativedelta(days=30))
 
+    flsp_att_to = fields.Many2one("flsp.contact", string='Attention to', domain="[('partner_id', '=', partner_id)]")
 
 
     @api.onchange('flsp_SPPEPP_so')
@@ -223,8 +224,13 @@ class SalesOrder(models.Model):
         self.flsp_approval_requested = False
         self.flsp_approval_approved = False
         self.flsp_state = 'draft'
+        action = self.env.ref('flspsaleapproval.launch_flsp_cancel_wizard').read()[0]
+        return action
+
+    def wiz_cancel_confirm(self):
         action = self.action_cancel()
         return action
+
 
     def button_flsp_confirm(self):
         if not self.partner_id.flsp_acc_valid:
