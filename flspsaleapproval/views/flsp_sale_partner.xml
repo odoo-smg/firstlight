@@ -14,6 +14,62 @@
                     <attribute name="domain">["&amp;", ["flsp_sale_type","=",flsp_sale_type], ["currency_id","=",flsp_sale_currency]]</attribute>
                     <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
                 </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]" position="attributes">
+                    <attribute name="string">Addresses</attribute>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]" position="after">
+                    <page string="Contacts" autofocus="autofocus">
+                        <field name="flsp_contacts_ids" nolabel="1" attrs="{'readonly': [('id', '=', False)]}" context="{'tree_view_ref':'flspsaleapproval.flsp_contact_tree_view', 'form_view_ref':'flspsaleapproval.flsp_contact_form_view', 'partner_id': id}"/>
+                    </page>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page string="Attachment">
+                        <group string="Attach a document:">
+                          <field name="attachment_ids" widget="many2many_binary" string="Attach another file" nolabel="1" colspan="2"/>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="flsp_contact_tree_view" model="ir.ui.view">
+            <field name="name">flsp.contact.tree.view</field>
+            <field name="model">flsp.contact</field>
+            <field name="arch" type="xml">
+                <tree string="Contacts">
+                    <field name="sequence" widget="handle"/>
+                    <field name="partner_id" invisible="1" />
+                    <field name="name" />
+                    <field name="job_position"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="notes" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="flsp_contact_form_view" model="ir.ui.view">
+            <field name="name">flsp.contact.form.view</field>
+            <field name="model">flsp.contact</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="Contact">
+                    <sheet>
+                        <label for="partner_id" string="Customer"/>
+                        <h1>
+                            <field name="partner_id"/>
+                        </h1>
+                        <group>
+                            <field name="name"  required='True' attrs="{'readonly': [('id', '!=', False)]}"/>
+                            <field name="job_position"/>
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="notes" />
+                        </group>
+                    </sheet>
+                </form>
             </field>
         </record>
 
