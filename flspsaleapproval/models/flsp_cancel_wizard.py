@@ -28,7 +28,7 @@ class Saleflspcancelwizard(models.TransientModel):
 
     order_id = fields.Many2one('sale.order', string='Order Reference', readonly=True)
     partner_id = fields.Many2one('res.partner', string='Customer', readonly=True)
-    cancel_reason = fields.Text(string="Notes")
+    cancel_reason = fields.Text(string="Notes", required=True)
 
     def flsp_cancel(self):
         self.ensure_one()
