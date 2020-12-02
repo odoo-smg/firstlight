@@ -15,3 +15,4 @@ from . import flsp_choose_delivery
 from . import flsp_reject_wizard
 from . import flsp_product_category
 from . import flsp_product_template
+from . import flsp_contact
