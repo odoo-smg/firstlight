@@ -244,6 +244,9 @@
                                 font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left;  ">Qty</td>
                             <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
                                 padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
+                                font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left;  ">Unit of Measure</td>
+                            <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
+                                padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
                                 font-style: normal; font-weight: bolder; text-align: left;  ">Unit Price</td>
                             <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
                                 padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
@@ -310,9 +313,14 @@
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
                                         padding-right: 4px; vertical-align: top; text-align: left;  word-wrap: normal; white-space:nowrap;">
-                                        <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/> <spam t-field="line.product_id.uom_po_id" /></td>
+                                        <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/> </td>
 <!--                                    t-field="line.product_id.uom_po_id"-->
 <!--                                        <spam t-field="line.product_uom_qty" t-options='{"widget": "integer"}'/> <spam t-field="line.product_uom"/></td>-->
+                                    <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
+                                        font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
+                                        padding-right: 4px; vertical-align: top; text-align: left;  word-wrap: normal; white-space:nowrap;">
+                                        <spam t-field="line.product_id.uom_po_id" />
+                                    </td>
 
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
@@ -565,6 +573,9 @@
                             <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
                                 padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
                                 font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left;  ">Qty</td>
+                            <td style="font-size: 16px; background-color: #64b2d8; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px;
+                                padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif;
+                                font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left;  ">Unit of Measure</td>
                         </tr>
                     </thead>
 
@@ -608,8 +619,13 @@
                                     <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
                                         font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
                                         padding-right: 4px; vertical-align: top; text-align: left; ">
-                                        <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/> <spam t-field="line.product_id.uom_po_id" /></td>
+                                        <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/> </td>
 
+                                    <td style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif; font-size: 14px; font-style: normal;
+                                        font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;
+                                        padding-right: 4px; vertical-align: top; text-align: left; ">
+                                        <spam t-field="line.product_id.uom_po_id" />
+                                    </td>
                                 </t>
                             </tr>
                         </t>
