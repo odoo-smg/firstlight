@@ -128,7 +128,7 @@
                               <t t-set="payments_vals" t-value="o._get_sale_order_info_JSON_values()"/>
                               <t t-foreach="payments_vals" t-as="payment_vals">
                                   <t t-if="payment_vals['contact'] != ''">
-                                      <br/>Attention to:
+                                      <br/>Attention:
                                       <span t-esc="payment_vals['contact']"/>
                                   </t>
                               </t>
