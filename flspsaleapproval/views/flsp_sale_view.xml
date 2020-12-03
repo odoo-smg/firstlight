@@ -86,6 +86,12 @@
                 <xpath expr="//group[@name='sale_shipping']" position="inside">
                   <field name="flsp_ship_via" string="Ship Via"/>
                 </xpath>
+                <xpath expr="//field[@name='note']" position="replace">
+                    <field name="note" string="Terms &amp; conditions"/>
+                </xpath>
+                <xpath expr="//field[@name='note']" position="after">
+                  <field name="flsp_internal_notes" string="Internal Notes"/>
+                </xpath>
             </field>
         </record>
 
