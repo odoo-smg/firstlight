@@ -52,6 +52,7 @@ class SalesOrder(models.Model):
     validity_date = fields.Date(string="Expiration", default = date.today() + relativedelta(days=30))
 
     flsp_att_to = fields.Many2one("flsp.contact", string='Attention to', domain="[('partner_id', '=', partner_id)]")
+    flsp_internal_notes = fields.Text('Internal Notes')
 
 
     @api.onchange('flsp_SPPEPP_so')

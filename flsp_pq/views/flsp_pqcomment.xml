@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--From view-->
+    <record model="ir.ui.view" id="flsppqcomment_form_view">
+        <field name="name">flsppqcomment.form </field>
+        <field name="model">flsp.pqcomment</field>
+        <field name="arch" type="xml">
+            <form string="flsppqcomment form">
+                <sheet>
+                    <group string="FLSP PQ Comments">
+                        <field name="flsp_pqcomment_name"/>
+                        <field name="flsp_pqcomment_desc"/> <!--widget="html"/>-->
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="flsppqcomment_tree_view">
+        <field name="name">flsppqcomment.tree</field>
+        <field name="model">flsp.pqcomment</field>
+        <field name="arch" type="xml">
+            <tree string="flspterms tree">
+                <field name="flsp_pqcomment_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Actions-->
+    <record model="ir.actions.act_window" id="flsppqcomment_action">
+        <field name="name">FLSP PQ Comments </field>
+        <field name="res_model">flsp.pqcomment</field>
+        <field name="view_mode">tree,form</field>
+<!--                    <field name="help" type="html">-->
+<!--                <p class="o_view_nocontent_smiling_face">Create the first course-->
+<!--                </p>-->
+<!--            </field>-->
+    </record>
+
+    <!--Menu-->
+    <menuitem id="flsppqcomment_menu"
+              name="PQ Comment config"
+              parent="purchase.menu_purchase_config"
+              action="flsppqcomment_action"/>
+
+</odoo>
+
+
+<!--parent="purchase.menu_purchase_config"-->
+<!--parent="purchase.menu_purchase_root"-->
