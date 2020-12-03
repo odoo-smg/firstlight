@@ -133,7 +133,7 @@
                           <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
                           <span t-field="doc.partner_shipping_id.country_id.code"/>
                           <t t-if="doc.flsp_att_to">
-                              <br/>Attention to:
+                              <br/>Attention:
                               <span t-field="doc.flsp_att_to.name"/>
                           </t>
                         </p>
