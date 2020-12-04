@@ -334,7 +334,7 @@
 
                                 </t>
                                 <t t-if="line.display_type == 'line_section'">
-                                    <td name="td_section_line" t-att-colspan="colspan" style="background-color: #6bbfde; border: 2px solid #2DA4D1;
+                                    <td name="td_section_line" t-att-colspan="colspan" style="background-color: #6bbfde; border: 2px solid #4b5eab;
                                             font-family: Franklin, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; color: white;
                                             text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px;
                                             vertical-align: top; text-align: left; ">
@@ -344,7 +344,7 @@
                                     <t t-set="current_subtotal" t-value="0"/>
                                 </t>
                                 <t t-if="line.display_type == 'line_note'">
-                                    <td name="td_note_line" t-att-colspan="colspan" style="border: 2px solid #2DA4D1; font-family: Franklin, sans-serif;
+                                    <td name="td_note_line" t-att-colspan="colspan" style="border: 2px solid #4b5eab; font-family: Franklin, sans-serif;
                                                 font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center;
                                                 padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top;
                                                 text-align: left; ">
@@ -354,7 +354,7 @@
                             </tr>
                             <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section')">
                                 <tr class="is-subtotal text-right">
-                                    <td name="td_section_subtotal" t-att-colspan="colspan" style="font-size: 16px; background-color: #bfe3f2; border: 2px solid #2DA4D1; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">
+                                    <td name="td_section_subtotal" t-att-colspan="colspan" style="font-size: 16px; background-color: #bfe3f2; border: 2px solid #4b5eab; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin, sans-serif; font-style: normal; font-weight: bolder; text-align: right;  ">
                                         <strong class="mr16">Subtotal</strong>
                                         <span
                                             t-esc="current_subtotal"
