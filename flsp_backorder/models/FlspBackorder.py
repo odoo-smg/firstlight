@@ -102,6 +102,7 @@ class FlspBackorder(models.Model):
                 moves_to_backorder.write({'picking_id': backorder_picking.id})
                 moves_to_backorder.mapped('package_level_id').write({'picking_id':backorder_picking.id})
                 moves_to_backorder.mapped('move_line_ids').write({'picking_id': backorder_picking.id})
+                self.write({'state': 'done'})
                 backorder_picking.action_assign()
                 backorders |= backorder_picking
         return backorders
