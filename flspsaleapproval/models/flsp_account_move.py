@@ -19,6 +19,9 @@ class flspaccountmove(models.Model):
 
 
         so = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        contact = ''
+        if so.flsp_att_to:
+            contact = so.flsp_att_to.name
 
         reconciled_vals = []
         for rec in so:
@@ -27,12 +30,16 @@ class flspaccountmove(models.Model):
                 'date_order': rec.date_order,
                 'flsp_ship_via': rec.flsp_ship_via,
                 'payment_term': rec.payment_term_id.note,
+                'contact': contact,
             })
         return reconciled_vals
 
     def _get_so_for_ci_info_JSON_values(self):
         self.ensure_one()
         so = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        contact = ''
+        if so.flsp_att_to:
+            contact = so.flsp_att_to.name
 
         sale_order = []
         for rec in so:
@@ -42,5 +49,6 @@ class flspaccountmove(models.Model):
                 'date_order': rec.date_order,
                 'flsp_ship_via': rec.flsp_ship_via,
                 'payment_term': rec.payment_term_id.note,
+                'contact': contact,
             })
         return sale_order

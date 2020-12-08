@@ -132,6 +132,10 @@
                           <span t-field="doc.partner_shipping_id.street"/><br/>
                           <span t-field="doc.partner_shipping_id.city"/>, <span t-field="doc.partner_shipping_id.state_id.code"/> <span t-field="doc.partner_shipping_id.zip"/><br/>
                           <span t-field="doc.partner_shipping_id.country_id.code"/>
+                          <t t-if="doc.flsp_att_to">
+                              <br/>Attention:
+                              <span t-field="doc.flsp_att_to.name"/>
+                          </t>
                         </p>
                     </div>
                     <div style="clear: both;"></div>
@@ -325,6 +329,17 @@
                           </t>
                         </p>
                 </div>
+
+                <t t-if="doc.note">
+                    <div style="margin:0px 0px 0px 0px; padding: 00px 0px 0px 0px; width:100%; ">
+                            <span style="font-size:20px; font-style: bold; color:#000000; font-family: Franklin Demi, sans-serif;">Terms &amp; Conditions:</span>
+                            <p style="font-size:15px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
+                              <t t-if="company.flsp_gst_number">
+                                <spam t-field="doc.note"/>
+                              </t>
+                            </p>
+                    </div>
+                </t>
 
                 <div class="oe_structure"/>
 
