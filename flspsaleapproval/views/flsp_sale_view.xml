@@ -40,7 +40,7 @@
                     <attribute name="attrs">{'readonly': ['|',('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='pricelist_id']" position="attributes">
-                    <attribute name="attrs">{'readonly': False, 'force_save': True}</attribute>
+                    <attribute name="attrs">{'readonly': ('flsp_order_line_count', '>', 0), 'force_save': True}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='state']" position="attributes">
                     <attribute name="attrs">{'invisible': ['&amp;',('flsp_approval_required', '=', True),('state', '=', 'draft')]}</attribute>
