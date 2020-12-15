@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flspcustom_inventory_flspcustom_inventory,flspcustom_inventory.flspcustom_inventory,model_flspcustom_inventory_flspcustom_inventory,base.group_user,1,1,1,1
