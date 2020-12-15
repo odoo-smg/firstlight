@@ -5,7 +5,7 @@
         <field name="name">Create Manufacture Orders</field>
         <field name="model_id" ref="flsp_mrp_planning.model_flsp_mrp_planning_line"/>
         <field name="binding_model_id" ref="flsp_mrp_planning.model_flsp_mrp_planning_line"/>
-        <field name="binding_view_types">list</field>
+        <field name="binding_view_types">list,form</field>
         <field name="state">code</field>
         <field name="code">
         if records:
@@ -17,14 +17,14 @@
         <field name="name">flsp.mrp.planning.line.form</field>
         <field name="model">flsp.mrp.planning.line</field>
         <field name="arch" type="xml">
-            <form string="MRP Planning Form">
+            <form string="MRP Planning Form" create="false" edit="false">
                 <sheet>
                     <group>
                         <group name="sales" string="Source" >
                             <field name="source_description"/>
                             <field name="source"/>
-                            <field name="stock_picking"/>
-                            <field name="production_id"/>
+                            <!--field name="stock_picking"/>
+                            <field name="production_id"/-->
                         </group>
                         <group name="purchase" string="Product" >
                             <field name="product_id"/>

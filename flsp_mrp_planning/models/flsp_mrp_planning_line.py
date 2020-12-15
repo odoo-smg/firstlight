@@ -46,7 +46,7 @@ class FlspMrpPlanningLine(models.Model):
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    def _flsp_calc_planning(self, calculate_sub_levels=False, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1, consider_drafts=False):
+    def _flsp_calc_planning(self, calculate_sub_levels=False, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1, consider_drafts=True):
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
         delivery_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Delivery Orders')]).ids
@@ -118,7 +118,7 @@ class FlspMrpPlanningLine(models.Model):
             else:
                 production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('move_raw_ids.product_id', '=', product.id)])
             for production in production_orders:
-                open_moves.append([len(open_moves)+1, 'Out', 'Production', production.name, 0, production.id, production.product_qty, production.date_planned_finished])
+                open_moves.append([len(open_moves)+1, 'Out', 'Production', production.origin +"-"+ production.name, 0, production.id, production.product_qty, production.date_planned_finished])
 
             if len(open_moves) > 0:
                 open_moves.sort(key=lambda l: l[7])
@@ -284,7 +284,7 @@ class FlspMrpPlanningLine(models.Model):
                 'date_planned_start': datetime.combine(item.start_date, datetime.now().time()),
                 'date_planned_finished': datetime.combine(item.deadline_date, datetime.now().time()),
                 'date_deadline': datetime.combine(item.deadline_date, datetime.now().time()),
-                'origin': 'FLSP-MRP: '+item.source,
+                'origin': item.source,
             })
 
 
@@ -300,3 +300,7 @@ class FlspMrpPlanningLine(models.Model):
                     list_move_raw += [(0, 0, move_raw_values)]
             mo.move_raw_ids = list_move_raw
             item.unlink()
+
+        action = self.env.ref('mrp.mrp_production_action').read()[0]
+        action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
+        return action
