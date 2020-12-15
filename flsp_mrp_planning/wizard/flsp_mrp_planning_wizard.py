@@ -36,7 +36,8 @@ class FlspMrpPlanningWizard(models.TransientModel):
         return action
 
     def flsp_recalc(self):
-        self.env['flsp.mrp.planning.line']._flsp_calc_planning(self.calculate_sub_levels, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts)
+        #self.env['flsp.mrp.planning.line']._flsp_calc_planning(self.calculate_sub_levels, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts)
+        self.env['flsp.mrp.planning.line']._flsp_calc_planning(self.calculate_sub_levels, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, True)
 
         #product = self.env['product.product'].search([], limit=1)
         #product._flsp_calc_suggested_qty()
