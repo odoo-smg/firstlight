@@ -7,6 +7,14 @@
             <field name="priority">100</field>
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
+              <xpath expr="//field[@name='type']" position="replace">
+                    <field name="type" widget="radio"/>
+                    <p colspan="2" class="oe_grey oe_edit_only" attrs="{'invisible': [('type','!=','phantom')]}">
+                    <ul>
+                        This option can be only selected for consumable products.
+                    </ul>
+                    </p>
+              </xpath>
               <xpath expr="//field[@name='routing_id'][1]" position="after">
                 <field name="flsp_eco_enforce" invisible="1" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
               </xpath>
