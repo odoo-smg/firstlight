@@ -11,7 +11,7 @@
                     <field name="type" widget="radio"/>
                     <p colspan="2" class="oe_grey oe_edit_only" attrs="{'invisible': [('type','!=','phantom')]}">
                     <ul>
-                        This option can be only selected for consumable products.
+                        This option can only be selected for consumable products.
                     </ul>
                     </p>
               </xpath>
