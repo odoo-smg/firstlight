@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import date, datetime
-from odoo import api, fields, models, exceptions
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class flspmrpbom(models.Model):
@@ -16,6 +17,11 @@ class flspmrpbom(models.Model):
     # New fields to control ECO enforcement
     flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
     flsp_bom_plm_valid = fields.Boolean(string="PLM Validated")
+
+    type = fields.Selection([
+        ('normal', 'Manufacture this product'),
+        ('phantom', 'Phantom')], 'BoM Type',
+        default='normal', required=True)
 
     @api.onchange('flsp_eco_enforce')
     def flsp_eco_enforce_onchange(self):
@@ -38,3 +44,9 @@ class flspmrpbom(models.Model):
         default['code'] = self._default_nextbomref()
         default['flsp_bom_plm_valid'] = False
         return super(flspmrpbom, self).copy(default)
+
+    @api.constrains('parent_product_tmpl_id','type')
+    def _constraint_phanthom_consumable(self):
+        if self.type == 'phantom' and self.product_tmpl_id.type != 'consu':
+            raise ValidationError('The BOM Type Phantom can be used only for consumable products.'
+                  '\nPlease review the product selected.')
