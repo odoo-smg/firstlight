@@ -39,9 +39,9 @@
                 <xpath expr="//field[@name='order_line']" position="attributes">
                     <attribute name="attrs">{'readonly': ['|',('flsp_approval_requested', '=', True), ('state', '!=', 'draft')]}</attribute>
                 </xpath>
-                <xpath expr="//field[@name='pricelist_id']" position="attributes">
+                <!--xpath expr="//field[@name='pricelist_id']" position="attributes">
                     <attribute name="attrs">{'readonly': [('flsp_order_line_count', '>', 0)], 'force_save': True}</attribute>
-                </xpath>
+                </xpath-->
                 <xpath expr="//field[@name='state']" position="attributes">
                     <attribute name="attrs">{'invisible': ['&amp;',('flsp_approval_required', '=', True),('state', '=', 'draft')]}</attribute>
                 </xpath>
