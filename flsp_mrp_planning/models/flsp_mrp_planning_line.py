@@ -118,7 +118,10 @@ class FlspMrpPlanningLine(models.Model):
             else:
                 production_orders = self.env['mrp.production'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('move_raw_ids.product_id', '=', product.id)])
             for production in production_orders:
-                open_moves.append([len(open_moves)+1, 'Out', 'Production', production.origin +"-"+ production.name, 0, production.id, production.product_qty, production.date_planned_finished])
+                if production.origin:
+                    open_moves.append([len(open_moves)+1, 'Out', 'Production', production.origin +"-"+ production.name, 0, production.id, production.product_qty, production.date_planned_finished])
+                else:
+                    open_moves.append([len(open_moves)+1, 'Out', 'Production', production.name, 0, production.id, production.product_qty, production.date_planned_finished])
 
             if len(open_moves) > 0:
                 open_moves.sort(key=lambda l: l[7])
