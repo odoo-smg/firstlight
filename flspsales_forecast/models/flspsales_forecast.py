@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from odoo import models, fields, api
-from datetime import datetime, time
-from dateutil.relativedelta import relativedelta
-
+from datetime import datetime
 from odoo.exceptions import ValidationError
 from lxml import etree
 
@@ -126,7 +123,7 @@ class FlspSalesForecast(models.Model):
     @api.model
     def fields_view_get(self, view_id=None, view_type='tree', context=None, toolbar=False, submenu=False):
         """
-        Purpose: to change the string name
+            Purpose: to dynamically display the dates
         """
         # result = super(FlspSalesForecast, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
         result = super().fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
@@ -138,9 +135,6 @@ class FlspSalesForecast(models.Model):
         #         line.forecast_line.active = False
 
         if view_type == 'tree':
-            print("checking if it executing on tree")
-            active_id = self._context.get('active_id', False)
-
             doc = etree.XML(result['arch'])
             if current_month == 12:
                 for node in doc.xpath("//field[@name='total_first']"):
@@ -456,127 +450,246 @@ class FlspSalesForecast(models.Model):
 
         if view_type == 'form':
             doc = etree.XML(result['arch'])
-
             if current_month == 12:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month5'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month4'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month3'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month2'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month1'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month12'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name','qty_month12')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name','qty_month1')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name','qty_month2')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name','qty_month3')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name','qty_month4')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name','qty_month5')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 1:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month6'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month5'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month4'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month3'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month2'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month1'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month1')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month2')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month3')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month4')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month5')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month6')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 2:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month7'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month6'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month5'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month4'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month3'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month2'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month2')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month3')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month4')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month5')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month6')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month7')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 3:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month8'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month7'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month6'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month5'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month4'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month3'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month3')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month4')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month5')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month6')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month7')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month8')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 4:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month9'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month8'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month7'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month6'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month5'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month4'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month4')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month5')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month6')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month7')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month8')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month9')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 5:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month10'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month9'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month8'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month7'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month6'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month5'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month5')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month6')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month7')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month8')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month9')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month10')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 6:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month11'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month10'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month9'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month8'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month7'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month6'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month6')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month7')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month8')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month9')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month10')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month11')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 7:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month12'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month11'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month10'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month9'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month8'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month7'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month7')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month8')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month9')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month10')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month11')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month12')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 8:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month1'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month12'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month11'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month10'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month9'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month8'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month8')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month9')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month10')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month11')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month12')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month1')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 9:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month2'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month1'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month12'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month11'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month10'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month9'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month9')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month10')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month11')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month12')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month1')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month2')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 10:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month3'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month2'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month1'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month12'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month11'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month10'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month10')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month11')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month12')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month1')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month2')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month3')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
             elif current_month == 11:
-                for node in doc.xpath("//field[@name='test']"):
-                    node.addnext(etree.Element('field', {'name': 'qty_month4'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month3'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month2'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month1'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month12'}))
-                    node.addnext(etree.Element('field', {'name': 'qty_month11'}))
+                for node in doc.xpath("//field[@name='total_first']"):
+                    node.set('name', 'qty_month11')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
-
+                for node in doc.xpath("//field[@name='total_second']"):
+                    node.set('name', 'qty_month12')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_third']"):
+                    node.set('name', 'qty_month1')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fourth']"):
+                    node.set('name', 'qty_month2')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_fifth']"):
+                    node.set('name', 'qty_month3')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+                for node in doc.xpath("//field[@name='total_sixth']"):
+                    node.set('name', 'qty_month4')
+                result['arch'] = etree.tostring(doc, encoding='unicode')
+     
         return result
 
 

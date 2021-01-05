@@ -10,12 +10,18 @@
                     <div class="oe_title">
                         <h1>
                             <field name="company_id" invisible="1"/>
-                            <field name="product_id" string="Product"/>
+                            <field name="product_id" string="Product" required="1"/>
                         </h1>
                     </div>
                     <group>
                         <group>
                             <field name="test" invisible="1"/>
+                            <field name="total_first" readonly="1"/>
+                            <field name="total_second" readonly="1"/>
+                            <field name="total_third" readonly="1"/>
+                            <field name="total_fourth" readonly="1"/>
+                            <field name="total_fifth" readonly="1"/>
+                            <field name="total_sixth" readonly="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -24,11 +30,11 @@
                             widget="section_and_note_one2many"
                             mode="tree,kanban">
                                 <tree  editable="bottom" default_order="forecast_date">
-                                    <field name="source"/>
+                                    <field name="source" required="1"/>
                                     <field name="company_id" invisible="1"/>
                                     <field name="customer"/>
-                                    <field name="forecast_qty"/>
-                                    <field name="forecast_date"/>
+                                    <field name="forecast_qty" required="1"/>
+                                    <field name="forecast_date" required="1"/>
                                     <field name="active" invisible="1"/>
                                 </tree>
                             </field>
