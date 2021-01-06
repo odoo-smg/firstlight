@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Form view-->
+    <record model="ir.ui.view" id="flsp_sales_forecast_form">
+        <field name="name">flsp.sales.forecast.form</field>
+        <field name="model">flsp.sales.forecast</field>
+        <field name="arch" type="xml">
+            <form string="Flsp Sales Forecast form">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="company_id" invisible="1"/>
+                            <field name="product_id" string="Product" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="test" invisible="1"/>
+                            <field name="total_first" readonly="1"/>
+                            <field name="total_second" readonly="1"/>
+                            <field name="total_third" readonly="1"/>
+                            <field name="total_fourth" readonly="1"/>
+                            <field name="total_fifth" readonly="1"/>
+                            <field name="total_sixth" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Forecasting Information">
+                            <field name="forecast_line"
+                            widget="section_and_note_one2many"
+                            mode="tree,kanban">
+                                <tree  editable="bottom" default_order="forecast_date">
+                                    <field name="source" required="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="customer"/>
+                                    <field name="forecast_qty" required="1"/>
+                                    <field name="forecast_date" required="1"/>
+                                    <field name="active" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="flsp_sales_forecast_tree">
+        <field name="name">flsp.sales.forecast.tree</field>
+        <field name="model">flsp.sales.forecast</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Sales Forecast tree">
+                <field name="company_id" invisible="1"/>
+                <field name="product_id"/>
+                    <field name="total_first"/>
+                    <field name="total_second"/>
+                    <field name="total_third"/>
+                    <field name="total_fourth"/>
+                    <field name="total_fifth"/>
+                    <field name="total_sixth"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record model="ir.actions.act_window" id="flsp_sales_forecast_action">
+        <field name="name">Sales Forecast</field>
+        <field name="res_model">flsp.sales.forecast</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the forecast
+            </p>
+        </field>
+    </record>
+
+    <!--Menu items-->
+    <menuitem id="flsp_sales_forecast_menu" name="Sales Forecast"
+              parent="sale.sale_order_menu"
+              action="flsp_sales_forecast_action"/>
+
+</odoo>
