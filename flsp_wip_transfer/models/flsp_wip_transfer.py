@@ -58,6 +58,8 @@ class FlspMrpPlanningLine(models.Model):
         for production in production_orders:
             components = self._get_flattened_totals(production.bom_id, production.product_qty)
             for prod in components:
+                if components[prod]['total'] <= 0:
+                    continue
                 wip_trans = self.env['flsp.wip.transfer'].search(['&', ('source', '=', production.name), ('product_id', '=', prod.id)])
                 stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', prod.id)])
                 pa_wip_qty = 0
