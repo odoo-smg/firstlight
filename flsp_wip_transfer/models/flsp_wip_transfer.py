@@ -18,6 +18,8 @@ class FlspMrpPlanningLine(models.Model):
     source = fields.Char("MO", readonly=True)
     mfg_demand = fields.Float(string='Qty', readonly=True)
     suggested = fields.Float(string='Suggested', readonly=True)
+    uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True)
+
     adjusted = fields.Float(string='Adjusted')
     state = fields.Selection([
         ('transfer', 'to transfer'),
@@ -79,6 +81,7 @@ class FlspMrpPlanningLine(models.Model):
                             'description': prod.name,
                             'default_code': prod.default_code,
                             'product_id': prod.id,
+                            'uom': prod.uom_id.id,
                             'stock_qty': prod.qty_available - pa_wip_qty,
                             'pa_wip_qty': pa_wip_qty,
                             'source': production.name,
