@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError
 import datetime
 
 class FlspMrpPlanningLine(models.Model):
@@ -37,7 +38,11 @@ class FlspMrpPlanningLine(models.Model):
 
 
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
+        if not pa_location:
+            raise UserError('WIP Stock Location is missing')
         pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
+        if not pa_wip_locations:
+            raise UserError('WIP Stock Location is missing')
 
         ## Remove production orders done:
         wip_transfers = self.env['flsp.wip.transfer'].search([('state', '=', ['transfer'])])
