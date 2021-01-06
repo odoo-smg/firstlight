@@ -58,33 +58,36 @@ class FlspMrpPlanningLine(models.Model):
         for production in production_orders:
             components = self._get_flattened_totals(production.bom_id, production.product_qty)
             for prod in components:
-                wip_trans = self.env['flsp.wip.transfer'].search(['&', ('source', '=', production.name), ('product_id', '=', prod.id)])
-                stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', prod.id)])
-                pa_wip_qty = 0
-                for stock_lin in stock_quant:
-                    pa_wip_qty += stock_lin.quantity
-                if wip_trans:
-                    #update current
-                    wip_trans.mfg_demand = components[prod]['total']
-                    wip_trans.suggested = 1
-                    wip_trans.adjusted = components[prod]['total']
-                    wip_trans.stock_qty = prod.qty_available - pa_wip_qty
-                    wip_trans.pa_wip_qty = pa_wip_qty
-                else:
-                    #insert new
-                    wip = self.env['flsp.wip.transfer'].create({
-                        'description': prod.name,
-                        'default_code': prod.default_code,
-                        'product_id': prod.id,
-                        'stock_qty': prod.qty_available - pa_wip_qty,
-                        'pa_wip_qty': pa_wip_qty,
-                        'source': production.name,
-                        'mfg_demand': components[prod]['total'],
-                        'suggested': 1,
-                        'adjusted': components[prod]['total'],
-                        'state': 'transfer',
-                        'production_id': production.id,
-                    })
+                if prod.type in ['service', 'consu']:
+                    continue
+                if components[prod]['total'] > 0:
+                    wip_trans = self.env['flsp.wip.transfer'].search(['&', ('source', '=', production.name), ('product_id', '=', prod.id)])
+                    stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', prod.id)])
+                    pa_wip_qty = 0
+                    for stock_lin in stock_quant:
+                        pa_wip_qty += stock_lin.quantity
+                    if wip_trans:
+                        #update current
+                        wip_trans.mfg_demand = components[prod]['total']
+                        wip_trans.suggested = 1
+                        wip_trans.adjusted = components[prod]['total']
+                        wip_trans.stock_qty = prod.qty_available - pa_wip_qty
+                        wip_trans.pa_wip_qty = pa_wip_qty
+                    else:
+                        #insert new
+                        wip = self.env['flsp.wip.transfer'].create({
+                            'description': prod.name,
+                            'default_code': prod.default_code,
+                            'product_id': prod.id,
+                            'stock_qty': prod.qty_available - pa_wip_qty,
+                            'pa_wip_qty': pa_wip_qty,
+                            'source': production.name,
+                            'mfg_demand': components[prod]['total'],
+                            'suggested': 1,
+                            'adjusted': components[prod]['total'],
+                            'state': 'transfer',
+                            'production_id': production.id,
+                        })
         return
 
     def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
