@@ -43,13 +43,13 @@
 
 	<!--Action-->
 	<record  model="ir.actions.act_window" id="flsp_specification_action">
-        <field name="name">FLSP Specification</field>
+        <field name="name">Family Specification</field>
         <field name="res_model">flsp.specification</field>
         <field name="view_mode">tree,form</field>
     </record>
 
     <!--Menu-->
- 	<menuitem name ="FLSP Specification"
+ 	<menuitem name ="Family Specification"
               id='menu_flsp_specification'
               parent="mrp.menu_mrp_bom"
               action="flsp_specification_action"/>
