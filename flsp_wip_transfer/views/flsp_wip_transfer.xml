@@ -57,6 +57,7 @@
                 <field name="pa_wip_qty"/>
                 <field name="source"/>
                 <field name="mfg_demand"/>
+                <field name="uom" string="UofM"/>
                 <!--field name="suggested"/-->
                 <field name="adjusted"/>
             </tree>

@@ -38,6 +38,7 @@
                             <field name="stock_qty"/>
                             <field name="pa_wip_qty"/>
                             <field name="mfg_demand" string="Qty needed"/>
+                            <field name="uom" string="Unit of Measure"/>
                             <!--field name="suggested" /-->
                         </group>
                     </group>
@@ -58,6 +59,7 @@
                 <field name="stock_qty"/>
                 <field name="pa_wip_qty"/>
                 <field name="mfg_demand"/>
+                <field name="uom" string="UofM"/>
                 <!--field name="suggested"/-->
                 <field name="adjusted"/>
             </tree>

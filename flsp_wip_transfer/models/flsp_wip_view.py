@@ -20,6 +20,7 @@ class Flspwipview(models.Model):
     source = fields.Char("MO", readonly=True)
     mfg_demand = fields.Float(string='Qty', readonly=True)
     suggested = fields.Float(string='Suggested', readonly=True)
+    uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True)
     adjusted = fields.Float(string='Adjusted')
     state = fields.Selection([
         ('transfer', 'to transfer'),
@@ -46,6 +47,7 @@ class Flspwipview(models.Model):
         max(source) as source,
         sum(mfg_demand) as mfg_demand,
         sum(suggested) as suggested,
+        max(uom) as uom,
         sum(adjusted) as adjusted,
         max(state) as state,
         max(stock_picking) as stock_picking,
@@ -53,7 +55,7 @@ class Flspwipview(models.Model):
         count(id) as qty_items
         FROM flsp_wip_transfer
         where state != 'done'
-        group by product_id 
+        group by product_id
         );
         """
         self.env.cr.execute(query)
