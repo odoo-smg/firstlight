@@ -26,11 +26,4 @@ class FlspSpecification(models.Model):
 class product_template(models.Model):
     _inherit = 'product.template'
 
-    flsp_specification = fields.Many2one('flsp.specification', string='Family Specification', ondelete='cascade',
-                                                help='Select the FLSP specification ')
-
-
-
-
-
-
+    flsp_specification = fields.Many2many('flsp.specification', string='Family Specification')
