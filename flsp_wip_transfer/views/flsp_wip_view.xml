@@ -67,9 +67,10 @@
                 <field name="pa_wip_qty"/>
                 <field name="mfg_demand"/>
                 <field name="uom" string="UofM"/>
-                <field name="purchase_uom" string="Purchase UofM" optional="hide"/>
                 <!--field name="suggested"/-->
                 <field name="adjusted"/>
+                <field name="purchase_adjusted" string="Adjusted PO UOM" optional="hide"/>
+                <field name="purchase_uom" string="Purchase UofM" optional="hide"/>
             </tree>
         </field>
     </record>
