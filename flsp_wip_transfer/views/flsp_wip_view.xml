@@ -31,18 +31,18 @@
                             </div>
                         </button>
                     </div>
-
+                    <group name="product" string="Product" >
+                    </group>
+                    <field name="product_id"/>
                     <group>
-                        <group name="product" string="Product" >
-                            <field name="product_id"/>
+                        <group name="uom" string="Unit of Measure" >
                             <field name="stock_qty"/>
                             <field name="pa_wip_qty"/>
                             <field name="mfg_demand" string="Qty needed"/>
                             <field name="uom" string="Unit of Measure"/>
                             <!--field name="suggested" /-->
                         </group>
-                        <group name="uom" string="Purchase Unit of Measure">
-                            <field name="product_id"/>
+                        <group name="purchase_uom" string="Purchase Unit of Measure">
                             <field name="purchase_stock_qty" string="WH/Stock"/>
                             <field name="purchase_pa_wip_qty" string="PA/WIP"/>
                             <field name="purchase_mfg_demand" string="Qty needed"/>
