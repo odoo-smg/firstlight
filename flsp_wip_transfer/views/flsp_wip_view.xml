@@ -41,6 +41,13 @@
                             <field name="uom" string="Unit of Measure"/>
                             <!--field name="suggested" /-->
                         </group>
+                        <group name="uom" string="Purchase Unit of Measure">
+                            <field name="product_id"/>
+                            <field name="purchase_stock_qty" string="WH/Stock"/>
+                            <field name="purchase_pa_wip_qty" string="PA/WIP"/>
+                            <field name="purchase_mfg_demand" string="Qty needed"/>
+                            <field name="purchase_uom" string="UofM"/>
+                        </group>
                     </group>
                 </sheet>
             </form>

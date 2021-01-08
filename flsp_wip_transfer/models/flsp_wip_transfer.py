@@ -30,6 +30,12 @@ class FlspMrpPlanningLine(models.Model):
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', readonly=False)
     stock_move_id = fields.Many2one('stock.move', string='Move Line Id', readonly=True)
 
+    purchase_uom = fields.Many2one('uom.uom', 'Purchase Unit of Measure', readonly=True)
+    purchase_stock_qty = fields.Float(string='WH/Stock 2nd uom', readonly=True)
+    purchase_pa_wip_qty = fields.Float(string='PA/WIP 2nd uom', readonly=True)
+    purchase_mfg_demand = fields.Float(string='Qty 2nd uom', readonly=True)
+    purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
+
     def _flsp_calc_demands(self, days_ahead):
 
         cur_date = datetime.datetime.now().date()
@@ -75,6 +81,11 @@ class FlspMrpPlanningLine(models.Model):
                         wip_trans.adjusted = components[prod]['total']
                         wip_trans.stock_qty = prod.qty_available - pa_wip_qty
                         wip_trans.pa_wip_qty = pa_wip_qty
+                        wip_trans.purchase_uom = prod.uom_po_id.id
+                        wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
+                        wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
+                        wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                        wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
                     else:
                         #insert new
                         wip = self.env['flsp.wip.transfer'].create({
@@ -90,8 +101,21 @@ class FlspMrpPlanningLine(models.Model):
                             'adjusted': components[prod]['total'],
                             'state': 'transfer',
                             'production_id': production.id,
+                            'purchase_uom': prod.uom_po_id.id,
+                            'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
+                            'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
+                            'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                            'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
                         })
         return
+
+    def _compute_quantity(self):
+        for mps in self:
+            mps.moves_qty = sum(mps.move_ids.filtered(lambda m: m.picking_id).mapped('product_qty'))
+            mps.manufacture_qty = sum(mps.move_ids.filtered(lambda m: m.production_id).mapped('product_qty'))
+            mps.rfq_qty = sum([l.product_uom._compute_quantity(l.product_qty, l.product_id.uom_id) for l in mps.purchase_order_line_ids])
+            mps.total_qty = mps.moves_qty + mps.manufacture_qty + mps.rfq_qty
+
 
     def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
         """Calculate the **unitary** product requirements of flattened BOM.
