@@ -31,6 +31,12 @@ class Flspwipview(models.Model):
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', readonly=False)
     qty_items = fields.Integer('Items')
 
+    purchase_uom = fields.Many2one('uom.uom', 'Purchase Unit of Measure', readonly=True)
+    purchase_stock_qty = fields.Float(string='WH/Stock 2nd uom', readonly=True)
+    purchase_pa_wip_qty = fields.Float(string='PA/WIP 2nd uom', readonly=True)
+    purchase_mfg_demand = fields.Float(string='Qty 2nd uom', readonly=True)
+    purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
+
     def init(self):
         tools.drop_view_if_exists(self._cr, 'flsp_wip_view')
 
@@ -52,7 +58,12 @@ class Flspwipview(models.Model):
         max(state) as state,
         max(stock_picking) as stock_picking,
         max(production_id) as production_id,
-        count(id) as qty_items
+        count(id) as qty_items,
+        max(purchase_uom) as purchase_uom,
+        max(purchase_stock_qty) as purchase_stock_qty,
+        max(purchase_pa_wip_qty) as purchase_pa_wip_qty,
+        sum(purchase_mfg_demand) as purchase_mfg_demand,
+        sum(purchase_adjusted) as purchase_adjusted
         FROM flsp_wip_transfer
         where state != 'done'
         group by product_id
