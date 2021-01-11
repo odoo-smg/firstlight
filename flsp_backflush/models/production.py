@@ -39,8 +39,12 @@ class MrpProduction(models.Model):
         ## (The sub parts will not be transferred to WIP).
         for components in self.move_raw_ids:
             for line in components.move_line_ids:
-                pa_stock_quantity = self.env['stock.quant'].search(['&', ('product_id', '=', line.product_id.id), ('location_id', '=', line.location_id.id)])
-                if pa_stock_quantity.quantity < 0 and line.product_id.bom_count > 0:
+                pa_stock_tmp = self.env['stock.quant'].search(['&', ('product_id', '=', line.product_id.id), ('location_id', '=', line.location_id.id)])
+                pa_stock_quantity = 0
+                for serial_location in pa_stock_tmp:
+                    pa_stock_quantity += serial_location.quantity
+
+                if pa_stock_quantity < 0 and line.product_id.bom_count > 0:
                     create_val = {
                         'origin': 'FLSP-AUTO-PA-ADJUST',
                         'picking_type_id': stock_picking_type.id,
