@@ -149,8 +149,8 @@ class MrpProduction(models.Model):
                     'state': 'done',
                     'done_move': True,
                 })
-            # stock_picking.button_validate()
-            stock_picking.state = 'done'
+            stock_picking.button_validate()
+            #stock_picking.state = 'done'
 
 
     def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
