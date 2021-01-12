@@ -46,7 +46,7 @@ class MrpProduction(models.Model):
 
                 if pa_stock_quantity < 0 and line.product_id.bom_count > 0:
                     create_val = {
-                        'origin': 'FLSP-AUTO-PA-ADJUST',
+                        'origin': self.name+' FLSP-AUTO-PA-ADJUST',
                         'picking_type_id': stock_picking_type.id,
                         'location_id': stock_virtual_location.id,
                         'location_dest_id': line.location_id.id,
@@ -90,7 +90,7 @@ class MrpProduction(models.Model):
 
             if not stock_picking:
                 create_val = {
-                    'origin': 'FLSP-Backflush',
+                    'origin': self.name + ' FLSP-Backflush',
                     'picking_type_id': stock_picking_type.id,
                     'location_id': wip_location.id,
                     'location_dest_id': virtual_production_location.id,
