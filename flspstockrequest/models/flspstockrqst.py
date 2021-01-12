@@ -70,28 +70,28 @@ class FlspStockRequest(models.Model):
             raise UserError('Stock Location is missing')
 
         if len(self.order_line) >= 1:
-            pick_lines = []
-            for line in self.order_line:
-                move_lines = {
-                    'name': line.product_id.name,
-                    'origin': self.name,
-                    'product_id': line.product_id.id,
-                    'product_uom': line.product_id.uom_id.id,
-                    'product_uom_qty': line.product_qty,
-                    'location_id': stock_location.id,
-                    'location_dest_id': wip_location.id,
-                    }
-                pick_lines.append((0, 0, move_lines))
-
             creat_val = {'picking_type_id': picking_type_id,
                          'origin': self.name,
                          'scheduled_date': self.need_by,
                          'location_id': stock_location.id,
                          'location_dest_id': wip_location.id,
-                         'move_lines': pick_lines
                          # 'partner_id': self.request_by.partner_id.id,
                          }
             stock_picking = self.env['stock.picking'].create(creat_val)
+            # pick_lines = []
+            for line in self.order_line:
+                # move_lines = \
+                self.env['stock.move'].create({
+                    'name': line.product_id.name,
+                    'origin': self.name,
+                    'picking_id': stock_picking.id,
+                    'product_id': line.product_id.id,
+                    'product_uom': line.product_id.uom_id.id,
+                    'product_uom_qty': line.product_qty,
+                    'location_id': stock_location.id,
+                    'location_dest_id': wip_location.id,
+                    })
+                # pick_lines.append((0, 0, move_lines))
             self.stock_picking = stock_picking
             self.write({'status': 'confirm'})
         else:
@@ -100,6 +100,52 @@ class FlspStockRequest(models.Model):
         stock_picking.action_confirm()
         return stock_picking
 
+    #
+    # def button_confirm(self):
+    #     """
+    #         Purpose: To create an internal transfer
+    #         Details: Stock picking is created and stock move are also filled.
+    #     """
+    #     print("Running the transfer")
+    #     wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
+    #     stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')])
+    #     picking_type_id = 5 #internal transfer
+    #     if not wip_location:
+    #         raise UserError('WIP Stock Location is missing')
+    #     if not stock_location:
+    #         raise UserError('Stock Location is missing')
+    #
+    #     if len(self.order_line) >= 1:
+    #         pick_lines = []
+    #         for line in self.order_line:
+    #             move_lines = {
+    #                 'name': line.product_id.name,
+    #                 'origin': self.name,
+    #                 'product_id': line.product_id.id,
+    #                 'product_uom': line.product_id.uom_id.id,
+    #                 'product_uom_qty': line.product_qty,
+    #                 'location_id': stock_location.id,
+    #                 'location_dest_id': wip_location.id,
+    #                 }
+    #             pick_lines.append((0, 0, move_lines))
+    #
+    #         creat_val = {'picking_type_id': picking_type_id,
+    #                      'origin': self.name,
+    #                      'scheduled_date': self.need_by,
+    #                      'location_id': stock_location.id,
+    #                      'location_dest_id': wip_location.id,
+    #                      'move_lines': pick_lines
+    #                      # 'partner_id': self.request_by.partner_id.id,
+    #                      }
+    #         stock_picking = self.env['stock.picking'].create(creat_val)
+    #         self.stock_picking = stock_picking
+    #         self.write({'status': 'confirm'})
+    #     else:
+    #         raise UserError('No transfer can be created if there is no products to transfer. \n'
+    #                         'Click OK and fill the stock request information or delete this record')
+    #     stock_picking.action_confirm()
+    #     return stock_picking
+    #
     def view_internal_transfer(self):
         """
             Purpose: To view the internal transfer for the Stock request
