@@ -15,6 +15,8 @@ class FlspSalesForecast(models.Model):
     """
 
     _name = 'flsp.sales.forecast'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Flsp Sales Forecast'
     _rec_name = "product_id"
 
     _sql_constraints = [
@@ -26,7 +28,7 @@ class FlspSalesForecast(models.Model):
     company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company)
     product_id = fields.Many2one('product.product', string='Product',
         domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
-        change_default=True)
+        change_default=True, tracking=True)
 
     # User table to fill
     forecast_line = fields.One2many('flsp.sales.forecast.line', 'order_id', string='Order Lines', copy=True, nauto_join=True)
@@ -689,7 +691,7 @@ class FlspSalesForecast(models.Model):
                 for node in doc.xpath("//field[@name='total_sixth']"):
                     node.set('name', 'qty_month4')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
-     
+
         return result
 
 
@@ -706,7 +708,7 @@ class FlspSalesForecast(models.Model):
     _name = 'flsp.sales.forecast.line'
     order_id = fields.Many2one('flsp.sales.forecast', string='Reference', required=True, ondelete='cascade', index=True, copy=False)
 
-    source = fields.Selection([('S', 'Sales'), ('E', 'EDI')], string="Source")
+    source = fields.Selection([('S', 'Internal'), ('E', 'External')], string="Source")
     customer = fields.Many2one(
         'res.partner', string='Customer', change_default=True, index=True, tracking=1,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
