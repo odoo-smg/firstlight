@@ -74,8 +74,8 @@ class MrpProduction(models.Model):
                         'state': 'done',
                         'done_move': True,
                     })
-                    #stock_picking.button_validate()
-                    stock_picking.state = 'done'
+                    stock_picking.button_validate()
+                    #stock_picking.state = 'done'
 
         ## Verifing quantities of components in PA/WIP if available move the quantity needed on MO to virtual production:
         bom_components = self._get_flattened_totals(self.bom_id, self.product_qty)
