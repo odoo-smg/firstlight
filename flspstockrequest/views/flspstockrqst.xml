@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Creating the sequence-->
+    <data noupdate="1">
+        <record id="flspstock_request_sequence" model="ir.sequence">
+            <field name="name">FlspStock Sequence</field>
+            <field name="code">seq.order</field>
+            <field name="active">True</field>
+            <field name="prefix">SR</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+    <!--Form view-->
+    <record model="ir.ui.view" id="flspstock_request_form">
+        <field name="name">flspstock.request.form</field>
+        <field name="model">flspstock.request</field>
+        <field name="arch" type="xml">
+            <form string="Flsp Stock Request form">
+                <header>
+                    <button name="button_confirm" string="Confirm" class="btn-primary" type="object"
+                            groups ="stock.group_stock_manager"
+                            attrs="{'invisible': [('status', 'not in', ['request'])]}"/>
+                    <field name="status"  widget="statusbar" statusbar_visible="request,confirm,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                        name="view_internal_transfer"
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart"
+                        string="Internal Transfer"
+                        attrs="{'invisible': [('status', 'in', ['request'])]}">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <field name="note"/>
+<!--                        attrs="{'invisible': [('status', 'not in', ['request'])]}"/>-->
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_order"/>
+                            <field name="request_by"/>
+                            <field name="material_handler" invisible="1"/>
+                            <field name="need_by"/>
+                            <field name="dest_location" invisible="1"/>
+                            <field name="is_done" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Stock Request Information">
+                            <field name="order_line"
+                            widget="section_and_note_one2many"
+                            mode="tree,kanban">
+                                <tree editable="bottom">
+                                    <field name="product_id" required="1"/>
+                                    <field name="product_qty" required="1"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="product_uom" groups="uom.group_uom" optional="hide"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="flspstock_request_tree">
+        <field name="name">flspstock.request.tree</field>
+        <field name="model">flspstock.request</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Stock Request tree"
+                  decoration-success="status in ('request')"
+                  decoration-warning="status in ('confirm')"
+                  decoration-muted="status in ('done')"
+            >
+                <field name="name"/>
+                <field name="date_order"/>
+                <field name="need_by"/>
+                <field name="request_by"/>
+                <field name="material_handler" optional="hide"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Search view-->
+    <record model="ir.ui.view" id="flspstock_search_view">
+        <field name="name">flspstock.request.search</field>
+        <field name="model">flspstock.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--Can search by short description and id-->
+                <field name="request_by"/>
+                <!--Filters-->
+                <filter name="to_do" string="To do" domain="['|', ('status','=','request'), ('status','=','confirm')]"/>
+                <filter name="request" string="Request" domain="[('status','=','request')]"/>
+                <filter name="confirm" string="Confirmed" domain="[('status','=','confirm')]"/>
+<!--                <group string="Grouped by">-->
+<!--                    <filter name="by_responsible" string="Responsiblity"-->
+<!--                        context="{'group_by': 'responsible'}"/>-->
+<!--                </group>-->
+            </search>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record model="ir.actions.act_window" id="flspstock_request_action">
+        <field name="name">FLSP Stock Requisition</field>
+        <field name="res_model">flspstock.request</field>
+        <field name="context">{'search_default_to_do': 1}</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the Request
+            </p>
+        </field>
+    </record>
+
+    <!--Menu items-->
+    <menuitem id="flspstock_request_menu" name="FLSP Stock Requisition"
+              parent="mrp.menu_mrp_manufacturing"
+              action="flspstock_request_action"/>
+</odoo>
+
+<!--parent="mrp.menu_mrp_root"-->
+
