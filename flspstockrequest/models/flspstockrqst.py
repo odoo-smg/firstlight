@@ -29,11 +29,11 @@ class FlspStockRequest(models.Model):
     # domain=lambda self: [('groups_id', 'in', self.env.ref('flspticketsystem.group_flspticketsystem_manager').id)],
     need_by = fields.Datetime(string='Need by', required=True, tracking=True)
     order_line = fields.One2many('flspstock.request.line', 'order_id', string='Order Lines', copy=True, auto_join=True)
-    status = fields.Selection([('request', 'Request'), ('confirm', 'Confirmed'), ('done', 'Done')], default='request', eval=True)
+    status = fields.Selection([('request', 'Request'), ('confirm', 'Confirmed'), ('done', 'Done')], default='request', eval=True, copy=False)
     is_done = fields.Boolean(store=True, compute='request_complete')
     dest_location = fields.Many2one('stock.location', string="Destination Location")
     #if we want to change dest location we simply call self in button confirm as dest location
-    stock_picking = fields.Many2one('stock.picking', string='Stock Picking', readonly=False)
+    stock_picking = fields.Many2one('stock.picking', string='Stock Picking', copy=False, readonly=False)
 
     @api.onchange('need_by')
     def _check_date_greater_than_today(self):
@@ -100,11 +100,11 @@ class FlspStockRequest(models.Model):
             self.stock_picking = stock_picking.id
             self.write({'status': 'confirm'})
             stock_picking.write({'scheduled_date': self.need_by})
+            stock_picking.action_assign()
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
                             'Click OK and fill the stock request information or delete this record')
         #stock_picking.action_confirm()
-        stock_picking.action_assign()
         return stock_picking
 
     #
