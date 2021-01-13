@@ -80,7 +80,7 @@ class FlspStockRequest(models.Model):
         if len(self.order_line) >= 1:
             creat_val = {'picking_type_id': picking_type_id.id,
                          'origin': self.name,
-                         'scheduled_date': self.need_by,
+                         #'scheduled_date': self.need_by,
                          'location_id': stock_location.id,
                          'location_dest_id': wip_location.id,
                          # 'partner_id': self.request_by.partner_id.id,
