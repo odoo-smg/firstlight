@@ -103,7 +103,7 @@ class FlspStockRequest(models.Model):
                 # pick_lines.append((0, 0, move_lines))
             self.message_post(body='lines: '+stock_picking.name, subtype="mail.mt_note")
             self.stock_picking = stock_picking.id
-            self.write({'status': 'confirm'})
+            #self.write({'status': 'confirm'})
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
                             'Click OK and fill the stock request information or delete this record')
