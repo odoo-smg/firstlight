@@ -2,8 +2,10 @@
 from datetime import datetime
 
 from odoo import models, fields, api
-from odoo.exceptions import UserError, ValidationError
 
+from odoo.exceptions import UserError, ValidationError
+import logging
+_logger = logging.getLogger(__name__)
 
 class FlspStockRequest(models.Model):
     """
@@ -27,11 +29,11 @@ class FlspStockRequest(models.Model):
     # domain=lambda self: [('groups_id', 'in', self.env.ref('flspticketsystem.group_flspticketsystem_manager').id)],
     need_by = fields.Datetime(string='Need by', required=True, tracking=True)
     order_line = fields.One2many('flspstock.request.line', 'order_id', string='Order Lines', copy=True, auto_join=True)
-    status = fields.Selection([('request', 'Request'), ('confirm', 'Confirmed'), ('done', 'Done')], default='request', eval=True)
+    status = fields.Selection([('request', 'Request'), ('confirm', 'Confirmed'), ('done', 'Done')], default='request', eval=True, copy=False)
     is_done = fields.Boolean(store=True, compute='request_complete')
     dest_location = fields.Many2one('stock.location', string="Destination Location")
     #if we want to change dest location we simply call self in button confirm as dest location
-    stock_picking = fields.Many2one('stock.picking', string='Stock Picking', readonly=False)
+    stock_picking = fields.Many2one('stock.picking', string='Stock Picking', copy=False, readonly=False)
 
     @api.onchange('need_by')
     def _check_date_greater_than_today(self):
@@ -60,24 +62,27 @@ class FlspStockRequest(models.Model):
             Purpose: To create an internal transfer
             Details: Stock picking is created and stock move are also filled.
         """
-        print("Running the transfer")
+
         wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
         stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')])
-        picking_type_id = 5 #internal transfer
+        picking_type_id = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')]) #internal transfer
+        if not picking_type_id:
+            raise UserError('Picking type Internal is missing')
         if not wip_location:
             raise UserError('WIP Stock Location is missing')
         if not stock_location:
             raise UserError('Stock Location is missing')
 
         if len(self.order_line) >= 1:
-            creat_val = {'picking_type_id': picking_type_id,
+            creat_val = {'picking_type_id': picking_type_id.id,
                          'origin': self.name,
-                         'scheduled_date': self.need_by,
+                         #'scheduled_date': self.need_by,
                          'location_id': stock_location.id,
                          'location_dest_id': wip_location.id,
                          # 'partner_id': self.request_by.partner_id.id,
                          }
             stock_picking = self.env['stock.picking'].create(creat_val)
+            self.message_post(body='Created Stock Transfer: '+stock_picking.name, subtype="mail.mt_note")
             # pick_lines = []
             for line in self.order_line:
                 # move_lines = \
@@ -92,12 +97,14 @@ class FlspStockRequest(models.Model):
                     'location_dest_id': wip_location.id,
                     })
                 # pick_lines.append((0, 0, move_lines))
-            self.stock_picking = stock_picking
+            self.stock_picking = stock_picking.id
             self.write({'status': 'confirm'})
+            #stock_picking.write({'scheduled_date': self.need_by})
+            stock_picking.action_assign()
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
                             'Click OK and fill the stock request information or delete this record')
-        stock_picking.action_confirm()
+        #stock_picking.action_confirm()
         return stock_picking
 
     #
