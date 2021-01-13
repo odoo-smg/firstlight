@@ -62,10 +62,6 @@ class FlspStockRequest(models.Model):
             Purpose: To create an internal transfer
             Details: Stock picking is created and stock move are also filled.
         """
-        print("Running the transfer")
-        self.message_post(
-            body='Running the transfer: ',
-            subtype="mail.mt_note")
 
         wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
         stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')])
@@ -86,7 +82,7 @@ class FlspStockRequest(models.Model):
                          # 'partner_id': self.request_by.partner_id.id,
                          }
             stock_picking = self.env['stock.picking'].create(creat_val)
-            self.message_post(body='picking: '+stock_picking.name, subtype="mail.mt_note")
+            self.message_post(body='Created Stock Transfer: '+stock_picking.name, subtype="mail.mt_note")
             # pick_lines = []
             for line in self.order_line:
                 # move_lines = \
@@ -101,10 +97,9 @@ class FlspStockRequest(models.Model):
                     'location_dest_id': wip_location.id,
                     })
                 # pick_lines.append((0, 0, move_lines))
-            self.message_post(body='lines: '+stock_picking.name, subtype="mail.mt_note")
             self.stock_picking = stock_picking.id
             self.write({'status': 'confirm'})
-            #stock_picking.scheduled_date = self.need_by
+            stock_picking.write({'scheduled_date': self.need_by})
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
                             'Click OK and fill the stock request information or delete this record')
