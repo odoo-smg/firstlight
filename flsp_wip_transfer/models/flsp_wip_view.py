@@ -103,7 +103,7 @@ class Flspwipview(models.Model):
                 print(product.product_id.name+' qty: '+str(product.adjusted))
 
                 move_line = self.env['stock.move'].create({
-                    'name': product.product_id.name,
+                    'name': "[wip-transfer]"+product.product_id.name,
                     'product_id': product.product_id.id,
                     'product_uom': product.product_id.uom_id.id,
                     'product_uom_qty': product.adjusted,
@@ -118,6 +118,7 @@ class Flspwipview(models.Model):
                     wip_line.stock_picking = stock_picking.id
                     wip_line.stock_move_id = move_line.id
             stock_picking.action_confirm()
+            stock_picking.action_assign()
 
             self.env['flspautoemails.bpmemails'].send_email(stock_picking, 'WIP001')
 
