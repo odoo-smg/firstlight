@@ -99,7 +99,7 @@ class FlspStockRequest(models.Model):
                 # pick_lines.append((0, 0, move_lines))
             self.stock_picking = stock_picking.id
             self.write({'status': 'confirm'})
-            stock_picking.write({'scheduled_date': self.need_by})
+            #stock_picking.write({'scheduled_date': self.need_by})
             stock_picking.action_assign()
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
