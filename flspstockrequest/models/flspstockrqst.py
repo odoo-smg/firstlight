@@ -88,10 +88,22 @@ class FlspStockRequest(models.Model):
             stock_picking = self.env['stock.picking'].create(creat_val)
             self.message_post(body='picking: '+stock_picking.name, subtype="mail.mt_note")
             # pick_lines = []
+            for line in self.order_line:
+                # move_lines = \
+                self.env['stock.move'].create({
+                    'name': line.product_id.name,
+                    'origin': self.name,
+                    'picking_id': stock_picking.id,
+                    'product_id': line.product_id.id,
+                    'product_uom': line.product_id.uom_id.id,
+                    'product_uom_qty': line.product_qty,
+                    'location_id': stock_location.id,
+                    'location_dest_id': wip_location.id,
+                    })
                 # pick_lines.append((0, 0, move_lines))
             self.message_post(body='lines: '+stock_picking.name, subtype="mail.mt_note")
             self.stock_picking = stock_picking.id
-            #self.write({'status': 'confirm'})
+            self.write({'status': 'confirm'})
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
                             'Click OK and fill the stock request information or delete this record')
