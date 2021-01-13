@@ -104,7 +104,7 @@ class FlspStockRequest(models.Model):
             self.message_post(body='lines: '+stock_picking.name, subtype="mail.mt_note")
             self.stock_picking = stock_picking.id
             self.write({'status': 'confirm'})
-            stock_picking.scheduled_date  self.need_by
+            stock_picking.scheduled_date = self.need_by
         else:
             raise UserError('No transfer can be created if there is no products to transfer. \n'
                             'Click OK and fill the stock request information or delete this record')
