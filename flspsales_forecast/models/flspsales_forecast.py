@@ -715,7 +715,7 @@ class FlspSalesForecast(models.Model):
     company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company)
 
     forecast_qty = fields.Float(string='Quantity')
-    total_forecast_qty = fields.Float(string='Total Quantity', compute="cal_total_forecast")
+    #total_forecast_qty = fields.Float(string='Total Quantity', compute="cal_total_forecast")
     forecast_date = fields.Datetime(string='Forecast Date', index=True)
 
     active = fields.Boolean(default=True) #useful, coz when false the line disappears
