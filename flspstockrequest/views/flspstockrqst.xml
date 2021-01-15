@@ -34,8 +34,12 @@
                         attrs="{'invisible': [('status', 'in', ['request'])]}">
                         </button>
                     </div>
+                    <p>_____________________________________________________________</p>
+                    <p><h2>**For production use only**</h2></p>
+                    <h3> Transfers product from WH/STOCK to WH/PA/WIP</h3>
+                    <p>_____________________________________________________________</p>
                     <div class="oe_title">
-                        <field name="note"/>
+                        <!--field name="note"/-->
 <!--                        attrs="{'invisible': [('status', 'not in', ['request'])]}"/>-->
                         <h1>
                             <field name="name"/>
@@ -133,4 +137,3 @@
 </odoo>
 
 <!--parent="mrp.menu_mrp_root"-->
-
