@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="flspserialnum_pdf">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="serial">
+                    <t t-foreach="serial.serial_num_line" t-as="move">
+                        <t>
+                            <div class="page">
+                                <div class="oe_structure"/>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <table class="table table-condensed" style="border-bottom: 0px solid white !important;width: 3in;">
+                                            <tr>
+                                              <th style="text-align: left;">
+                                                <span t-field="serial.product_id.display_name"/>
+                                              </th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    LN/SN:
+                                                    <span t-field="move.serial_num"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center; vertical-align: middle;" class="col-5">
+                                                    <img t-if="move.serial_num" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.serial_num, 600, 150)" style="width:100%;height:20%;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+        <report
+                string="Lot/Serial Number (PDF)"
+                id="action_flspserial_num_lot_label"
+                model="flsp.serialnum"
+                report_type="qweb-pdf"
+                name="flspserialnum.flspserialnum_pdf"
+                file="flspserialnum.flspserialnum_pdf"
+                print_report_name="'Bulk Lot-Serial - %s' % object.product_id.display_name"
+        />
+    </data>
+</odoo>

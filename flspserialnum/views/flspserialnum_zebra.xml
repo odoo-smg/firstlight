@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="flspserialnum_zebra">
+            <t t-foreach="docs" t-as="serial">
+                <t t-foreach="serial.serial_num_line" t-as="move">
+                    <t t-translation="off">
+                        ^XA
+^FO100,50
+^A0N,44,33^FD<t t-esc="serial.product_id.display_name"/>^FS
+^FO100,100
+^A0N,44,33^FDLN/SN: <t t-esc="move.serial_num"/>^FS
+^FO100,150^BY3
+^BCN,100,Y,N,N
+^FD<t t-esc="move.serial_num"/>^FS
+^XZ
+                    </t>
+                </t>
+            </t>
+        </template>
+        <report id="flsp_serialnum_zebra"
+            model="flsp.serialnum"
+            string="Lot/Serial Number (ZPL)"
+            report_type="qweb-text"
+            name="flspserialnum.flspserialnum_zebra"
+            file="flspserialnum.flspserialnum_zebra"
+        />
+    </data>
+</odoo>
+
+
+<!--                        -->
+<!--~SD30-->
+<!--^XA-->
+<!--^FO120,120, 0-->
+<!--^A0N,95,95-->
+<!--^FO100,180^BY5-->
+<!--^BCN,200,Y,Y,N-->
+<!--^FD<t t-esc="move.serial_num"/>^FS-->
+<!--^FO100,390^GFA,2136,2136,12,078,1FE,3FF,7FF8,:7FFC,:IFC,:::::7FFC,:7FFE,:7IF,3IF,3IF8,:1IFC,1IFE,0IFE,0JF,07IF8,07IFC,03IFE,01JF,01JFC,00JFE,007JF,003JF8,001JFE,001KF,I0KF8,I07JFE,I01KF,J0KF8,J07JFC,J03KF,J01KF8,K07JFC,K03JFE,K01KF,L07JF8,L03JF8,L01JFC,M0JFE,M03JF,M01JF,N0JF8,N07IFC,N03IFC,N01IFE,O0IFE,:O07IF,O03IF,:O01IF8,::P0IF8,::L07OF8,L0PFC,:::::::::00XFC,01XFE,::03XFE,03YF,03FFER01IF,03FFCS0IF,::03FFER01IF,03YF,07YF8,:::::07FF8S0IF8,07FF8S07FF8,0IF8S07FFC,:::0IFT03FFC,:::1IFT03FFE,:1FFET01FFE,:::::3FFET01IF,3FFCU0IF,:::::7FF8U07FF,7FF8U07FF8,:::::7FFV03FF8,:IF8U07FFC,gHFC,::::::::JFC3QF0JFC,JF01PFE03IFC,IFE00PFC01IFC,IFE007OF801IFC,IFC007OF800IFC,:::IFE007OF801IFC,IFE00PFC01IFC,JF01PFE03IFC,JFE7QFDJFC,gHFC,::::::I0IFEN01IFC,I07FFEN01IF8,::::::::::::I07FFCO0IF8,:I03FFCO0IF,I03FF8O07FF,I01FFP03FE,J07CQ0F8,^FS-->
+<!--^FO230,416-->
+<!--^A0N,90,90^FDDate: <t t-esc="move.create_date" t-options='{"widget": "date", "format": "MM/dd/YY"}'/>^FS-->
+<!--^FO230,516-->
+<!--^A0N,80,80^FDMade in Canada^FS-->
+<!--^XZ-->
