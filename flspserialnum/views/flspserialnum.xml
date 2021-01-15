@@ -51,6 +51,8 @@
         <field name="model">flsp.serialnum</field>
         <field name="arch" type="xml">
             <tree string="Flsp Serial Num Tree">
+                <field name="create_date"/>
+                <field name="created_by"/>
                 <field name="product_id"/>
                 <field name="serial_count"/>
             </tree>
