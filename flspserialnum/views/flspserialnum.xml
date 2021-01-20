@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Form view-->
+    <record model="ir.ui.view" id="flsp_serialnum_form">
+        <field name="name">flsp.serialnum.form</field>
+        <field name="model">flsp.serialnum</field>
+        <field name="arch" type="xml">
+            <form string="Flsp Serial Num Form">
+                <header>
+                    <button name="create_serial_num" string="Create Serial Numbers" class="btn-primary" type="object"
+                    attrs="{'invisible': [('id', '=', False)]}"/>
+                </header>
+                <sheet>
+<!--                    <field name="company_id" invisible="0"/>-->
+                    <h1><field name="product_id" options="{'no_open':True,'no_create': True}"/></h1>
+                    <group>
+                        <group>
+                            <field name="serial_count"/>
+                            <field name="first_serial" readonly="0"/>
+                        </group>
+                        <group>
+                            <field name="create_date" widget="date"/>
+                            <field name="created_by" options="{'no_open':True,'no_create': True}"/>
+                            <field name="manufacturing_num" invisible="1" options="{'no_open':True,'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Serial Numbers created">
+                            <field name="serial_num_line"
+                            widget="section_and_note_one2many"
+                            mode="tree,kanban">
+                                <tree  editable="bottom">
+                                    <field name="serial_num"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <div>
+                                <field name="note"/>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="flsp_serialnum_tree">
+        <field name="name">flsp.serialnum.tree</field>
+        <field name="model">flsp.serialnum</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Serial Num Tree">
+                <field name="create_date"/>
+                <field name="created_by"/>
+                <field name="product_id"/>
+                <field name="serial_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record model="ir.actions.act_window" id="flsp_serialnum_action">
+        <field name="name">FLSP Serial Num</field>
+        <field name="res_model">flsp.serialnum</field>
+<!--        <field name="context">{'search_default_to_do': 1}</field>-->
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first serial num
+            </p>
+        </field>
+    </record>
+
+      <!--Menu items-->
+    <menuitem id="flspserialnum" name="FLSP Serial Num"
+              parent="mrp.menu_mrp_manufacturing"
+              action="flsp_serialnum_action"/>
+</odoo>
