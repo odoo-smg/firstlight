@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flsp_comparebom_wizard,flsp_comparebom_wizard,model_flsp_comparebom_wizard,base.group_user,1,1,1,1
+access_flsp_comparebom_view,flsp_comparebom_view,model_flsp_comparebom_view,base.group_user,1,1,1,1
+access_flsp_comparebom,flsp_comparebom,model_flsp_comparebom,base.group_user,1,1,1,1
+access_flsp_comparebom_line,flsp_comparebom_line,model_flsp_comparebom_line,base.group_user,1,1,1,1
