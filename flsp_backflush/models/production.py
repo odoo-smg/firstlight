@@ -165,15 +165,37 @@ class MrpProduction(models.Model):
         if totals is None:
             totals = {}
         factor /= bom.product_uom_id._compute_quantity(
-            bom.product_qty, bom.product_tmpl_id.uom_id
+            bom.product_qty, bom.product_tmpl_id.uom_id, round=False
         )
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
-                new_factor = factor * line.product_uom_id._compute_quantity(
-                    line.product_qty, line.product_id.uom_id
-                )
-                '''if totals.get(line.product_id):
+                if not line.product_tmpl_id.flsp_backflush:
+                    if totals.get(line.product_id):
+                        totals[line.product_id]['total'] += (
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                                line.product_qty, line.product_id.uom_id, round=False
+                            )
+                        )
+                    else:
+                        totals[line.product_id] = {'total':(
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                                line.product_qty, line.product_id.uom_id, round=False
+                            )
+                        ), 'level': level, 'bom': sub_bom.code}
+                    continue
+                else:
+                    new_factor = factor * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
+                    )
+
+                level += 1
+                self._get_flattened_totals(sub_bom, new_factor, totals, level)
+                level -= 1
+            else:
+                if totals.get(line.product_id):
                     totals[line.product_id]['total'] += (
                         factor
                         * line.product_uom_id._compute_quantity(
@@ -186,24 +208,5 @@ class MrpProduction(models.Model):
                         * line.product_uom_id._compute_quantity(
                             line.product_qty, line.product_id.uom_id, round=False
                         )
-                    ), 'level': level, 'bom': sub_bom.code}
-                '''
-                level += 1
-                self._get_flattened_totals(sub_bom, new_factor, totals, level)
-                level -= 1
-            else:
-                if totals.get(line.product_id):
-                    totals[line.product_id]['total'] += (
-                            factor
-                            * line.product_uom_id._compute_quantity(
-                        line.product_qty, line.product_id.uom_id
-                    )
-                    )
-                else:
-                    totals[line.product_id] = {'total': (
-                            factor
-                            * line.product_uom_id._compute_quantity(
-                        line.product_qty, line.product_id.uom_id
-                    )
                     ), 'level': level, 'bom': ''}
         return totals

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flspbackflush_product_form_view">
+            <field name="name">flspbackflush.product.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='sale_delay']" position="after">
+                    <field name="flsp_backflush" class="oe_inline" style="vertical-align:baseline"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>
