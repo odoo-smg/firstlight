@@ -24,6 +24,7 @@
 
     # always loaded
     'data': [
+        'views/backflush_products.xml',
         #'views/production.xml',
     ],
 }

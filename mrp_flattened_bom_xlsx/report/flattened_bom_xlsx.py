@@ -25,7 +25,12 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.write(i, 4, bom.product_qty)
         sheet.write(i, 5, bom.product_uom_id.name or "")
         sheet.write(i, 6, bom.code or "")
-        sheet.write(i, 7, bom.product_tmpl_id.legacy_code or "")
+        sheet.write(i, 7, bom.flsp_bom_plm_valid or "")
+        sheet.write(i, 8, bom.product_tmpl_id.legacy_code or "")
+        sheet.write(i, 9, bom.product_tmpl_id.flsp_plm_valid or "")
+        if 'flsp_backflush' in self.env['product.template']._fields:
+            sheet.write(i, 10, bom.product_tmpl_id.flsp_backflush or "")
+
         i += 1
         for product, total_qty in requirements.items():
             sheet.write(i, 1, product.default_code or "")
@@ -34,7 +39,11 @@ class FlattenedBomXlsx(models.AbstractModel):
             sheet.write(i, 4, total_qty['total'] or 0.0)
             sheet.write(i, 5, product.uom_id.name or "")
             sheet.write(i, 6, total_qty['bom'] or "")
-            sheet.write(i, 7, product.legacy_code or "")
+            sheet.write(i, 7, total_qty['bom_plm'] or "")
+            sheet.write(i, 8, product.legacy_code or "")
+            sheet.write(i, 9, product.flsp_plm_valid or "")
+            if 'flsp_backflush' in self.env['product.template']._fields:
+                sheet.write(i, 10, product.flsp_backflush or "")
             i += 1
         return i
 
@@ -53,20 +62,42 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.set_column(3, 3, 40)
         sheet.set_column(4, 5, 15)
         sheet.set_column(6, 6, 25)
-        sheet.set_column(7, 7, 20)
+        sheet.set_column(7, 7, 10)
+        sheet.set_column(8, 8, 20)
+        sheet.set_column(9, 9, 10)
+        if 'flsp_backflush' in self.env['product.template']._fields:
+            sheet.set_column(10, 10, 10)
         title_style = workbook.add_format(
             {"bold": True, "bg_color": "#FFFFCC", "bottom": 1}
         )
-        sheet_title = [
-            _("BOM Name"),
-            _("Part#"),
-            _("Indented Part#"),
-            _("Product Name"),
-            _("Quantity"),
-            _("Unit of Measure"),
-            _("BOM Reference"),
-            _("Legacy Part#"),
-        ]
+        if 'flsp_backflush' in self.env['product.template']._fields:
+            sheet_title = [
+                _("BOM Name"),
+                _("Part#"),
+                _("Indented Part#"),
+                _("Product Name"),
+                _("Quantity"),
+                _("Unit of Measure"),
+                _("BOM Reference"),
+                _("BOM PLM"),
+                _("Legacy Part#"),
+                _("Part PLM"),
+                _("Backflush"),
+            ]
+        else:
+            sheet_title = [
+                _("BOM Name"),
+                _("Part#"),
+                _("Indented Part#"),
+                _("Product Name"),
+                _("Quantity"),
+                _("Unit of Measure"),
+                _("BOM Reference"),
+                _("BOM PLM"),
+                _("Legacy Part#"),
+                _("Part PLM"),
+            ]
+
         sheet.set_row(0, None, None, {"collapsed": 1})
         sheet.write_row(1, 0, sheet_title, title_style)
         sheet.freeze_panes(2, 0)

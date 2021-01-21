@@ -57,9 +57,9 @@ class FlspMrpPlanningLine(models.Model):
 
         for wip_trans in wip_transfers:
             delete_wip = True
-            for production in production_orders:
-                if wip_trans.source == production.name:
-                    delete_wip = False
+            #for production in production_orders:
+            #    if wip_trans.source == production.name:
+            #        delete_wip = False
             if delete_wip:
                 wip_trans.unlink()
 
@@ -134,24 +134,27 @@ class FlspMrpPlanningLine(models.Model):
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
-                new_factor = factor * line.product_uom_id._compute_quantity(
-                    line.product_qty, line.product_id.uom_id, round=False
-                )
-                '''if totals.get(line.product_id):
-                    totals[line.product_id]['total'] += (
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
+                if not line.product_tmpl_id.flsp_backflush:
+                    if totals.get(line.product_id):
+                        totals[line.product_id]['total'] += (
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                                line.product_qty, line.product_id.uom_id, round=False
+                            )
                         )
-                    )
+                    else:
+                        totals[line.product_id] = {'total':(
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                                line.product_qty, line.product_id.uom_id, round=False
+                            )
+                        ), 'level': level, 'bom': sub_bom.code}
+                    continue
                 else:
-                    totals[line.product_id] = {'total':(
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
-                    ), 'level': level, 'bom': sub_bom.code}
-                '''
+                    new_factor = factor * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
+                    )
+
                 level += 1
                 self._get_flattened_totals(sub_bom, new_factor, totals, level)
                 level -= 1
