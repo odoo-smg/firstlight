@@ -9,7 +9,7 @@
 ^XA
 ^FO60,10^BY3
 ^BQN,2,8, H, 7
-^FD<t t-esc="move.serial_num"/>^FS
+^FD   <t t-esc="move.serial_num"/>^FS
 ^FO40,205, 0
 ^A0N,65,75^FD<t t-esc="move.serial_num"/>^FS
 ^FO40,295

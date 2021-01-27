@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+quality_manager,quality manager,model_flsp_quality,group_flsp_quality_manager,1,1,1,1
+stage_manager,stage manager,model_flsp_qualitystage,group_flsp_quality_manager,1,1,1,1
+reason_manager,reason manager,model_flsp_qualityreason,group_flsp_quality_manager,1,1,1,1
+
+quality_user,quality user,model_flsp_quality,group_flsp_quality_user,1,1,1,1
+stage_user,stage user,model_flsp_qualitystage,group_flsp_quality_user,1,1,1,1
+reason_user,reason user,model_flsp_qualityreason,group_flsp_quality_user,1,1,1,1
