@@ -49,5 +49,6 @@
         'views/flsp_production_form.xml',
         'views/flsp_serial_label_zpl_1x34.xml',
         'views/flsp_serial_label_zpl_2x1.xml',
+        'views/flsp_antena_lable_zpl_2x1.xml',
     ],
 }
