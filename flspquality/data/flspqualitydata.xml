@@ -1,0 +1,30 @@
+<odoo>
+    <data noupdate="1">
+        <!--Stages-->
+        <record id="flsp_quality_stage_0" model="flsp.qualitystage">
+            <field name="name">New</field>
+        </record>
+        <record id="flsp_quality_stage_1" model="flsp.qualitystage">
+            <field name="name">Confirmed</field>
+        </record>
+        <record id="flsp_quality_stage_2" model="flsp.qualitystage">
+            <field name="name">Action Proposed</field>
+        </record>
+        <record id="flsp_quality_stage_3" model="flsp.qualitystage">
+            <field name="name">Solved</field>
+            <field name="folded">True</field>
+            <field name="done">True</field>
+        </record>
+
+        <!--Sequence-->
+        <record id="flsp_quality_sequence" model="ir.sequence">
+            <field name="name">Flsp Quality Sequence</field>
+            <field name="code">flsp.quality</field>
+            <field name="active">True</field>
+            <field name="prefix">QT</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>
