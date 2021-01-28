@@ -15,11 +15,11 @@
 ^XA
 ^FO460,60
 ^BQN,2,10
-^FDMA,PN: <t t-esc="product_code"/>  SN: <t t-esc="move.serial_num[-6:]"/>^FS
+^FDMA,PN: <t t-esc="product_code"/>  SN: <t t-esc="move.serial_num[-6:]"/> SMG PN: <t t-esc="serial.product_id.default_code"/>^FS
 ^FO60,380
 ^A0N,70,70^FDPN: <t t-esc="product_code"/>   SN: <t t-esc="move.serial_num[-6:]"/>^FS
 ^FO300,490
-^A0N,70,70^FDFLS PN: 101413-001^FS
+^A0N,70,70^FDSMG PN: <t t-esc="serial.product_id.default_code"/>^FS
 ^XZ
                                 </t>
                 </t>
