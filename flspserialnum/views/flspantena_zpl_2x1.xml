@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="flspserialnum_antena_zpl_2x1">
+            <t t-foreach="docs" t-as="serial">
+                <t t-foreach="serial.serial_num_line" t-as="move">
+                        <t t-translation="off">
+                        <t t-set="product_code" t-value="serial.product_id.default_code"/>
+                        <t t-set="product_desc" t-value="serial.product_id.name"/>
+                        <t t-foreach="serial.product_id.customerscode_ids" t-as="customercode_id">
+                            <t t-set="product_code" t-value="customercode_id.part_number"/>
+                            <t t-set="product_desc" t-value="customercode_id.description"/>
+                        </t>
+~SD30
+^XA
+^FO460,60
+^BQN,2,10
+^FDMA,PN: <t t-esc="product_code"/> SMG PN: <t t-esc="serial.product_id.default_code"/> SN: <t t-esc="move.serial_num[-6:]"/>^FS
+^FO60,380
+^A0N,70,70^FDPN: <t t-esc="product_code"/>   SN: <t t-esc="move.serial_num[-6:]"/>^FS
+^FO300,490
+^A0N,70,70^FDSMG PN: <t t-esc="serial.product_id.default_code"/>^FS
+^XZ
+                                </t>
+                </t>
+            </t>
+        </template>
+        <report id="flsp_serialnum_antena_2x1"
+            model="flsp.serialnum"
+            string="2x1 Antena label (ZPL)"
+            report_type="qweb-text"
+            name="flspserialnum.flspserialnum_antena_zpl_2x1"
+            file="flspserialnum.flspserialnum_antena_zpl_2x1"
+        />
+    </data>
+</odoo>

@@ -27,5 +27,6 @@
         'views/flspserialnum_zebra.xml',
         'views/flspserialnum_zpl_1x34.xml',
         'views/flspserialnum_zpl_2x1.xml',
+        'views/flspantena_zpl_2x1.xml',
     ],
 }

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Form view-->
+    <record model="ir.ui.view" id="flsp_quality_form" >
+        <field name="name">flsp.quality.form</field>
+        <field name="model">flsp.quality</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'folded'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="title" required="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="product_tmpl_id" required="1" options="{'no_open':True,'no_create': True}"/>
+                            <field name="product_id" groups="product.group_product_variant"/>
+                            <field name="lot_id" context="{'default_product_id': product_id}" groups="stock.group_production_lot" options="{'no_open':True,'no_create': True}"/>
+                            <field name="date_create" readonly="1"/>
+                            <field name="created_by" readonly="1"/>
+                            <field name="date_close" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="sale_id" options="{'no_open':True,'no_create': True}"/>
+                            <field name="partner_id" readonly="0" options="{'no_open':True,'no_create': True}"/>
+                            <field name="rga_num"/>
+                            <field name="responsible" required="1"/>
+                            <field name="reason"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Description of the issue..."/>
+                        </page>
+                        <page string="Corrective Actions">
+                            <field name="action_corrective" placeholder="Describe the corrective actions you did..."/>
+                        </page>
+                        <page string="Preventive Actions">
+                            <field name="action_preventive" placeholder="Describe the preventive actions you did..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--Kanban view-->
+    <record model="ir.ui.view" id="flsp_quality_kanban" >
+        <field name="name">flsp.quality.kanban</field>
+        <field name="model">flsp.quality</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                <field name="description"/>
+                <field name="created_by"/>
+                <field name="stage_id"/>
+                <field name="priority"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div>
+                                <strong><field name="product_tmpl_id"/></strong>
+                            </div>
+                            <div>
+                                Sequence #:
+                                <field name="display_name"/>
+                            </div>
+                            <div t-attf-class="oe_kanban_content">
+                                S/O #:
+                                <field name="sale_id"/>
+                                <br/>
+                                Create date:
+                                <field name="date_create"/>
+                                <br/>
+                                Responsible:
+                                <field name="responsible"/>
+                            </div>
+<!--                            <div class="oe_kanban_bottom_right">-->
+<!--                                <img t-att-src="kanban_image('res.users', 'image_128', record.user_id.raw_value)" t-att-title="record.user_id.value" t-att-alt="record.user_id.value" class="oe_kanban_avatar o_image_24_cover float-right"/>-->
+<!--                            </div>-->
+                            <div class="oe_kanban_bottom_left">
+                                <field name="priority" widget="priority"/>
+                                <field name="activity_ids" widget="kanban_activity"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="fls_quality_tree">
+        <field name="name">flsp.quality.tree</field>
+        <field name="model">flsp.quality</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="display_name"/>
+                <field name="product_tmpl_id"/>
+                <field name="product_id" invisible="1"/>
+                <field name="responsible"/>
+                <field name="date_create" widget="date"/>
+                <field name="sale_id"/>
+                <field name="partner_id" optional="show"/>
+                <field name="date_close" widget="date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Search-->
+    <record model="ir.ui.view" id="flsp_quality_search">
+        <field name="name">flsp.quality.search</field>
+        <field name="model">flsp.quality</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--Search-->
+                <field name="product_id" string="Product"/>
+                <field name="responsible"/>
+                <field name="created_by"/>
+
+                <!--Filters-->
+<!--                <filter name="myalerts" string="My Alerts"  domain="[('created_by', '=', uid)]"/>-->
+                <separator/>
+                <filter name="inprogress" string="In Progress"  domain="[('stage_id.done', '=', False)]"/>
+                <filter name="done" string="Done"  domain="[('stage_id.done', '=', True)]"/>
+                <separator/>
+
+                <!--Group by-->
+                <group expand="0" string="Group By">
+                    <filter name="groupby_stage" string="Stage" context="{'group_by': 'stage_id'}"/>
+                    <filter name="groupby_created_by" string="Created_by" context="{'group_by': 'created_by'}"/>
+                    <filter name="groupby_reason" string="Root Cause" context="{'group_by': 'reason'}"/>
+                    <filter name="groupby_date" string="Creation Date" context="{'group_by': 'create_date'}"/>
+                    <filter name="groupby_responsible" string="Classification"  context="{'group_by': 'responsible'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--ACTION ITEM-->
+    <record model="ir.actions.act_window" id="flsp_quality_action">
+        <field name="name">Flsp Quality</field>
+        <field name="res_model">flsp.quality</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+     <!--MENU ITEM-->
+    <menuitem name="Quality" id="main_quality_menu"
+         web_icon="flspquality,static/description/icon.png"/>
+
+    <menuitem name="Quality" id="quality_menu"
+              parent="main_quality_menu"
+              action="flsp_quality_action" />
+
+</odoo>
+
