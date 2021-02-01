@@ -3,6 +3,7 @@ from odoo import models, fields, api
 from datetime import datetime
 from odoo.exceptions import ValidationError
 from lxml import etree
+from dateutil.relativedelta import relativedelta
 
 class FlspSalesForecast(models.Model):
     """
@@ -711,11 +712,12 @@ class FlspSalesForecast(models.Model):
     source = fields.Selection([('S', 'Internal'), ('E', 'External')], string="Source")
     customer = fields.Many2one(
         'res.partner', string='Customer', change_default=True, index=True, tracking=1,
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
+        domain=[('customer_rank', '!=', 0)],)
+        # domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", domain=[('customer_rank', '!=', 0)],)
     company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company)
 
     forecast_qty = fields.Float(string='Quantity')
-    #total_forecast_qty = fields.Float(string='Total Quantity', compute="cal_total_forecast")
+    # total_forecast_qty = fields.Float(string='Total Quantity', compute="cal_total_forecast")
     forecast_date = fields.Datetime(string='Forecast Date', index=True)
 
     active = fields.Boolean(default=True) #useful, coz when false the line disappears
@@ -724,11 +726,16 @@ class FlspSalesForecast(models.Model):
     def _check_date_greater_than_today(self):
         """
             Purpose: To ensure that the forecast date is greater than the current date
+            Addon:   feb/01/2021 added ability to add forecast for only 12 months
         """
+        next_year = datetime.now() + relativedelta(months=12)
+        print(next_year)
         for line in self:
             if line.forecast_date:
                 if line.forecast_date < datetime.today():
                     raise ValidationError("Please enter a future forecast date")
+                elif line.forecast_date > next_year:
+                    raise ValidationError("Please enter Forecast within the next 12 months only")
 
 
 
