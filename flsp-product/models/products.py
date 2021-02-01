@@ -128,21 +128,25 @@ class Smgproduct(models.Model):
     def copy(self, default=None):
         flsp_default_part_init = self.env['ir.config_parameter'].sudo().get_param('product.template.flsp_part_init')[:1]
         default = dict(default or {})
-
-        if not(self.flsp_part_suffix):
-            suffix = '000'
-        else:
-            suffix = str(int(self.flsp_part_suffix)+1)+""
-
+        # PREFIX INFORMATION
         if not(self.flsp_part_prefix):
             prefix = '00000'
         else:
             prefix = self.flsp_part_prefix
-
+        # SUFFIX INFORMATION
+        self._cr.execute(
+            "select max(flsp_part_suffix) as suffix from product_template where flsp_part_prefix like '" + self.flsp_part_prefix + "%' and length(default_code) = 10 ")
+        table = self._cr.fetchall()
+        for line in table:
+            value = int(line[0])
+        suf = value
+        if not(self.flsp_part_suffix):
+            suffix = '000'
+        else:
+            # suffix = str(int(self.flsp_part_suffix)+1)+""
+            suffix = str(suf+1)+""
         suffix = ('000'+str(int(suffix)))[-3:]
-
         default_init = self.default_code[:1]
-
         default['default_code'] = default_init+prefix+'-'+suffix
         default['flsp_part_suffix'] = suffix
         default['flsp_part_prefix'] = prefix
