@@ -28,8 +28,9 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.write(i, 7, bom.flsp_bom_plm_valid or "")
         sheet.write(i, 8, bom.product_tmpl_id.legacy_code or "")
         sheet.write(i, 9, bom.product_tmpl_id.flsp_plm_valid or "")
+        sheet.write(i, 10, bom.product_tmpl_id.tracking or "")
         if 'flsp_backflush' in self.env['product.template']._fields:
-            sheet.write(i, 10, bom.product_tmpl_id.flsp_backflush or "")
+            sheet.write(i, 11, bom.product_tmpl_id.flsp_backflush or "")
 
         i += 1
         for product, total_qty in requirements.items():
@@ -42,8 +43,9 @@ class FlattenedBomXlsx(models.AbstractModel):
             sheet.write(i, 7, total_qty['bom_plm'] or "")
             sheet.write(i, 8, product.legacy_code or "")
             sheet.write(i, 9, product.flsp_plm_valid or "")
+            sheet.write(i, 10, product.tracking or "")
             if 'flsp_backflush' in self.env['product.template']._fields:
-                sheet.write(i, 10, product.flsp_backflush or "")
+                sheet.write(i, 11, product.flsp_backflush or "")
             i += 1
         return i
 
@@ -65,8 +67,9 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.set_column(7, 7, 10)
         sheet.set_column(8, 8, 20)
         sheet.set_column(9, 9, 10)
+        sheet.set_column(10, 10, 10)
         if 'flsp_backflush' in self.env['product.template']._fields:
-            sheet.set_column(10, 10, 10)
+            sheet.set_column(11, 11, 10)
         title_style = workbook.add_format(
             {"bold": True, "bg_color": "#FFFFCC", "bottom": 1}
         )
@@ -82,6 +85,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("BOM PLM"),
                 _("Legacy Part#"),
                 _("Part PLM"),
+                _("Tracking"),
                 _("Backflush"),
             ]
         else:
@@ -96,6 +100,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("BOM PLM"),
                 _("Legacy Part#"),
                 _("Part PLM"),
+                _("Tracking"),
             ]
 
         sheet.set_row(0, None, None, {"collapsed": 1})
