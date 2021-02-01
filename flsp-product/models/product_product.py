@@ -7,7 +7,7 @@ class smgproductprd(models.Model):
     _inherit = 'product.product'
     _check_company_auto = True
 
-    flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True)
+    flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True, copy=False)
     attachment_ids = fields.Many2many('ir.attachment', 'product_attachment_rel','drawing_id', 'attachment_id',
         string='Attachments',
         compute='_get_product_attachment',
