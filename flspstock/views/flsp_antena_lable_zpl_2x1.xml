@@ -13,7 +13,7 @@
                                 <t t-set="product_desc" t-value="customercode_id.description"/>
                             <!--/t-->
                         </t>
-~SD30
+~SD23
 ^XA
 ^FO460,60
 ^BQN,2,10
@@ -53,7 +53,7 @@
                         </t>
                         <t t-foreach="range(qty)" t-as="item">
                             <t t-translation="off">
-~SD30
+~SD23
 ^XA
 ^FO460,60
 ^BQN,2,10

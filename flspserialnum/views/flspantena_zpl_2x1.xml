@@ -11,7 +11,7 @@
                             <t t-set="product_code" t-value="customercode_id.part_number"/>
                             <t t-set="product_desc" t-value="customercode_id.description"/>
                         </t>
-~SD30
+~SD23
 ^XA
 ^FO460,60
 ^BQN,2,10
