@@ -15,4 +15,4 @@ class FlspMaintenance(models.Model):
     _inherit = 'maintenance.equipment'
 
     flsp_asset_num = fields.Char(string="Asset #", tracking=True)
-    flsp_calibration_num = fields.Char(string="Calibration Certificate #")
+    flsp_calibration_num = fields.Char(string="Calibration Certificate")
