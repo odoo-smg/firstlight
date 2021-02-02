@@ -259,7 +259,9 @@ class FlspMrppurchaseLine(models.Model):
                             suggested_qty += multiple - (suggested_qty % multiple)
                 # Checking Vendor lead time:
                 if prod_vendor:
-                    if prod_vendor.delay > 0:
+                    if prod_vendor.delay and prod_vendor.delay > 0:
+                        if not required_by:
+                            required_by = current_date
                         required_by = required_by-timedelta(days=prod_vendor.delay)
                 self.create({'product_tmpl_id': product.product_tmpl_id.id,
                              'product_id': product.id,
@@ -394,7 +396,9 @@ class FlspMrppurchaseLine(models.Model):
                                 suggested_qty += multiple - (suggested_qty % multiple)
                     # Checking Vendor lead time:
                     if prod_vendor:
-                        if prod_vendor.delay > 0:
+                        if prod_vendor.delay and prod_vendor.delay > 0:
+                            if not required_by:
+                                required_by = current_date
                             required_by = required_by - timedelta(days=prod_vendor.delay)
                     self.create({'product_tmpl_id': product.product_tmpl_id.id,
                                  'product_id': product.id,
