@@ -44,7 +44,7 @@ class MrpBom(models.Model):
                         * line.product_uom_id._compute_quantity(
                             line.product_qty, line.product_id.uom_id, round=False
                         )
-                    ), 'level': level, 'bom': sub_bom.code, 'bom_plm': sub_bom.flsp_bom_plm_valid}
+                    ), 'level': level, 'bom': sub_bom.code, 'bom_plm': sub_bom.flsp_bom_plm_valid, 'track': line.product_id.tracking}
 
                 level += 1
                 sub_bom._get_flattened_totals(new_factor, totals, level)
@@ -63,5 +63,5 @@ class MrpBom(models.Model):
                         * line.product_uom_id._compute_quantity(
                             line.product_qty, line.product_id.uom_id, round=False
                         )
-                    ), 'level': level, 'bom': '', 'bom_plm': ''}
+                    ), 'level': level, 'bom': '', 'bom_plm': '', 'track': line.product_id.tracking}
         return totals
