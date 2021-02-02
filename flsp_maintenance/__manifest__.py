@@ -7,9 +7,9 @@
 
     'description': """
         Customizations performed:
-        Specification:
-            *FEB/02 - Added asset # and calibration certificate # on equipment 
-            *       _ Added the two fields on equipment search view
+        Equipment:
+            * FEB/02 - Added asset # and calibration certificate # on equipment 
+            * FEB/02 - Added the two fields on equipment search view
     """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
