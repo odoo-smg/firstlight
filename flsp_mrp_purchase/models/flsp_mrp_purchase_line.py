@@ -245,7 +245,13 @@ class FlspMrppurchaseLine(models.Model):
                     max_qty = 0.0
                     multiple = 1
 
-                suggested_qty = min_qty - current_balance
+                if current_balance < 0:
+                    suggested_qty = min_qty - current_balance
+                else:
+                    if current_balance < min_qty:
+                        suggested_qty = min_qty - current_balance
+                    else:
+                        suggested_qty = 0
                 # Checking supplier quantity:
                 if prod_vendor:
                     if suggested_qty > 0 and prod_vendor.min_qty > 0:
@@ -264,43 +270,43 @@ class FlspMrppurchaseLine(models.Model):
                         if not required_by:
                             required_by = current_date
                         required_by = required_by-timedelta(days=prod_vendor.delay)
-                self.create({'product_tmpl_id': product.product_tmpl_id.id,
-                             'product_id': product.id,
-                             'description': product.product_tmpl_id.name,
-                             'default_code': product.product_tmpl_id.default_code,
-                             'suggested_qty': suggested_qty,
-                             'adjusted_qty': suggested_qty,
-                             # 'start_date': current_day + timedelta(days=-1 * lead_time),
-                             # 'deadline_date': current_day,
-                             'calculated': True,
-                             # 'stock_picking': picking_id,
-                             # 'production_id': production_id,
-                             # 'source_description': desc_source,
-                             'product_qty': product.qty_available,
-                             'product_min_qty': min_qty,
-                             'qty_multiple': multiple,
-                             'vendor_id': prod_vendor.name.id,
-                             'vendor_qty': prod_vendor.min_qty,
-                             'delay': prod_vendor.delay,
-                             'stock_qty': product.qty_available-pa_wip_qty,
-                             'wip_qty': pa_wip_qty,
-                             'rationale': rationale,
-                             'level_bom': bom_level,
-                             'required_by': required_by,
-                             'consumption_month1': consumption[1],
-                             'consumption_month2': consumption[2],
-                             'consumption_month3': consumption[3],
-                             'consumption_month4': consumption[4],
-                             'consumption_month5': consumption[5],
-                             'consumption_month6': consumption[6],
-                             'consumption_month7': consumption[7],
-                             'consumption_month8': consumption[8],
-                             'consumption_month9': consumption[9],
-                             'consumption_month10': consumption[10],
-                             'consumption_month11': consumption[11],
-                             'consumption_month12': consumption[12],
-                             'source': 'source', })
-
+                if suggested_qty > 0:
+                    self.create({'product_tmpl_id': product.product_tmpl_id.id,
+                                 'product_id': product.id,
+                                 'description': product.product_tmpl_id.name,
+                                 'default_code': product.product_tmpl_id.default_code,
+                                 'suggested_qty': suggested_qty,
+                                 'adjusted_qty': suggested_qty,
+                                 # 'start_date': current_day + timedelta(days=-1 * lead_time),
+                                 # 'deadline_date': current_day,
+                                 'calculated': True,
+                                 # 'stock_picking': picking_id,
+                                 # 'production_id': production_id,
+                                 # 'source_description': desc_source,
+                                 'product_qty': product.qty_available,
+                                 'product_min_qty': min_qty,
+                                 'qty_multiple': multiple,
+                                 'vendor_id': prod_vendor.name.id,
+                                 'vendor_qty': prod_vendor.min_qty,
+                                 'delay': prod_vendor.delay,
+                                 'stock_qty': product.qty_available-pa_wip_qty,
+                                 'wip_qty': pa_wip_qty,
+                                 'rationale': rationale,
+                                 'level_bom': bom_level,
+                                 'required_by': required_by,
+                                 'consumption_month1': consumption[1],
+                                 'consumption_month2': consumption[2],
+                                 'consumption_month3': consumption[3],
+                                 'consumption_month4': consumption[4],
+                                 'consumption_month5': consumption[5],
+                                 'consumption_month6': consumption[6],
+                                 'consumption_month7': consumption[7],
+                                 'consumption_month8': consumption[8],
+                                 'consumption_month9': consumption[9],
+                                 'consumption_month10': consumption[10],
+                                 'consumption_month11': consumption[11],
+                                 'consumption_month12': consumption[12],
+                                 'source': 'source', })
                 bom_level=0
                 consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 if not item:
