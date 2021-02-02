@@ -248,8 +248,9 @@ class FlspMrppurchaseLine(models.Model):
                 suggested_qty = min_qty - current_balance
                 # Checking supplier quantity:
                 if prod_vendor:
-                    if suggested_qty < prod_vendor.min_qty:
-                        suggested_qty = prod_vendor.min_qty
+                    if suggested_qty > 0 and prod_vendor.min_qty > 0:
+                        if suggested_qty < prod_vendor.min_qty:
+                            suggested_qty = prod_vendor.min_qty
                 # checking multiple quantities
                 if multiple > 1:
                     if multiple > suggested_qty:
@@ -385,8 +386,9 @@ class FlspMrppurchaseLine(models.Model):
                     suggested_qty = min_qty - current_balance
                     # Checking supplier quantity:
                     if prod_vendor:
-                        if suggested_qty < prod_vendor.min_qty:
-                            suggested_qty = prod_vendor.min_qty
+                        if suggested_qty > 0 and prod_vendor.min_qty > 0:
+                            if suggested_qty < prod_vendor.min_qty:
+                                suggested_qty = prod_vendor.min_qty
                     # checking multiple quantities
                     if multiple > 1:
                         if multiple > suggested_qty:
