@@ -467,7 +467,12 @@ class FlspMrppurchaseLine(models.Model):
                     else:
                         if (suggested_qty % planning.qty_multiple) > 0:
                             suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
-                planning.suggested_qty = suggested_qty
+                if consider_wip:
+                    current_balance = planning.product_qty
+                else:
+                    current_balance = planning.product_qty - planning.wip_qty
+                if suggested_qty > current_balance:
+                    planning.suggested_qty = suggested_qty
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
