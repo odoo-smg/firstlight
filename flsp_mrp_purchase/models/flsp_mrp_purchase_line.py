@@ -55,6 +55,7 @@ class FlspMrppurchaseLine(models.Model):
     vendor_price = fields.Float(string='Price', readonly=True)
     delay = fields.Integer(string="Delivery Lead Time")
     required_by = fields.Date(String="Required by", readonly=True)
+    balance = fields.Float(string='Balance', readonly=True)
 
     qty_month1 = fields.Float(string='January')
     qty_month2 = fields.Float(string='February')
@@ -452,10 +453,16 @@ class FlspMrppurchaseLine(models.Model):
                         key = 1
                 rationale += '</pre>'
 
+                current_balance = planning.balance - value_to_consider
                 # Checking Minimal Quantity
-                suggested_qty = planning.suggested_qty + value_to_consider
-                if suggested_qty < planning.product_min_qty:
-                    suggested_qty = planning.product_min_qty - suggested_qty
+                if current_balance < 0:
+                    suggested_qty = planning.product_min_qty - current_balance
+                else:
+                    if current_balance < planning.product_min_qty:
+                        suggested_qty = planning.product_min_qty - current_balance
+                    else:
+                        suggested_qty = 0
+
                 # Checking supplier quantity:
                 if suggested_qty > 0 and planning.vendor_qty > 0:
                     if suggested_qty < planning.vendor_qty:
@@ -575,6 +582,7 @@ class FlspMrppurchaseLine(models.Model):
                 current_balance = product.qty_available
             else:
                 current_balance = product.qty_available - pa_wip_qty
+            balance = current_balance
         else:
             current_balance = balance
 
@@ -589,6 +597,7 @@ class FlspMrppurchaseLine(models.Model):
             max_qty = 0.0
             multiple = 1
 
+        # Minimal quantity:
         if current_balance < 0:
             suggested_qty = min_qty - current_balance
         else:
@@ -658,5 +667,6 @@ class FlspMrppurchaseLine(models.Model):
                          'qty_month10': forecast[10],
                          'qty_month11': forecast[11],
                          'qty_month12': forecast[12],
+                         'balance': balance,
                          'source': 'source', })
         return ret
