@@ -79,27 +79,21 @@
         </field>
     </record>
 
-    <!--record id="purchase_suggestion_search_view" model="ir.ui.view">
-        <field name="name">purchase.suggestion.search</field>
-        <field name="model">report.purchase.suggestion</field>
+    <record id="flsp_mrp_purchase_line_search_view" model="ir.ui.view">
+        <field name="name">mrp.purchase.line.suggestion.search</field>
+        <field name="model">flsp.mrp.purchase.line</field>
         <field name="arch" type="xml">
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
                 <separator/>
                 <filter string="Zero Filter" name="filter_zero" domain="[('suggested_qty','>', 0)]"/>
-                <filter string="To Manufacture" name="filter_to_mfg" domain="[('state','=','mfg')]"/>
-                <filter string="To Confirm MO" name="filter_to_confirm" domain="[('state', '=', 'mo')]"/>
-                <filter string="To Buy" name="filter_to_purchase" domain="[('state', '=', 'buy')]"/>
-                <filter string="To Confirm PO" name="filter_to_confirm" domain="[('state', '=', 'po')]"/>
-                <filter string="Can be purchased" name="can_be_purchased" domain="[('route_buy', '=', 'buy')]"/>
-                <filter string="Can be produced" name="can_be_produced" domain="[('route_mfg', '=', 'mfg')]"/>
                 <separator/>
                 <group expand="1" string="Group By">
-                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Supplier" name="vendor" context="{'group_by':'vendor_id'}"/>
                 </group>
             </search>
         </field>
-    </record-->
+    </record>
 
 
     <record id="flsp_mrp_purchase_line_action" model="ir.actions.act_window">
