@@ -480,6 +480,7 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance = planning.product_qty - planning.wip_qty
                 if suggested_qty > current_balance:
                     planning.suggested_qty = suggested_qty
+                    planning.adjusted_qty = suggested_qty
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
