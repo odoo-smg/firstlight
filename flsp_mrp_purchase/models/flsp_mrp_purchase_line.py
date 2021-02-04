@@ -543,6 +543,14 @@ class FlspMrppurchaseLine(models.Model):
 
     def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, forecast=False):
 
+        if not consumption:
+            consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        if not forecast:
+            forecast = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        total_forecast = 0
+        for item in forecast:
+            total_forecast += item
+
         ret = False
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
         if not pa_location:
@@ -601,51 +609,49 @@ class FlspMrppurchaseLine(models.Model):
                 if not required_by:
                     required_by = datetime.now()
                 required_by = required_by - timedelta(days=prod_vendor.delay)
-        if not consumption:
-            consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        if not forecast:
-            forecast = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
-                     'product_id': product.id,
-                     'description': product.product_tmpl_id.name,
-                     'default_code': product.product_tmpl_id.default_code,
-                     'suggested_qty': suggested_qty,
-                     'adjusted_qty': suggested_qty,
-                     'calculated': True,
-                     'product_qty': product.qty_available,
-                     'product_min_qty': min_qty,
-                     'product_max_qty': max_qty,
-                     'qty_multiple': multiple,
-                     'vendor_id': prod_vendor.name.id,
-                     'vendor_qty': prod_vendor.min_qty,
-                     'delay': prod_vendor.delay,
-                     'stock_qty': product.qty_available - pa_wip_qty,
-                     'wip_qty': pa_wip_qty,
-                     'rationale': rationale,
-                     'required_by': required_by,
-                     'consumption_month1': consumption[1],
-                     'consumption_month2': consumption[2],
-                     'consumption_month3': consumption[3],
-                     'consumption_month4': consumption[4],
-                     'consumption_month5': consumption[5],
-                     'consumption_month6': consumption[6],
-                     'consumption_month7': consumption[7],
-                     'consumption_month8': consumption[8],
-                     'consumption_month9': consumption[9],
-                     'consumption_month10': consumption[10],
-                     'consumption_month11': consumption[11],
-                     'consumption_month12': consumption[12],
-                     'qty_month1': forecast[1],
-                     'qty_month2': forecast[2],
-                     'qty_month3': forecast[3],
-                     'qty_month4': forecast[4],
-                     'qty_month5': forecast[5],
-                     'qty_month6': forecast[6],
-                     'qty_month7': forecast[7],
-                     'qty_month8': forecast[8],
-                     'qty_month9': forecast[9],
-                     'qty_month10': forecast[10],
-                     'qty_month11': forecast[11],
-                     'qty_month12': forecast[12],
-                     'source': 'source', })
+
+        if suggested_qty+total_forecast > 0:
+            ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
+                         'product_id': product.id,
+                         'description': product.product_tmpl_id.name,
+                         'default_code': product.product_tmpl_id.default_code,
+                         'suggested_qty': suggested_qty,
+                         'adjusted_qty': suggested_qty,
+                         'calculated': True,
+                         'product_qty': product.qty_available,
+                         'product_min_qty': min_qty,
+                         'product_max_qty': max_qty,
+                         'qty_multiple': multiple,
+                         'vendor_id': prod_vendor.name.id,
+                         'vendor_qty': prod_vendor.min_qty,
+                         'delay': prod_vendor.delay,
+                         'stock_qty': product.qty_available - pa_wip_qty,
+                         'wip_qty': pa_wip_qty,
+                         'rationale': rationale,
+                         'required_by': required_by,
+                         'consumption_month1': consumption[1],
+                         'consumption_month2': consumption[2],
+                         'consumption_month3': consumption[3],
+                         'consumption_month4': consumption[4],
+                         'consumption_month5': consumption[5],
+                         'consumption_month6': consumption[6],
+                         'consumption_month7': consumption[7],
+                         'consumption_month8': consumption[8],
+                         'consumption_month9': consumption[9],
+                         'consumption_month10': consumption[10],
+                         'consumption_month11': consumption[11],
+                         'consumption_month12': consumption[12],
+                         'qty_month1': forecast[1],
+                         'qty_month2': forecast[2],
+                         'qty_month3': forecast[3],
+                         'qty_month4': forecast[4],
+                         'qty_month5': forecast[5],
+                         'qty_month6': forecast[6],
+                         'qty_month7': forecast[7],
+                         'qty_month8': forecast[8],
+                         'qty_month9': forecast[9],
+                         'qty_month10': forecast[10],
+                         'qty_month11': forecast[11],
+                         'qty_month12': forecast[12],
+                         'source': 'source', })
         return ret
