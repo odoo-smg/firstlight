@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--OnHold form view-->
+    <record model="ir.ui.view" id="flsp_tktonhold_inherit_form">
+        <field name="name">flsp.tktonhold.inherit.form</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id" ref="flspticketsystem.ticket_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="button_onhold" string="OnHold" class="btn-primary" type="object"
+                            attrs="{'invisible': [('status', 'in', ['onhold','close'])]}"/>
+                <button name="button_remove_hold" string="Remove Hold" class="btn-primary" type="object"
+                            attrs="{'invisible': [('status', 'not in', ['onhold'])]}"/>
+            </xpath>
+            <xpath expr="//field[@name='send_user_email']" position="after">
+                <field name="tkt_eta" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                <field name="other_notes" groups="flspticketsystem.group_flspticketsystem_manager"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="OnHold" attrs="{'invisible':[('status','=','open')]}">
+                    <h2>Detailing OnHold history</h2>
+                    <group>
+                        <field name="onhold_user" readonly="1"/>
+                        <field name="onhold_date" readonly="1"/>
+                        <field name="reason" readonly="1"/>
+                    </group>
+              </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Onhold tree view-->
+    <record model="ir.ui.view" id="flsp_tktonhold_inherit_tree">
+        <field name="name">flsp.tktonhold.inherit.tree</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id" ref="flspticketsystem.tickets_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='complete_date']" position="after">
+                <field name="tkt_eta" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--OnHold Search view-->
+    <record model="ir.ui.view" id="flsp_tktonhold_inherit_search">
+        <field name="name">flsp.tktonhold.inherit.search</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id" ref="flspticketsystem.ticket_search_view"/>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="onhold" string="OnHold"
+                        domain="[('status','=','onhold')]"/>
+            </search>
+        </field>
+    </record>
+</odoo>
+
+<!--<button name="button_onhold" string="OnHold" class="btn-primary" type="object"-->
+<!--                            status="onhold"-->
+<!--                            attrs="{'invisible': [('status', 'in', ['onhold'])]}"/>-->
