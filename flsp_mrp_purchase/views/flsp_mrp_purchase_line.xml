@@ -86,7 +86,7 @@
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
                 <separator/>
-                <filter string="Zero Filter" name="filter_zero" domain="[('suggested_qty','>', 0)]"/>
+                <filter string="Zero Filter" name="filter_zero" domain="[('adjusted_qty','>', 0)]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Supplier" name="vendor" context="{'group_by':'vendor_id'}"/>
@@ -101,9 +101,8 @@
         <field name="res_model">flsp.mrp.purchase.line</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="flsp_mrp_purchase_line_view_tree"/>
-        <!--field name="search_view_id" ref="purchase_suggestion_search_view"/>
-        <field name="context">{'search_default_can_be_none': 1}</field-->
-        <field name="domain">[]</field>
+        <field name="search_view_id" ref="flsp_mrp_purchase_line_search_view"/>
+        <field name="context">{'search_default_filter_zero': 1}</field> <!--Making to do default-->
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You have nothing to be produced.</p>
         </field>
