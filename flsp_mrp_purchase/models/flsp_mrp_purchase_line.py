@@ -82,6 +82,12 @@ class FlspMrppurchaseLine(models.Model):
     consumption_month11 = fields.Float(string='Consumption November')
     consumption_month12 = fields.Float(string='Consumption December')
 
+    def name_get(self):
+        return [(
+            record.id,
+            record.default_code
+        ) for record in self]
+
     def _flsp_calc_purchase(self, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1, consider_drafts=True, consider_wip=True, consider_forecast=True):
         current_date = datetime.now()
         required_by = current_date
@@ -222,7 +228,7 @@ class FlspMrppurchaseLine(models.Model):
                 current_balance = product.qty_available
             else:
                 current_balance = product.qty_available - pa_wip_qty
-            rationale += '<br/>            |             | '+'{0: <12}|'.format(current_balance)+'     |        |         |             |Initial Balance'
+            rationale += '<br/>            |             | '+'{0: <12.2f}|'.format(current_balance)+'     |        |         |             |Initial Balance'
             bom_level = item[8]
             required_by = False
             break
@@ -259,7 +265,7 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance = product.qty_available
                 else:
                     current_balance = product.qty_available - pa_wip_qty
-                rationale += '<br/>            |             | ' + '{0: <12}|'.format(current_balance) + '     |        |         |             |Initial Balance'
+                rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(current_balance) + '     |        |         |             |Initial Balance'
             if item:
                 if item[1] == 'Out  ':
                     current_balance -= item[5]
@@ -271,7 +277,7 @@ class FlspMrppurchaseLine(models.Model):
                 if not required_by:
                     if current_balance < 0:
                         required_by = item[7]
-                rationale += '<br/>'+item[7].strftime("%Y-%m-%d")+'  | '+'{0: <12}|'.format(item[5])+' ' + '{0: <12}|'.format(current_balance) + item[1]+'|'+item[2]+'|'+'{0: <9}|'.format(item[8])+'{0: <13}|'.format(item[9])+item[3]
+                rationale += '<br/>'+item[7].strftime("%Y-%m-%d")+'  | '+'{:<12.4f}|'.format(item[5])+' ' + '{0: <12.2f}|'.format(current_balance) + item[1]+'|'+item[2]+'|'+'{0: <9}|'.format(item[8])+'{0: <13}|'.format(item[9])+item[3]
                 product = item[4]
                 if bom_level < item[8]:
                     bom_level = item[8]
@@ -303,20 +309,33 @@ class FlspMrppurchaseLine(models.Model):
                         if not purchase_planning:
                             product = component
                             rationale = 'No open movements - Product Selected based on Forecast.'
-                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip, False, forecast)
+                            forecasted = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            forecasted[1] = forecast.qty_month1*forecast_components[component]['total']
+                            forecasted[2] = forecast.qty_month2*forecast_components[component]['total']
+                            forecasted[3] = forecast.qty_month3*forecast_components[component]['total']
+                            forecasted[4] = forecast.qty_month4*forecast_components[component]['total']
+                            forecasted[5] = forecast.qty_month5*forecast_components[component]['total']
+                            forecasted[6] = forecast.qty_month6*forecast_components[component]['total']
+                            forecasted[7] = forecast.qty_month7*forecast_components[component]['total']
+                            forecasted[8] = forecast.qty_month8*forecast_components[component]['total']
+                            forecasted[9] = forecast.qty_month9*forecast_components[component]['total']
+                            forecasted[10] = forecast.qty_month10*forecast_components[component]['total']
+                            forecasted[11] = forecast.qty_month11*forecast_components[component]['total']
+                            forecasted[12] = forecast.qty_month12*forecast_components[component]['total']
+                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip, False, forecasted)
                         else:
-                            purchase_planning.qty_month1 += forecast.qty_month1
-                            purchase_planning.qty_month2 += forecast.qty_month2
-                            purchase_planning.qty_month3 += forecast.qty_month3
-                            purchase_planning.qty_month4 += forecast.qty_month4
-                            purchase_planning.qty_month5 += forecast.qty_month5
-                            purchase_planning.qty_month6 += forecast.qty_month6
-                            purchase_planning.qty_month7 += forecast.qty_month7
-                            purchase_planning.qty_month8 += forecast.qty_month8
-                            purchase_planning.qty_month9 += forecast.qty_month9
-                            purchase_planning.qty_month10 += forecast.qty_month10
-                            purchase_planning.qty_month11 += forecast.qty_month11
-                            purchase_planning.qty_month12 += forecast.qty_month12
+                            purchase_planning.qty_month1 += forecast.qty_month1*forecast_components[component]['total']
+                            purchase_planning.qty_month2 += forecast.qty_month2*forecast_components[component]['total']
+                            purchase_planning.qty_month3 += forecast.qty_month3*forecast_components[component]['total']
+                            purchase_planning.qty_month4 += forecast.qty_month4*forecast_components[component]['total']
+                            purchase_planning.qty_month5 += forecast.qty_month5*forecast_components[component]['total']
+                            purchase_planning.qty_month6 += forecast.qty_month6*forecast_components[component]['total']
+                            purchase_planning.qty_month7 += forecast.qty_month7*forecast_components[component]['total']
+                            purchase_planning.qty_month8 += forecast.qty_month8*forecast_components[component]['total']
+                            purchase_planning.qty_month9 += forecast.qty_month9*forecast_components[component]['total']
+                            purchase_planning.qty_month10 += forecast.qty_month10*forecast_components[component]['total']
+                            purchase_planning.qty_month11 += forecast.qty_month11*forecast_components[component]['total']
+                            purchase_planning.qty_month12 += forecast.qty_month12*forecast_components[component]['total']
                 else:
                     if forecast.product_id.type == 'product' and route_buy in forecast.product_id.route_ids.ids:
                         purchase_planning = self.env['flsp.mrp.purchase.line'].search([('product_id', '=', forecast.product_id.id)],limit=1)
@@ -324,7 +343,20 @@ class FlspMrppurchaseLine(models.Model):
                             product = forecast.product_id
                             current_balance = False
                             rationale = 'No movement. Product Selected based on Forecast.'
-                            purchase_line = self._include_prod(product, rationale, current_balance, current_date, consider_wip)
+                            forecasted = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            forecasted[1] = forecast.qty_month1
+                            forecasted[2] = forecast.qty_month2
+                            forecasted[3] = forecast.qty_month3
+                            forecasted[4] = forecast.qty_month4
+                            forecasted[5] = forecast.qty_month5
+                            forecasted[6] = forecast.qty_month6
+                            forecasted[7] = forecast.qty_month7
+                            forecasted[8] = forecast.qty_month8
+                            forecasted[9] = forecast.qty_month9
+                            forecasted[10] = forecast.qty_month10
+                            forecasted[11] = forecast.qty_month11
+                            forecasted[12] = forecast.qty_month12
+                            purchase_line = self._include_prod(product, rationale, current_balance, current_date, consider_wip, False, forecasted)
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1
                             purchase_planning.qty_month2 += forecast.qty_month2
@@ -341,8 +373,9 @@ class FlspMrppurchaseLine(models.Model):
 
             print('starting forecast')
             purchase_planning = self.env['flsp.mrp.purchase.line'].search([])
-            months = ['', 'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', 'July     ',
-                      'August   ', 'October  ', 'September', 'November ', 'December ']
+            months = ['', 'January         ', 'February        ', 'March           ', 'April           ',
+                          'May             ', 'June            ', 'July            ', 'August          ',
+                          'October         ', 'September       ', 'November        ', 'December        ']
             next_6_months = []
             key = current_date.month
             count = 1
@@ -356,73 +389,90 @@ class FlspMrppurchaseLine(models.Model):
                 count += 1
             for planning in purchase_planning:
                 print(planning)
-                rationale = "<pre>----------------------------- Forecast ---------------------------------<br/>"
-                rationale += '           |'
+                rationale = "<pre>------------------------------------------------- Forecast ----------------------------------------------------<br/>"
+                rationale += '        |'
                 for month in next_6_months:
                     rationale += month + "|"
                 rationale += "<br/>"
                 key = current_date.month
-                rationale += 'Forecast   |'
+                rationale += 'Forecast|'
                 for month in next_6_months:
                     field_name = 'qty_month'+str(key)
-                    rationale += '{0: <9}|'.format(getattr(planning, field_name))
+                    rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
                     key += 1
                     if key > 12:
                         key = 1
-                rationale += '<br/>Actual     |'
+                rationale += '<br/>Actual  |'
                 key = current_date.month
                 for month in next_6_months:
                     field_name = 'consumption_month'+str(key)
-                    rationale += '{0: <9}|'.format(getattr(planning, field_name))
+                    rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
                     key += 1
                     if key > 12:
                         key = 1
-                rationale += '<br/>Diff       |'
+                rationale += '<br/>Diff    |'
                 key = current_date.month
                 for month in next_6_months:
                     field_name = 'qty_month'+str(key)
                     diff = getattr(planning, field_name)
                     field_name = 'consumption_month'+str(key)
                     diff -= getattr(planning, field_name)
-                    rationale += '{0: <9}|'.format(diff)
+                    rationale += '{0: <16.2f}|'.format(diff)
                     key += 1
                     if key > 12:
                         key = 1
-                rationale += "<br/>------------------------------------------------------------------------</pre>"
+                rationale += "<br/>---------------------------------------------------------------------------------------------------------------<br/>"
+                months_to_consider = int(planning.delay/31)
+                value_to_consider = 0
+                if months_to_consider >= 1:
+                    months_to_consider += 1
+                if months_to_consider <= 0:
+                    months_to_consider = 1
+                rationale += '-------'
+                key = current_date.month
+                for current_month in range(7):
+                    if current_month < months_to_consider:
+                        field_name = 'qty_month' + str(key)
+                        diff = getattr(planning, field_name)
+                        field_name = 'consumption_month' + str(key)
+                        diff -= getattr(planning, field_name)
+                        if diff > 0:
+                            value_to_consider += diff
+                    if current_month+1 == months_to_consider:
+                        rationale += '>|'+'{0: <16.2f}'.format(value_to_consider)
+                    elif current_month < months_to_consider:
+                        if months_to_consider >= 6 and current_month > 5:
+                            rationale += '>|' + '{0: <16.2f}'.format(value_to_consider)
+                        else:
+                            rationale += '-----------------'
+                    else:
+                        rationale += '                 '
+                    key += 1
+                    if key > 12:
+                        key = 1
+                rationale += '</pre>'
+
+                # Checking Minimal Quantity
+                suggested_qty = planning.suggested_qty + value_to_consider
+                if suggested_qty < planning.product_min_qty:
+                    suggested_qty = planning.product_min_qty - suggested_qty
+                # Checking supplier quantity:
+                if suggested_qty > 0 and planning.vendor_qty > 0:
+                    if suggested_qty < planning.vendor_qty:
+                            suggested_qty = planning.vendor_qty
+                # checking multiple quantities
+                if planning.qty_multiple > 1:
+                    if planning.qty_multiple > suggested_qty:
+                        suggested_qty += planning.qty_multiple - suggested_qty
+                    else:
+                        if (suggested_qty % planning.qty_multiple) > 0:
+                            suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
+                planning.suggested_qty = suggested_qty
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
             # else:
             #    print('product already in there.......')
-
-        return
-
-
-        products_templates = self.env['product.template'].search(['&', ('type', '=', 'product'), ('route_ids', 'in', [route_buy, route_mfg])])
-        for product_template in products_templates:
-            lead_time = product_template.produce_delay
-            product = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
-            order_point = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', product.id)], limit=1)
-            if order_point:
-                min_qty = order_point.product_min_qty
-                max_qty = order_point.product_max_qty
-                multiple = order_point.qty_multiple
-            else:
-                min_qty = 0.0
-                max_qty = 0.0
-                multiple = 1
-
-            current_balance = product.qty_available
-            pa_wip_qty = 0
-            stock_quant = self.env['stock.quant'].search(
-                ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
-            for stock_lin in stock_quant:
-                pa_wip_qty += stock_lin.quantity
-
-            if consider_wip:
-                current_balance = product.qty_available
-            else:
-                current_balance = product.qty_available - pa_wip_qty
 
         return
 
@@ -491,7 +541,7 @@ class FlspMrppurchaseLine(models.Model):
                     ), 'level': level, 'bom': ''}
         return totals
 
-    def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, fc_obj=False):
+    def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, forecast=False):
 
         ret = False
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
@@ -553,63 +603,49 @@ class FlspMrppurchaseLine(models.Model):
                 required_by = required_by - timedelta(days=prod_vendor.delay)
         if not consumption:
             consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        forecast = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        if fc_obj:
-            forecast[1] = fc_obj.qty_month1
-            forecast[2] = fc_obj.qty_month2
-            forecast[3] = fc_obj.qty_month3
-            forecast[4] = fc_obj.qty_month4
-            forecast[5] = fc_obj.qty_month5
-            forecast[6] = fc_obj.qty_month6
-            forecast[7] = fc_obj.qty_month7
-            forecast[8] = fc_obj.qty_month8
-            forecast[9] = fc_obj.qty_month9
-            forecast[10] = fc_obj.qty_month10
-            forecast[11] = fc_obj.qty_month11
-            forecast[12] = fc_obj.qty_month12
-
-        if suggested_qty > 0:
-            ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
-                         'product_id': product.id,
-                         'description': product.product_tmpl_id.name,
-                         'default_code': product.product_tmpl_id.default_code,
-                         'suggested_qty': suggested_qty,
-                         'adjusted_qty': suggested_qty,
-                         'calculated': True,
-                         'product_qty': product.qty_available,
-                         'product_min_qty': min_qty,
-                         'product_max_qty': max_qty,
-                         'qty_multiple': multiple,
-                         'vendor_id': prod_vendor.name.id,
-                         'vendor_qty': prod_vendor.min_qty,
-                         'delay': prod_vendor.delay,
-                         'stock_qty': product.qty_available - pa_wip_qty,
-                         'wip_qty': pa_wip_qty,
-                         'rationale': rationale,
-                         'required_by': required_by,
-                         'consumption_month1': consumption[1],
-                         'consumption_month2': consumption[2],
-                         'consumption_month3': consumption[3],
-                         'consumption_month4': consumption[4],
-                         'consumption_month5': consumption[5],
-                         'consumption_month6': consumption[6],
-                         'consumption_month7': consumption[7],
-                         'consumption_month8': consumption[8],
-                         'consumption_month9': consumption[9],
-                         'consumption_month10': consumption[10],
-                         'consumption_month11': consumption[11],
-                         'consumption_month12': consumption[12],
-                         'qty_month1': forecast[1],
-                         'qty_month2': forecast[2],
-                         'qty_month3': forecast[3],
-                         'qty_month4': forecast[4],
-                         'qty_month5': forecast[5],
-                         'qty_month6': forecast[6],
-                         'qty_month7': forecast[7],
-                         'qty_month8': forecast[8],
-                         'qty_month9': forecast[9],
-                         'qty_month10': forecast[10],
-                         'qty_month11': forecast[11],
-                         'qty_month12': forecast[12],
-                         'source': 'source', })
+        if not forecast:
+            forecast = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
+                     'product_id': product.id,
+                     'description': product.product_tmpl_id.name,
+                     'default_code': product.product_tmpl_id.default_code,
+                     'suggested_qty': suggested_qty,
+                     'adjusted_qty': suggested_qty,
+                     'calculated': True,
+                     'product_qty': product.qty_available,
+                     'product_min_qty': min_qty,
+                     'product_max_qty': max_qty,
+                     'qty_multiple': multiple,
+                     'vendor_id': prod_vendor.name.id,
+                     'vendor_qty': prod_vendor.min_qty,
+                     'delay': prod_vendor.delay,
+                     'stock_qty': product.qty_available - pa_wip_qty,
+                     'wip_qty': pa_wip_qty,
+                     'rationale': rationale,
+                     'required_by': required_by,
+                     'consumption_month1': consumption[1],
+                     'consumption_month2': consumption[2],
+                     'consumption_month3': consumption[3],
+                     'consumption_month4': consumption[4],
+                     'consumption_month5': consumption[5],
+                     'consumption_month6': consumption[6],
+                     'consumption_month7': consumption[7],
+                     'consumption_month8': consumption[8],
+                     'consumption_month9': consumption[9],
+                     'consumption_month10': consumption[10],
+                     'consumption_month11': consumption[11],
+                     'consumption_month12': consumption[12],
+                     'qty_month1': forecast[1],
+                     'qty_month2': forecast[2],
+                     'qty_month3': forecast[3],
+                     'qty_month4': forecast[4],
+                     'qty_month5': forecast[5],
+                     'qty_month6': forecast[6],
+                     'qty_month7': forecast[7],
+                     'qty_month8': forecast[8],
+                     'qty_month9': forecast[9],
+                     'qty_month10': forecast[10],
+                     'qty_month11': forecast[11],
+                     'qty_month12': forecast[12],
+                     'source': 'source', })
         return ret
