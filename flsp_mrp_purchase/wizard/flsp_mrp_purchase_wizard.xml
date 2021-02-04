@@ -70,7 +70,13 @@
 
         <menuitem id="flsp_mrp_purchase_menu"
                   name="FLSP MRP purchase"
-                  parent="mrp.menu_mrp_reporting"
+                  parent="purchase.purchase_report"
                   sequence="100"
                   action="launch_flsp_mrp_purchase_wizard"/>
+
+        <!--menuitem id="flsp_mrp_purchase_menu"
+                  name="FLSP MRP purchase"
+                  parent="mrp.menu_mrp_reporting"
+                  sequence="100"
+                  action="launch_flsp_mrp_purchase_wizard"/-->
 </odoo>
