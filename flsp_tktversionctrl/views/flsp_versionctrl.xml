@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Version form view-->
+    <record model="ir.ui.view" id="flsp_tkt_inherit_form">
+        <field name="name">flsp.tkt.inherit.form</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id" ref="flspticketsystem.ticket_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Version Control" attrs="{'invisible':[('status','=','open')]}" groups="flspticketsystem.group_flspticketsystem_manager">
+                    <h2>To be filled before closing the Ticket</h2>
+                    <group>
+                        <field name="model_id" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                        <field name="version_type" groups="flspticketsystem.group_flspticketsystem_manager"/> <!--widget="radio"-->
+                        <field name="version_num" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                        <field name="version_description" attrs="{'required': [('version_type','!=', 'O')]}" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                    </group>
+              </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

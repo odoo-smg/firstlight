@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="flsp_tktonhold_from_view">
+        <field name="name">flsp.tktonhold.form</field>
+        <field name="model">flspticketsystem.onhold</field>
+        <field name="arch" type="xml">
+            <form string="Put Ticket On Hold">
+                <group string="Fill in details for putting on hold">
+                    <field name="ticket_id" invisible="True" />
+                    <field name="onhold_user"/>
+                    <field name="onhold_date"/>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="onhold" string="On Hold" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_tktonhold_wizard">
+        <field name="name">Ticket Onhold</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flspticketsystem.onhold</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flsp_tktonhold_from_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
+
+
+
+
+

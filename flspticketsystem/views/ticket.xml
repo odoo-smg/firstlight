@@ -29,17 +29,25 @@
 
                         <field name="short_description"/>
                         <field name="detailed_description"/>
-                        <field name="attachment_ids" widget="many2many_binary"/>
+                        <field name="attachment_ids" multiple = "true"/>
+<!--                        <field name="attachment_ids" widget="many2many_binary"/>-->
                         <field name="share" widget="many2many_tags"/>
                     </group>
-                    <group string="To be filled by ERP Developer">
-                        <field name="responsible"/>
-                        <field name="analysis"/>
-                        <field name="complete_date"/>
-                        <field name="type"/>
-                        <field name="solution"/>
-                        <field name="send_user_email" groups="flspticketsystem.group_flspticketsystem_manager"/>
-                    </group>
+                    <notebook>
+                        <page string="Developers Section">
+                            <h2>To be filled by ERP Developer\IT Support</h2>
+                            <group>
+        <!--                    <group string="To be filled by ERP Developer">-->
+                                <field name="responsible"/>
+                                <field name="analysis"/>
+                                <field name="complete_date"/>
+                                <field name="type"/>
+                                <field name="solution"/>
+                                <field name="send_user_email" groups="flspticketsystem.group_flspticketsystem_manager"/>
+        <!--                    </group>-->
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

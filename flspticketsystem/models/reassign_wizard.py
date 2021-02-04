@@ -68,3 +68,11 @@ class ReAssign(models.TransientModel):
 
         self.env['flspautoemails.bpmemails'].send_email(self, 'TKT0004')
         return {'type': 'ir.actions.act_window_close'}
+
+
+
+
+
+
+
+

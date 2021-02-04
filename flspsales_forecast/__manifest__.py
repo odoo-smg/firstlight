@@ -9,6 +9,7 @@
         Customizations performed:
         Sales forecast:
             * Sales - Add sales forecast 
+            * Feb/04/2021 - Added a security group for sales forecast
     """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
@@ -21,6 +22,7 @@
 
     # always loaded
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/flspsales_forecast.xml',
     ],
