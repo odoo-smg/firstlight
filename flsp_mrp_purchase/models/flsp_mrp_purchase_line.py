@@ -236,7 +236,8 @@ class FlspMrppurchaseLine(models.Model):
             if new_prod:
                 rationale += "</pre>"
                 purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, consumption)
-                purchase_line.level_bom = bom_level
+                if purchase_line:
+                    purchase_line.level_bom = bom_level
                 bom_level = 0
                 consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -492,6 +493,7 @@ class FlspMrppurchaseLine(models.Model):
 
     def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, fc_obj=False):
 
+        ret = False
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
