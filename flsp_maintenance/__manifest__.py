@@ -14,7 +14,7 @@
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
 
-    'category': 'Uncategorized',
+    'category': 'maintenance',
     'version': '0.1',
 
     # any module necessary for this one to work correctly

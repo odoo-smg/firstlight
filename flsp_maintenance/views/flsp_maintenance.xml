@@ -9,7 +9,8 @@
 <!--            <xpath expr="//field[@name='owner_user_id']" position="after">-->
             <xpath expr="//field[@name='category_id']" position="after">
                 <field name="flsp_asset_num"/>
-                <field name="flsp_calibration_num"/>
+                <field name="flsp_calibration_num" invisible="1"/>
+                <field name="flsp_calibration_img" widget="many2many_binary"/>
             </xpath>
         </field>
     </record>
@@ -22,7 +23,7 @@
         <field name="arch" type="xml">
             <field name="category_id" position="after">
                 <field name="flsp_asset_num"/>
-                <field name="flsp_calibration_num"/>
+<!--                <field name="flsp_calibration_num"/>-->
             </field>
 <!--            <group position="inside">-->
 <!--                <filter string="Employee" name="employee" domain="[]" context="{'group_by': 'employee_id'}"/>-->
