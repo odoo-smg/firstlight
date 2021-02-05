@@ -722,6 +722,15 @@ class FlspSalesForecast(models.Model):
 
     active = fields.Boolean(default=True) #useful, coz when false the line disappears
 
+    # @api.model
+    # def write(self, vals):
+    #     print("=======write function=====")
+    #     res = super(FlspSalesForecast, self).write(vals)
+    #     # for line in self.forecast_date:
+    #     self.forecast_date += relativedelta(hours=7)
+    #     print(self.forecast_date)
+    #     return res
+
     @api.onchange('forecast_date')
     def _check_date_greater_than_today(self):
         """
@@ -729,14 +738,20 @@ class FlspSalesForecast(models.Model):
             Addon:   feb/01/2021 added ability to add forecast for only 12 months
         """
         next_year = datetime.now() + relativedelta(months=12)
-        print(next_year)
+        # print(next_year)
+        now = datetime.now()
+        current_hour = now.strftime("%H")
+        current_min = now.strftime("%M")
+        current_sec = now.strftime("%S")
         for line in self:
             if line.forecast_date:
+                # line.forecast_date += relativedelta(hours=7)
+                line.forecast_date += relativedelta(hour=int(current_hour), minute=int(current_min), second=int(current_sec))
                 if line.forecast_date < datetime.today():
                     raise ValidationError("Please enter a future forecast date")
                 elif line.forecast_date > next_year:
                     raise ValidationError("Please enter Forecast within the next 12 months only")
-
+                print(line.forecast_date)
 
 
 ##ADD TO SCHEDULED ACTION SO AS TO ARCHIEVE LAST MONTHS RECORDS
