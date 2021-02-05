@@ -14,7 +14,7 @@ class Ticket(models.Model):
     """
     _name = 'flspticketsystem.ticket'
     _description = "Tickets"
-
+    # _rec_name = 'id'
     # User fields
     id = fields.Integer(index=True)
     start_date = fields.Date(string="Request date", default=fields.Date.today, required=True,
@@ -47,8 +47,10 @@ class Ticket(models.Model):
     send_user_email = fields.Boolean(default=True,
         help='Deactivate if you do not want to send user email upon creation of ticket')
 
-    attachment_ids = fields.Many2many('ir.attachment', string='Attachments',
-        help='Add any attachments that will help in solving your request')
+    # attachment_ids = fields.Many2many('ir.attachment', string='Attachments',
+    #     help='Add any attachments that will help in solving your request')
+
+    attachment_ids = fields.Binary(string="Attachments", attachment=True)
 
     assign_date = fields.Date(string="Assign Date")
     re_assign_date = fields.Date(string="Re Assign Date")
@@ -131,3 +133,19 @@ class Ticket(models.Model):
                 'default_ticket_id': ticket_id,
             }
         }
+    #
+    # def name_get(self):
+    #     return [(self.id, "%s (%s)" % (list.short_description, list.id)) for list in self]
+
+
+
+
+
+
+
+
+
+
+
+
+

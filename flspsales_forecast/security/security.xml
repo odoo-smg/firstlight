@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Show groups-->
+    <record model="ir.module.category" id="flsp_salesforecast_security">
+        <field name="name">FLSP Sales forecast</field>
+        <field name="description">Choose access groups</field>
+        <field name="sequence">4</field>
+    </record>
+
+<!--    &lt;!&ndash;Creating the groups referenced in csv&ndash;&gt;-->
+<!--    <record id="group_flspticketsystem_user" model="res.groups">-->
+<!--        <field name="name">FLSP TicketSystem / User</field>-->
+<!--        <field name="category_id" ref="ticket_this"/>-->
+<!--    </record>-->
+
+    <record id="group_flspsalesforecast_manager" model="res.groups">
+        <field name="name">Access forecast data</field>
+        <field name="category_id" ref="flsp_salesforecast_security"/>
+    </record>
+</odoo>

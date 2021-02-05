@@ -95,3 +95,4 @@
               action="flsp_sales_forecast_action"/>
 
 </odoo>
+<!--              groups="flspticketsystem.group_flspticketsystem_manager"/>-->

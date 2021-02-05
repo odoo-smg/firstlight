@@ -129,9 +129,9 @@
     </record>
 
     <menuitem id="flsp_purchase_suggestion_report"
-              name="Purchase Suggestion"
+              name="Legacy Purchase Suggestion"
               parent="purchase.purchase_report"
-              sequence="100"
+              sequence="98"
               action="action_upd_prd_suggestion"/>
 
     <!--menuitem id="flsp_production_suggestion_report"
