@@ -26,6 +26,7 @@
     # any module necessary for this one to work correctly
     'depends': ['base'],
     'depends': ['sale_management'],
+    'depends': ['flsp-salesorder'],
 
     # always loaded
     'data': [
