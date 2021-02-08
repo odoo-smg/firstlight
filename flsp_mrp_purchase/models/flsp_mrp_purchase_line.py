@@ -29,6 +29,9 @@ class FlspMrppurchaseLine(models.Model):
     month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
     suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
     adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
+    purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
+    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True, help="Quantity suggested to buy or produce.")
+
     qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
     level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
@@ -56,6 +59,9 @@ class FlspMrppurchaseLine(models.Model):
     delay = fields.Integer(string="Delivery Lead Time")
     required_by = fields.Date(String="Required by", readonly=True)
     balance = fields.Float(string='Balance', readonly=True)
+
+    uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True)
+    purchase_uom = fields.Many2one('uom.uom', 'Purchase Unit of Measure', readonly=True)
 
     qty_month1 = fields.Float(string='January')
     qty_month2 = fields.Float(string='February')
@@ -88,6 +94,15 @@ class FlspMrppurchaseLine(models.Model):
             record.id,
             record.default_code
         ) for record in self]
+
+
+    @api.onchange('adjusted_qty')
+    def onchange_adjusted_qty(self):
+        self.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted_qty, self.product_id.uom_po_id)
+        if self._origin.id:
+            planning = self.env['flsp.mrp.purchase.line'].search([('id', '=', self._origin.id)])
+            if planning:
+                planning.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted_qty, self.product_id.uom_po_id)
 
     def _flsp_calc_purchase(self, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1, consider_drafts=True, consider_wip=True, consider_forecast=True):
         current_date = datetime.now()
@@ -372,7 +387,6 @@ class FlspMrppurchaseLine(models.Model):
                             purchase_planning.qty_month11 += forecast.qty_month11
                             purchase_planning.qty_month12 += forecast.qty_month12
 
-            print('starting forecast')
             purchase_planning = self.env['flsp.mrp.purchase.line'].search([])
             months = ['', 'January         ', 'February        ', 'March           ', 'April           ',
                           'May             ', 'June            ', 'July            ', 'August          ',
@@ -389,7 +403,6 @@ class FlspMrppurchaseLine(models.Model):
                 key += 1
                 count += 1
             for planning in purchase_planning:
-                print(planning)
                 rationale = "<pre>------------------------------------------------- Forecast ----------------------------------------------------<br/>"
                 rationale += '        |'
                 for month in next_6_months:
@@ -481,6 +494,8 @@ class FlspMrppurchaseLine(models.Model):
                 if suggested_qty > current_balance:
                     planning.suggested_qty = suggested_qty
                     planning.adjusted_qty = suggested_qty
+                    planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
+                    planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
@@ -490,11 +505,53 @@ class FlspMrppurchaseLine(models.Model):
         return
 
     def execute_suggestion(self):
+
+        new_po = False
+        ordered_by_vendor = []
+        item_to_buy = []
+        item_to_unlink = []
+
+        for each in self:
+            ordered_by_vendor.append([each, each.vendor_id.id])
+        ordered_by_vendor.sort(key=lambda x: x[1])
+        vendor = ordered_by_vendor[0][0].vendor_id
+
+        for product in ordered_by_vendor:
+            if vendor != product[0].vendor_id:
+                if vendor:
+                    new_po = self.env['purchase.order'].create({'partner_id': vendor.id,
+                                                                'currency_id': self.env.company.currency_id.id,
+                                                                'date_order': datetime.now(),
+                                                                'order_line': item_to_buy})
+                    if new_po:
+                        for item in item_to_unlink:
+                            item.unlink()
+                item_to_buy = []
+                item_to_unlink = []
+            if product[0].vendor_id:
+                item = product[0]
+                item_to_buy.append(
+                    (0, 0, {'product_id': item.product_id.id,
+                            'name': item.product_tmpl_id.name,
+                            'product_qty': item.purchase_adjusted,
+                            'product_uom': item.purchase_uom.id,
+                            'price_unit': item.vendor_price,
+                            'date_planned': datetime.now()}))
+                item_to_unlink.append(product[0])
+            else:
+                product[0].rationale += "</br> ***** PO not created. Please inform the Vendor in the Product."
+            vendor = product[0].vendor_id
+
+        if vendor:
+            new_po = self.env['purchase.order'].create({'partner_id': vendor.id,
+                                                        'currency_id': self.env.company.currency_id.id,
+                                                        'date_order': datetime.now(),
+                                                        'order_line': item_to_buy})
+            if new_po:
+                for item in item_to_unlink:
+                    item.unlink()
+
         return
-        # item.unlink()
-        action = self.env.ref('mrp.mrp_production_action').read()[0]
-        action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
-        return action
 
     def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
         """Calculate the **unitary** product requirements of flattened BOM.
@@ -626,12 +683,17 @@ class FlspMrppurchaseLine(models.Model):
                 required_by = required_by - timedelta(days=prod_vendor.delay)
 
         if suggested_qty+total_forecast > 0:
+
             ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
                          'product_id': product.id,
                          'description': product.product_tmpl_id.name,
                          'default_code': product.product_tmpl_id.default_code,
                          'suggested_qty': suggested_qty,
                          'adjusted_qty': suggested_qty,
+                         'purchase_adjusted': product.uom_id._compute_quantity(suggested_qty,product.uom_po_id),
+                         'purchase_suggested': product.uom_id._compute_quantity(suggested_qty,product.uom_po_id),
+                         'uom': product.uom_id.id,
+                         'purchase_uom': product.uom_po_id.id,
                          'calculated': True,
                          'product_qty': product.qty_available,
                          'product_min_qty': min_qty,
@@ -640,6 +702,7 @@ class FlspMrppurchaseLine(models.Model):
                          'vendor_id': prod_vendor.name.id,
                          'vendor_qty': prod_vendor.min_qty,
                          'delay': prod_vendor.delay,
+                         'vendor_price': prod_vendor.price,
                          'stock_qty': product.qty_available - pa_wip_qty,
                          'wip_qty': pa_wip_qty,
                          'rationale': rationale,

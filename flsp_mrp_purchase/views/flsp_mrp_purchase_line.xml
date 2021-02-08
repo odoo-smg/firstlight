@@ -39,7 +39,13 @@
                         <group name="material_purchase" string="Plan" >
                             <field name="suggested_qty" string="Required Qty" invisible="False" />
                             <field name="adjusted_qty" string="Adjusted Qty" invisible="False" />
+                            <field name="uom" string="Unit of Measure"/>
                             <field name="required_by"/>
+                        </group>
+                        <group name="material_purchase_2nd" string="Purchase UofM" >
+                            <field name="purchase_suggested" string="Required 2nd" invisible="False" readonly="1" />
+                            <field name="purchase_adjusted" string="Adjusted 2nd" invisible="False" readonly="1" />
+                            <field name="purchase_uom" string="Purchase UofM"/>
                         </group>
                     </group>
                     <group>
