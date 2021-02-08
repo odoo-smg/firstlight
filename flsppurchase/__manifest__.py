@@ -26,6 +26,7 @@
     'depends': ['base'],
     'depends': ['purchase'],
     'depends': ['sale'],
+    'depends': ['sale_management'],    
 
     # always loaded
     'data': [
