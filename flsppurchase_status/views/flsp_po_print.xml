@@ -134,9 +134,17 @@
                 <div class="oe_structure"/>
 
                 <div style="margin:40px 0px 0px 0px; padding: 30px 0px 30px 0px; width:100%; ">
+<!--SHIPPING ADDRESS ACCOUNTS FOR THE DROP SHIP LOCATION-->
                     <div style=" float:left; width:50%; " >
                         <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Shipping Address:</spam>
-                            <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
+                            <p  t-if="doc.picking_type_id.id == 9" style="font-size:16px; font-weight: lighter; font-style: normal; color:000000; font-family: Franklin Demi, sans-serif;">
+                                <span t-field="doc.dest_address_id.name"/><br/>
+                                <span t-field="doc.dest_address_id.street"/><br/>
+                                <span t-field="doc.dest_address_id.city"/>, <span t-field="doc.dest_address_id.state_id.code"/>, <span t-field="doc.dest_address_id.zip"/><br/>
+                                <span t-field="doc.dest_address_id.country_id"/><br/>
+                                <span t-field="doc.dest_address_id.phone"/>
+                            </p>
+                            <p  t-else="else" style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
                                 <span t-field="doc.company_id.name"/><br/>
                                 <span t-field="doc.company_id.flsp_street"/><br/>
                                 <span t-field="doc.company_id.flsp_city"/>, <span t-field="doc.company_id.flsp_state_id.code"/>, <span t-field="doc.company_id.flsp_zip"/><br/>
@@ -157,12 +165,6 @@
                     </div>
                     <div style="clear: both;"></div>
                 </div>
-
-<!--                <h2 t-if="doc.state == 'draft'" style="color:#4b5eab; font-weight: bold;">Request for Quotation #<span t-field="doc.name"/></h2>-->
-<!--                <h2 t-if="doc.state in ['sent', 'to approve']" style="color:#4b5eab; font-weight: bold;">Purchase Order #<span t-field="doc.name"/></h2>-->
-<!--                <h2 t-if="doc.state in ['purchase', 'done']" style="color:#4b5eab; font-weight: bold;">Purchase Order #<span t-field="doc.name"/></h2>-->
-<!--                <h2 t-if="doc.state == 'cancel'" style="color:#4b5eab; font-weight: bold;">Cancelled Purchase Order #<span t-field="doc.name"/></h2>-->
-<!--Added changes here to reflect if its a PQ -->
                 <h2 t-if="doc.state == 'draft'" style="color:#4b5eab; font-weight: bold;">Request for Quotation #
                     <span t-if="doc.flsp_pq_check == True" t-field="doc.flsp_pq_name"/>
                     <span t-if="doc.flsp_pq_check == False" t-field="doc.name"/>
@@ -523,9 +525,17 @@
                 <div class="oe_structure"/>
 
                 <div style="margin:40px 0px 0px 0px; padding: 30px 0px 30px 0px; width:100%; ">
+<!--SHIPPING ADDRESS ACCOUNTS FOR THE DROP SHIP LOCATION-->
                     <div style=" float:left; width:50%; " >
                         <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Shipping Address:</spam>
-                            <p style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
+                            <p  t-if="doc.picking_type_id.id == 9" style="font-size:16px; font-weight: lighter; font-style: normal; color:000000; font-family: Franklin Demi, sans-serif;">
+                                <span t-field="doc.dest_address_id.name"/><br/>
+                                <span t-field="doc.dest_address_id.street"/><br/>
+                                <span t-field="doc.dest_address_id.city"/>, <span t-field="doc.dest_address_id.state_id.code"/>, <span t-field="doc.dest_address_id.zip"/><br/>
+                                <span t-field="doc.dest_address_id.country_id"/><br/>
+                                <span t-field="doc.dest_address_id.phone"/>
+                            </p>
+                            <p  t-else="else" style="font-size:16px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Demi, sans-serif;">
                                 <span t-field="doc.company_id.name"/><br/>
                                 <span t-field="doc.company_id.flsp_street"/><br/>
                                 <span t-field="doc.company_id.flsp_city"/>, <span t-field="doc.company_id.flsp_state_id.code"/>, <span t-field="doc.company_id.flsp_zip"/><br/>
@@ -533,6 +543,7 @@
                                 <span t-field="doc.company_id.phone"/>
                             </p>
                     </div>
+
 
                     <div style=" float:right; width:50%; ">
                         <spam style="font-size:18px; font-weight: bold; color:#4b5eab; font-family:Franklin, sans-serif;">Vendor:</spam>

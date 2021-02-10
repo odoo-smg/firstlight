@@ -33,13 +33,14 @@ class Flsp_PO_Status(models.Model):
         ('cancelled', 'Cancelled'),
         ('non_confirmed', 'PO Not confirmed'),
         ('confirmed', 'PO confirmed'),
-        ('received', 'Received')],
+        ('received', 'Received'),
+        ('late', 'Late')],
         string='FLSP Status',   eval=True, store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
 
     # Dates
     flsp_scheduled_date = fields.Datetime(string="FLSP Scheduled Date",
         help='This is the scheduled date of when the product will arrive, it accounts for product lead times'
-             '\n-If multiple products, the lates product scheduled date equates to this date',
+        '\n-If multiple products, the lates product scheduled date equates to this date',
         compute="get_flsp_scheduled_date", store=True, readonly=False,)
 
     flsp_vendor_confirmation_date = fields.Datetime(string="Vendor Confirmation Date",
@@ -103,7 +104,7 @@ class Flsp_PO_Status(models.Model):
         self.write({'state': 'done'})
         # self.write({'flsp_po_status': 'received', })
 
-    # DATE
+# DATE
     @api.onchange('flsp_vendor_confirmation_date')
     def _change_vendor_confirm_change_scheduled(self):
         """
@@ -174,6 +175,43 @@ class Flsp_PO_Status(models.Model):
                 if len(picking.move_lines) == 0:
                     picking.write({"state": "cancel"})
 
+# Late Status
+#     @api.onchange('flsp_scheduled_date')
+#     def _change_status_to_late(self):
+#         # today = datetime.today().date()
+#         today = datetime.today()
+#         scheduled = self.flsp_scheduled_date
+#         relative = relativedelta(days=-1) #past 1 day
+#         if self.state == 'purchase' and (scheduled < today +relative):
+#             # if(scheduled > today +relative):
+#             self.write({'flsp_po_status': 'late', })
+#
+#         elif self.state == 'purchase' and (scheduled > today + relative) and self.flsp_vendor_confirmation_date:
+#             # if(scheduled > today +relative):
+#             self.write({'flsp_po_status': 'confirmed', })
+#
+#         elif self.state == 'purchase' and (scheduled > today + relative):
+#             # if(scheduled > today +relative):
+#             self.write({'flsp_po_status': 'non_confirmed', })
+
+    # # @api.onchange('flsp_scheduled_date')
+    # def _write(self, vals):
+    #     # today = datetime.today().date()
+    #     today = datetime.today()
+    #     scheduled = self.flsp_scheduled_date
+    #     relative = relativedelta(days=-1) #past 1 day
+    #     if self.state == 'purchase' and (scheduled < today +relative):
+    #         # if(scheduled > today +relative):
+    #         self.write({'flsp_po_status': 'late', })
+    #
+    #     elif self.state == 'purchase' and (scheduled > today + relative) and self.flsp_vendor_confirmation_date:
+    #         # if(scheduled > today +relative):
+    #         self.write({'flsp_po_status': 'confirmed', })
+    #
+    #     elif self.state == 'purchase' and (scheduled > today + relative):
+    #         # if(scheduled > today +relative):
+    #         self.write({'flsp_po_status': 'non_confirmed', })
+
 
 # Changing to received got from PURCHASE.STOCK
     @api.depends('picking_ids', 'picking_ids.state')
@@ -185,3 +223,39 @@ class Flsp_PO_Status(models.Model):
                     order.write({'flsp_po_status': 'received', })
             else:
                 order.is_shipped = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

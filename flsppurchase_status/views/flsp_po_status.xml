@@ -9,8 +9,8 @@
             <xpath expr="//field[@name='amount_total']" position="after">
                 <field name="flsp_po_status" optional="show"/>
                 <field name="flsp_scheduled_date" optional="hide"/>
-            </xpath>
 
+            </xpath>
             <!--Hiding the original states-->
             <xpath expr="//field[@name='state']" position="attributes">
                 <attribute name="optional">hide</attribute>
@@ -18,12 +18,13 @@
 
             <!-- Adding decorations-->
             <xpath expr="//tree" position="attributes">
+<!--Any order in red is late  -->
                 <attribute name="decoration-danger">flsp_po_status in ['confirmed', 'non_confirmed'] and (flsp_scheduled_date &lt; current_date)</attribute>
                 <attribute name="decoration-muted">flsp_po_status in ['cancelled']</attribute>
                 <attribute name="decoration-warning">flsp_po_status in ['request', 'non_confirmed']</attribute>
                 <attribute name="decoration-success">flsp_po_status in ['confirmed',]</attribute>
                 <attribute name="decoration-it">flsp_po_status == 'received'</attribute>
-                <!--attribute name="decoration-danger">flsp_po_status == 'late'</attribute-->
+<!--                <attribute name="decoration-danger">flsp_po_status == 'late'</attribute>-->
             </xpath>
 
 
@@ -47,3 +48,6 @@
     </record>
 
 </odoo>
+
+
+
