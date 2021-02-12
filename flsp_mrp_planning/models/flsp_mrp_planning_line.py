@@ -335,10 +335,46 @@ class FlspMrpPlanningLine(models.Model):
         if consider_forecast:
             sales_forecast = self.env['flsp.sales.forecast'].search([])
             for forecast in sales_forecast:
+                print('forecast for: '+forecast.product_id.name)
                 forecast_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
                 if forecast_bom:
+                    if forecast.product_id.type == 'product' and route_mfg in forecast.product_id.route_ids.ids:
+                        purchase_planning = self.env['flsp.mrp.planning.line'].search([('product_id', '=', forecast.product_id.id)],limit=1)
+                        if not purchase_planning:
+                            product = forecast.product_id
+                            current_balance = False
+                            rationale = 'No movement. Product Selected based on Forecast.'
+                            forecasted = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            forecasted[1] = forecast.qty_month1
+                            forecasted[2] = forecast.qty_month2
+                            forecasted[3] = forecast.qty_month3
+                            forecasted[4] = forecast.qty_month4
+                            forecasted[5] = forecast.qty_month5
+                            forecasted[6] = forecast.qty_month6
+                            forecasted[7] = forecast.qty_month7
+                            forecasted[8] = forecast.qty_month8
+                            forecasted[9] = forecast.qty_month9
+                            forecasted[10] = forecast.qty_month10
+                            forecasted[11] = forecast.qty_month11
+                            forecasted[12] = forecast.qty_month12
+                            purchase_line = self._include_prod(product, rationale, current_balance, current_date, consider_wip, False, forecasted, standard_lead_time, indirect_lead_time)
+                        else:
+                            purchase_planning.qty_month1 += forecast.qty_month1
+                            purchase_planning.qty_month2 += forecast.qty_month2
+                            purchase_planning.qty_month3 += forecast.qty_month3
+                            purchase_planning.qty_month4 += forecast.qty_month4
+                            purchase_planning.qty_month5 += forecast.qty_month5
+                            purchase_planning.qty_month6 += forecast.qty_month6
+                            purchase_planning.qty_month7 += forecast.qty_month7
+                            purchase_planning.qty_month8 += forecast.qty_month8
+                            purchase_planning.qty_month9 += forecast.qty_month9
+                            purchase_planning.qty_month10 += forecast.qty_month10
+                            purchase_planning.qty_month11 += forecast.qty_month11
+                            purchase_planning.qty_month12 += forecast.qty_month12
+                    print(' bom:---------------- ')
                     forecast_components = self._get_flattened_totals(forecast_bom, 1)
                     for component in forecast_components:
+                        print('  components: ' + component.name)
                         if route_mfg not in component.route_ids.ids:
                             continue
                         if component.flsp_backflush:
@@ -375,6 +411,7 @@ class FlspMrpPlanningLine(models.Model):
                             purchase_planning.qty_month11 += forecast.qty_month11*forecast_components[component]['total']
                             purchase_planning.qty_month12 += forecast.qty_month12*forecast_components[component]['total']
                 else:
+                    print(' No no bom:---------------- ')
                     if forecast.product_id.type == 'product' and route_mfg in forecast.product_id.route_ids.ids:
                         purchase_planning = self.env['flsp.mrp.planning.line'].search([('product_id', '=', forecast.product_id.id)],limit=1)
                         if not purchase_planning:
@@ -487,7 +524,6 @@ class FlspMrpPlanningLine(models.Model):
                     if key > 12:
                         key = 1
                 rationale += '</pre>'
-
                 current_balance = planning.balance - value_to_consider
                 # Checking Minimal Quantity
                 if current_balance < 0:
@@ -499,9 +535,10 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = 0
 
                 # Checking supplier quantity:
-                if suggested_qty > 0 and planning.vendor_qty > 0:
-                    if suggested_qty < planning.vendor_qty:
-                            suggested_qty = planning.vendor_qty
+                #if suggested_qty > 0 and planning.vendor_qty > 0:
+                #    if suggested_qty < planning.vendor_qty:
+                #            suggested_qty = planning.vendor_qty
+
                 # checking multiple quantities
                 if planning.qty_multiple > 1:
                     if planning.qty_multiple > suggested_qty:
@@ -513,7 +550,8 @@ class FlspMrpPlanningLine(models.Model):
                     current_balance = planning.product_qty
                 else:
                     current_balance = planning.product_qty - planning.wip_qty
-                if suggested_qty > current_balance:
+
+                if suggested_qty > 0:
                     planning.suggested_qty = suggested_qty
                     planning.adjusted_qty = suggested_qty
                     planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
