@@ -173,16 +173,25 @@ class FlspStockRequest(models.Model):
         """
             Purpose: to see if the request is done
         """
-        print("exectuting request_complete")
+        #print("exectuting request_complete")
         # print(self.stock_picking.origin)
-        pickings = self.env['stock.picking'].search([('origin', '=', self.name)])
-        for line in self:
-            if line.status == 'confirm':
-                if (pickings.origin == self.stock_picking.origin) and (pickings.state == 'done'):
-                    self.is_done = True
-                    self.write({'status': 'done'})
-                else:
-                    self.is_done = False
+        #pickings = self.env['stock.picking'].search([('origin', '=', self.name)])
+        #for line in self:
+        #    if line.status == 'confirm':
+        #        if (pickings.origin == self.stock_picking.origin) and (pickings.state == 'done'):
+        #            self.is_done = True
+        #            self.write({'status': 'done'})
+        #        else:
+        #            self.is_done = False
+        # Alexandre in Feb.11.2021 commented block above and include below:
+        for each in self:
+            if each.stock_picking.state == 'done':
+                self.is_done = True
+                self.write({'status': 'done'})
+            else:
+                self.is_done = False
+        # Alexandre in Feb.11.2021
+
 
 class FlspStockRequestLine(models.Model):
     """

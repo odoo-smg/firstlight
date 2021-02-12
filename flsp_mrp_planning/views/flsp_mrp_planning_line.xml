@@ -17,28 +17,27 @@
         <field name="name">flsp.mrp.planning.line.form</field>
         <field name="model">flsp.mrp.planning.line</field>
         <field name="arch" type="xml">
-            <form string="MRP Planning Form" create="false" edit="false">
+            <form string="MRP Planning Form" create="false" edit="true">
                 <sheet>
                     <group>
-                        <group name="sales" string="Source" >
-                            <field name="source_description"/>
-                            <field name="source"/>
-                            <!--field name="stock_picking"/>
-                            <field name="production_id"/-->
-                        </group>
-                        <group name="purchase" string="Product" >
+                        <group name="product" string="Product" >
                             <field name="product_id"/>
+                            <field name="produce_delay"/>
+                            <field name="product_min_qty"/>
+                            <field name="qty_multiple"/>
+                            <field name="stock_qty"/>
+                            <field name="wip_qty"/>
+                            <field name="product_qty"/>
+                        </group>
+                        <group name="material_purchase" string="Plan" >
+                            <field name="suggested_qty" string="Required Qty" invisible="False" />
+                            <field name="adjusted_qty" string="Adjusted Qty" invisible="False" />
+                            <field name="uom" string="Unit of Measure"/>
+                            <field name="required_by"/>
                         </group>
                     </group>
                     <group>
-                        <group name="material_planning" string="Plan" >
-                            <field name="suggested_qty" string="Requested Qty" invisible="False" />
-                            <field name="start_date"/>
-                            <field name="deadline_date"/>
-                        </group>
-                    </group>
-                    <group>
-                        <field name="rationale" string="Notes"/>
+                        <field name="rationale" string="Notes" readonly="1"/>
                     </group>
                 </sheet>
             </form>
@@ -50,49 +49,49 @@
         <field name="model">flsp.mrp.planning.line</field>
         <field name="arch" type="xml">
             <tree string="Suggestion View"  create="0" delete="0">
-                <field name="default_code" />
                 <field name="product_tmpl_id" optional="show" />
+                <field name="default_code" optional="hide"/>
                 <field name="description" optional="hide"/>
-                <!--field name="product_qty"/-->
-                <field name="source"/>
+                <field name="stock_qty"/>
+                <field name="wip_qty"/>
+                <field name="level_bom"  optional="hide"/>
+                <field name="qty_rfq"  optional="hide"/>
+                <field name="month1_use"  optional="hide"/>
+                <field name="month2_use"  optional="hide"/>
+                <field name="month3_use"  optional="hide"/>
+                <field name="product_min_qty"  optional="hide"/>
+                <field name="qty_multiple"  optional="hide"/>
+                <!--field name="source"/-->
                 <field name="suggested_qty" string="Required Qty"/>
-                <!--field name="adjusted_qty"/-->
-                <field name="start_date" optional="show"/>
-                <field name="deadline_date" string="Deadline" optional="show"/>
+                <field name="required_by"/>
+                <field name="adjusted_qty"/>
+                <!--field name="state"/-->
+                <field name="start_date" optional="hide"/>
+                <field name="deadline_date" string="Deadline" optional="hide"/>
             </tree>
         </field>
     </record>
 
-    <!--record id="purchase_suggestion_search_view" model="ir.ui.view">
-        <field name="name">purchase.suggestion.search</field>
-        <field name="model">report.purchase.suggestion</field>
+    <record id="flsp_mrp_planning_line_search_view" model="ir.ui.view">
+        <field name="name">mrp.planning.line.suggestion.search</field>
+        <field name="model">flsp.mrp.planning.line</field>
         <field name="arch" type="xml">
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
                 <separator/>
-                <filter string="Zero Filter" name="filter_zero" domain="[('suggested_qty','>', 0)]"/>
-                <filter string="To Manufacture" name="filter_to_mfg" domain="[('state','=','mfg')]"/>
-                <filter string="To Confirm MO" name="filter_to_confirm" domain="[('state', '=', 'mo')]"/>
-                <filter string="To Buy" name="filter_to_purchase" domain="[('state', '=', 'buy')]"/>
-                <filter string="To Confirm PO" name="filter_to_confirm" domain="[('state', '=', 'po')]"/>
-                <filter string="Can be purchased" name="can_be_purchased" domain="[('route_buy', '=', 'buy')]"/>
-                <filter string="Can be produced" name="can_be_produced" domain="[('route_mfg', '=', 'mfg')]"/>
+                <filter string="Zero Filter" name="filter_zero" domain="[('adjusted_qty','>', 0)]"/>
                 <separator/>
-                <group expand="1" string="Group By">
-                    <filter string="State" name="state" context="{'group_by':'state'}"/>
-                </group>
             </search>
         </field>
-    </record-->
-
+    </record>
 
     <record id="flsp_mrp_planning_line_action" model="ir.actions.act_window">
         <field name="name">MRP Planning Report</field>
         <field name="res_model">flsp.mrp.planning.line</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="flsp_mrp_planning_line_view_tree"/>
-        <!--field name="search_view_id" ref="purchase_suggestion_search_view"/>
-        <field name="context">{'search_default_can_be_none': 1}</field-->
+        <field name="search_view_id" ref="flsp_mrp_planning_line_search_view"/>
+        <field name="context">{'search_default_filter_zero': 1}</field> <!--Making to do default-->
         <field name="domain">[]</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You have nothing to be produced.</p>

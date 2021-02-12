@@ -6,8 +6,8 @@
             <field name="model">flsp_mrp_planning.wizard</field>
             <field name="arch" type="xml">
                 <form string="Recompute MRP Planning">
-                    <h4>Would you like to recalculate the MRP Planning?</h4>
-                    <p>This routine could take several minutes to run.</p>
+                    <h4>Would you like to recalculate the MRP Planning Suggestions?</h4>
+                    <p>The Production Suggestions are automatically calculated every night.This routine could take several minutes to run.</p>
                     <!--field name="calculate_sub_levels" class="text-center oe_inline" />
                     Calculate the sub levels of BOM.
                     <br/-->
@@ -25,15 +25,22 @@
                                 days only for products which have the manufacturing lead time set to zero.
                             </div>
 
-                            <field name="orders_to_confirm" invisible="1" />
+                            <!--field name="orders_to_confirm" invisible="1" />
                             <div attrs="{'invisible': [('orders_to_confirm', '=', False)]}" >
-                               &#x25CF; There are Manufacturing Orders to Confirm, please use the button below to confirm before calculate the planning.
+                               &#x25CF; There are Manufacturing Orders to Confirm, please use the button below to confirm before calculate the purchase.
                                 <button name="flsp_confirm_mo" type="object" attrs="{'invisible': [('orders_to_confirm', '=', False)]}" string="Confirm Manufacturing Orders" class="btn-default btn-primary" />
-                            </div>
-                            <div attrs="{'invisible': [True]}" >
-                            <!--div attrs="{'invisible': [('orders_to_confirm', '=', False)]}" -->
+                            </div-->
+                            <div>
                                 <field name="consider_drafts"/>
-                                Consider Drafts of Manufacturing Orders anyways.
+                                Consider Drafts of Manufacturing Orders.
+                            </div>
+                            <div>
+                                <field name="consider_wip"/>
+                                Consider WIP balance.
+                            </div>
+                            <div>
+                                <field name="consider_forecast"/>
+                                Consider Sales Forecast.
                             </div>
 
 
@@ -44,8 +51,8 @@
                             </div-->
 
                     <footer>
-                        <button name="flsp_recalc" type="object" string="Yes" class="btn-primary" />
-                        <button name="flsp_report" type="object" string="No" class="btn-default btn-secondary" />
+                        <button name="flsp_report" type="object" string="No" class="btn-primary" />
+                        <button name="flsp_recalc" type="object" string="Yes" class="btn-default btn-secondary" />
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </form>
