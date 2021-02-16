@@ -421,6 +421,7 @@ class FlspMrpPlanningLine(models.Model):
                 rationale += '</pre>'
 
                 # Current balance calculated
+                original_balance = 0
                 current_balance = product.qty_available
                 product = planning.product_id
                 for item in open_moves:
@@ -430,21 +431,15 @@ class FlspMrpPlanningLine(models.Model):
                         else:
                             current_balance += item[5]
 
-                current_balance = current_balance - value_to_consider
+                original_balance = current_balance
+                suggested_qty = current_balance - value_to_consider
 
                 # Checking Minimal Quantity
-                if current_balance < 0:
-                    suggested_qty = planning.product_min_qty - current_balance
-                else:
-                    if current_balance < planning.product_min_qty:
-                        suggested_qty = planning.product_min_qty - current_balance
+                if suggested_qty < planning.product_min_qty:
+                    if suggested_qty < 0:
+                        suggested_qty = planning.product_min_qty - suggested_qty
                     else:
-                        suggested_qty = 0
-
-                # Checking supplier quantity:
-                #if suggested_qty > 0 and planning.vendor_qty > 0:
-                #    if suggested_qty < planning.vendor_qty:
-                #            suggested_qty = planning.vendor_qty
+                        suggested_qty = planning.product_min_qty
 
                 # checking multiple quantities
                 if planning.qty_multiple > 1:
@@ -463,7 +458,7 @@ class FlspMrpPlanningLine(models.Model):
                     planning.adjusted_qty = suggested_qty
                     planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
                     planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
-                planning.rationale += rationale
+                planning.rationale += rationale + "->balance"+str(original_balance)
             # if not purchase_planning:
             #    print(forecast.product_id.name)
             # else:
