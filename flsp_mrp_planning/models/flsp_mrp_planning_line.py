@@ -453,7 +453,7 @@ class FlspMrpPlanningLine(models.Model):
                 else:
                     current_balance = planning.product_qty - planning.wip_qty
 
-                if suggested_qty > 0:
+                if suggested_qty > 0 and value_to_consider > 0:
                     planning.suggested_qty = suggested_qty
                     planning.adjusted_qty = suggested_qty
                     planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
