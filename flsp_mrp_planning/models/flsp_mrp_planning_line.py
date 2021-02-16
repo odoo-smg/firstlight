@@ -458,7 +458,7 @@ class FlspMrpPlanningLine(models.Model):
                     planning.adjusted_qty = suggested_qty
                     planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
                     planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
-                planning.rationale += rationale + "->balance: "+str(original_balance)+"  product: "+product.name
+                planning.rationale += rationale
 
             # if not purchase_planning:
             #    print(forecast.product_id.name)
