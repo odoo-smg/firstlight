@@ -422,8 +422,8 @@ class FlspMrpPlanningLine(models.Model):
 
                 # Current balance calculated
                 original_balance = 0
-                current_balance = product.qty_available
                 product = planning.product_id
+                current_balance = product.qty_available
                 for item in open_moves:
                     if product == item[4]:
                         if item[1] == 'Out  ':
@@ -459,6 +459,7 @@ class FlspMrpPlanningLine(models.Model):
                     planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
                     planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
                 planning.rationale += rationale + "->balance: "+str(original_balance)+"  product: "+product.name
+
             # if not purchase_planning:
             #    print(forecast.product_id.name)
             # else:
