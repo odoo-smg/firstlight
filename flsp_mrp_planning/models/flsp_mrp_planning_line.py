@@ -231,18 +231,15 @@ class FlspMrpPlanningLine(models.Model):
             product = item[4]
             if previous_product != product:
                 balance = product.qty_available
-                print(" ----------------------------- balance for: " + item[4].name + " -> " + str(balance))
             if item[1] == 'Out  ':
                 balance -= item[5]
             else:
                 balance += item[5]
-            print(str(item[7]) + "  - " + item[3] + " // " + item[4].name + " -> " + str(item[5])+" Balance: "+str(balance))
             previous_product = product
 
 
         rationale = {}
 
-        print('**************************************')
         product = open_moves[0][4]
         rationale[product.id] = ''
 
@@ -255,7 +252,6 @@ class FlspMrpPlanningLine(models.Model):
         for item in open_moves:
             if product != item[4]:
                 rationale[product] += "</pre>"
-                print(rationale[product])
                 product = item[4]
                 rationale[product] = "<pre>--------------------------------------------------------------------------------------------"
                 rationale[product] += "<br/>                                        | Movement     "
@@ -273,14 +269,13 @@ class FlspMrpPlanningLine(models.Model):
                     current_balance -= item[5]
                 else:
                     current_balance += item[5]
-                print(product.name)
                 rationale[product] += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]
             product = item[4]
 
         if product:
-            print(product.name)
+            #print(product.name)
             rationale[product] += "</pre>"
-            print(rationale[product])
+            #print(rationale[product])
 
         for item in open_moves:
             product = item[4]
@@ -424,7 +419,19 @@ class FlspMrpPlanningLine(models.Model):
                     if key > 12:
                         key = 1
                 rationale += '</pre>'
-                current_balance = planning.balance - value_to_consider
+
+                # Current balance calculated
+                current_balance = product.qty_available
+                product = planning.product_id
+                for item in open_moves:
+                    if product == item[4]:
+                        if item[1] == 'Out  ':
+                            current_balance -= item[5]
+                        else:
+                            current_balance += item[5]
+
+                current_balance = current_balance - value_to_consider
+
                 # Checking Minimal Quantity
                 if current_balance < 0:
                     suggested_qty = planning.product_min_qty - current_balance
@@ -526,9 +533,9 @@ class FlspMrpPlanningLine(models.Model):
         for item in open_moves:
             new_prod = True
             new_date = True
-            print(source+"--------------------------------------")
+            #print(source+"--------------------------------------")
             if item:
-                print("--->" + str(item[7]) + "  - " + item[3] + " // " + item[4].name + " -> " + str(item[5]))
+                #print("--->" + str(item[7]) + "  - " + item[3] + " // " + item[4].name + " -> " + str(item[5]))
                 if route_mfg not in item[4].route_ids.ids:
                     continue
                 new_prod = (item[4] != product)
@@ -536,7 +543,7 @@ class FlspMrpPlanningLine(models.Model):
                 new_date = (item[7].date() != previous_date)
             if new_prod or new_date:
                 rationale += "</pre>"
-                print(suggested_qty)
+                #print(suggested_qty)
                 purchase_line = self._include_prod(product, rationale, source, suggested_qty, current_balance, required_by, consider_wip, consumption, False,     standard_lead_time, indirect_lead_time)
                 if purchase_line:
                     purchase_line.level_bom = bom_level
@@ -661,10 +668,8 @@ class FlspMrpPlanningLine(models.Model):
                             purchase_planning.qty_month10 += forecast.qty_month10
                             purchase_planning.qty_month11 += forecast.qty_month11
                             purchase_planning.qty_month12 += forecast.qty_month12
-                    print(' bom:---------------- ')
                     forecast_components = self._get_flattened_totals(forecast_bom, 1)
                     for component in forecast_components:
-                        print('  components: ' + component.name)
                         if route_mfg not in component.route_ids.ids:
                             continue
                         if component.flsp_backflush:
@@ -701,7 +706,7 @@ class FlspMrpPlanningLine(models.Model):
                             purchase_planning.qty_month11 += forecast.qty_month11*forecast_components[component]['total']
                             purchase_planning.qty_month12 += forecast.qty_month12*forecast_components[component]['total']
                 else:
-                    print(' No no bom:---------------- ')
+                    #print(' No no bom:---------------- ')
                     if forecast.product_id.type == 'product' and route_mfg in forecast.product_id.route_ids.ids:
                         purchase_planning = self.env['flsp.mrp.planning.line'].search([('product_id', '=', forecast.product_id.id)],limit=1)
                         if not purchase_planning:
@@ -925,10 +930,7 @@ class FlspMrpPlanningLine(models.Model):
             pa_wip_qty += stock_lin.quantity
 
         if not balance:
-            if consider_wip:
-                current_balance = product.qty_available
-            else:
-                current_balance = product.qty_available - pa_wip_qty
+            current_balance = product.qty_available
             balance = current_balance
         else:
             current_balance = balance
@@ -967,15 +969,12 @@ class FlspMrpPlanningLine(models.Model):
                 if (suggested_qty % multiple) > 0:
                     suggested_qty += multiple - (suggested_qty % multiple)
         # Checking mfg lead time:
-        if product.produce_delay and product.produce_delay > 0:
-            if not required_by:
-                required_by = datetime.now()
-            required_by = required_by - timedelta(days=product.produce_delay)
-        else:
-            if not required_by:
-                required_by = datetime.now()
-            required_by = required_by - timedelta(days=standard_lead_time)
-
+        if not required_by:
+            required_by = datetime.now()
+            if product.produce_delay and product.produce_delay > 0:
+                required_by = required_by - timedelta(days=product.produce_delay)
+            else:
+                required_by = required_by - timedelta(days=standard_lead_time)
 
         if suggested_qty+total_forecast > 0 or source=='forecast':
 
