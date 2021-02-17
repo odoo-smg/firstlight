@@ -12,3 +12,4 @@ from . import flsp_stockpackaging
 from . import flsp_delivery_wizard
 from . import package_wizard
 from . import flsp_production
+from . import flsp_moving_line
