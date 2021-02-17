@@ -12,7 +12,7 @@
                     <group>
                         <field name="model_id" groups="flspticketsystem.group_flspticketsystem_manager"/>
                         <field name="version_type" groups="flspticketsystem.group_flspticketsystem_manager"/> <!--widget="radio"-->
-                        <field name="version_num" groups="flspticketsystem.group_flspticketsystem_manager"/>
+                        <field name="version_num" attrs="{'invisible': [('version_type','==', 'O')]}" groups="flspticketsystem.group_flspticketsystem_manager"/>
                         <field name="version_description" attrs="{'required': [('version_type','!=', 'O')]}" groups="flspticketsystem.group_flspticketsystem_manager"/>
                     </group>
               </page>
