@@ -50,7 +50,7 @@ class MrpProduction(models.Model):
                         'picking_type_id': stock_picking_type.id,
                         'location_id': stock_virtual_location.id,
                         'location_dest_id': line.location_id.id,
-                        'state': 'done',
+                        'state': 'assigned',
                     }
                     stock_picking = self.env['stock.picking'].create(create_val)
                     stock_move = self.env['stock.move'].create({
@@ -60,7 +60,8 @@ class MrpProduction(models.Model):
                         'product_uom_qty': line.qty_done,
                         'picking_id': stock_picking.id,
                         'location_id': stock_virtual_location.id,
-                        'location_dest_id': line.location_id.id
+                        'location_dest_id': line.location_id.id,
+                        'state': 'assigned',
                     })
                     move_line = self.env['stock.move.line'].create({
                         'product_id': line.product_id.id,
@@ -71,11 +72,11 @@ class MrpProduction(models.Model):
                         'move_id' : stock_move.id,
                         'location_id': stock_virtual_location.id,
                         'location_dest_id': line.location_id.id,
-                        'state': 'done',
+                        'state': 'assigned',
                         'done_move': True,
                     })
                     stock_picking.button_validate()
-                    #stock_picking.state = 'done'
+
 
         ## Verifing quantities of components in PA/WIP if available move the quantity needed on MO to virtual production:
         bom_components = self._get_flattened_totals(self.bom_id, self.product_qty)
@@ -94,7 +95,7 @@ class MrpProduction(models.Model):
                     'picking_type_id': stock_picking_type.id,
                     'location_id': wip_location.id,
                     'location_dest_id': virtual_production_location.id,
-                    'state': 'done',
+                    'state': 'assigned',
                 }
                 stock_picking = self.env['stock.picking'].create(create_val)
             tracking = False
@@ -108,10 +109,21 @@ class MrpProduction(models.Model):
                     if lot.quantity > 0:
                         if lot.quantity - qty_needed >= 0:
                             wip_lot[lot.lot_id] = {'qty': qty_needed, 'location': lot.location_id}
+                            qty_needed = 0
                             break
                         else:
                             wip_lot[lot.lot_id] = {'qty': lot.quantity, 'location': lot.location_id}
                             qty_needed -= lot.quantity
+                # In case we don't have the total quantity available will create a lot 999999_000000
+                if qty_needed > 0:
+                    if prod.tracking == 'lot':
+                        new_lot = self.create_lot(prod, 1)
+                        if new_lot:
+                            wip_lot[new_lot[0]] = {'qty': qty_needed, 'location': wip_location}
+                    else:
+                        new_lot = self.create_lot(prod, int(qty_needed))
+                        for lot in new_lot:
+                            wip_lot[lot] = {'qty': 1, 'location': wip_location}
 
             stock_move = self.env['stock.move'].create({
                 'name': prod.name,
@@ -133,7 +145,7 @@ class MrpProduction(models.Model):
                         'move_id': stock_move.id,
                         'location_id': wip_lot[lot]['location'].id,
                         'location_dest_id': virtual_production_location.id,
-                        'state': 'done',
+                        'state': 'assigned',
                         'done_move': True,
                     })
             else:
@@ -146,11 +158,12 @@ class MrpProduction(models.Model):
                     'move_id': stock_move.id,
                     'location_id': wip_location.id,
                     'location_dest_id': virtual_production_location.id,
-                    'state': 'done',
+                    'state': 'assigned',
                     'done_move': True,
                 })
+        if stock_picking:
             stock_picking.button_validate()
-            #stock_picking.state = 'done'
+
 
 
     def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
@@ -210,3 +223,24 @@ class MrpProduction(models.Model):
                         )
                     ), 'level': level, 'bom': ''}
         return totals
+
+
+    def create_lot(self, prod, qty):
+        ret = []
+        self._cr.execute("select max(name) as code from stock_production_lot where name like '999999%' ")
+        retvalue = self._cr.fetchall()
+        returned_registre = retvalue[0]
+        latest_lot = returned_registre[0]
+        if latest_lot:
+            next_lot = ('00000'+str(int(latest_lot[-5:])+1))[-5:]
+        else:
+            next_lot = '00001'
+        for x in range(0,qty):
+            lot = self.env['stock.production.lot'].create({
+                'name': '999999_'+next_lot,
+                'product_id': prod.id,
+                'ref': 'Backflush TEMP',
+            })
+            next_lot = ('00000' + str(int(next_lot[1:6]) + 1))[-5:]
+            ret.append(lot)
+        return ret

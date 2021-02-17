@@ -15,7 +15,9 @@ class FlspMrpPlanningWizard(models.TransientModel):
     standard_i_lead_time = fields.Integer(String="Lead time Indirect", default=1, help="Standard Indirect Lead time.")
     standard_queue_time = fields.Integer(String="Lead time", default=1, help="Standard queue time.")
     orders_to_confirm = fields.Boolean(String="Orders to confirm", default=False)
-    consider_drafts = fields.Boolean(String="Consider Draft MOs", default=False)
+    consider_drafts = fields.Boolean(String="Consider Draft MOs", default=True)
+    consider_wip = fields.Boolean(String="Consider WIP balance", default=True)
+    consider_forecast = fields.Boolean(String="Consider Forecast", default=False)
 
     @api.model
     def default_get(self, fields):
@@ -37,7 +39,7 @@ class FlspMrpPlanningWizard(models.TransientModel):
 
     def flsp_recalc(self):
         #self.env['flsp.mrp.planning.line']._flsp_calc_planning(self.calculate_sub_levels, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts)
-        self.env['flsp.mrp.planning.line']._flsp_calc_planning(self.calculate_sub_levels, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, True)
+        self.env['flsp.mrp.planning.line']._flsp_calc_planning(self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts, self.consider_wip, self.consider_forecast)
 
         #product = self.env['product.product'].search([], limit=1)
         #product._flsp_calc_suggested_qty()
