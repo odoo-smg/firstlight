@@ -7,6 +7,8 @@ from odoo.exceptions import UserError
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
+    flsp_qty_backflushed = fields.Float(string="Qty Backflushed")
+
     def button_mark_done(self):
         self.ensure_one()
         self.action_assign()
@@ -14,7 +16,33 @@ class MrpProduction(models.Model):
         self.backflush_flsp()
         return res
 
-    def backflush_flsp(self):
+    def post_inventory(self):
+        self.ensure_one()
+        self.action_assign()
+        res = super(MrpProduction, self).post_inventory()
+        self.backflush_partials_flsp()
+        return res
+
+    def backflush_partials_flsp(self):
+
+        stock_move_done = self.env['stock.move'].search(
+        ['&', '&', '&', ('product_id', '=', self.product_id.id),
+                        ('production_id', '=', self.id),
+                        ('is_done', '=', True),
+                        ('scrapped', '=', False)])
+        total_backflushable = 0
+        for move in stock_move_done:
+            total_backflushable += move.product_qty
+
+        if self.flsp_qty_backflushed:
+            total_to_backflush = total_backflushable - self.flsp_qty_backflushed
+        else:
+            total_to_backflush = total_backflushable
+
+        self.backflush_flsp(total_to_backflush)
+        self.flsp_qty_backflushed = total_to_backflush
+
+    def backflush_flsp(self, backflush_qty=0):
         wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
         stock_virtual_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Inventory adjustment')])
         virtual_production_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Production')])
@@ -35,6 +63,8 @@ class MrpProduction(models.Model):
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
 
+        if backflush_qty <=0:
+            backflush_qty = self.product_qty - self.flsp_qty_backflushed
         ## Verifing the quantity of any production sub part if negative make it zero:
         ## (The sub parts will not be transferred to WIP).
         for components in self.move_raw_ids:
@@ -44,7 +74,7 @@ class MrpProduction(models.Model):
                 for serial_location in pa_stock_tmp:
                     pa_stock_quantity += serial_location.quantity
 
-                if pa_stock_quantity < 0 and line.product_id.bom_count > 0:
+                if pa_stock_quantity < 0 and line.product_id.bom_count > 0 and line.product_id.flsp_backflush:
                     create_val = {
                         'origin': self.name+' FLSP-AUTO-PA-ADJUST',
                         'picking_type_id': stock_picking_type.id,
@@ -79,7 +109,7 @@ class MrpProduction(models.Model):
 
 
         ## Verifing quantities of components in PA/WIP if available move the quantity needed on MO to virtual production:
-        bom_components = self._get_flattened_totals(self.bom_id, self.product_qty)
+        bom_components = self._get_flattened_totals(self.bom_id, backflush_qty)
         stock_picking = False
         for prod in bom_components:
             if bom_components[prod]['level'] == 1:
