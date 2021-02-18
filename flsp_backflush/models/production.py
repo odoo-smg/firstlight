@@ -13,7 +13,9 @@ class MrpProduction(models.Model):
         self.ensure_one()
         self.action_assign()
         res = super(MrpProduction, self).button_mark_done()
-        self.backflush_flsp()
+        backflush_qty = self.product_qty - self.flsp_qty_backflushed
+        self.backflush_flsp(backflush_qty)
+        self.flsp_qty_backflushed = self.product_qty
         return res
 
     def post_inventory(self):
@@ -40,7 +42,10 @@ class MrpProduction(models.Model):
             total_to_backflush = total_backflushable
 
         self.backflush_flsp(total_to_backflush)
-        self.flsp_qty_backflushed = total_to_backflush
+        if self.flsp_qty_backflushed:
+            self.flsp_qty_backflushed += total_to_backflush
+        else:
+            self.flsp_qty_backflushed = total_to_backflush
 
     def backflush_flsp(self, backflush_qty=0):
         wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
@@ -63,7 +68,7 @@ class MrpProduction(models.Model):
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
 
-        if backflush_qty <=0:
+        if backflush_qty <= 0:
             backflush_qty = self.product_qty - self.flsp_qty_backflushed
         ## Verifing the quantity of any production sub part if negative make it zero:
         ## (The sub parts will not be transferred to WIP).
