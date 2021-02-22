@@ -317,7 +317,7 @@ class FlspMrpPlanningLine(models.Model):
                     for item in open_moves:
                         if product == item[4]:
                             if item[1] == 'Out  ':
-                                if current_date < item[7]:
+                                if current_date.month == item[7].month:
                                     consumption[item[7].month] += item[5]
 
                     forecasted[1] = forecast.qty_month1
@@ -1029,6 +1029,7 @@ class FlspMrpPlanningLine(models.Model):
         return ret
 
     def execute_suggestion(self):
+        pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')], limit=1)
         for item in self:
             bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', item.product_tmpl_id.id)], limit=1)
             if not bom_id:
@@ -1048,6 +1049,7 @@ class FlspMrpPlanningLine(models.Model):
                 'date_planned_start': datetime.combine(item.start_date, datetime.now().time()),
                 'date_planned_finished': datetime.combine(item.deadline_date, datetime.now().time()),
                 'date_deadline': datetime.combine(item.deadline_date, datetime.now().time()),
+                'location_src_id': pa_location.id,
                 'origin': item.source,
             })
 
