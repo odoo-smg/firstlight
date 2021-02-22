@@ -433,11 +433,11 @@ class FlspMrpPlanningLine(models.Model):
 
                 original_balance = current_balance
                 suggested_qty = 0
-                if current_balance < value_to_consider
+                if current_balance < value_to_consider:
                     suggested_qty = current_balance - value_to_consider
 
                 # Checking Minimal Quantity
-                if suggested_qty > 0
+                if suggested_qty > 0:
                     if suggested_qty < planning.product_min_qty:
                         if suggested_qty < 0:
                             suggested_qty = planning.product_min_qty - suggested_qty
@@ -445,7 +445,7 @@ class FlspMrpPlanningLine(models.Model):
                             suggested_qty = planning.product_min_qty
 
                 # checking multiple quantities
-                if suggested_qty > 0
+                if suggested_qty > 0:
                     if planning.qty_multiple > 1:
                         if planning.qty_multiple > suggested_qty:
                             suggested_qty += planning.qty_multiple - suggested_qty
