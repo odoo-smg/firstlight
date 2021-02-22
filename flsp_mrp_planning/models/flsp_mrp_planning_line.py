@@ -317,7 +317,7 @@ class FlspMrpPlanningLine(models.Model):
                     for item in open_moves:
                         if product == item[4]:
                             if item[1] == 'Out  ':
-                                if current_date < item[7]:
+                                if current_date <= item[7]:
                                     consumption[item[7].month] += item[5]
 
                     forecasted[1] = forecast.qty_month1
