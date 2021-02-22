@@ -432,28 +432,32 @@ class FlspMrpPlanningLine(models.Model):
                             current_balance += item[5]
 
                 original_balance = current_balance
-                suggested_qty = current_balance - value_to_consider
+                suggested_qty = 0
+                if current_balance < value_to_consider:
+                    suggested_qty = value_to_consider - current_balance
 
                 # Checking Minimal Quantity
-                if suggested_qty < planning.product_min_qty:
-                    if suggested_qty < 0:
-                        suggested_qty = planning.product_min_qty - suggested_qty
-                    else:
-                        suggested_qty = planning.product_min_qty
+                if suggested_qty > 0:
+                    if suggested_qty < planning.product_min_qty:
+                        if suggested_qty < 0:
+                            suggested_qty = planning.product_min_qty - suggested_qty
+                        else:
+                            suggested_qty = planning.product_min_qty
 
                 # checking multiple quantities
-                if planning.qty_multiple > 1:
-                    if planning.qty_multiple > suggested_qty:
-                        suggested_qty += planning.qty_multiple - suggested_qty
-                    else:
-                        if (suggested_qty % planning.qty_multiple) > 0:
-                            suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
+                if suggested_qty > 0:
+                    if planning.qty_multiple > 1:
+                        if planning.qty_multiple > suggested_qty:
+                            suggested_qty += planning.qty_multiple - suggested_qty
+                        else:
+                            if (suggested_qty % planning.qty_multiple) > 0:
+                                suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
                 if consider_wip:
                     current_balance = planning.product_qty
                 else:
                     current_balance = planning.product_qty - planning.wip_qty
 
-                if suggested_qty > 0 and value_to_consider > 0:
+                if value_to_consider > 0:
                     planning.suggested_qty = suggested_qty
                     planning.adjusted_qty = suggested_qty
                     planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
