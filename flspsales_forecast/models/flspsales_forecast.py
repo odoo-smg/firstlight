@@ -28,7 +28,7 @@ class FlspSalesForecast(models.Model):
     ]
     company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company)
     product_id = fields.Many2one('product.product', string='Product',
-        domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
         change_default=True, tracking=True)
 
     # User table to fill
