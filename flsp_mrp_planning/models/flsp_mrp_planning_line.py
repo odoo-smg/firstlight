@@ -1050,9 +1050,9 @@ class FlspMrpPlanningLine(models.Model):
                 'bom_id': bom_id.id,
                 'product_uom_id': item.product_id.uom_id.id,
                 'product_qty': item.suggested_qty,
-                'date_planned_start': datetime.combine(item.start_date, datetime.now().time()),
-                'date_planned_finished': datetime.combine(item.deadline_date, datetime.now().time()),
-                'date_deadline': datetime.combine(item.deadline_date, datetime.now().time()),
+                'date_planned_start': datetime.combine(item.required_by, datetime.now().time()),
+                'date_planned_finished': datetime.combine(item.required_by, datetime.now().time()),
+                'date_deadline': datetime.combine(item.required_by, datetime.now().time()),
                 'location_src_id': pa_location.id,
                 'origin': item.source,
             })
