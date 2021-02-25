@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+    <!--Adding PQ on the form view, show PQ as name if its checked -->
+    <record id="flsp_uom_category_form" model="ir.ui.view" >
+        <field name="name">flsp.uom.category.form</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='measure_type']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="flsp_uom_category_list" model="ir.ui.view" >
+        <field name="name">flsp.uom.category.list</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="edit">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
