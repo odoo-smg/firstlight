@@ -118,7 +118,7 @@ class MrpProduction(models.Model):
                                     'name': line.product_id.name,
                                     'product_id': line.product_id.id,
                                     'product_uom': line.product_id.uom_id.id,
-                                    'product_uom_qty': serial_location.quantity,
+                                    'product_uom_qty': serial_location.quantity*(-1),
                                     'picking_id': stock_picking.id,
                                     'location_id': stock_virtual_location.id,
                                     'location_dest_id': line.location_id.id,
@@ -127,7 +127,7 @@ class MrpProduction(models.Model):
                                 move_line = self.env['stock.move.line'].create({
                                     'product_id': line.product_id.id,
                                     'product_uom_id': line.product_id.uom_id.id,
-                                    'qty_done': serial_location.quantity,
+                                    'qty_done': serial_location.quantity*(-1),
                                     'lot_id': serial_location.lot_id.id,
                                     'picking_id': stock_picking.id,
                                     'move_id': stock_move.id,
