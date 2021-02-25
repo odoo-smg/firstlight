@@ -6,7 +6,7 @@
 
     'description': """
         To prevent the user from change a UOM created.
-        If needed to edit the user will need to archive and create a new one.  
+        If needed to edit the user will need to archive and create a new one.
     """,
 
     'author': "Alexandre Sousa",
@@ -23,6 +23,6 @@
     # always loaded
     'data': [
         'views/flsp_uom.xml',
-
+        'views/flsp_uom_category.xml',
     ],
 }
