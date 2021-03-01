@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Tree view-->
+	<record id="flsp_mrp_negative_inv_report_tree" model="ir.ui.view">
+        <field name="name">flsp.mrp.negative.inv.report.tree</field>
+        <field name="model">flsp.mrp.negative.inv.report</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Sold Product reporting" create="false">
+                <!--Fields to display on report-->
+                <field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="product_uom"/>
+                <field name="location_id"/>
+                <field name="lot"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Search-->
+    <record id="flsp_mrp_negative_inv_report_search" model="ir.ui.view">
+        <field name="name">flsp.mrp.negative.inv.report.search</field>
+        <field name="model">flsp.mrp.negative.inv.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Sale Report">
+                <field name="product_id"/>
+                <field name="default_code"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product" context="{'group_by':'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record id="flsp_mrp_negative_inv_report_action" model="ir.actions.act_window">
+        <field name="name">Flsp Negative Inventory Report</field>
+        <field name="res_model">flsp.mrp.negative.inv.report</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_mrp_negative_inv_report_tree"/>
+        <field name="context">{'group_by': ['product_id']}</field>
+    </record>
+
+    <!--Menuitem-->
+    <menuitem name="Flsp Negative Inventory Report"
+              id="flsp_mrp_negative_inv_report_menu"
+              parent="mrp.menu_mrp_reporting"
+              action="flsp_mrp_negative_inv_report_action"
+    />
+</odoo>
+
