@@ -97,6 +97,8 @@ class Flspwipview(models.Model):
             if product.state == 'negative':
                 negative_adjust = True
             count_products += 1
+
+        product_done = {}
         if negative_adjust and count_products > 0:
             # Adjust negative quantities In PA and PA/WIP
             create_val = {
@@ -110,7 +112,6 @@ class Flspwipview(models.Model):
             for product in self:
                 wip_transfer = self.env['flsp.wip.transfer'].search(['&', ('product_id', '=', product.product_id.id),('state', '=', 'negative')])
                 for wip in wip_transfer:
-
                     # check if the serial number is available in Stock, if so transfer from there.
                     from_location_id = stock_virtual_location.id
                     if wip.product_id.tracking == 'serial' and wip.product_id.bom_count > 0:
@@ -118,7 +119,13 @@ class Flspwipview(models.Model):
                         if stock_quant:
                             if stock_quant.quantity > 0:
                                 from_location_id = stock_location.id
-
+                                wip.state = "done"
+                                wip.stock_picking = stock_picking.id
+                                wip.stock_move_id = move_line.id
+                                if wip.product_id.id in product_done:
+                                    product_done[wip.product_id.id]['total'] += 1
+                                else:
+                                    product_done[wip.product_id.id] = {'total': 1}
 
                     stock_move = self.env['stock.move'].create({
                         'name': wip.product_id.name,
@@ -142,6 +149,7 @@ class Flspwipview(models.Model):
                         'state': 'assigned',
                         'done_move': True,
                     })
+
         if negative_adjust and count_products > 0 and stock_picking:
             stock_picking.button_validate()
         if count_products > 0:
@@ -155,11 +163,22 @@ class Flspwipview(models.Model):
 
             for product in self:
 
+                quantity_transfer = product.adjusted
+                if product.product_id.id in product_done:
+                    quantity_transfer -= product_done[product.product_id.id]['total']
+
+                if quantity_transfer <= 0:
+                    if count_products <= 1:
+                        stock_picking = False
+                    else:
+                        count_products -= 1
+                    continue
+
                 move_line = self.env['stock.move'].create({
                     'name': "[wip-transfer]"+product.product_id.name,
                     'product_id': product.product_id.id,
                     'product_uom': product.product_id.uom_id.id,
-                    'product_uom_qty': product.adjusted,
+                    'product_uom_qty': quantity_transfer,
                     #'product_qty': product.adjusted,
                     'picking_id': stock_picking.id,
                     'location_id': stock_location.id,
