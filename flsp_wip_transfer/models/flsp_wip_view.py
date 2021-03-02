@@ -121,7 +121,7 @@ class Flspwipview(models.Model):
                                 from_location_id = stock_location.id
                                 wip.state = "done"
                                 wip.stock_picking = stock_picking.id
-                                wip.stock_move_id = move_line.id
+                                #wip.stock_move_id = move_line.id
                                 if wip.product_id.id in product_done:
                                     product_done[wip.product_id.id]['total'] += 1
                                 else:
