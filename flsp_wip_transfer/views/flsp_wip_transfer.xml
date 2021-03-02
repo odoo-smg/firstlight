@@ -56,10 +56,12 @@
                 <field name="stock_qty"/>
                 <field name="pa_wip_qty"/>
                 <field name="source"/>
-                <field name="mfg_demand"/>
+                <field name="mfg_demand" string="Required Qty"/>
                 <field name="uom" string="UofM"/>
-                <!--field name="suggested"/-->
-                <field name="adjusted"/>
+                <field name="adjusted" attrs="{'readonly': [('state', '!=', 'transfer')]}"/>
+                <field name="purchase_adjusted" string="Adjusted PO UOM" optional="hide" readonly="1"/>
+                <field name="purchase_uom" string="Purchase UofM" optional="hide"/>
+                <field name="state" optional="hide"/>
             </tree>
         </field>
     </record>

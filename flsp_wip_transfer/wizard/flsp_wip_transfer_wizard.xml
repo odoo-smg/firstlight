@@ -18,11 +18,16 @@
                              <field name="consider_days_ahead" class="text-center oe_inline" no_label="1" style="width: 40px !important;"/>
                                 days.
                             </div>
-
+                            <div>
+                                &#x25CF;
+                                <field name="negative_items"/>
+                                Adjust only the negative items.
+                            </div>
                     <footer>
                         <button name="flsp_recalc" type="object" string="Yes" class="btn-primary" />
                         <button name="flsp_report" type="object" string="No" class="btn-default btn-secondary" />
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                        <button name="flsp_details_report" type="object" string="Details" class="btn-default btn-secondary"/>
                     </footer>
                 </form>
             </field>
