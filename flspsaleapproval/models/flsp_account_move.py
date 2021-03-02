@@ -17,21 +17,24 @@ class flspaccountmove(models.Model):
         #ids = self.env['account.move.line'].search(domain).mapped('statement_line_id').ids
         #reverse_entries = self.env['account.move'].search([('reversed_entry_id', '=', self.id)])
 
-
-        so = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        if self.invoice_origin:
+            so = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        else:
+            so = False
         contact = ''
-        if so.flsp_att_to:
-            contact = so.flsp_att_to.name
-
         reconciled_vals = []
-        for rec in so:
-            reconciled_vals.append({
-                'name': rec.client_order_ref if rec.client_order_ref else rec.name,
-                'date_order': rec.date_order,
-                'flsp_ship_via': rec.flsp_ship_via,
-                'payment_term': rec.payment_term_id.note,
-                'contact': contact,
-            })
+        if so:
+            if so.flsp_att_to:
+                contact = so.flsp_att_to.name
+
+            for rec in so:
+                reconciled_vals.append({
+                    'name': rec.client_order_ref if rec.client_order_ref else rec.name,
+                    'date_order': rec.date_order,
+                    'flsp_ship_via': rec.flsp_ship_via,
+                    'payment_term': rec.payment_term_id.note,
+                    'contact': contact,
+                })
         return reconciled_vals
 
     def _get_so_for_ci_info_JSON_values(self):
