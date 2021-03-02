@@ -12,12 +12,7 @@
     'website': "http://www.smartrendmfg.com",
     "category": "Manufacture",
     'version': '0.1',
-    'depends': ['base'],
-    "depends": ["mrp"],
-    "depends": ["product"],
-    "depends": ["sale"],
-    "depends": ["purchase"],
-    "depends": ["stock"],
+    'depends': ['base', 'mrp', 'sale', 'purchase', 'stock'],
 
     # always loaded
     'data': [
