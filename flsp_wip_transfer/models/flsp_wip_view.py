@@ -110,13 +110,23 @@ class Flspwipview(models.Model):
             for product in self:
                 wip_transfer = self.env['flsp.wip.transfer'].search(['&', ('product_id', '=', product.product_id.id),('state', '=', 'negative')])
                 for wip in wip_transfer:
+
+                    # check if the serial number is available in Stock, if so transfer from there.
+                    from_location_id = stock_virtual_location.id
+                    if wip.product_id.tracking == 'serial' and wip.product_id.bom_count > 0:
+                        stock_quant = self.env['stock.quant'].search(['&', '&', ('product_id', '=', wip.product_id.id), ('location_id', '=', stock_location.id), ('lot_id', '=', wip.negative_lot_id.id)])
+                        if stock_quant:
+                            if stock_quant.quantity > 0:
+                                from_location_id = stock_location.id
+
+
                     stock_move = self.env['stock.move'].create({
                         'name': wip.product_id.name,
                         'product_id': wip.product_id.id,
                         'product_uom': wip.product_id.uom_id.id,
                         'product_uom_qty': wip.adjusted,
                         'picking_id': stock_picking.id,
-                        'location_id': stock_virtual_location.id,
+                        'location_id': from_location_id,
                         'location_dest_id': wip.negative_location_id.id,
                         'state': 'assigned',
                     })
@@ -127,7 +137,7 @@ class Flspwipview(models.Model):
                         'lot_id': wip.negative_lot_id.id,
                         'picking_id': stock_picking.id,
                         'move_id': stock_move.id,
-                        'location_id': stock_virtual_location.id,
+                        'location_id': from_location_id,
                         'location_dest_id': wip.negative_location_id.id,
                         'state': 'assigned',
                         'done_move': True,
