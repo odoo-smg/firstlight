@@ -20,9 +20,10 @@ class FlspMrpPlanningLine(models.Model):
     suggested = fields.Float(string='Suggested', readonly=True)
     uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True)
 
-    adjusted = fields.Float(string='Adjusted')
+    adjusted = fields.Float(string='Adjusted', states={'negative': [('readonly', False)]})
     state = fields.Selection([
         ('transfer', 'to transfer'),
+        ('negative', 'to adjust'),
         ('short', 'not available'),
         ('done', 'done'),
     ], string='State', readonly=True)
@@ -36,8 +37,19 @@ class FlspMrpPlanningLine(models.Model):
     purchase_mfg_demand = fields.Float(string='Qty 2nd uom', readonly=True)
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
 
-    def _flsp_calc_demands(self, days_ahead):
+    negative_location_id = fields.Many2one('stock.location', string="Negative Location")
+    negative_lot_id = fields.Many2one('stock.production_lot', string="Negative Serial/Lot")
 
+    @api.onchange('adjusted')
+    def onchange_adjusted(self):
+        self.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted, self.product_id.uom_po_id)
+        wip_trans = self.env['flsp.wip.transfer'].search([('id', '=', self._origin.id)])
+        if wip_trans:
+            wip_trans.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted, self.product_id.uom_po_id)
+
+
+
+    def _flsp_calc_demands(self, days_ahead, bring_negative):
         cur_date = datetime.datetime.now().date()
         date_mo = (cur_date + relativedelta(days=+ days_ahead))
 
@@ -52,8 +64,8 @@ class FlspMrpPlanningLine(models.Model):
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
 
-        ## Remove production orders done:
-        wip_transfers = self.env['flsp.wip.transfer'].search([('state', '=', ['transfer'])])
+        ## Remove production orders done or negative:
+        wip_transfers = self.env['flsp.wip.transfer'].search([('state', 'in', ['transfer', 'negative'])])
 
         for wip_trans in wip_transfers:
             delete_wip = True
@@ -63,50 +75,93 @@ class FlspMrpPlanningLine(models.Model):
             if delete_wip:
                 wip_trans.unlink()
 
-        for production in production_orders:
-            components = self._get_flattened_totals(production.bom_id, production.product_qty)
-            for prod in components:
-                if prod.type in ['service', 'consu']:
-                    continue
-                if components[prod]['total'] > 0:
-                    wip_trans = self.env['flsp.wip.transfer'].search(['&', ('source', '=', production.name), ('product_id', '=', prod.id)])
-                    stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', prod.id)])
+        # Add products with negative quantity in WIP:
+        if bring_negative:
+            negative_stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('quantity', '<', 0)])
+            for item in negative_stock_quant:
+                if item.product_id.type not in ['service', 'consu']:
+                    stock_quant = self.env['stock.quant'].search(
+                        ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', item.product_id.id)])
                     pa_wip_qty = 0
                     for stock_lin in stock_quant:
                         pa_wip_qty += stock_lin.quantity
-                    if wip_trans:
-                        #update current
-                        wip_trans.mfg_demand = components[prod]['total']
-                        wip_trans.suggested = 1
-                        wip_trans.adjusted = components[prod]['total']
-                        wip_trans.stock_qty = prod.qty_available - pa_wip_qty
-                        wip_trans.pa_wip_qty = pa_wip_qty
-                        wip_trans.purchase_uom = prod.uom_po_id.id
-                        wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
-                        wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
-                        wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
-                        wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                    lot_id = False
+                    if item.product_id.tracking == 'none':
+                        lot_name = ''
+                        lot_id = False
                     else:
-                        #insert new
-                        wip = self.env['flsp.wip.transfer'].create({
-                            'description': prod.name,
-                            'default_code': prod.default_code,
-                            'product_id': prod.id,
-                            'uom': prod.uom_id.id,
-                            'stock_qty': prod.qty_available - pa_wip_qty,
-                            'pa_wip_qty': pa_wip_qty,
-                            'source': production.name,
-                            'mfg_demand': components[prod]['total'],
-                            'suggested': 1,
-                            'adjusted': components[prod]['total'],
-                            'state': 'transfer',
-                            'production_id': production.id,
-                            'purchase_uom': prod.uom_po_id.id,
-                            'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
-                            'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
-                            'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
-                            'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                        lot_name = ' lot: '+ item.lot_id.name
+                        lot_id = item.lot_id.id
+                    # insert new
+                    wip = self.env['flsp.wip.transfer'].create({
+                        'description': item.product_id.name,
+                        'default_code': item.product_id.default_code,
+                        'product_id': item.product_id.id,
+                        'uom': item.product_id.uom_id.id,
+                        'stock_qty': item.product_id.qty_available - pa_wip_qty,
+                        'pa_wip_qty': pa_wip_qty,
+                        'source': 'Negative Adjustment - location: '+item.location_id.name+lot_name,
+                        'mfg_demand': item.quantity * (-1),
+                        'suggested': 1,
+                        'adjusted': item.quantity * (-1),
+                        'state': 'negative',
+                        'negative_location_id': item.location_id.id,
+                        'negative_lot_id': lot_id,
+                        'purchase_uom': item.product_id.uom_po_id.id,
+                        'purchase_stock_qty': item.product_id.uom_id._compute_quantity(item.product_id.qty_available - pa_wip_qty,
+                                                                            item.product_id.uom_po_id),
+                        'purchase_pa_wip_qty': item.product_id.uom_id._compute_quantity(pa_wip_qty, item.product_id.uom_po_id),
+                        'purchase_mfg_demand': item.product_id.uom_id._compute_quantity(item.quantity * (-1),
+                                                                             item.product_id.uom_po_id),
+                        'purchase_adjusted': item.product_id.uom_id._compute_quantity(item.quantity * (-1),
+                                                                           item.product_id.uom_po_id),
                         })
+        else:
+            for production in production_orders:
+                components = self._get_flattened_totals(production.bom_id, production.product_qty)
+                for prod in components:
+                    if prod.type in ['service', 'consu']:
+                        continue
+                    if components[prod]['total'] > 0:
+                        wip_trans = self.env['flsp.wip.transfer'].search(['&', ('source', '=', production.name), ('product_id', '=', prod.id)])
+                        stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', prod.id)])
+                        pa_wip_qty = 0
+                        for stock_lin in stock_quant:
+                            pa_wip_qty += stock_lin.quantity
+                        if wip_trans:
+                            #update current
+                            wip_trans.mfg_demand = components[prod]['total']
+                            wip_trans.suggested = 1
+                            wip_trans.adjusted = components[prod]['total']
+                            wip_trans.stock_qty = prod.qty_available - pa_wip_qty
+                            wip_trans.pa_wip_qty = pa_wip_qty
+                            wip_trans.purchase_uom = prod.uom_po_id.id
+                            wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
+                            wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
+                            wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                            wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                        else:
+                            #insert new
+                            wip = self.env['flsp.wip.transfer'].create({
+                                'description': prod.name,
+                                'default_code': prod.default_code,
+                                'product_id': prod.id,
+                                'uom': prod.uom_id.id,
+                                'stock_qty': prod.qty_available - pa_wip_qty,
+                                'pa_wip_qty': pa_wip_qty,
+                                'source': production.name,
+                                'mfg_demand': components[prod]['total'],
+                                'suggested': 1,
+                                'adjusted': components[prod]['total'],
+                                'state': 'transfer',
+                                'production_id': production.id,
+                                'purchase_uom': prod.uom_po_id.id,
+                                'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
+                                'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
+                                'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                                'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                            })
+
         return
 
     def _compute_quantity(self):

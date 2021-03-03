@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flsp_bom_availability_wizard,flsp_bom_availability_wizard,model_flsp_bom_availability_wizard,base.group_user,1,1,1,1
+access_flsp_bom_availability_view,flsp_bom_availability_view,model_flsp_bom_availability_view,base.group_user,1,1,1,1
+access_flsp_bom_availability,flsp_bom_availability,model_flsp_bom_availability,base.group_user,1,1,1,1
+access_flsp_bom_availability_line,flsp_bom_availability_line,model_flsp_bom_availability_line,base.group_user,1,1,1,1

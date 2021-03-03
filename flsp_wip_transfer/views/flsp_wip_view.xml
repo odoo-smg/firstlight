@@ -65,7 +65,7 @@
                 <field name="product_id" optional="show" />
                 <field name="stock_qty"/>
                 <field name="pa_wip_qty"/>
-                <field name="mfg_demand"/>
+                <field name="mfg_demand" string="Required Qty"/>
                 <field name="uom" string="UofM"/>
                 <!--field name="suggested"/-->
                 <field name="adjusted"/>
