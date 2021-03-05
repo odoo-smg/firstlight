@@ -39,7 +39,6 @@ class MrpBom(models.Model):
                 #        )
                 #    )
                 #else:
-                print("     ---->"+line.product_id.name)
                 totals[len(totals)+1] = {'total':(
                     factor
                     * line.product_uom_id._compute_quantity(
@@ -59,7 +58,6 @@ class MrpBom(models.Model):
                 #        )
                 #    )
                 # else:
-                print("         ---->"+line.product_id.name)
                 totals[len(totals)+1] = {'total':(
                     factor
                     * line.product_uom_id._compute_quantity(
