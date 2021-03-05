@@ -39,12 +39,13 @@ class MrpBom(models.Model):
                 #        )
                 #    )
                 #else:
-                totals[line.product_id] = {'total':(
+                print("     ---->"+line.product_id.name)
+                totals[len(totals)+1] = {'total':(
                     factor
                     * line.product_uom_id._compute_quantity(
                         line.product_qty, line.product_id.uom_id, round=False
                     )
-                ), 'level': level, 'bom': sub_bom.code, 'bom_plm': sub_bom.flsp_bom_plm_valid, 'track': line.product_id.tracking}
+                ), 'level': level, 'bom': sub_bom.code, 'bom_plm': sub_bom.flsp_bom_plm_valid, 'track': line.product_id.tracking, 'prod': line.product_id}
 
                 level += 1
                 sub_bom._get_flattened_totals(new_factor, totals, level)
@@ -58,10 +59,11 @@ class MrpBom(models.Model):
                 #        )
                 #    )
                 # else:
-                totals[line.product_id] = {'total':(
+                print("         ---->"+line.product_id.name)
+                totals[len(totals)+1] = {'total':(
                     factor
                     * line.product_uom_id._compute_quantity(
                         line.product_qty, line.product_id.uom_id, round=False
                     )
-                ), 'level': level, 'bom': '', 'bom_plm': '', 'track': line.product_id.tracking}
+                ), 'level': level, 'bom': '', 'bom_plm': '', 'track': line.product_id.tracking, 'prod': line.product_id}
         return totals
