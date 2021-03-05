@@ -31,37 +31,37 @@ class MrpBom(models.Model):
                 new_factor = factor * line.product_uom_id._compute_quantity(
                     line.product_qty, line.product_id.uom_id, round=False
                 )
-                if totals.get(line.product_id):
-                    totals[line.product_id]['total'] += (
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
+                #if totals.get(line.product_id):
+                #    totals[line.product_id]['total'] += (
+                #        factor
+                #        * line.product_uom_id._compute_quantity(
+                #            line.product_qty, line.product_id.uom_id, round=False
+                #        )
+                #    )
+                #else:
+                totals[line.product_id] = {'total':(
+                    factor
+                    * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
                     )
-                else:
-                    totals[line.product_id] = {'total':(
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
-                    ), 'level': level, 'bom': sub_bom.code, 'bom_plm': sub_bom.flsp_bom_plm_valid, 'track': line.product_id.tracking}
+                ), 'level': level, 'bom': sub_bom.code, 'bom_plm': sub_bom.flsp_bom_plm_valid, 'track': line.product_id.tracking}
 
                 level += 1
                 sub_bom._get_flattened_totals(new_factor, totals, level)
                 level -= 1
             else:
-                if totals.get(line.product_id):
-                    totals[line.product_id]['total'] += (
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
+                # if totals.get(line.product_id):
+                #    totals[line.product_id]['total'] += (
+                #        factor
+                #        * line.product_uom_id._compute_quantity(
+                #            line.product_qty, line.product_id.uom_id, round=False
+                #        )
+                #    )
+                # else:
+                totals[line.product_id] = {'total':(
+                    factor
+                    * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
                     )
-                else:
-                    totals[line.product_id] = {'total':(
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
-                    ), 'level': level, 'bom': '', 'bom_plm': '', 'track': line.product_id.tracking}
+                ), 'level': level, 'bom': '', 'bom_plm': '', 'track': line.product_id.tracking}
         return totals
