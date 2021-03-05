@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="flsp_bom_availability_wizard" model="ir.ui.view">
+        <field name="name">Flsp BoM Availability</field>
+        <field name="model">flsp.bom.availability.wizard</field>
+        <field name="arch" type="xml">
+            <form string="FLSP BOM Availability">
+                <group string="Select BOM">
+                    <field name="bom" options="{'no_open':True,'no_create': True}" domain="['|',('active','=',True),('active','=',False)]"/>
+                </group>
+                <footer>
+                    <button name="display_availability" string="Display Availability" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="launch_flsp_bom_availability_wizard" model="ir.actions.act_window">
+        <field name="name">FLSP BOM Availability</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.bom.availability.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="flsp_bom_availability_wizard_menu"
+              name="FLSP BOM Availability"
+              parent="mrp.menu_mrp_manufacturing"
+              action="launch_flsp_bom_availability_wizard"/>
+</odoo>
