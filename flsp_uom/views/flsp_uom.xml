@@ -26,6 +26,7 @@
                 <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
             </xpath>
         </field>
+        
     </record>
 
 </odoo>
