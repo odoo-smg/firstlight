@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_sale_target_category_form">
+            <field name="name">flsp.sale.target.category.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='first']" position="after">
+                    <group name="flsp_weekly_sale">
+                        <field name="flsp_weekly_report"/>
+                    </group>
+                    <group string="Sales Target" name="flsp_sale_target">
+                        <field name="flsp_sale_target_ids" nolabel="1" context="{'default_category_id': active_id, 'tree_view_ref':'flsp_sale_target.flsp_sale_target_tree_view'}" attrs="{'readonly': [('id', '=', False)]}" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="flsp_sale_target_tree_view" model="ir.ui.view">
+            <field name="name">flsp.sale.target.category.tree.view</field>
+            <field name="model">flsp.sale.target.category</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Target">
+                    <field name="year"/>
+                    <field name="month01" />
+                    <field name="month02" />
+                    <field name="month03" />
+                    <field name="month04" />
+                    <field name="month05" />
+                    <field name="month06" />
+                    <!--field name="month07" />
+                    <field name="month08" />
+                    <field name="month09" />
+                    <field name="month10" />
+                    <field name="month11" />
+                    <field name="month12" /-->
+                </tree>
+            </field>
+        </record>
+ </odoo>
