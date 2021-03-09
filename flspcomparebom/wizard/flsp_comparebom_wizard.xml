@@ -27,7 +27,7 @@
     </record>
 
     <menuitem id="flsp_comparebom_wizard_menu"
-              name="FLSP Compare BOMS"
-              parent="mrp.menu_mrp_manufacturing"
+              name="Compare BOMS"
+              parent="mrp.menu_mrp_reporting"
               action="launch_flsp_comparebom_wizard"/>
 </odoo>

@@ -72,7 +72,7 @@
     </record>
 
       <!--Menu items-->
-    <menuitem id="flspserialnum" name="FLSP Serial Num"
+    <menuitem id="flspserialnum" name="Batch Serial Num"
               parent="mrp.menu_mrp_manufacturing"
               action="flsp_serialnum_action"/>
 </odoo>
