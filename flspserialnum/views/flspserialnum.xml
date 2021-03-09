@@ -71,6 +71,7 @@
         </field>
     </record>
 
+
       <!--Menu items-->
     <menuitem id="flspserialnum" name="Batch Serial Num"
               parent="mrp.menu_mrp_manufacturing"
