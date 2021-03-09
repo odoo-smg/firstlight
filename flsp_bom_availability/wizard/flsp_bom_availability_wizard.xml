@@ -25,6 +25,7 @@
         <field name="target">new</field>
     </record>
 
+
     <menuitem id="flsp_bom_availability_wizard_menu"
               name="BOM Availability"
               parent="mrp.menu_mrp_reporting"
