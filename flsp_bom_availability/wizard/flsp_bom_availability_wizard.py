@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
-
-from odoo import models, fields, api
-# import logging
-
-# _logger = logging.getLogger(__name__)
-# def _moduleName():
-#     path = os.path.dirname(__file__)
-#     return os.path.basename(os.path.dirname(path))
-# openerpModule = _moduleName()
+from odoo import models, fields
 
 class FlspBomAvailabilityWizard(models.TransientModel):
     """
@@ -27,22 +18,11 @@ class FlspBomAvailabilityWizard(models.TransientModel):
         """
             Purpose:    Save bom,
                         Then use that in def init to get information for bom
-                        Returns the view
+                        Returns the tree view action
         """
         self.ensure_one()
         self.env['flsp.bom.availability'].create({'bom': self.bom.id})
-        # self.env['flsp.comparebom'].create({'bom': self.bom.id})
-        res = self.env['flsp.bom.availability.view'].search([], limit=1).id #returns number 1
-        view = self.env.ref('flsp_bom_availability.flsp_bom_availability_view_form').id
+        action = self.env.ref('flsp_bom_availability.flsp_bom_availability_line_action').read()[0]
+        action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
+        return action
 
-        return {
-            'type': 'ir.actions.act_window',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': view,
-            'res_model': 'flsp.bom.availability.view',
-            'domain': [],
-            # 'target': 'new',  # to clear the breadcrumbs
-            'target': 'main',  # to clear the breadcrumbs
-            'res_id': res,      #very useful since it helps show which form to open, it can be any form i want
-        }
