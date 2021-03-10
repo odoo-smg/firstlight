@@ -7,12 +7,16 @@
             <field name="priority">96</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='vat']" position="after">
-                    <field name="flsp_sale_type" attrs="{'readonly': [('flsp_acc_valid', '=', True)]}" />
-                    <field name="flsp_sale_currency" attrs="{'readonly': [('flsp_acc_valid', '=', True)]}" />
+                    <field name="flsp_sale_type" attrs="{'readonly': ['&amp;', ('flsp_acc_valid', '=', True), ('flsp_sale_type', '!=', False)],
+                                                        'required':[('customer_rank','>',0)],
+                                                        'invisible':[('customer_rank','=',0)]} " />
+                    <field name="flsp_sale_currency" attrs="{'readonly': ['&amp;', ('flsp_acc_valid', '=', True), ('flsp_sale_currency', '!=', False)],
+                                                        'required':[('customer_rank','>',0)],
+                                                        'invisible':[('customer_rank','=',0)]} " />
                 </xpath>
                 <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
-                    <attribute name="domain">["&amp;", ["flsp_sale_type","=",flsp_sale_type], ["currency_id","=",flsp_sale_currency]]</attribute>
-                    <attribute name="attrs">{"readonly": [["flsp_acc_valid","=",True]]}</attribute>
+                  <attribute name="domain">["&amp;", ["flsp_sale_type","=",flsp_sale_type], ["currency_id","=",flsp_sale_currency]]</attribute>
+                  <attribute name="attrs">{'readonly': ['&amp;', ('flsp_acc_valid', '=', True), ('property_product_pricelist', '!=', False)], 'required':[('customer_rank','>',0)]}</attribute>
                 </xpath>
                 <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]" position="attributes">
                     <attribute name="string">Addresses</attribute>
@@ -62,7 +66,7 @@
                             <field name="partner_id"/>
                         </h1>
                         <group>
-                            <field name="name"  required='True' attrs="{'readonly': [('id', '!=', False)]}"/>
+                            <field name="name"  required='True'/>
                             <field name="job_position"/>
                             <field name="email"/>
                             <field name="phone"/>

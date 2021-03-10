@@ -21,6 +21,10 @@
                 <field name="flsp_shipping_method"/>
                 <field name="flsp_carrier_account"/>
               </xpath>
+              <xpath expr="//field[@name='user_id']" position="attributes">
+                  <attribute name="domain">[('sale_team_id', '!=', False)]</attribute>
+                  <attribute name="attrs">{'required': True}</attribute>
+              </xpath>
             </field>
         </record>
 
