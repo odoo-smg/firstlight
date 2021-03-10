@@ -172,6 +172,11 @@ class Flspwipview(models.Model):
                         stock_picking = False
                     else:
                         count_products -= 1
+                    if not negative_adjust:
+                        wip_transfer = self.env['flsp.wip.transfer'].search(
+                            ['&', ('product_id', '=', product.product_id.id), ('state', '!=', 'done')])
+                        for wip_line in wip_transfer:
+                            wip_line.state = "done"
                     continue
 
                 move_line = self.env['stock.move'].create({
