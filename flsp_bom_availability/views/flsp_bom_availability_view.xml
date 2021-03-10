@@ -1,55 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record model="ir.ui.view" id="flsp_bom_availability_view_form">
-        <field name="name">flsp.bom.availability.view.form</field>
-        <field name="model">flsp.bom.availability.view</field>
+    <record model="ir.ui.view" id="flsp_bom_availability_line_tree">
+        <field name="name">flsp.bom.availability.view.tree</field>
+        <field name="model">flsp.bom.availability.line</field>
         <field name="arch" type="xml">
-            <form string="Comparison" create="0" delete="0" edit="0" >
-                <sheet>
-                    <group>
-                        <group name="bom" string="BOM" >
-                            <field name="bom"/>
-                            <field name="code"/>
-                            <field name="version" />
-                            <field name="active" />
-                        </group>
-                        <group string="Quantity">
-                            <field name="product_uom_id" />
-                            <field name="product_qty" />
-                            <field name="onhand_qty" />
-<!--                            <field name="incoming_qty" />-->
-<!--                            <field name="outgoing_qty" />-->
-                            <field name="forecast_qty" />
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="BOM Availability Information">
-                            <field name="bom_line" widget="section_and_note_one2many" mode="tree">
-                                <tree>
-                                    <field name="id1" invisible="1"/>
-                                    <field name="product_line_id"/>
-                                    <field name="uom_id"/>
-                                    <field name="product_line_qty"/>
-                                    <field name="onhand_qty_line"/>
-<!--                                    <field name="outgoing_qty_line"/>-->
-<!--                                    <field name="incoming_qty_line"/>-->
-                                    <field name="forecast_qty_line"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
+            <tree string="Comparison" create="0" delete="0" edit="0" >
+                <field name="bom_level"/>
+                <field name="product_line_id"/>
+                <field name="has_bom"/>
+                <field name="bom_comp_id"/>
+                <field name="uom_id"/>
+                <field name="product_line_qty"/>
+                <field name="onhand_qty_line"/>
+                <field name="forecast_qty_line"/>
+                <field name="bom_line_id" optional="hide"/>
+            </tree>
         </field>
     </record>
 
-    <record id="flsp_bom_availability_view_action" model="ir.actions.act_window">
+    <record id="flsp_bom_availability_line_action" model="ir.actions.act_window">
         <field name="name">Flsp BoM Availability</field>
-        <field name="res_model">flsp.bom.availability.view</field>
+        <field name="res_model">flsp.bom.availability.line</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="view_id" ref="flsp_bom_availability_view_form"/>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">Please Check Availability</p>
-        </field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_bom_availability_line_tree"/>
     </record>
 </odoo>

@@ -213,6 +213,7 @@ class Flsp_PO_Status(models.Model):
     #         self.write({'flsp_po_status': 'non_confirmed', })
 
 
+    is_shipped = fields.Boolean(string='Is shipped', compute='_compute_is_shipped', store=True)
 # Changing to received got from PURCHASE.STOCK
     @api.depends('picking_ids', 'picking_ids.state')
     def _compute_is_shipped(self):
@@ -223,39 +224,3 @@ class Flsp_PO_Status(models.Model):
                     order.write({'flsp_po_status': 'received', })
             else:
                 order.is_shipped = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

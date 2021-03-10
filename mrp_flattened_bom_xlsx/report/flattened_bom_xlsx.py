@@ -34,18 +34,18 @@ class FlattenedBomXlsx(models.AbstractModel):
 
         i += 1
         for product, total_qty in requirements.items():
-            sheet.write(i, 1, product.default_code or "")
-            sheet.write(i, 2, total_qty['level']*"|---"+product.default_code or 0)
-            sheet.write(i, 3, product.display_name or "")
+            sheet.write(i, 1, total_qty['prod'].default_code or "")
+            sheet.write(i, 2, total_qty['level']*"|---"+total_qty['prod'].default_code or 0)
+            sheet.write(i, 3, total_qty['prod'].display_name or "")
             sheet.write(i, 4, total_qty['total'] or 0.0)
-            sheet.write(i, 5, product.uom_id.name or "")
+            sheet.write(i, 5, total_qty['prod'].uom_id.name or "")
             sheet.write(i, 6, total_qty['bom'] or "")
             sheet.write(i, 7, total_qty['bom_plm'] or "")
-            sheet.write(i, 8, product.legacy_code or "")
-            sheet.write(i, 9, product.flsp_plm_valid or "")
-            sheet.write(i, 10, product.tracking or "")
+            sheet.write(i, 8, total_qty['prod'].legacy_code or "")
+            sheet.write(i, 9, total_qty['prod'].flsp_plm_valid or "")
+            sheet.write(i, 10, total_qty['prod'].tracking or "")
             if 'flsp_backflush' in self.env['product.template']._fields:
-                sheet.write(i, 11, product.flsp_backflush or "")
+                sheet.write(i, 11, total_qty['prod'].flsp_backflush or "")
             i += 1
         return i
 

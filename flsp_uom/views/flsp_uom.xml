@@ -19,10 +19,14 @@
             <xpath expr="//field[@name='uom_type']" position="attributes">
                 <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
             </xpath>
+            <xpath expr="//field[@name='factor']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
             <xpath expr="//field[@name='factor_inv']" position="attributes">
                 <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
             </xpath>
         </field>
+        
     </record>
 
 </odoo>
