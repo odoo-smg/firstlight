@@ -142,3 +142,28 @@ class mrp_production(models.Model):
             # print("No errors where raised in the validation process")
             action = self.action_confirm()
         return action
+
+class product_product(models.Model):
+    """
+        class_name: product_product
+        model_name: product.product
+        Purpose:    To add flsp mrp validation bttn to the product
+        Date:       March.12th.2021.F
+        Author:     Sami Byaruhanga
+    """
+    _inherit = 'product.product'
+    flsp_mrp_bttn = fields.Boolean(string='MRP Validated', default=False, store=True, copy=False)
+    def button_mrp_valid(self):
+        """
+            Purpose:    To validated product template
+        """
+        self.product_tmpl_id.flsp_mrp_bttn = True
+        return self.write({'flsp_mrp_bttn': True})
+        # self.write({'flsp_mrp_bttn': True})
+    def button_mrp_unvalid(self):
+        """
+            Purpose:    To unvalidate product template
+        """
+        self.product_tmpl_id.flsp_mrp_bttn = False
+        return self.write({'flsp_mrp_bttn': False})
+        
