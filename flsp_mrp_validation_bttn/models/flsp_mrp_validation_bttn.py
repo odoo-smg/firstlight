@@ -59,8 +59,8 @@ class mrp_production(models.Model):
                                         ) as table1
                             where 		mbl_bom_id= %s
 
-                        union -- recursive part now 
-                            select 		r.pdct_temp_id, 
+                        union -- recursive part now
+                            select 		r.pdct_temp_id,
                                         r.flsp_mrp_bttn, r.mbl_bom_id, r.name, r.bom_id, eb.level + 1 AS level
                             from 		(select 		pt.id as pdct_temp_id, pt.flsp_mrp_bttn, mbl.bom_id as mbl_bom_id,
                                             pt.name ,mb.id as bom_id
@@ -73,11 +73,11 @@ class mrp_production(models.Model):
                                             on 			pt.id = mb.product_tmpl_id
                                         ) as r
                             inner join	explode_bom eb on eb.bom_id = r.mbl_bom_id
-                    ) 
-                    --select      eb.pdct_temp_id, eb.flsp_mrp_bttn	from explode_bom as eb 
-                    --select      eb.pdct_temp_id	from explode_bom as eb 
-                    select      pt.default_code, pt.name 
-                    from        explode_bom as eb 
+                    )
+                    --select      eb.pdct_temp_id, eb.flsp_mrp_bttn	from explode_bom as eb
+                    --select      eb.pdct_temp_id	from explode_bom as eb
+                    select      pt.default_code, pt.name
+                    from        explode_bom as eb
                     inner join  product_template as pt
                     on          eb.pdct_temp_id = pt.id
                     inner join  product_product as pp
@@ -128,7 +128,11 @@ class mrp_production(models.Model):
             Returns:    The action confirm
             Note:       This button overrides the previous bttn actions in the xml code
         """
+        if len(self.database_return_table()) == 0:
+            self.write({'check_mrp_valid': False})
+            # print(self.check_mrp_valid)
         if self.check_mrp_valid:
+            # print(self.check_mrp_valid)
             # print("RAISING THE VALIDATION ERROR")
             raise ValidationError((self.clean_table(self.database_return_table())))
         elif not self.bom_id.flsp_bom_plm_valid:
