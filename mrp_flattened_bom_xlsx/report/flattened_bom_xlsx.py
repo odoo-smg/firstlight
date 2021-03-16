@@ -24,15 +24,18 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.write(i, 3, bom.display_name or "")
         sheet.write(i, 4, bom.product_qty)
         sheet.write(i, 5, bom.product_uom_id.name or "")
-        sheet.write(i, 6, bom.code or "")
-        sheet.write(i, 7, bom.flsp_bom_plm_valid or "")
-        sheet.write(i, 8, bom.product_tmpl_id.legacy_code or "")
-        sheet.write(i, 9, bom.product_tmpl_id.flsp_plm_valid or "")
-        sheet.write(i, 10, bom.product_tmpl_id.tracking or "")
+
+        sheet.write(i, 6, bom.product_tmpl_id.standard_price or "")
+
+        sheet.write(i, 7, bom.code or "")
+        sheet.write(i, 8, bom.flsp_bom_plm_valid or "")
+        sheet.write(i, 9, bom.product_tmpl_id.legacy_code or "")
+        sheet.write(i, 10, bom.product_tmpl_id.flsp_plm_valid or "")
+        sheet.write(i, 11, bom.product_tmpl_id.tracking or "")
         if 'flsp_backflush' in self.env['product.template']._fields:
-            sheet.write(i, 11, bom.product_tmpl_id.flsp_backflush or "")
+            sheet.write(i, 12, bom.product_tmpl_id.flsp_backflush or "")
         if 'flsp_mrp_bttn' in self.env['product.template']._fields:
-            sheet.write(i, 12, bom.product_tmpl_id.flsp_mrp_bttn or "")
+            sheet.write(i, 13, bom.product_tmpl_id.flsp_mrp_bttn or "")
 
         i += 1
         for product, total_qty in requirements.items():
@@ -41,15 +44,18 @@ class FlattenedBomXlsx(models.AbstractModel):
             sheet.write(i, 3, total_qty['prod'].display_name or "")
             sheet.write(i, 4, total_qty['total'] or 0.0)
             sheet.write(i, 5, total_qty['prod'].uom_id.name or "")
-            sheet.write(i, 6, total_qty['bom'] or "")
-            sheet.write(i, 7, total_qty['bom_plm'] or "")
-            sheet.write(i, 8, total_qty['prod'].legacy_code or "")
-            sheet.write(i, 9, total_qty['prod'].flsp_plm_valid or "")
-            sheet.write(i, 10, total_qty['prod'].tracking or "")
+
+            sheet.write(i, 6, total_qty['prod'].standard_price or "")
+
+            sheet.write(i, 7, total_qty['bom'] or "")
+            sheet.write(i, 8, total_qty['bom_plm'] or "")
+            sheet.write(i, 9, total_qty['prod'].legacy_code or "")
+            sheet.write(i, 10, total_qty['prod'].flsp_plm_valid or "")
+            sheet.write(i, 11, total_qty['prod'].tracking or "")
             if 'flsp_backflush' in self.env['product.template']._fields:
-                sheet.write(i, 11, total_qty['prod'].flsp_backflush or "")
+                sheet.write(i, 12, total_qty['prod'].flsp_backflush or "")
             if 'flsp_mrp_bttn' in self.env['product.template']._fields:
-                sheet.write(i, 12, total_qty['prod'].flsp_mrp_bttn or "")
+                sheet.write(i, 13, total_qty['prod'].flsp_mrp_bttn or "")
             i += 1
         return i
 
@@ -66,10 +72,12 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.set_column(1, 1, 15)
         sheet.set_column(2, 2, 30)
         sheet.set_column(3, 3, 40)
-        sheet.set_column(4, 5, 15)
-        sheet.set_column(6, 6, 25)
-        sheet.set_column(7, 7, 10)
-        sheet.set_column(8, 8, 20)
+
+        sheet.set_column(4, 6, 10)
+
+        sheet.set_column(7, 7, 25)
+        sheet.set_column(8, 8, 10)
+        sheet.set_column(9, 9, 20)
         sheet.set_column(9, 9, 10)
         sheet.set_column(10, 10, 10)
         if 'flsp_backflush' in self.env['product.template']._fields:
@@ -87,7 +95,10 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Indented Part#"),
                 _("Product Name"),
                 _("Quantity"),
-                _("Unit of Measure"),
+                _("UoM"),
+
+                _("cost"),
+
                 _("BOM Reference"),
                 _("BOM PLM"),
                 _("Legacy Part#"),
@@ -104,6 +115,9 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Product Name"),
                 _("Quantity"),
                 _("Unit of Measure"),
+
+                _("Cost"),
+
                 _("BOM Reference"),
                 _("BOM PLM"),
                 _("Legacy Part#"),

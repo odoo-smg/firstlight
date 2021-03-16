@@ -47,10 +47,10 @@ class Ticket(models.Model):
     send_user_email = fields.Boolean(default=True,
         help='Deactivate if you do not want to send user email upon creation of ticket')
 
-    # attachment_ids = fields.Many2many('ir.attachment', string='Attachments',
-    #     help='Add any attachments that will help in solving your request')
+    attachment_ids = fields.Many2many('ir.attachment', string='Attachments',
+        help='Add any attachments that will help in solving your request')
 
-    attachment_ids = fields.Binary(string="Attachments", attachment=True)
+    # attachment_ids = fields.Binary(string="Attachments", attachment=True)
 
     assign_date = fields.Date(string="Assign Date")
     re_assign_date = fields.Date(string="Re Assign Date")

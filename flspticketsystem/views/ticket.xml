@@ -29,9 +29,9 @@
 
                         <field name="short_description"/>
                         <field name="detailed_description"/>
-                        <field name="attachment_ids" multiple = "true"/>
-<!--                        <field name="attachment_ids" widget="many2many_binary"/>-->
-                        <field name="share" widget="many2many_tags"/>
+<!--                        <field name="attachment_ids" multiple = "true"/>-->
+                        <field name="attachment_ids" widget="many2many_binary"/>
+<!--                        <field name="share" widget="many2many_tags"/>-->
                     </group>
                     <notebook>
                         <page string="Developers Section">
