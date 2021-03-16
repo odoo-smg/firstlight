@@ -41,6 +41,12 @@ class flspsalespartner(models.Model):
 
     flsp_related_user_id = fields.Many2one('res.users', 'System User')
 
+    def _flsp_show_user_id(self):
+        manager_group_user = self.env['res.groups'].search([('name', '=', 'Access Rights')], limit=1)
+        if self.env.user.id in manager_group_user.users.ids:
+            self.flsp_show_user_id = True
+        else:
+            self.flsp_show_user_id = False
 
     @api.onchange('parent_id')
     def flsp_onchange_parent_id(self):
