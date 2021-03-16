@@ -37,6 +37,11 @@ class flspsalespartner(models.Model):
         string='Attachments',
         help='Attach a new document here.')
 
+    flsp_show_user_id = fields.Boolean("To show fields", compute="_flsp_show_user_id")
+
+    flsp_related_user_id = fields.Many2one('res.users', 'System User')
+
+
     @api.onchange('parent_id')
     def flsp_onchange_parent_id(self):
         if not self.parent_id:
