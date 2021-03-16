@@ -116,6 +116,7 @@ class FlspMrpPlanningLine(models.Model):
         receipt_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Receipts')]).ids
 
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')], limit=1).parent_path
+
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
         pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
@@ -917,6 +918,7 @@ class FlspMrpPlanningLine(models.Model):
 
         ret = False
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')], limit=1).parent_path
+        
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
         pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
