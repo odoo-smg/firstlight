@@ -69,9 +69,9 @@
                 <field name="vendor_id"/>
                 <field name="level_bom"  optional="hide"/>
                 <field name="qty_rfq"  optional="hide"/>
-                <field name="month1_use"  optional="hide"/>
+                <!--field name="month1_use"  optional="hide"/>
                 <field name="month2_use"  optional="hide"/>
-                <field name="month3_use"  optional="hide"/>
+                <field name="month3_use"  optional="hide"/-->
                 <field name="product_min_qty"  optional="hide"/>
                 <field name="qty_multiple"  optional="hide"/>
                 <!--field name="source"/-->
@@ -81,6 +81,7 @@
                 <!--field name="state"/-->
                 <field name="start_date" optional="hide"/>
                 <field name="deadline_date" string="Deadline" optional="hide"/>
+                <field name="balance" string="Forecasted"  optional="hide"/>
             </tree>
         </field>
     </record>
