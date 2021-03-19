@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_sales_report_form_view">
+            <field name="name">flsp.sales.report.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">93</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='utm_link']" position="attributes">
+                    <attribute name="groups">base.group_user</attribute>
+                </xpath>
+                <xpath expr="//group[@name='sale_reporting']" position="attributes">
+                    <attribute name="groups">base.group_user</attribute>
+                </xpath>
+                <xpath expr="//field[@name='source_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('partner_id', '!=', False)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='team_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('partner_id', '!=', False)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='source_id']" position="after">
+                    <field name="flsp_source_name" invisible="1" />
+                    <field name="flsp_utm_other_source" attrs="{'required':[('flsp_source_name', '=', 'Other')], 'invisible':[('flsp_source_name', '!=', 'Other')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
