@@ -7,6 +7,13 @@
                     <strong>Lot/Serial Number</strong>
                 </th>
             </xpath>
+            <xpath expr="//table[@class='table table-sm']//tbody//tr//td[2]" position="replace">
+                <td style="text-align:left; word-wrap:normal; white-space:nowrap;">
+                    <span t-if="o.state != 'done'" t-field="ml.product_uom_qty"/>
+                    <span t-if="o.state == 'done'" t-field="ml.qty_done"/>
+                    <span t-field="ml.product_uom_id" groups="uom.group_uom"/>
+                </td>
+            </xpath>
             <xpath expr="//td[@class=' text-center h6']" position="replace">
                 <td t-if="has_serial_number">
                     <span t-if="ml.lot_id" t-field="ml.lot_id.name"/>
