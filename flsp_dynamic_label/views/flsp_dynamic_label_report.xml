@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_label">
+            <t t-esc="docs.result"/>
+        </template>
+
+        <!-- QWEB Report use paperformat -->
+        <report
+            id="dynamic_label"
+            model="flsp.dynamic.label.wizard"
+            string="Dynamic Label"
+            menu="False"
+            report_type="qweb-text"
+            name="flsp_dynamic_label.report_label"
+            />
+
+    </data>
+</odoo>

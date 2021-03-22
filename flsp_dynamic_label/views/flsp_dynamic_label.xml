@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Form view for dynamic label-->
+    <record id="flsp_dynamic_label_form" model="ir.ui.view">
+        <field name="name">flsp.dynamic.label.form</field>
+        <field name="model">flsp.dynamic.label</field>
+        <field name="arch" type="xml">
+            <form string="Dynamic label Form">
+                <header>
+                    <button name="update_zpl_preview" string="Update zpl preview" class="btn-primary" type="object"/>
+                </header>
+
+                <sheet>
+                    <group string="Label information" colspan="4" col="4">
+                        <field name="template_name"/>
+                        <field name="model_id" options="{'no_open':True,'no_create': True}"/>
+                        <field name="created_by" readonly="1"/>
+                        <field name="create_date" readonly="1"/>
+                        <field name="purpose"/>
+                        <field name="dictionary" required="1"/>
+                        <field name="dic_preview" required="1"/>
+                    </group>
+                    <group>
+                        <field name="action_exists"/>
+                    </group>
+                    <notebook>
+                        <page string="Code">
+                            <field name="template_code" autofocus="auto-focus" widget="ace" options="{'mode': 'python'}"/>
+<!--                            <field name="template_code" autofocus="auto-focus"/>-->
+<!--                            <field name="template_code" widget="ace" options="{'mode': 'xml'}"/>-->
+                        </page>
+                        <page string="ZPL Preview">
+                            <field name="zpl_preview"/>
+                        </page>
+                        <page string="Add to Actions" attrs="{'invisible':[('action_exists','=',True)]}">
+                            <group colspan="2" col="2">
+                                <button name="create_action" string="Add to Models Action " type="object"
+                                        icon="fa-plus"
+                                        colspan="2" attrs="{'invisible':[('action_exists','=',True)]}"/>
+<!--                                                                        colspan="2" attrs="{'invisible':[('ref_ir_act_report','!=',False)]}"/>-->
+
+
+                                <field name="ref_ir_act_report" invisible="1"/>
+<!--                                       attrs="{'invisible':[('ref_ir_act_report','=',False)]}"/>-->
+                                <button name="unlink_action" string="Remove from model action" type="object"
+                                        icon="fa-trash-o"
+                                        attrs="{'invisible':[('action_exists','=',False)]}" colspan="2"/>
+<!--                                        attrs="{'invisible':[('ref_ir_act_report','=',False)]}" colspan="2"/>-->
+
+                            </group>
+                        </page>
+                        <page string="Help">
+                                <group>
+                                    <div style="margin-top: 4px;">
+                                        <h5>Template Layout details</h5>
+                                        <p>Fill in the <strong>Template name, model, purpose, dictionary, dictionary preview </strong>as specified below.</p>
+                                        <ul>
+                                            <li><strong>Template name:</strong> Enter meaningful template name. This will be shown in action wizard.</li>
+                                            <li><strong>Purpose:</strong> Specify template purpose.</li>
+                                            <li><strong>Model:</strong> Specify model name. This will be useful in adding an action to that models form view.</li>
+                                            <li><strong>Dictionary:</strong> will be executed on wizard call. This is sample
+                                                code <code>result = {'test': self.env['model.name'].search([('id','=',self.env.context.get('active_id'))])}</code></li>
+                                            <li><strong>Dic.preview:</strong> This will be used in creating a preview. This is a sample code
+                                                <code>Dic.preview: result = {'test': self.env['model.name'].search([('id','=',2)])}</code></li>
+                                            <li><strong>Code:</strong>This is the zpl code and based off the dictionary and dictionary preview above.
+                                                Below is a sample code<code style="white-space: pre-wrap">
+result = '''
+^XA
+^CFA,30
+^FO50,100^FD ''' + dictionary['test'].name + '''^FS
+^FO50,140^FD ''' + dictionary['test'].company_id.name+ '''^FS
+^FO50,180^FD ''' + str(dictionary['test'].amount_total) + ''' ^FS
+^FO50,220^FD ''' + str(dictionary['test'].dest_address_id) + '''^FS
+^CFA,15
+^BY5,2,270
+^FO100,350^BC^FD 11223344 ^FS
+^XZ
+'''
+                                                </code></li>
+                                            <li><strong>ZPL Preview:</strong>Shows the sample zpl preview. Copy in zpl viewer (
+                                                <code>http://labelary.com/viewer.html</code>). </li>
+                                            <li><strong>Add to Actions</strong>Will add actions on specified model form</li>
+                                        </ul>
+                                    </div>
+                                </group>
+                            </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view for dynamic label-->
+    <record id="flsp_dynamic_label_tree" model="ir.ui.view">
+        <field name="name">flsp.dynamic.label.tree</field>
+        <field name="model">flsp.dynamic.label</field>
+        <field name="arch" type="xml">
+            <tree string="Dynamic Label Tree">
+                <field name="template_name"/>
+                <field name="model_id"/>
+                <field name="create_date"/>
+                <field name="write_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action for dynamic label-->
+    <record id="flsp_dynamic_label_action" model="ir.actions.act_window">
+        <field name="name">FLSP Dynamic Label</field>
+        <field name="res_model">flsp.dynamic.label</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!--Menu Item for dynamic label-->
+    <menuitem id="flsp_dynamic_label_menu"
+              name="FLSP Dynamic Label"
+              parent="flspautoemails.flsp_settings"
+              action="flsp_dynamic_label_action"/>
+</odoo>
