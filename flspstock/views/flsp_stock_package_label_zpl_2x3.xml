@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+        <template id="flsp_stock_package_label_zpl_2x3">
+            <t t-foreach="docs" t-as="package">
+                <t t-translation="off">
+                    <t t-set="package_name" t-value="package.name"/>
+                    <t t-set="part_number" t-value="package.packaging_id.product_id.default_code"/>
+                    <t t-set="customer_part_number" t-value=""/>
+                    <t t-foreach="package.quant_ids" t-as="l">
+                        <t t-foreach="l.product_id" t-as="prod">
+                            <t t-if="not part_number">
+                                <t t-set="part_number" t-value="prod.default_code"/>
+                            </t>
+                        </t>
+                        <t t-foreach="l.product_id.customerscode_ids" t-as="customercode_id">
+                            <t t-set="customer_part_number" t-value="customercode_id.part_number"/>
+                        </t>
+                    </t>
+~SD30
+^XA
+^FO1000,80
+^A0R,80,95^FDPackage Name:^FS
+^A0R,80,75^FO650,80
+^FB1000,4,,
+^FD<t t-esc="package_name"/>^FS
+^FO950,1000^BY4
+^BCR,120,Y,N,N
+^A0N,50,40^FD<t t-esc="package_name"/>^FS
+
+^FO750,80
+^A0R,80,95^FDPART NO.^FS
+^FO650,80^BY3
+^A0R,80,75^FD<t t-esc="part_number"/>^FS
+
+^FO750,1000
+^A0R,80,95^FDCUST PART NO.^FS
+^FO650,1000^BY3
+^A0R,80,75^FD<t t-esc="customer_part_number"/>^FS
+
+^FO450,80
+^A0R,80,95^FDLot/Serial Numbers:^FS
+                    <t t-set="originalY" t-value="350"/>
+                    <t t-foreach="package.quant_ids" t-as="quant_id">
+                        <t t-set="product_code" t-value=""/>
+                        <t t-if="quant_id.lot_id">
+                            <t t-set="product_code" t-value="quant_id.lot_id.name"/>
+                        </t>
+                        <t t-set="y" t-value="originalY - (quant_id_index % 3 )* 100"/>
+                        <t t-if="quant_id_index / 3 == 0">
+                            <t t-set="x" t-value="80"/>
+                        </t>
+                        <t t-if="quant_id_index / 3 == 1">
+                            <t t-set="x" t-value="1000"/>
+                        </t>
+^FO<t t-esc="y"/>,<t t-esc="x"/>
+^A0R,80,75^FD<t t-esc="product_code"/>^FS
+                   </t>
+^XZ
+                </t>
+            </t>
+        </template>
+
+        <report
+            string="Imaging 2 x 3 label(ZPL)"
+            id="flsp_stock_package_label_2x3"
+            model="stock.quant.package"
+            report_type="qweb-text"
+            name="flspstock.flsp_stock_package_label_zpl_2x3"
+            file="flspstock.flsp_stock_package_label_zpl_2x3"/>
+</data>
+</odoo>
