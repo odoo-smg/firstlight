@@ -82,13 +82,14 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.set_column(10, 10, 10)
         if 'flsp_backflush' in self.env['product.template']._fields:
             sheet.set_column(11, 11, 10)
-        if 'flsp_mrp_bttn' in self.env['product.template']._fields:
-            sheet.set_column(12, 12, 11)
+        # if 'flsp_mrp_bttn' in self.env['product.template']._fields:
+        #     sheet.set_column(12, 12, 11)
         title_style = workbook.add_format(
             {"bold": True, "bg_color": "#FFFFCC", "bottom": 1}
         )
 
-        if 'flsp_backflush' and 'flsp_mrp_bttn' in self.env['product.template']._fields:
+        # if 'flsp_backflush' and 'flsp_mrp_bttn' in self.env['product.template']._fields:
+        if 'flsp_backflush' in self.env['product.template']._fields:
             sheet_title = [
                 _("BOM Name"),
                 _("Part#"),
@@ -105,7 +106,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Part PLM"),
                 _("Tracking"),
                 _("Backflush"),
-                _("MRP Valid"),
+                # _("MRP Valid"),
             ]
         else:
             sheet_title = [
