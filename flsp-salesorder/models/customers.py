@@ -7,7 +7,8 @@ class flspcustomer(models.Model):
     _inherit = 'res.partner'
     _check_company_auto = True
 
-    flsp_user_id = fields.Many2one('res.users', string="Salesperson 2")
+    flsp_user_id = fields.Many2one('res.users', string="Inside Salesperson")
+    flsp_dss_user_id = fields.Many2one('res.users', string="Dealer Specialist")
     flsp_shipping_method = fields.Selection([
         ('1', 'FL account and Invoice the Customer'),
         ('2', 'FL account and do not Invoice Customer'),
@@ -17,7 +18,7 @@ class flspcustomer(models.Model):
     flsp_carrier_account = fields.Char(String="Carrier Account")
 
     flsp_default_contact = fields.Boolean(String="Default")
-    
+
     _sql_constraints = [
         ('customer_name_unique_flsp',
          'UNIQUE(name)',
