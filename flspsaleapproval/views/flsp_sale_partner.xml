@@ -16,6 +16,8 @@
                 </xpath>
                 <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
                   <attribute name="domain">["&amp;", ["flsp_sale_type","=",flsp_sale_type], ["currency_id","=",flsp_sale_currency]]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
                   <attribute name="attrs">{'readonly': ['&amp;', ('flsp_acc_valid', '=', True), ('property_product_pricelist', '!=', False)], 'required':[('customer_rank','>',0)]}</attribute>
                 </xpath>
                 <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]" position="attributes">
