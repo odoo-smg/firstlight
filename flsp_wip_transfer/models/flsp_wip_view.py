@@ -82,6 +82,7 @@ class Flspwipview(models.Model):
         stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')])
         stock_picking_type = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')])
         stock_virtual_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Inventory adjustment')])
+        stock_virtual_production = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Production')])
         stock_picking = False
         if not stock_picking_type:
             raise UserError('Picking type Internal is missing')
@@ -91,6 +92,8 @@ class Flspwipview(models.Model):
             raise UserError('Stock Location is missing')
         if not stock_virtual_location:
             raise UserError('Stock Virtual Location is missing')
+        if not stock_virtual_production:
+            raise UserError('Virtual Production Location is missing')
         count_products = 0
         negative_adjust = False
         for product in self:
@@ -153,12 +156,20 @@ class Flspwipview(models.Model):
         if negative_adjust and count_products > 0 and stock_picking:
             stock_picking.button_validate()
         if count_products > 0:
-            create_val = {
-                'origin': 'FLSP-WIP-TRANSFER',
-                'picking_type_id': stock_picking_type.id,
-                'location_id': stock_location.id,
-                'location_dest_id': wip_location.id,
-            }
+            if negative_adjust:
+                create_val = {
+                    'origin': 'FLSP-WIP-TRANSFER',
+                    'picking_type_id': stock_picking_type.id,
+                    'location_id': stock_location.id,
+                    'location_dest_id': stock_virtual_production.id,
+                }
+            else:
+                create_val = {
+                    'origin': 'FLSP-WIP-TRANSFER',
+                    'picking_type_id': stock_picking_type.id,
+                    'location_id': stock_location.id,
+                    'location_dest_id': wip_location.id,
+                }
             stock_picking = self.env['stock.picking'].create(create_val)
 
             for product in self:
@@ -179,17 +190,28 @@ class Flspwipview(models.Model):
                         for wip_line in wip_transfer:
                             wip_line.state = "done"
                     continue
-
-                move_line = self.env['stock.move'].create({
-                    'name': "[wip-transfer]"+product.product_id.name,
-                    'product_id': product.product_id.id,
-                    'product_uom': product.product_id.uom_id.id,
-                    'product_uom_qty': quantity_transfer,
-                    #'product_qty': product.adjusted,
-                    'picking_id': stock_picking.id,
-                    'location_id': stock_location.id,
-                    'location_dest_id': wip_location.id
-                })
+                if negative_adjust:
+                    move_line = self.env['stock.move'].create({
+                        'name': "[wip-transfer]"+product.product_id.name,
+                        'product_id': product.product_id.id,
+                        'product_uom': product.product_id.uom_id.id,
+                        'product_uom_qty': quantity_transfer,
+                        #'product_qty': product.adjusted,
+                        'picking_id': stock_picking.id,
+                        'location_id': stock_location.id,
+                        'location_dest_id': stock_virtual_production.id
+                    })
+                else:
+                    move_line = self.env['stock.move'].create({
+                        'name': "[wip-transfer]"+product.product_id.name,
+                        'product_id': product.product_id.id,
+                        'product_uom': product.product_id.uom_id.id,
+                        'product_uom_qty': quantity_transfer,
+                        #'product_qty': product.adjusted,
+                        'picking_id': stock_picking.id,
+                        'location_id': stock_location.id,
+                        'location_dest_id': wip_location.id
+                    })
                 wip_transfer = self.env['flsp.wip.transfer'].search(['&',('product_id', '=', product.product_id.id), ('state', '!=', 'done')])
                 for wip_line in wip_transfer:
                     wip_line.state = "done"
