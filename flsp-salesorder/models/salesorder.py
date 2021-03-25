@@ -7,7 +7,8 @@ class flspsalesorder(models.Model):
     _inherit = 'sale.order'
 
     flsp_so_user_id = fields.Many2one('res.users', string="Inside Salesperson")
-    flsp_so_dss_user_id = fields.Many2one('res.users', string="D. Support Specialist")
+    flsp_so_dss_user_id = fields.Many2one('res.users', string="Dealer Specialist")
+    flsp_include_invoice = fields.Boolean('Include Invoice', default=True)
     flsp_amount_deposit = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
     flsp_bpm_status = fields.Selection([
         ('quote', 'Quote'),

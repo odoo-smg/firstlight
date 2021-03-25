@@ -22,6 +22,7 @@
                 <field name="flsp_amount_deposit"/>
               </xpath>
               <xpath expr="//label[@for='commitment_date']" position="before">
+                <field name="flsp_include_invoice"/>
                 <field name="flsp_shipping_method"/>
                 <field name="flsp_carrier_account"/>
               </xpath>

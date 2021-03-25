@@ -13,7 +13,7 @@ class SalesOrder(models.Model):
     def _onchange_source_id(self):
         self.flsp_source_name = self.source_id.name
 
-    @api.onchange('user_id')
-    def onchange_user_id(self):
-        if self.user_id and self.user_id.sale_team_id:
-            self.team_id = False #self.user_id.sale_team_id
+    #@api.onchange('user_id')
+    #def onchange_user_id(self):
+        #if self.user_id and self.user_id.sale_team_id:
+            #self.team_id = False #self.user_id.sale_team_id
