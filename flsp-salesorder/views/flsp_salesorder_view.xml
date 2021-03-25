@@ -8,8 +8,12 @@
               <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="flsp_bpm_status" invisible="1"/>
               </xpath>
+              <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Outside Salesperson</attribute>
+              </xpath>
               <xpath expr="//field[@name='user_id']" position="after">
                 <field name="flsp_so_user_id"/>
+                <field name="flsp_so_dss_user_id"/>
               </xpath>
               <xpath expr="//tree/field[@name='price_unit']" position="attributes">
                 <attribute name="attrs">{'readonly': True}</attribute>

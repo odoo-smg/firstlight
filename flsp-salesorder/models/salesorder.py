@@ -6,7 +6,8 @@ from odoo import fields, models, api
 class flspsalesorder(models.Model):
     _inherit = 'sale.order'
 
-    flsp_so_user_id = fields.Many2one('res.users', string="Salesperson 2")
+    flsp_so_user_id = fields.Many2one('res.users', string="Inside Salesperson")
+    flsp_so_dss_user_id = fields.Many2one('res.users', string="D. Support Specialist")
     flsp_amount_deposit = fields.Monetary(string='Deposit Payment', store=True, copy=False, readonly=True)
     flsp_bpm_status = fields.Selection([
         ('quote', 'Quote'),
@@ -56,6 +57,7 @@ class flspsalesorder(models.Model):
                 'payment_term_id': False,
                 'fiscal_position_id': False,
                 'flsp_so_user_id': False,
+                'flsp_so_dss_user_id': False,
                 'flsp_shipping_method': False,
                 'flsp_ship_via': False,
                 'flsp_carrier_account': False,
@@ -85,6 +87,7 @@ class flspsalesorder(models.Model):
             'partner_invoice_id': default_invoice,
             'partner_shipping_id': default_address,
             'flsp_so_user_id': self.partner_id.flsp_user_id.id or self.env.uid,
+            'flsp_so_dss_user_id': self.partner_id.flsp_dss_user_id.id,
             'flsp_shipping_method': default_shipping_method,
             'flsp_ship_via': default_ship_via,
             'flsp_carrier_account': default_shipping_account,
