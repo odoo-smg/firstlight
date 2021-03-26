@@ -43,3 +43,17 @@ class flspmrpeco(models.Model):
             else:
                 record.type_id = npi_stage
                 record.stage_id = npi_first_stage
+
+    @api.onchange('product_tmpl_id')
+    def onchange_product_tmpl_id(self):
+        """
+            Date:    Mar/26th/2021
+            Purpose: OVERWRITE the same method in file "mrp_eco.py" for Model "mrp.eco"
+                    to reset self.bom_id when no BOM is associated with the selected product
+            Assumption: Value "False" is the default value for no BOM associated
+            Author: Perry He
+        """
+        if self.product_tmpl_id.bom_ids:
+            self.bom_id = self.product_tmpl_id.bom_ids.ids[0]
+        else:
+            self.bom_id = False
