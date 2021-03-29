@@ -6,7 +6,7 @@
         Module purpose is to show only available Serial numbers on the production, produce wizard""",
 
     'description': """ Changes
-            * Mar.26th.2021 - Created the model
+            * Mar.26th.2021 - Created the model 
         """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",

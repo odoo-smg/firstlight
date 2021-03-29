@@ -144,7 +144,7 @@ class FlspMrpAbstractFilterSn(models.AbstractModel):
 
     lot_id = fields.Many2one(
         'stock.production.lot', 'Lot/Serial Number', check_company=True,
-        domain="[('product_id', '=', product_id), ('qty_on_table','=',True), ('qty_location.complete_name', 'ilike', 'WIP'), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]")
+        domain="[('product_id', '=', product_id), ('qty_on_table','=',True), ('qty_location.complete_name', 'ilike', 'PA'), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]")
     # ('qty_location.complete_name', '=', 'WH/PA/WIP')
     @api.onchange('lot_id')
     def _onchange_lot_id(self):
