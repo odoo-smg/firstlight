@@ -119,6 +119,14 @@ class FlspMrppurchaseLine(models.Model):
         pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
+        stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')]).parent_path
+        if not stock_location:
+            raise UserError('Stock Location is missing')
+        wh_stock_locations = self.env['stock.location'].search([('parent_path', 'like', stock_location+'%')]).ids
+        if not wh_stock_locations:
+            raise UserError('Stock Location is missing')
+
+
 
         mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search([])
         for purchase in mrp_purchase_product:  ##delete not used
@@ -224,7 +232,7 @@ class FlspMrppurchaseLine(models.Model):
             rationale += "<br/>DATE        | QTY         |Balance      |Type |Source  |BOM Level|Mfg Lead time| Doc"
             rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------"
             product = open_moves[1][4]
-            order_point = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', product.id)], limit=1)
+            order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
             if order_point:
                 min_qty = order_point.product_min_qty
                 max_qty = order_point.product_max_qty
@@ -622,12 +630,18 @@ class FlspMrppurchaseLine(models.Model):
             total_forecast += item
 
         ret = False
+        stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')]).parent_path
+        if not stock_location:
+            raise UserError('Stock Location is missing')
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
         pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
+        wh_stock_locations = self.env['stock.location'].search([('parent_path', 'like', stock_location+'%')]).ids
+        if not wh_stock_locations:
+            raise UserError('Stock Location is missing')
 
         pa_wip_qty = 0
         stock_quant = self.env['stock.quant'].search(
@@ -645,7 +659,7 @@ class FlspMrppurchaseLine(models.Model):
             current_balance = balance
 
         prod_vendor = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', product.product_tmpl_id.id)],limit=1)
-        order_point = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', product.id)], limit=1)
+        order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
         if order_point:
             min_qty = order_point.product_min_qty
             max_qty = order_point.product_max_qty
