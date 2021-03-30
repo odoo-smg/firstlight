@@ -128,40 +128,146 @@ class FlspMrpPlanningLine(models.Model):
                         pa_wip_qty = 0
                         for stock_lin in stock_quant:
                             pa_wip_qty += stock_lin.quantity
-                        if wip_trans:
-                            #update current
-                            wip_trans.mfg_demand = components[prod]['total']
-                            wip_trans.suggested = 1
-                            wip_trans.adjusted = components[prod]['total']
-                            wip_trans.stock_qty = prod.qty_available - pa_wip_qty
-                            wip_trans.pa_wip_qty = pa_wip_qty
-                            wip_trans.purchase_uom = prod.uom_po_id.id
-                            wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
-                            wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
-                            wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
-                            wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
-                        else:
-                            #insert new
-                            wip = self.env['flsp.wip.transfer'].create({
-                                'description': prod.name,
-                                'default_code': prod.default_code,
-                                'product_id': prod.id,
-                                'uom': prod.uom_id.id,
-                                'stock_qty': prod.qty_available - pa_wip_qty,
-                                'pa_wip_qty': pa_wip_qty,
-                                'source': production.name,
-                                'mfg_demand': components[prod]['total'],
-                                'suggested': 1,
-                                'adjusted': components[prod]['total'],
-                                'state': 'transfer',
-                                'production_id': production.id,
-                                'purchase_uom': prod.uom_po_id.id,
-                                'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
-                                'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
-                                'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
-                                'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
-                            })
 
+                        if pa_wip_qty < components[prod]['total']:
+                            if wip_trans:
+                                #update current
+                                wip_trans.mfg_demand = components[prod]['total']
+                                wip_trans.suggested = 1
+                                wip_trans.adjusted = components[prod]['total']
+                                wip_trans.stock_qty = prod.qty_available - pa_wip_qty
+                                wip_trans.pa_wip_qty = pa_wip_qty
+                                wip_trans.purchase_uom = prod.uom_po_id.id
+                                wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
+                                wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
+                                wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                                wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                            else:
+                                #insert new
+                                wip = self.env['flsp.wip.transfer'].create({
+                                    'description': prod.name,
+                                    'default_code': prod.default_code,
+                                    'product_id': prod.id,
+                                    'uom': prod.uom_id.id,
+                                    'stock_qty': prod.qty_available - pa_wip_qty,
+                                    'pa_wip_qty': pa_wip_qty,
+                                    'source': production.name,
+                                    'mfg_demand': components[prod]['total'],
+                                    'suggested': 1,
+                                    'adjusted': components[prod]['total'],
+                                    'state': 'transfer',
+                                    'production_id': production.id,
+                                    'purchase_uom': prod.uom_po_id.id,
+                                    'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
+                                    'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
+                                    'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                                    'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                                })
+
+        ## Minimal quantity
+
+        # products already suggested:
+        wip_trans = self.env['flsp.wip.transfer'].search([])
+        products = self.env['product.product'].search([('id', 'in', wip_trans.mapped('product_id').ids)])
+        for product in products:
+            pa_wip_qty = 0
+
+            wips_total = self.env['flsp.wip.transfer'].search([('product_id', '=', product.id)])
+            already_suggested = sum(wips_total.mapped('mfg_demand'))
+            stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
+            for stock_lin in stock_quant:
+                pa_wip_qty += stock_lin.quantity
+
+            current_balance = pa_wip_qty
+            wip_order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)], limit=1)
+            if wip_order_point:
+                min_qty = wip_order_point.product_min_qty
+                max_qty = wip_order_point.product_max_qty
+                multiple = wip_order_point.qty_multiple
+            else:
+                min_qty = 0.0
+                max_qty = 0.0
+                multiple = 1
+
+            # Minimal quantity:
+            if current_balance < 0:
+                suggested_qty = min_qty - current_balance
+            else:
+                if current_balance+already_suggested < min_qty:
+                    suggested_qty = min_qty - (current_balance+already_suggested)
+                else:
+                    suggested_qty = 0
+            if suggested_qty > 0:
+                wip = self.env['flsp.wip.transfer'].create({
+                    'description': product.name,
+                    'default_code': product.default_code,
+                    'product_id': product.id,
+                    'uom': product.uom_id.id,
+                    'stock_qty': product.qty_available - pa_wip_qty,
+                    'pa_wip_qty': pa_wip_qty,
+                    'source': 'Min Qty',
+                    'mfg_demand': suggested_qty,
+                    'suggested': 1,
+                    'adjusted': suggested_qty,
+                    'state': 'transfer',
+                    'purchase_uom': product.uom_po_id.id,
+                    'purchase_stock_qty': product.uom_id._compute_quantity(product.qty_available - pa_wip_qty,
+                                                                        product.uom_po_id),
+                    'purchase_pa_wip_qty': product.uom_id._compute_quantity(pa_wip_qty, product.uom_po_id),
+                    'purchase_mfg_demand': product.uom_id._compute_quantity(suggested_qty, product.uom_po_id),
+                    'purchase_adjusted': product.uom_id._compute_quantity(suggested_qty, product.uom_po_id),
+                })
+
+        # products not suggested yet:
+        wip_trans = self.env['flsp.wip.transfer'].search([])
+        products = self.env['product.product'].search([('id', 'not in', wip_trans.mapped('product_id').ids)])
+        for product in products:
+            print('Products without movement:'+product.name)
+            pa_wip_qty = 0
+            stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
+            for stock_lin in stock_quant:
+                pa_wip_qty += stock_lin.quantity
+
+            current_balance = pa_wip_qty
+            wip_order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)], limit=1)
+            if wip_order_point:
+                print('    tem orderpoint:' + wip_order_point.name)
+                min_qty = wip_order_point.product_min_qty
+                max_qty = wip_order_point.product_max_qty
+                multiple = wip_order_point.qty_multiple
+            else:
+                min_qty = 0.0
+                max_qty = 0.0
+                multiple = 1
+
+            # Minimal quantity:
+            if current_balance < 0:
+                suggested_qty = min_qty - current_balance
+            else:
+                if current_balance < min_qty:
+                    suggested_qty = min_qty - current_balance
+                else:
+                    suggested_qty = 0
+            if suggested_qty > 0:
+                wip = self.env['flsp.wip.transfer'].create({
+                    'description': product.name,
+                    'default_code': product.default_code,
+                    'product_id': product.id,
+                    'uom': product.uom_id.id,
+                    'stock_qty': product.qty_available - pa_wip_qty,
+                    'pa_wip_qty': pa_wip_qty,
+                    'source': 'Min Qty',
+                    'mfg_demand': suggested_qty,
+                    'suggested': 1,
+                    'adjusted': suggested_qty,
+                    'state': 'transfer',
+                    'purchase_uom': product.uom_po_id.id,
+                    'purchase_stock_qty': product.uom_id._compute_quantity(product.qty_available - pa_wip_qty,
+                                                                        product.uom_po_id),
+                    'purchase_pa_wip_qty': product.uom_id._compute_quantity(pa_wip_qty, product.uom_po_id),
+                    'purchase_mfg_demand': product.uom_id._compute_quantity(suggested_qty, product.uom_po_id),
+                    'purchase_adjusted': product.uom_id._compute_quantity(suggested_qty, product.uom_po_id),
+                })
         return
 
     def _compute_quantity(self):
