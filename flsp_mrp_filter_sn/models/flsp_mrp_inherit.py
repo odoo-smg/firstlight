@@ -14,7 +14,7 @@ class FlspStockProductionLotFilterSn(models.Model):
     Author:     Sami Byaruhanga
     """
     _inherit = 'stock.production.lot'
-    qty_on_table = fields.Boolean(string='Quantity exist')
+    qty_on_table = fields.Boolean(string='Quantity exist', compute='_product_qty', store=True)
 
     qty_location = fields.Many2one('stock.location') #location will be added in stock.quant in change
 
@@ -23,15 +23,23 @@ class FlspStockProductionLotFilterSn(models.Model):
         Purpose: To check the qty_on_table field
         Note:    Method is inherited from stock.production.lot
         """
+        # method in orginal function
         for lot in self:
             # We only care for the quants in internal or transit locations.
             quants = lot.quant_ids.filtered(lambda q: q.location_id.usage in ['internal', 'transit'])
             lot.product_qty = sum(quants.mapped('quantity'))
+
+        # custom method for filtering serial number
         for line in self:
-            if line.product_qty >0:
-                line.qty_on_table = True
+            if line.product_qty > 0 and self.qty_location:
+                if 'PA' in self.qty_location.complete_name:
+                    line.qty_on_table = True
+                    print("made true in stock.production.lot")
+                    print(self.qty_location.complete_name)
             else:
                 line.qty_on_table = False
+                print("made false in stock.production.lot**************")
+                print(self.qty_location.complete_name)
 
 
 class FlspSockQuantFilterSn(models.Model):
@@ -44,17 +52,40 @@ class FlspSockQuantFilterSn(models.Model):
     """
     _inherit = 'stock.quant'
 
-    @api.onchange('inventory_quantity')
+    @api.onchange('inventory_quantity', 'location_id')
     def change_product_qty_in_lot_table(self):
         """
             Purpose: To change the qty_on_table for stock.production.lot
         """
-        if self.inventory_quantity > 0:
+        print("Onchange is executing in stock quant*****************")
+        if self.inventory_quantity > 0 and ('PA' in self.location_id.complete_name):
             self.lot_id.qty_on_table = True
             self.lot_id.qty_location = self.location_id
-            print(self.lot_id.qty_location)
+            print("made true in stock qunat and the location name is:+++++++++++")
+            print(self.lot_id.qty_location.complete_name)
         else:
             self.lot_id.qty_on_table = False
+            print("made False in stock qunat and the location name is:----------")
+            print(self.lot_id.qty_location.complete_name)
+
+class FlspInvAdjLineFilterSn(models.Model):
+    """
+    class_name: FlspInvAdjLineFilterSn
+    inherit:    stock.inventory.line
+    Purpose:    To change the stock.production.lot field qty_location depending on inventory adjustment
+    Date:       Mar/30th/2021/T
+    Author:     Sami Byaruhanga
+    """
+    _inherit = 'stock.inventory.line'
+
+    @api.onchange('location_id', 'prod_lot_id')
+    def change_product_qty_in_lot_table(self):
+        print("Onchange executing in inventory adjustment ************")
+        print(self.prod_lot_id)
+        if self.prod_lot_id:
+            print('product has lot associated')
+            self.prod_lot_id.qty_location = self.location_id
+            self.prod_lot_id.qty_on_table = True
 
 
 class FlspMrpProductionFilterSn(models.Model):
@@ -72,10 +103,11 @@ class FlspMrpProductionFilterSn(models.Model):
         """
         Purpose: To write the stock.production.lot to false so its filtered in next MO domain
         """
-        print("executing change product qty in lot table")
+        print("executing change product qty in lot table in mo*****************")
         stock_move_line = self.env['stock.move.line'].search([('reference', '=', self.name)])
         for line in stock_move_line:
-            if line.lot_id and (self.location_src_id == line.location_id):
+            if line.lot_id and ('PA' in self.location_src_id.complete_name): # == line.location_id):
+                print("The lot_id names in stock_move are: ")
                 print(line.lot_id.name)
                 line.lot_id.qty_on_table = False
 
@@ -145,11 +177,3 @@ class FlspMrpAbstractFilterSn(models.AbstractModel):
     lot_id = fields.Many2one(
         'stock.production.lot', 'Lot/Serial Number', check_company=True,
         domain="[('product_id', '=', product_id), ('qty_on_table','=',True), ('qty_location.complete_name', 'ilike', 'PA'), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]")
-    # ('qty_location.complete_name', '=', 'WH/PA/WIP')
-    @api.onchange('lot_id')
-    def _onchange_lot_id(self):
-        """ When the user is encoding a produce line for a tracked product, we apply some logic to
-        help him. This onchange will automatically switch `qty_done` to 1.0.
-        """
-        if self.product_id.tracking == 'serial':
-            self.qty_done = 1
