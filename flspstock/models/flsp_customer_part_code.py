@@ -11,5 +11,6 @@ class Customerscode(models.Model):
     partner_id = fields.Many2one('res.partner', string='Customer', required=True)
     part_number = fields.Char(string="Part Number", required=True)
     description = fields.Char(string="Description", required=True)
+    size = fields.Char(string="Size")
     company_id = fields.Many2one('res.company', 'Company', index=True)
     label_desc = fields.Char(string="Customer Label Name", required=True)
