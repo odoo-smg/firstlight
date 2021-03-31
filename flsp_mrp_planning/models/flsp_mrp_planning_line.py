@@ -918,7 +918,7 @@ class FlspMrpPlanningLine(models.Model):
 
         ret = False
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')], limit=1).parent_path
-        
+
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
         pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
@@ -1056,6 +1056,7 @@ class FlspMrpPlanningLine(models.Model):
                 'date_planned_finished': datetime.combine(item.required_by, datetime.now().time()),
                 'date_deadline': datetime.combine(item.required_by, datetime.now().time()),
                 'location_src_id': pa_location.id,
+                'location_dest_id': pa_location.id,
                 'origin': item.source,
             })
 
