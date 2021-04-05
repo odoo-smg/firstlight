@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flspstock_stock_track_confirmation">
+            <field name="name">flspstock.track.confirmation.inherit</field>
+            <field name="model">stock.track.confirmation</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="stock.view_stock_track_confirmation"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_confirm']" position="replace">
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary" groups="stock.group_stock_manager"/>
+                </xpath>
+            </field>
+        </record>
+ </odoo>
