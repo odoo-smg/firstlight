@@ -41,7 +41,7 @@
                                 <field name="responsible"/>
                                 <field name="analysis"/>
                                 <field name="complete_date"/>
-                                <field name="type"/>
+                                <field name="type" attrs = "{'required': [('status', '=', 'inprogress')]}"/>
                                 <field name="solution"/>
                                 <field name="send_user_email" groups="flspticketsystem.group_flspticketsystem_manager"/>
         <!--                    </group>-->
