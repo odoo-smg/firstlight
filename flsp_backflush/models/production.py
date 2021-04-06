@@ -72,71 +72,71 @@ class MrpProduction(models.Model):
             backflush_qty = self.product_qty - self.flsp_qty_backflushed
         ## Verifing the quantity of any production sub part if negative make it zero:
         ## (The sub parts will not be transferred to WIP).
-        for components in self.move_raw_ids:
-            for line in components.move_line_ids:
-                pa_stock_tmp = self.env['stock.quant'].search(['&', ('product_id', '=', line.product_id.id), ('location_id', '=', line.location_id.id)])
-                pa_stock_quantity = 0
-                for serial_location in pa_stock_tmp:
-                    pa_stock_quantity += serial_location.quantity
-
-                if pa_stock_quantity < 0 and line.product_id.bom_count > 0 and line.product_id.flsp_backflush:
-                    create_val = {
-                        'origin': self.name + ' FLSP-AUTO-PA-ADJUST',
-                        'picking_type_id': stock_picking_type.id,
-                        'location_id': stock_virtual_location.id,
-                        'location_dest_id': line.location_id.id,
-                        'state': 'assigned',
-                    }
-                    stock_picking = self.env['stock.picking'].create(create_val)
-                    if line.product_id.tracking == 'none':
-                        stock_move = self.env['stock.move'].create({
-                            'name': line.product_id.name,
-                            'product_id': line.product_id.id,
-                            'product_uom': line.product_id.uom_id.id,
-                            'product_uom_qty': line.qty_done,
-                            'picking_id': stock_picking.id,
-                            'location_id': stock_virtual_location.id,
-                            'location_dest_id': line.location_id.id,
-                            'state': 'assigned',
-                        })
-                        move_line = self.env['stock.move.line'].create({
-                            'product_id': line.product_id.id,
-                            'product_uom_id': line.product_id.uom_id.id,
-                            'qty_done': line.qty_done,
-                            'lot_id': line.lot_id.id,
-                            'picking_id': stock_picking.id,
-                            'move_id' : stock_move.id,
-                            'location_id': stock_virtual_location.id,
-                            'location_dest_id': line.location_id.id,
-                            'state': 'assigned',
-                            'done_move': True,
-                        })
-                    else:
-                        for serial_location in pa_stock_tmp:
-                            if serial_location.quantity < 0:
-                                stock_move = self.env['stock.move'].create({
-                                    'name': line.product_id.name,
-                                    'product_id': line.product_id.id,
-                                    'product_uom': line.product_id.uom_id.id,
-                                    'product_uom_qty': serial_location.quantity*(-1),
-                                    'picking_id': stock_picking.id,
-                                    'location_id': stock_virtual_location.id,
-                                    'location_dest_id': line.location_id.id,
-                                    'state': 'assigned',
-                                })
-                                move_line = self.env['stock.move.line'].create({
-                                    'product_id': line.product_id.id,
-                                    'product_uom_id': line.product_id.uom_id.id,
-                                    'qty_done': serial_location.quantity*(-1),
-                                    'lot_id': serial_location.lot_id.id,
-                                    'picking_id': stock_picking.id,
-                                    'move_id': stock_move.id,
-                                    'location_id': stock_virtual_location.id,
-                                    'location_dest_id': line.location_id.id,
-                                    'state': 'assigned',
-                                    'done_move': True,
-                                })
-                    stock_picking.button_validate()
+        # for components in self.move_raw_ids:
+        #     for line in components.move_line_ids:
+        #         pa_stock_tmp = self.env['stock.quant'].search(['&', ('product_id', '=', line.product_id.id), ('location_id', '=', line.location_id.id)])
+        #         pa_stock_quantity = 0
+        #         for serial_location in pa_stock_tmp:
+        #             pa_stock_quantity += serial_location.quantity
+        #
+        #         if pa_stock_quantity < 0 and line.product_id.bom_count > 0 and line.product_id.flsp_backflush:
+        #             create_val = {
+        #                 'origin': self.name + ' FLSP-AUTO-PA-ADJUST',
+        #                 'picking_type_id': stock_picking_type.id,
+        #                 'location_id': stock_virtual_location.id,
+        #                 'location_dest_id': line.location_id.id,
+        #                 'state': 'assigned',
+        #             }
+        #             stock_picking = self.env['stock.picking'].create(create_val)
+        #             if line.product_id.tracking == 'none':
+        #                 stock_move = self.env['stock.move'].create({
+        #                     'name': line.product_id.name,
+        #                     'product_id': line.product_id.id,
+        #                     'product_uom': line.product_id.uom_id.id,
+        #                     'product_uom_qty': line.qty_done,
+        #                     'picking_id': stock_picking.id,
+        #                     'location_id': stock_virtual_location.id,
+        #                     'location_dest_id': line.location_id.id,
+        #                     'state': 'assigned',
+        #                 })
+        #                 move_line = self.env['stock.move.line'].create({
+        #                     'product_id': line.product_id.id,
+        #                     'product_uom_id': line.product_id.uom_id.id,
+        #                     'qty_done': line.qty_done,
+        #                     'lot_id': line.lot_id.id,
+        #                     'picking_id': stock_picking.id,
+        #                     'move_id' : stock_move.id,
+        #                     'location_id': stock_virtual_location.id,
+        #                     'location_dest_id': line.location_id.id,
+        #                     'state': 'assigned',
+        #                     'done_move': True,
+        #                 })
+        #             else:
+        #                 for serial_location in pa_stock_tmp:
+        #                     if serial_location.quantity < 0:
+        #                         stock_move = self.env['stock.move'].create({
+        #                             'name': line.product_id.name,
+        #                             'product_id': line.product_id.id,
+        #                             'product_uom': line.product_id.uom_id.id,
+        #                             'product_uom_qty': serial_location.quantity*(-1),
+        #                             'picking_id': stock_picking.id,
+        #                             'location_id': stock_virtual_location.id,
+        #                             'location_dest_id': line.location_id.id,
+        #                             'state': 'assigned',
+        #                         })
+        #                         move_line = self.env['stock.move.line'].create({
+        #                             'product_id': line.product_id.id,
+        #                             'product_uom_id': line.product_id.uom_id.id,
+        #                             'qty_done': serial_location.quantity*(-1),
+        #                             'lot_id': serial_location.lot_id.id,
+        #                             'picking_id': stock_picking.id,
+        #                             'move_id': stock_move.id,
+        #                             'location_id': stock_virtual_location.id,
+        #                             'location_dest_id': line.location_id.id,
+        #                             'state': 'assigned',
+        #                             'done_move': True,
+        #                         })
+        #             stock_picking.button_validate()
 
 
         ## Verifing quantities of components in PA/WIP if available move the quantity needed on MO to virtual production:
