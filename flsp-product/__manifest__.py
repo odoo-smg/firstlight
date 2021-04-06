@@ -40,5 +40,6 @@
         'views/flsp_settings_view.xml',
         'views/flsp_stockpicking_view.xml',
         'views/flsp_product_product.xml',
+        'views/flsp_finished_product_acc.xml',
     ],
 }
