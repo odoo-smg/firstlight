@@ -42,21 +42,19 @@ class FlspEcoReject(models.Model):
         self._create_or_update_approval(status='rejected')
         self.product_tmpl_id.write({'name': self.backup_pdct.name,
                                     'type': self.backup_pdct.type,
-                                    'categ_id': self.backup_pdct.categ_id,
+                                    'categ_id': self.backup_pdct.categ_id.id,
                                     'list_price': self.backup_pdct.list_price,
                                     'taxes_id': self.backup_pdct.taxes_id,
                                     'standard_price': self.backup_pdct.standard_price,
                                     'uom_id': self.backup_pdct.uom_id.id,
                                     'tracking': self.backup_pdct.tracking,
                                     'attachment_ids': self.backup_pdct.attachment_ids,
-                                    #Make active post sending to alex TODO
-                                    # 'x_studio_specification': self.backup_pdct.x_studio_specification,
-                                    # 'x_studio_drawing': self.backup_pdct.x_studio_drawing,
+                                    'x_studio_specification': self.backup_pdct.x_studio_specification,
+                                    'x_studio_drawing': self.backup_pdct.x_studio_drawing,
                                     })
 
-
 """
-    In case we need for plm 
+    In case we need for plm
     'volume': self.backup_pdct.volume,
     'legacy_code': self.backup_pdct.legacy_code,
     'weight': self.backup_pdct.weight,
