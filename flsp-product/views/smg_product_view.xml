@@ -46,5 +46,13 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-
+    <record id="automation_archive_boms" model="base.automation">
+        <field name="name">FLSP Product - Archive BoMs Associated With Archived Products</field>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="trigger">on_write</field>
+        <field name="filter_domain">[('active', '=', 0)]</field>
+        <field name="state">code</field>
+        <field name="code" eval="'records.bom_ids.write({\'active\': 0})'"/>
+        <field name="active" eval="True"/>
+    </record>
 </odoo>
