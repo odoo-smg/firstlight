@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flspArchieveBase.mrp_plm.models.mrp_eco import MrpEco
+# from flspArchieveBase.mrp_plm.models.mrp_eco import MrpEco
 from odoo import models, fields, api
 
 
