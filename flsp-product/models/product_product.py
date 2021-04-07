@@ -53,15 +53,17 @@ class smgproductprd(models.Model):
         """   
         _logger.info("Starting 'recalculateCost()' for finished products.")
 
-        finished_products = self.env['product.product'].search([('valuation', '!=', 'real_time')]).filtered(lambda p: p.bom_count > 0)
+        finished_products = self.env['product.product'].search([]).filtered(lambda p: p.bom_count > 0)
+        _logger.info("The products to calculate: " + str(finished_products.mapped('display_name')))
 
         finished_products.calculate_bom_cost()
-
         _logger.info("'recalculateCost()' done.")
+
+        finished_products.notify_recalculateCost()
 
     
     # Simialr to method action_bom_cost() in \mrp_account\models\product.py
-    # the products should exclude ones with "valuation == 'real_time'""
+    # the products exclude ones with "valuation == 'real_time'" in method action_bom_cost(), but no need to filter them out in our schedule
     def calculate_bom_cost(self):
         # get all boms for the products
         boms_to_recompute = self.env['mrp.bom'].search(['|', ('product_id', 'in', self.ids), '&', ('product_id', '=', False), ('product_tmpl_id', 'in', self.mapped('product_tmpl_id').ids)])
@@ -119,3 +121,8 @@ class smgproductprd(models.Model):
         costMap[self.id] = bom_price
         return bom_price
 
+    def notify_recalculateCost(self):
+        _logger.info("************ Sending 'Products with Cost Recalculation - Daily Report' ************")
+        self.env['flspautoemails.bpmemails'].send_email(self, 'AC0002')
+        _logger.info("************ 'Products with Cost Recalculation - Daily Report' DONE ***************")
+        
