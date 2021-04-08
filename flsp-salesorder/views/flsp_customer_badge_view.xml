@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+     <record model="ir.ui.view" id="flsp_customer_badge_form_view">
+            <field name="name">flsp.customer.badge.form</field>
+            <field name="model">flsp.customer.badge</field>
+            <field name="arch" type="xml">
+                 <form string="Customer Badge Form">
+                    <sheet>
+                        <group>
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"  placeholder="Badge Name" style="width:50%;"/>
+                            </h1>
+                                <field name="reward_level" style="width:20%;"/>
+                                <field name="currency_id" style="width:20%;"/>
+                                <field name="annual_program_amount"  style="width:20%;"/>
+                        </group>
+                        <group>
+                                <field name="sale_discount"  style="width:20%;"/>
+                        </group>
+                        <group>
+                                <field name="freight_units_5_to_10_discount" style="width:20%;"/>
+                        </group>
+                        <group>
+                                <field name="freight_units_over_10_discount"  style="width:20%;"    />
+                        </group>
+                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="flsp_customer_badge_tree_view">
+            <field name="name">flsp.customer.badge.tree</field>
+            <field name="model">flsp.customer.badge</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Badge Tree">
+                    <field name="name"/>
+                    <field name="reward_level"/>
+                    <field name="currency_id"/>
+                    <field name="annual_program_amount"/>
+                    <field name="sale_discount"/>
+                    <field name="freight_units_5_to_10_discount"/>
+                    <field name="freight_units_over_10_discount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="flsp_customer_badge_kanban_view">
+            <field name="name">flsp.customer.badge.kanban</field>
+            <field name="model">flsp.customer.badge</field>
+            <field name="arch" type="xml">
+                <kanban class="o_flsp_customer_badge_kanban">
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div t-attf-class="cb_kanban_content">
+                                    Name:  
+                                    <field name="name"/>
+                                    <br/>
+                                    Reward Level:  
+                                    <field name="reward_level"/>
+                                    <br/>
+                                    Rewards Pricing Discount (%):  
+                                    <field name="sale_discount"/>
+                                    <br/>
+                                    Freight Discount with from 5 to 10 units (%):  
+                                    <field name="freight_units_5_to_10_discount"/>
+                                    <br/>
+                                    Freight Discount with more than 10 units (%):  
+                                    <field name="freight_units_over_10_discount"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- window action -->
+        <record model="ir.actions.act_window" id="flsp_customer_badge_list_action">
+            <field name="name">Customer Badges</field>
+            <field name="res_model">flsp.customer.badge</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create the first Customer Badge</p>
+            </field>
+        </record>
+
+        <!-- menu design -->
+        <menuitem id="customer_badge_menu" name="Customer Badges" 
+                  parent="sale.menu_sale_config"
+                  action="flsp_customer_badge_list_action"/>
+</odoo>
