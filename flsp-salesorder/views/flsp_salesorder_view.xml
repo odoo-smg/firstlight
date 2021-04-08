@@ -23,8 +23,8 @@
               </xpath>
               <xpath expr="//label[@for='commitment_date']" position="before">
                 <field name="flsp_include_invoice"/>
-                <field name="flsp_shipping_method"/>
-                <field name="flsp_carrier_account"/>
+                <field name="flsp_shipping_method" attrs="{'required': [(True)], }"/>
+                <field name="flsp_carrier_account" attrs="{'required':[('flsp_shipping_method', '=', '3')]}"/>
               </xpath>
               <xpath expr="//field[@name='user_id']" position="attributes">
                   <attribute name="domain">[('sale_team_id', '!=', False)]</attribute>

@@ -87,7 +87,7 @@
                     <attribute name="domain">[('id', 'in', flsp_products_line_pricelist)]</attribute>
                 </xpath>
                 <xpath expr="//group[@name='sale_shipping']" position="inside">
-                  <field name="flsp_ship_via" string="Ship Via"/>
+                  <field name="flsp_ship_via" string="Ship Via" attrs="{'required': [(True)], }"/>
                 </xpath>
                 <xpath expr="//field[@name='note']" position="replace">
                     <field name="note" string="Terms &amp; conditions"/>
