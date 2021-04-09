@@ -10,7 +10,7 @@
             <xpath expr="//field[@name='ref']" position="after">
 <!--                <field name="qty_exists"/>-->
                 <field name="qty_on_table" invisible="1"/>
-<!--                <field name="qty_location" invisible="1"/>-->
+                <field name="qty_location" invisible="1"/>
 
             </xpath>
         </field>
