@@ -104,14 +104,15 @@ class FlspStockPickingFilterSn(models.Model):
                 else:
                     line.lot_id.qty_on_table = False
 
+
     def button_validate(self):
         """
             Purpose:    To call method to change the stock.production table
             Note:       Used method because its short and called in button validate
         """
-        super(FlspStockPickingFilterSn, self).button_validate()
+        res = super(FlspStockPickingFilterSn, self).button_validate()
         self.change_product_qty_in_lot_table()
-        return
+        return res
 
 
 class FlspMrpProductionFilterSn(models.Model):
