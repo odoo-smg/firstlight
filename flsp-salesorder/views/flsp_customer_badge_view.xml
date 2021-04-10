@@ -1,35 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-     <record model="ir.ui.view" id="flsp_customer_badge_form_view">
-            <field name="name">flsp.customer.badge.form</field>
-            <field name="model">flsp.customer.badge</field>
-            <field name="arch" type="xml">
-                 <form string="Customer Badge Form">
-                    <sheet>
+    <record model="ir.ui.view" id="flsp_customer_badge_form_view">
+        <field name="name">flsp.customer.badge.form</field>
+        <field name="model">flsp.customer.badge</field>
+        <field name="arch" type="xml">
+            <form string="Customer Badge Form">
+                <sheet>
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"  placeholder="Badge Name" style="width:50%;"/>
+                    </h1>
+                    <group>
                         <group>
-                            <label for="name" class="oe_edit_only"/>
-                            <h1>
-                                <field name="name"  placeholder="Badge Name" style="width:50%;"/>
-                            </h1>
-                                <field name="reward_level" style="width:20%;"/>
-                                <field name="currency_id" style="width:20%;"/>
-                                <field name="annual_program_amount"  style="width:20%;"/>
+                            <group>
+                                <field name="reward_level"/>
+                                <field name="currency_id"/>
+                                <field name="annual_program_amount"/>
+                            </group>
+                            <group>
+                                <field name="sale_discount"/>
+                            </group>
+                            <group>
+                                <field name="freight_units_5_to_10_discount"/>
+                            </group>
+                            <group>
+                                <field name="freight_units_over_10_discount"/>
+                            </group>
                         </group>
                         <group>
-                                <field name="sale_discount"  style="width:20%;"/>
+                            <img alt="Bronze badge" attrs="{'invisible':[('reward_level', '!=', 'BRONZE')]}" src="/flsp-salesorder/static/description/bronze.png"/>
+                            <img alt="Silver badge" attrs="{'invisible':[('reward_level', '!=', 'SILVER')]}" src="/flsp-salesorder/static/description/silver.png"/>
+                            <img alt="Gold badge" attrs="{'invisible':[('reward_level', '!=', 'GOLD')]}" src="/flsp-salesorder/static/description/gold.png"/>
+                            <img alt="platinum badge" attrs="{'invisible':[('reward_level', '!=', 'PLATINUM')]}" src="/flsp-salesorder/static/description/platinum.png"/>
                         </group>
-                        <group>
-                                <field name="freight_units_5_to_10_discount" style="width:20%;"/>
-                        </group>
-                        <group>
-                                <field name="freight_units_over_10_discount"  style="width:20%;"    />
-                        </group>
-                        
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
         
         <record model="ir.ui.view" id="flsp_customer_badge_tree_view">
             <field name="name">flsp.customer.badge.tree</field>
@@ -56,6 +65,10 @@
                     <templates>
                         <t t-name="kanban-box">
                             <div t-attf-class="oe_kanban_global_click">
+                                <img alt="Bronze badge" attrs="{'invisible':[('reward_level', '!=', 'BRONZE')]}" src="/flsp-salesorder/static/description/bronze.png" class="o_kanban_image"/>
+                                <img alt="Silver badge" attrs="{'invisible':[('reward_level', '!=', 'SILVER')]}" src="/flsp-salesorder/static/description/silver.png" class="o_kanban_image"/>
+                                <img alt="Gold badge" attrs="{'invisible':[('reward_level', '!=', 'GOLD')]}" src="/flsp-salesorder/static/description/gold.png" class="o_kanban_image"/>
+                                <img alt="platinum badge" attrs="{'invisible':[('reward_level', '!=', 'PLATINUM')]}" src="/flsp-salesorder/static/description/platinum.png" class="o_kanban_image"/>
                                 <div t-attf-class="cb_kanban_content">
                                     Name:  
                                     <field name="name"/>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="manage_customer_badge_form_view">
+        <field name="name">manage.customer.badge.form</field>
+        <field name="model">flsp.manage.customer.badge</field>
+        <field name="arch" type="xml">
+            <form string="Customer badge">
+                <group string="Select customer badge">
+                    <field name="customer_id" invisible="True" />
+                    <field name="flsp_customer_badge_id"/>
+                </group>
+                <footer>
+                    <button name="button_set_customer_badge" string="Set" type="object" class="btn-primary" help="Add a customer badge or update existing customer badge with the new one"/>
+                    <button name="button_delete_customer_badge" string="Delete" type="object" class="btn-primary" help="Delete current customer badge"/>
+                    <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_manage_customer_badge_wizard">
+        <field name="name">Manage Customer Badge</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.manage.customer.badge</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="manage_customer_badge_form_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
+
+
+
+
+
+
