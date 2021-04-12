@@ -41,7 +41,7 @@
                     <!-- <button name="button_customer_badge" attrs="{'invisible': [('flsp_customer_badge_id', '!=', False)]}" groups="account.group_account_manager" string="Add Customer Badge" type="object" class="oe_highlight"/> -->
                     <button name="button_customer_badge" groups="account.group_account_manager" string="Customer Badge" type="object" class="oe_highlight"/>
                 </xpath>
-                <xpath expr="//form[1]/sheet[1]/div[@class='oe_title']/div[@class='o_row']" position="before">
+                <xpath expr="//form[1]/sheet[1]/div[@class='oe_title']" position="after">
                     <field name="flsp_customer_badge_id" string="Customer Badge" invisible="1"/>
                     <field name="flsp_customer_badge_reward_level" string="Reward Level" invisible="1"/>
                     <img alt="Bronze badge" attrs="{'invisible':['|', ('flsp_customer_badge_id', '=', False), ('flsp_customer_badge_reward_level', '!=', 'BRONZE')]}" src="/flsp-salesorder/static/description/bronze.png"/>
