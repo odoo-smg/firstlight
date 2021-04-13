@@ -7,13 +7,11 @@
 
     'description': """ Changes
             * Mar.26th.2021 - Created the model 
+            * Apr.8th.2021  - Filter SN for all internal transfers
         """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
 
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
 
