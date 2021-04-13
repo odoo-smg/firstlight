@@ -12,3 +12,5 @@ class FlspBackorder(models.Model):
         help="Inform here the Sale Target for the product category.")
 
     flsp_weekly_report = fields.Boolean("Weekly Report")
+    flsp_name_report = fields.Char('Report Category Name')
+    flsp_report_color = fields.Char('Report Color')

@@ -9,6 +9,8 @@
                 <xpath expr="//group[@name='first']" position="after">
                     <group name="flsp_weekly_sale">
                         <field name="flsp_weekly_report"/>
+                        <field name="flsp_name_report"/>
+                        <field name="flsp_report_color" widget="color"/>
                     </group>
                     <group string="Sales Target" name="flsp_sale_target">
                         <field name="flsp_sale_target_ids" nolabel="1" context="{'default_category_id': active_id, 'tree_view_ref':'flsp_sale_target.flsp_sale_target_tree_view'}" attrs="{'readonly': [('id', '=', False)]}" />
