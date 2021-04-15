@@ -30,25 +30,4 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <!-- inherit and customize "Customer" form view to add the "customer badge" if it exists -->
-        <record model="ir.ui.view" id="flsp_customer_badge_form_inherit">
-            <field name="name">flsp.customer.badge.form.inherit</field>
-            <field name="model">res.partner</field>
-            <field name="priority">99</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//header/button[@name='button_partner_acc_valid_off']" position="after">
-                    <!-- <button name="button_customer_badge" attrs="{'invisible': [('flsp_customer_badge_id', '!=', False)]}" groups="account.group_account_manager" string="Add Customer Badge" type="object" class="oe_highlight"/> -->
-                    <button name="button_customer_badge" groups="account.group_account_manager" string="Customer Badge" type="object" class="oe_highlight"/>
-                </xpath>
-                <xpath expr="//form[1]/sheet[1]/div[@class='oe_title']" position="after">
-                    <field name="flsp_customer_badge_id" string="Customer Badge" invisible="1"/>
-                    <field name="flsp_customer_badge_reward_level" string="Reward Level" invisible="1"/>
-                    <img alt="Bronze badge" attrs="{'invisible':['|', ('flsp_customer_badge_id', '=', False), ('flsp_customer_badge_reward_level', '!=', 'BRONZE')]}" src="/flsp-salesorder/static/description/bronze.png"/>
-                    <img alt="Silver badge" attrs="{'invisible':['|', ('flsp_customer_badge_id', '=', False), ('flsp_customer_badge_reward_level', '!=', 'SILVER')]}" src="/flsp-salesorder/static/description/silver.png"/>
-                    <img alt="Gold badge" attrs="{'invisible':['|', ('flsp_customer_badge_id', '=', False), ('flsp_customer_badge_reward_level', '!=', 'GOLD')]}" src="/flsp-salesorder/static/description/gold.png"/>
-                    <img alt="platinum badge" attrs="{'invisible':['|', ('flsp_customer_badge_id', '=', False), ('flsp_customer_badge_reward_level', '!=', 'PLATINUM')]}" src="/flsp-salesorder/static/description/platinum.png"/>
-                </xpath>
-            </field>
-        </record>
 </odoo>
