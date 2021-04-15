@@ -8,10 +8,7 @@
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='ref']" position="after">
-<!--                <field name="qty_exists"/>-->
-                <field name="qty_on_table" invisible="1"/>
-                <field name="qty_location" invisible="1"/>
-
+                <field name="qty_location" widget="many2many_tags" invisible="1"/>
             </xpath>
         </field>
     </record>
