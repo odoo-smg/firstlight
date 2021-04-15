@@ -15,27 +15,26 @@ class FlspStockProductionLotFilterSn(models.Model):
     """
     _inherit = 'stock.production.lot'
 
-    qty_on_table = fields.Boolean(string='Quantity exist', compute='_product_qty', store=True)
-    qty_location = fields.Many2one('stock.location')
+    qty_on_table = fields.Boolean(string='Quantity exist', compute='qty_available', store=True,
+                                  help="Very useful since it will help show which quantities are available")
+    qty_location = fields.Many2one('stock.location', string='Quantity_location', compute='qty_available', store=True)
 
-    def _product_qty(self):
+    @api.depends('product_qty')
+    def qty_available(self):
         """
-            Purpose: To check the qty_on_table field
-            Note:    Method is inherited from stock.production.lot
+            Purpose:    To make qty on table true if there is qty available on lot
+            Update on:  Apr.8th.2021.R
+            Tkt #:      344
         """
-        # method in orginal function
-        for lot in self:
-            # We only care for the quants in internal or transit locations.
-            quants = lot.quant_ids.filtered(lambda q: q.location_id.usage in ['internal', 'transit'])
-            lot.product_qty = sum(quants.mapped('quantity'))
+        for record in self:
+            if record.product_qty > 0:
+                record.qty_on_table = True
 
-        # custom method for filtering serial number
-        for line in self:
-            if line.product_qty > 0 and self.qty_location:
-                if 'PA' in self.qty_location.complete_name:
-                    line.qty_on_table = True
-            else:
-                line.qty_on_table = False
+        stock = self.env['stock.quant'].search([('quantity', '>', 0), ('lot_id', '=', self.ids)])
+        for line in stock:
+            for record in self:
+                if line.lot_id.name == record.name:
+                    record.qty_location = line.location_id
 
 
 class FlspSockQuantFilterSn(models.Model):
@@ -53,12 +52,12 @@ class FlspSockQuantFilterSn(models.Model):
         """
             Purpose: To change the qty_on_table for stock.production.lot
         """
-        # print("Onchange is executing in stock quant*****************")
-        if self.inventory_quantity > 0 and ('PA' in self.location_id.complete_name):
+        if self.inventory_quantity > 0:# and ('PA' in self.location_id.complete_name):
             self.lot_id.qty_on_table = True
             self.lot_id.qty_location = self.location_id
         else:
             self.lot_id.qty_on_table = False
+
 
 class FlspInvAdjLineFilterSn(models.Model):
     """
@@ -70,17 +69,14 @@ class FlspInvAdjLineFilterSn(models.Model):
     """
     _inherit = 'stock.inventory.line'
 
-    @api.onchange('location_id', 'prod_lot_id')
+    @api.onchange('location_id', 'prod_lot_id', 'product_qty')
     def change_product_qty_in_lot_table(self):
         """
             Purpose: To write the stock.production.lot location and qty on table
         """
-        print("Onchange executing in inventory adjustment ************")
-        print(self.prod_lot_id)
         if self.prod_lot_id:
-            print('product has lot associated')
             self.prod_lot_id.qty_location = self.location_id
-            if 'PA' in self.location_id.complete_name:
+            if self.product_qty > 0:
                 self.prod_lot_id.qty_on_table = True
             else:
                 self.prod_lot_id.qty_on_table = False
@@ -96,28 +92,27 @@ class FlspStockPickingFilterSn(models.Model):
     """
     _inherit = 'stock.picking'
 
-    # @api.onchange('date_done', 'state')
     def change_product_qty_in_lot_table(self):
         """
             Purpose: To write the stock.production.lot location and qty on table
         """
-        print("Executing the changed quantity in  stock picking************")
         for line in self.move_line_ids:
             if line.lot_id:
-                print('product has lot associated')
                 line.lot_id.qty_location = self.location_dest_id
-                if 'PA' in self.location_dest_id.complete_name:
+                if self.location_dest_id:
                     line.lot_id.qty_on_table = True
                 else:
                     line.lot_id.qty_on_table = False
 
-    def _check_sms_confirmation_popup(self):
+
+    def button_validate(self):
         """
             Purpose:    To call method to change the stock.production table
             Note:       Used method because its short and called in button validate
         """
+        res = super(FlspStockPickingFilterSn, self).button_validate()
         self.change_product_qty_in_lot_table()
-        return False
+        return res
 
 
 class FlspMrpProductionFilterSn(models.Model):
@@ -134,10 +129,9 @@ class FlspMrpProductionFilterSn(models.Model):
         """
             Purpose: To write the stock.production.lot to false so its filtered in next MO domain
         """
-        print("executing change product qty in lot table in mo*****************")
         stock_move_line = self.env['stock.move.line'].search([('reference', '=', self.name)])
         for line in stock_move_line:
-            if line.lot_id and ('PA' in self.location_src_id.complete_name):
+            if line.lot_id:
                 line.lot_id.qty_on_table = False
 
     def post_inventory(self):
@@ -203,4 +197,22 @@ class FlspMrpAbstractFilterSn(models.AbstractModel):
     _inherit = "mrp.abstract.workorder.line"
     lot_id = fields.Many2one(
         'stock.production.lot', 'Lot/Serial Number', check_company=True,
-        domain="[('product_id', '=', product_id), ('qty_on_table','=',True), ('qty_location.complete_name', 'ilike', 'PA'), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]")
+        domain="[('product_id', '=', product_id), ('qty_on_table','=',True), ('qty_location.complete_name', 'ilike', 'WH/PA'), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]")
+
+
+class FlspStockMoveLineFilterSn(models.Model):
+    """
+        class_name: FlspMrpFilterSn
+        inherit:    stock.move.line
+        Purpose:    To show only Serial numbers that are available
+        Date:       Apr/8th/2021/R
+        Author:     Sami Byaruhanga
+    """
+    _inherit = 'stock.move.line'
+
+    # Inherited and added the qty_on_table = True in domain
+    # Ticket#341
+    lot_id = fields.Many2one(
+        'stock.production.lot', 'Lot/Serial Number',
+        domain="[('product_id', '=', product_id), ('company_id', '=', company_id), "
+               "('qty_on_table','=',True),('qty_location','=',location_id)]", check_company=True)
