@@ -4,6 +4,9 @@ from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
+_logger = logging.getLogger(__name__)
+
 class Flspbpmemails(models.Model):
     """
     Set emails to the process
@@ -27,6 +30,7 @@ class Flspbpmemails(models.Model):
     email_preview = fields.Text(string="Email Preview")
     user_ids = fields.Many2many('res.users', 'flspautoemails_bpmemails_users_rel', string="Users To receive",
                     help='Include here the users that must receive email from this template.')
+
     @api.model
     def get_emails(self, model, context, save_log=False):
         emails_to = ''
@@ -54,6 +58,7 @@ class Flspbpmemails(models.Model):
         if emails_to == '':
             emails_to = False
         return emails_to
+
     @api.model
     def _rule_eval(self, rule, model=None, dict=None, save_log=False):
         if rule:
@@ -72,7 +77,8 @@ class Flspbpmemails(models.Model):
                           context,
                           mode='exec',
                           nocopy=True)  # nocopy allows to return 'result'
-            except Exception:
+            except Exception as e:
+                _logger.warning("Exception in _rule_eval: " + str(e))
                 if save_log:
                     log = self.env['flspautoemails.bpmemailslog'].create({
                         'date_sent': datetime.now(),
@@ -89,6 +95,7 @@ class Flspbpmemails(models.Model):
                     raise ValidationError("Wrong python code defined for BPM Emails="+self.name+". Code:" + rule)
                 return False
             return context.get('result', False)
+
     def update_preview(self):
         context = self._rule_eval(self.dict_preview, self)
         condition = self._rule_eval(self.condition, self, context)
@@ -110,9 +117,12 @@ class Flspbpmemails(models.Model):
         if body_calc:
             body += self._rule_eval(self.email_body, self, context)
         self.email_preview = body
+
     def send_email(self, model, template):
         bpm_email = self.env['flspautoemails.bpmemails'].search([('name', '=', template)])
         result = True
+        if (not bpm_email) or (not bpm_email.exists()):
+            _logger.warning("The template does NOT exist, please check it with name: " + str(template))
         if bpm_email.exists():
             if bpm_email.email_active:
                 context = bpm_email._rule_eval(bpm_email.dictionary, model, None, True)
@@ -142,7 +152,7 @@ class Flspbpmemails(models.Model):
                     result = True
                 else:
                     log_model_id = 0
-                    if model.id:
+                    if 'id' in model and model.id:
                         log_model_id = model.id
                     #create a log
                     log = self.env['flspautoemails.bpmemailslog'].create({
@@ -158,6 +168,7 @@ class Flspbpmemails(models.Model):
                     })
                     result = False
         return result
+
     def send_test(self):
         context = self._rule_eval(self.dict_preview, self)
         email_to = self.test_email
