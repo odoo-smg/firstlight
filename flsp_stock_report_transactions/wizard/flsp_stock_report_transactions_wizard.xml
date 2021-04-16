@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_stock_report_trans_wizard_form_view" model="ir.ui.view">
+            <field name="name">Stock Transactions Report</field>
+            <field name="model">flsp_stock_report_transactions.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Stock Transactions Report">
+                    <group>
+                        <field name="location_id" required="1" />
+                        <field name="product_id" required="1" />
+                        <field name="tracking" attrs="{'invisible': True}"/>
+                        <field name="lot_id" attrs="{'invisible': [('tracking', '=', 'none')]}" />
+                    </group>
+                    <footer>
+                        <button name="flsp_report" type="object" string="Confirm" class="btn-primary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_stock_report_transactions_wizard" model="ir.actions.act_window">
+            <field name="name">FLSP - Stock Transactions Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp_stock_report_transactions.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="flsp_stock_report_transactions_menu"
+                  name="FLSP Stock Transactions"
+                  parent="stock.menu_warehouse_report"
+                  sequence="600"
+                  action="launch_flsp_stock_report_transactions_wizard"/>
+</odoo>

@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from . import flsp_mrp_inherit
+from . import filter_sn_method
