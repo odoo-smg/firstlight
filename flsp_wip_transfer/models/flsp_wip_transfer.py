@@ -197,6 +197,15 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = min_qty - (current_balance+already_suggested)
                     else:
                         suggested_qty = 0
+
+                # checking multiple quantities - including the qty already suggested
+                if multiple > 1:
+                    if multiple > suggested_qty+already_suggested:
+                        suggested_qty += multiple - suggested_qty+already_suggested
+                    else:
+                        if ((suggested_qty+already_suggested) % multiple) > 0:
+                            suggested_qty += multiple - ((suggested_qty+already_suggested) % multiple)
+
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
@@ -248,6 +257,15 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = min_qty - current_balance
                     else:
                         suggested_qty = 0
+
+                # checking multiple quantities - just because it haven't being suggested yet
+                if multiple > 1:
+                    if multiple > suggested_qty:
+                        suggested_qty += multiple - suggested_qty
+                    else:
+                        if (suggested_qty % multiple) > 0:
+                            suggested_qty += multiple - (suggested_qty % multiple)
+
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
