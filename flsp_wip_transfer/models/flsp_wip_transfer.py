@@ -201,7 +201,7 @@ class FlspMrpPlanningLine(models.Model):
                 # checking multiple quantities - including the qty already suggested
                 if multiple > 1:
                     if multiple > suggested_qty+already_suggested:
-                        suggested_qty += multiple - suggested_qty+already_suggested
+                        suggested_qty += multiple - (suggested_qty+already_suggested)
                     else:
                         if ((suggested_qty+already_suggested) % multiple) > 0:
                             suggested_qty += multiple - ((suggested_qty+already_suggested) % multiple)
