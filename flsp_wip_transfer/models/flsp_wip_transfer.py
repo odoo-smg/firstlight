@@ -197,14 +197,13 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = min_qty - (current_balance+already_suggested)
                     else:
                         suggested_qty = 0
-
-                # checking multiple quantities - including the qty already suggested
+                # checking multiple quantities - including the already suggested qty
                 if multiple > 1:
                     if multiple > suggested_qty+already_suggested:
-                        suggested_qty += multiple - (suggested_qty+already_suggested)
+                        suggested_qty += multiple - suggested_qty+already_suggested
                     else:
                         if ((suggested_qty+already_suggested) % multiple) > 0:
-                            suggested_qty += multiple * (1-((suggested_qty+already_suggested) % multiple))
+                            suggested_qty += multiple-((suggested_qty+already_suggested) % multiple)
 
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
@@ -246,7 +245,10 @@ class FlspMrpPlanningLine(models.Model):
                     min_qty = 0.0
                     max_qty = 0.0
                     multiple = 1
-
+                if multiple == False:
+                    multiple = 1
+                if multiple <= 0:
+                    multiple = 1
                 # Minimal quantity:
                 if current_balance < 0:
                     suggested_qty = min_qty - current_balance
@@ -262,8 +264,7 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty += multiple - suggested_qty
                     else:
                         if (suggested_qty % multiple) > 0:
-                            suggested_qty += multiple * (1 - (suggested_qty % multiple))
-
+                            suggested_qty += multiple - (suggested_qty % multiple)
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
