@@ -204,7 +204,7 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty += multiple - (suggested_qty+already_suggested)
                     else:
                         if ((suggested_qty+already_suggested) % multiple) > 0:
-                            suggested_qty += multiple - ((suggested_qty+already_suggested) % multiple)
+                            suggested_qty += multiple * (1-((suggested_qty+already_suggested) % multiple))
 
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
@@ -231,7 +231,6 @@ class FlspMrpPlanningLine(models.Model):
             wip_trans = self.env['flsp.wip.transfer'].search([])
             products = self.env['product.product'].search([('id', 'not in', wip_trans.mapped('product_id').ids)])
             for product in products:
-                print('Products without movement:'+product.name)
                 pa_wip_qty = 0
                 stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
                 for stock_lin in stock_quant:
@@ -240,7 +239,6 @@ class FlspMrpPlanningLine(models.Model):
                 current_balance = pa_wip_qty
                 wip_order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)], limit=1)
                 if wip_order_point:
-                    print('    tem orderpoint:' + wip_order_point.name)
                     min_qty = wip_order_point.product_min_qty
                     max_qty = wip_order_point.product_max_qty
                     multiple = wip_order_point.qty_multiple
@@ -264,7 +262,7 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty += multiple - suggested_qty
                     else:
                         if (suggested_qty % multiple) > 0:
-                            suggested_qty += multiple - (suggested_qty % multiple)
+                            suggested_qty += multiple * (1 - (suggested_qty % multiple))
 
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
