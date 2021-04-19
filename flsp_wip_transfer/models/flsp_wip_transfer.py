@@ -205,6 +205,7 @@ class FlspMrpPlanningLine(models.Model):
                         if ((suggested_qty+already_suggested) % multiple) > 0:
                             suggested_qty += multiple-((suggested_qty+already_suggested) % multiple)
 
+
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
@@ -265,6 +266,7 @@ class FlspMrpPlanningLine(models.Model):
                     else:
                         if (suggested_qty % multiple) > 0:
                             suggested_qty += multiple - (suggested_qty % multiple)
+                            
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
