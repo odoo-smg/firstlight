@@ -29,7 +29,7 @@ class FlspStockProductionLotFilterSn(models.Model):
 
     @api.depends('product_qty')
     def check_all_available_sn(self):
-        return
+        #return
         """
             Purpose:    To check stock_quant for all lots/sn with qty >0
                         Writes the stock_qty location on the serial numbers
