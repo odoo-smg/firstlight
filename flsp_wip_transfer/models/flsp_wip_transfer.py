@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
 import datetime
 
+
 class FlspMrpPlanningLine(models.Model):
     _name = 'flsp.wip.transfer'
     _description = 'FLSP Weekly Transfer'
@@ -50,6 +51,7 @@ class FlspMrpPlanningLine(models.Model):
 
 
     def _flsp_calc_demands(self, days_ahead, bring_negative):
+
         cur_date = datetime.datetime.now().date()
         date_mo = (cur_date + relativedelta(days=+ days_ahead))
 
@@ -165,14 +167,13 @@ class FlspMrpPlanningLine(models.Model):
                                 })
 
             ## Minimal quantity
-
             # products already suggested:
             wip_trans = self.env['flsp.wip.transfer'].search([])
             products = self.env['product.product'].search([('id', 'in', wip_trans.mapped('product_id').ids)])
             for product in products:
                 pa_wip_qty = 0
 
-                wips_total = self.env['flsp.wip.transfer'].search([('product_id', '=', product.id)])
+                wips_total = self.env['flsp.wip.transfer'].search(['&', ('product_id', '=', product.id), ('state', '=', 'transfer')])
                 already_suggested = sum(wips_total.mapped('mfg_demand'))
                 stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
                 for stock_lin in stock_quant:
@@ -197,6 +198,14 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = min_qty - (current_balance+already_suggested)
                     else:
                         suggested_qty = 0
+                # checking multiple quantities - including the already suggested qty
+                if multiple > 1:
+                    if multiple > suggested_qty+already_suggested:
+                        suggested_qty += multiple - suggested_qty+already_suggested
+                    else:
+                        if ((suggested_qty+already_suggested) % multiple) > 0:
+                            suggested_qty += multiple-((suggested_qty+already_suggested) % multiple)
+
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
@@ -222,7 +231,6 @@ class FlspMrpPlanningLine(models.Model):
             wip_trans = self.env['flsp.wip.transfer'].search([])
             products = self.env['product.product'].search([('id', 'not in', wip_trans.mapped('product_id').ids)])
             for product in products:
-                print('Products without movement:'+product.name)
                 pa_wip_qty = 0
                 stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
                 for stock_lin in stock_quant:
@@ -231,7 +239,6 @@ class FlspMrpPlanningLine(models.Model):
                 current_balance = pa_wip_qty
                 wip_order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)], limit=1)
                 if wip_order_point:
-                    print('    tem orderpoint:' + wip_order_point.name)
                     min_qty = wip_order_point.product_min_qty
                     max_qty = wip_order_point.product_max_qty
                     multiple = wip_order_point.qty_multiple
@@ -239,7 +246,10 @@ class FlspMrpPlanningLine(models.Model):
                     min_qty = 0.0
                     max_qty = 0.0
                     multiple = 1
-
+                if multiple == False:
+                    multiple = 1
+                if multiple <= 0:
+                    multiple = 1
                 # Minimal quantity:
                 if current_balance < 0:
                     suggested_qty = min_qty - current_balance
@@ -248,6 +258,14 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = min_qty - current_balance
                     else:
                         suggested_qty = 0
+
+                # checking multiple quantities - just because it haven't being suggested yet
+                if multiple > 1:
+                    if multiple > suggested_qty:
+                        suggested_qty += multiple - suggested_qty
+                    else:
+                        if (suggested_qty % multiple) > 0:
+                            suggested_qty += multiple - (suggested_qty % multiple)
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
