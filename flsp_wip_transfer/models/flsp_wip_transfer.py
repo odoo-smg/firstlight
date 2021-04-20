@@ -180,7 +180,7 @@ class FlspMrpPlanningLine(models.Model):
             for product in products:
                 pa_wip_qty = 0
 
-                wips_total = self.env['flsp.wip.transfer'].search([('product_id', '=', product.id)])
+                wips_total = self.env['flsp.wip.transfer'].search(['&', ('product_id', '=', product.id), ('state', '=', 'transfer')])
                 already_suggested = sum(wips_total.mapped('mfg_demand'))
                 stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
                 for stock_lin in stock_quant:
