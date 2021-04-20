@@ -53,6 +53,10 @@ class FlspMrpPlanningLine(models.Model):
 
 
     def _flsp_calc_demands(self, days_ahead, bring_negative):
+
+        print("**************** Calculating the demands ************************")
+        _logger.debug("**************** Calculating the demands ************************")
+
         cur_date = datetime.datetime.now().date()
         date_mo = (cur_date + relativedelta(days=+ days_ahead))
 
