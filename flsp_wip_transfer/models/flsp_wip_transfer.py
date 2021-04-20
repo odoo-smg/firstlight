@@ -3,10 +3,8 @@
 from odoo import models, fields, api
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
-import logging
 import datetime
 
-_logger = logging.getLogger(__name__)
 
 class FlspMrpPlanningLine(models.Model):
     _name = 'flsp.wip.transfer'
@@ -53,9 +51,6 @@ class FlspMrpPlanningLine(models.Model):
 
 
     def _flsp_calc_demands(self, days_ahead, bring_negative):
-
-        print("**************** Calculating the demands ************************")
-        _logger.debug("**************** Calculating the demands ************************")
 
         cur_date = datetime.datetime.now().date()
         date_mo = (cur_date + relativedelta(days=+ days_ahead))
@@ -172,8 +167,6 @@ class FlspMrpPlanningLine(models.Model):
                                 })
 
             ## Minimal quantity
-
-            _logger.debug('******************************************** used products')
             # products already suggested:
             wip_trans = self.env['flsp.wip.transfer'].search([])
             products = self.env['product.product'].search([('id', 'in', wip_trans.mapped('product_id').ids)])
@@ -206,19 +199,12 @@ class FlspMrpPlanningLine(models.Model):
                     else:
                         suggested_qty = 0
                 # checking multiple quantities - including the already suggested qty
-                _logger.debug('  Minimal quantity for used products .Product = '+product.name)
-                _logger.debug('     suggested: ' + str(suggested_qty))
-                _logger.debug('     already suggested: ' + str(already_suggested))
-                _logger.debug('     multiple: ' + str(multiple))
-                _logger.debug('     total: ' + str(suggested_qty+already_suggested))
                 if multiple > 1:
                     if multiple > suggested_qty+already_suggested:
                         suggested_qty += multiple - suggested_qty+already_suggested
-                        _logger.debug('     ***** multiple is bigger: ' + str(suggested_qty))
                     else:
                         if ((suggested_qty+already_suggested) % multiple) > 0:
                             suggested_qty += multiple-((suggested_qty+already_suggested) % multiple)
-                            _logger.debug('     ***** remainder is bigger: ' + str(suggested_qty))
 
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
@@ -242,7 +228,6 @@ class FlspMrpPlanningLine(models.Model):
                     })
 
             # products not suggested yet:
-            _logger.debug('******************************************** not suggested products')
             wip_trans = self.env['flsp.wip.transfer'].search([])
             products = self.env['product.product'].search([('id', 'not in', wip_trans.mapped('product_id').ids)])
             for product in products:
@@ -275,19 +260,12 @@ class FlspMrpPlanningLine(models.Model):
                         suggested_qty = 0
 
                 # checking multiple quantities - just because it haven't being suggested yet
-                _logger.debug('  Minimal quantity for used products .Product = '+product.name)
-                _logger.debug('     suggested: ' + str(suggested_qty))
-                _logger.debug('     already suggested: ' + str(already_suggested))
-                _logger.debug('     multiple: ' + str(multiple))
-                _logger.debug('     total: ' + str(suggested_qty+already_suggested))
                 if multiple > 1:
                     if multiple > suggested_qty:
                         suggested_qty += multiple - suggested_qty
-                        _logger.debug('     ***** multiple is bigger: ' + str(suggested_qty))
                     else:
                         if (suggested_qty % multiple) > 0:
                             suggested_qty += multiple - (suggested_qty % multiple)
-                            _logger.debug('     ***** remainder is bigger: ' + str(suggested_qty))
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
