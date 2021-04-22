@@ -6,6 +6,7 @@ from datetime import timedelta
 from datetime import datetime
 from odoo.exceptions import UserError
 
+
 class FlspMrppurchaseLine(models.Model):
     _name = 'flsp.mrp.purchase.line'
     _description = 'FLSP MRP purchase Line'
@@ -21,8 +22,10 @@ class FlspMrppurchaseLine(models.Model):
     qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
-    curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
-    curr_ins = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
+    curr_outs = fields.Float(String="Demand", readonly=True,
+                             help="Includes all confirmed sales orders and manufacturing orders")
+    curr_ins = fields.Float(String="Replenishment", readonly=True,
+                            help="Includes all confirmed purchase orders and manufacturing orders")
     average_use = fields.Float(String="Avg Use", readonly=True, help="Average usage of the past 3 months.")
     month1_use = fields.Float(String="2020-06 Usage", readonly=True, help="Total usage of last month.")
     month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
@@ -30,17 +33,19 @@ class FlspMrppurchaseLine(models.Model):
     suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
     adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
-    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True, help="Quantity suggested to buy or produce.")
+    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True,
+                                      help="Quantity suggested to buy or produce.")
 
     qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
     level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
-    route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
-    route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
+    route_buy = fields.Selection([('buy', 'To Buy'), ('na', 'Non Applicable'), ], string='To Buy', readonly=True)
+    route_mfg = fields.Selection([('mfg', 'To Manufacture'), ('na', 'Non Applicable'), ], string='To Produce',
+                                 readonly=True)
     state = fields.Selection([
         ('buy', 'To Buy'),
-        ('ok' , 'No Action'),
-        ('po' , 'Confirm PO'),
-        ('mo' , 'Confirm MO'),
+        ('ok', 'No Action'),
+        ('po', 'Confirm PO'),
+        ('mo', 'Confirm MO'),
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
     type = fields.Char(string='Type', readonly=True)
@@ -51,10 +56,10 @@ class FlspMrppurchaseLine(models.Model):
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    stock_qty    = fields.Float(string='Stock Qty', readonly=True)
-    wip_qty      = fields.Float(string='WIP Qty', readonly=True)
-    vendor_id    = fields.Many2one('res.partner', string='Supplier')
-    vendor_qty   = fields.Float(string='Quantity', readonly=True)
+    stock_qty = fields.Float(string='Stock Qty', readonly=True)
+    wip_qty = fields.Float(string='WIP Qty', readonly=True)
+    vendor_id = fields.Many2one('res.partner', string='Supplier')
+    vendor_qty = fields.Float(string='Quantity', readonly=True)
     vendor_price = fields.Float(string='Price', readonly=True)
     delay = fields.Integer(string="Delivery Lead Time")
     required_by = fields.Date(String="Required by", readonly=True)
@@ -95,16 +100,17 @@ class FlspMrppurchaseLine(models.Model):
             record.default_code
         ) for record in self]
 
-
     @api.onchange('adjusted_qty')
     def onchange_adjusted_qty(self):
         self.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted_qty, self.product_id.uom_po_id)
         if self._origin.id:
             planning = self.env['flsp.mrp.purchase.line'].search([('id', '=', self._origin.id)])
             if planning:
-                planning.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted_qty, self.product_id.uom_po_id)
+                planning.purchase_adjusted = self.product_id.uom_id._compute_quantity(self.adjusted_qty,
+                                                                                      self.product_id.uom_po_id)
 
-    def _flsp_calc_purchase(self, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1, consider_drafts=True, consider_wip=True, consider_forecast=True):
+    def _flsp_calc_purchase(self, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1,
+                            consider_drafts=True, consider_wip=True, consider_forecast=True):
         current_date = datetime.now()
         required_by = current_date
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
@@ -116,17 +122,15 @@ class FlspMrppurchaseLine(models.Model):
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
-        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
+        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location + '%')]).ids
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
         stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')]).parent_path
         if not stock_location:
             raise UserError('Stock Location is missing')
-        wh_stock_locations = self.env['stock.location'].search([('parent_path', 'like', stock_location+'%')]).ids
+        wh_stock_locations = self.env['stock.location'].search([('parent_path', 'like', stock_location + '%')]).ids
         if not wh_stock_locations:
             raise UserError('Stock Location is missing')
-
-
 
         mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search([])
         for purchase in mrp_purchase_product:  ##delete not used
@@ -144,7 +148,8 @@ class FlspMrppurchaseLine(models.Model):
         # *******************************************************************************
         # ***************************** Purchase Orders *********************************
         # *******************************************************************************
-        open_receipts = self.env['stock.picking'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']),('picking_type_id', 'in', receipt_stock_type)])
+        open_receipts = self.env['stock.picking'].search(
+            ['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('picking_type_id', 'in', receipt_stock_type)])
         for receipt in open_receipts:
             stock_move_product = self.env['stock.move'].search([('picking_id', '=', receipt.id)])
             for move in stock_move_product:
@@ -156,19 +161,21 @@ class FlspMrppurchaseLine(models.Model):
         # *******************************************************************************
         # ***************************** Sales Orders ************************************
         # *******************************************************************************
-        open_deliveries = self.env['stock.picking'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('picking_type_id', 'in', delivery_stock_type)])
+        open_deliveries = self.env['stock.picking'].search(
+            ['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('picking_type_id', 'in', delivery_stock_type)])
         for delivery in open_deliveries:
             stock_move_product = self.env['stock.move'].search([('picking_id', '=', delivery.id)])
             for move in stock_move_product:
-                move_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', move.product_id.product_tmpl_id.id)], limit=1)
+                move_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', move.product_id.product_tmpl_id.id)],
+                                                      limit=1)
                 if not move_bom:
                     open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
                                        receipt.origin,
                                        move.product_id,
                                        move.product_uom_qty, move.product_uom,
-                                       receipt.scheduled_date, 0, standard_lead_time ])
+                                       receipt.scheduled_date, 0, standard_lead_time])
                 else:
-                    move_components = self._get_flattened_totals(move_bom, move.product_uom_qty)
+                    move_components = self._get_flattened_totals(move_bom, move.product_uom_qty, {}, 0, True)
                     for prod in move_components:
                         if prod.type in ['service', 'consu']:
                             continue
@@ -178,7 +185,8 @@ class FlspMrppurchaseLine(models.Model):
                                            delivery.origin,
                                            prod,
                                            move_components[prod]['total'], prod.uom_id.id,
-                                           delivery.scheduled_date, move_components[prod]['level'], standard_lead_time+(indirect_lead_time*move_components[prod]['level'])])
+                                           delivery.scheduled_date, move_components[prod]['level'],
+                                           standard_lead_time + (indirect_lead_time * move_components[prod]['level'])])
         # *******************************************************************************
         # ************************ Manufacturing Orders *********************************
         # *******************************************************************************
@@ -187,14 +195,16 @@ class FlspMrppurchaseLine(models.Model):
         else:
             production_orders = self.env['mrp.production'].search([('state', 'not in', ['done', 'cancel', 'draft'])])
         for production in production_orders:
-            move_components = self._get_flattened_totals(production.bom_id, production.product_qty)
+            move_components = self._get_flattened_totals(production.bom_id, production.product_qty, {}, 0,True)
+
             for prod in move_components:
                 if move_components[prod]['level'] == 1:
                     open_moves.append([len(open_moves) + 1, 'In   ', 'MO      ',
                                        production.name,
                                        prod,
                                        move_components[prod]['total'], prod.uom_id.id,
-                                       production.date_planned_start, move_components[prod]['level'], standard_lead_time+(move_components[prod]['level']*indirect_lead_time)])
+                                       production.date_planned_start, move_components[prod]['level'],
+                                       standard_lead_time + (move_components[prod]['level'] * indirect_lead_time)])
                     continue
                 if prod.type in ['service', 'consu']:
                     continue
@@ -204,23 +214,24 @@ class FlspMrppurchaseLine(models.Model):
                                    production.name,
                                    prod,
                                    move_components[prod]['total'], prod.uom_id.id,
-                                   production.date_planned_start, move_components[prod]['level'], standard_lead_time+(indirect_lead_time*move_components[prod]['level'])])
-        #print(open_moves)
+                                   production.date_planned_start, move_components[prod]['level'],
+                                   standard_lead_time + (indirect_lead_time * move_components[prod]['level'])])
+        # print(open_moves)
 
-        #for move in open_moves:
-            #print(move[4].default_code+' - '+str(move[7])) ## Product + Date
-            #print(move[4])  ## Product
+        # for move in open_moves:
+        # print(move[4].default_code+' - '+str(move[7])) ## Product + Date
+        # print(move[4])  ## Product
 
-        #open_moves.sort(key=lambda x: x[4].id) # Sort by product
-        #open_moves.sort(key=lambda x: x[7])  # Sort by date
+        # open_moves.sort(key=lambda x: x[4].id) # Sort by product
+        # open_moves.sort(key=lambda x: x[7])  # Sort by date
         open_moves.sort(key=lambda x: (x[4].id, x[7]))  # Sort by product and then date
-        open_moves.append(False) ## append the last item to print when the for ends.
+        open_moves.append(False)  ## append the last item to print when the for ends.
         consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        #print('---> After sorting')
-        #for move in open_moves:
-            #print(move[4].default_code+' - '+str(move[7])) ## Product + Date
-            #print(move[7]) ## Date
-            #print(move[4])  ## Product
+        # print('---> After sorting')
+        # for move in open_moves:
+        # print(move[4].default_code+' - '+str(move[7])) ## Product + Date
+        # print(move[7]) ## Date
+        # print(move[4])  ## Product
 
         # First Item
         for item in open_moves:
@@ -232,7 +243,8 @@ class FlspMrppurchaseLine(models.Model):
             rationale += "<br/>DATE        | QTY         |Balance      |Type |Source  |BOM Level|Mfg Lead time| Doc"
             rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------"
             product = open_moves[1][4]
-            order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
+            order_point = self.env['stock.warehouse.orderpoint'].search(
+                ['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
             if order_point:
                 min_qty = order_point.product_min_qty
                 max_qty = order_point.product_max_qty
@@ -252,7 +264,8 @@ class FlspMrppurchaseLine(models.Model):
                 current_balance = product.qty_available
             else:
                 current_balance = product.qty_available - pa_wip_qty
-            rationale += '<br/>            |             | '+'{0: <12.2f}|'.format(current_balance)+'     |        |         |             |Initial Balance'
+            rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
+                current_balance) + '     |        |         |             |Initial Balance'
             bom_level = item[8]
             required_by = False
             break
@@ -265,7 +278,8 @@ class FlspMrppurchaseLine(models.Model):
                 new_prod = (item[4] != product)
             if new_prod:
                 rationale += "</pre>"
-                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, consumption)
+                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip,
+                                                   consumption)
                 if purchase_line:
                     purchase_line.level_bom = bom_level
                 bom_level = 0
@@ -289,7 +303,8 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance = product.qty_available
                 else:
                     current_balance = product.qty_available - pa_wip_qty
-                rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(current_balance) + '     |        |         |             |Initial Balance'
+                rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
+                    current_balance) + '     |        |         |             |Initial Balance'
             if item:
                 if item[1] == 'Out  ':
                     current_balance -= item[5]
@@ -301,11 +316,12 @@ class FlspMrppurchaseLine(models.Model):
                 if not required_by:
                     if current_balance < 0:
                         required_by = item[7]
-                rationale += '<br/>'+item[7].strftime("%Y-%m-%d")+'  | '+'{:<12.4f}|'.format(item[5])+' ' + '{0: <12.2f}|'.format(current_balance) + item[1]+'|'+item[2]+'|'+'{0: <9}|'.format(item[8])+'{0: <13}|'.format(item[9])+item[3]
+                rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
+                    item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[
+                                 2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]
                 product = item[4]
                 if bom_level < item[8]:
                     bom_level = item[8]
-
 
         # ########################################
         # ### Other products without movements ###
@@ -317,7 +333,8 @@ class FlspMrppurchaseLine(models.Model):
             if not purchase_planning:
                 current_balance = False
                 rationale = 'No open movements - Product Selected based on Min qty.'
-                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, consumption)
+                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip,
+                                                   consumption)
 
         # ########################################
         # ######## FORECAST   ####################
@@ -325,44 +342,60 @@ class FlspMrppurchaseLine(models.Model):
         if consider_forecast:
             sales_forecast = self.env['flsp.sales.forecast'].search([])
             for forecast in sales_forecast:
-                forecast_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
+                forecast_bom = self.env['mrp.bom'].search(
+                    [('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
                 if forecast_bom:
                     forecast_components = self._get_flattened_totals(forecast_bom, 1)
                     for component in forecast_components:
-                        purchase_planning = self.env['flsp.mrp.purchase.line'].search([('product_id', '=', component.id)],limit=1)
+                        purchase_planning = self.env['flsp.mrp.purchase.line'].search(
+                            [('product_id', '=', component.id)], limit=1)
                         if not purchase_planning:
                             product = component
                             rationale = 'No open movements - Product Selected based on Forecast.'
                             forecasted = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                            forecasted[1] = forecast.qty_month1*forecast_components[component]['total']
-                            forecasted[2] = forecast.qty_month2*forecast_components[component]['total']
-                            forecasted[3] = forecast.qty_month3*forecast_components[component]['total']
-                            forecasted[4] = forecast.qty_month4*forecast_components[component]['total']
-                            forecasted[5] = forecast.qty_month5*forecast_components[component]['total']
-                            forecasted[6] = forecast.qty_month6*forecast_components[component]['total']
-                            forecasted[7] = forecast.qty_month7*forecast_components[component]['total']
-                            forecasted[8] = forecast.qty_month8*forecast_components[component]['total']
-                            forecasted[9] = forecast.qty_month9*forecast_components[component]['total']
-                            forecasted[10] = forecast.qty_month10*forecast_components[component]['total']
-                            forecasted[11] = forecast.qty_month11*forecast_components[component]['total']
-                            forecasted[12] = forecast.qty_month12*forecast_components[component]['total']
-                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip, False, forecasted)
+                            forecasted[1] = forecast.qty_month1 * forecast_components[component]['total']
+                            forecasted[2] = forecast.qty_month2 * forecast_components[component]['total']
+                            forecasted[3] = forecast.qty_month3 * forecast_components[component]['total']
+                            forecasted[4] = forecast.qty_month4 * forecast_components[component]['total']
+                            forecasted[5] = forecast.qty_month5 * forecast_components[component]['total']
+                            forecasted[6] = forecast.qty_month6 * forecast_components[component]['total']
+                            forecasted[7] = forecast.qty_month7 * forecast_components[component]['total']
+                            forecasted[8] = forecast.qty_month8 * forecast_components[component]['total']
+                            forecasted[9] = forecast.qty_month9 * forecast_components[component]['total']
+                            forecasted[10] = forecast.qty_month10 * forecast_components[component]['total']
+                            forecasted[11] = forecast.qty_month11 * forecast_components[component]['total']
+                            forecasted[12] = forecast.qty_month12 * forecast_components[component]['total']
+                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip,
+                                                               False, forecasted)
                         else:
-                            purchase_planning.qty_month1 += forecast.qty_month1*forecast_components[component]['total']
-                            purchase_planning.qty_month2 += forecast.qty_month2*forecast_components[component]['total']
-                            purchase_planning.qty_month3 += forecast.qty_month3*forecast_components[component]['total']
-                            purchase_planning.qty_month4 += forecast.qty_month4*forecast_components[component]['total']
-                            purchase_planning.qty_month5 += forecast.qty_month5*forecast_components[component]['total']
-                            purchase_planning.qty_month6 += forecast.qty_month6*forecast_components[component]['total']
-                            purchase_planning.qty_month7 += forecast.qty_month7*forecast_components[component]['total']
-                            purchase_planning.qty_month8 += forecast.qty_month8*forecast_components[component]['total']
-                            purchase_planning.qty_month9 += forecast.qty_month9*forecast_components[component]['total']
-                            purchase_planning.qty_month10 += forecast.qty_month10*forecast_components[component]['total']
-                            purchase_planning.qty_month11 += forecast.qty_month11*forecast_components[component]['total']
-                            purchase_planning.qty_month12 += forecast.qty_month12*forecast_components[component]['total']
+                            purchase_planning.qty_month1 += forecast.qty_month1 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month2 += forecast.qty_month2 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month3 += forecast.qty_month3 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month4 += forecast.qty_month4 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month5 += forecast.qty_month5 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month6 += forecast.qty_month6 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month7 += forecast.qty_month7 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month8 += forecast.qty_month8 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month9 += forecast.qty_month9 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month10 += forecast.qty_month10 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month11 += forecast.qty_month11 * forecast_components[component][
+                                'total']
+                            purchase_planning.qty_month12 += forecast.qty_month12 * forecast_components[component][
+                                'total']
                 else:
                     if forecast.product_id.type == 'product' and route_buy in forecast.product_id.route_ids.ids:
-                        purchase_planning = self.env['flsp.mrp.purchase.line'].search([('product_id', '=', forecast.product_id.id)],limit=1)
+                        purchase_planning = self.env['flsp.mrp.purchase.line'].search(
+                            [('product_id', '=', forecast.product_id.id)], limit=1)
                         if not purchase_planning:
                             product = forecast.product_id
                             current_balance = False
@@ -380,7 +413,8 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[10] = forecast.qty_month10
                             forecasted[11] = forecast.qty_month11
                             forecasted[12] = forecast.qty_month12
-                            purchase_line = self._include_prod(product, rationale, current_balance, current_date, consider_wip, False, forecasted)
+                            purchase_line = self._include_prod(product, rationale, current_balance, current_date,
+                                                               consider_wip, False, forecasted)
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1
                             purchase_planning.qty_month2 += forecast.qty_month2
@@ -397,8 +431,8 @@ class FlspMrppurchaseLine(models.Model):
 
             purchase_planning = self.env['flsp.mrp.purchase.line'].search([])
             months = ['', 'January         ', 'February        ', 'March           ', 'April           ',
-                          'May             ', 'June            ', 'July            ', 'August          ',
-                          'October         ', 'September       ', 'November        ', 'December        ']
+                      'May             ', 'June            ', 'July            ', 'August          ',
+                      'October         ', 'September       ', 'November        ', 'December        ']
             next_6_months = []
             key = current_date.month
             count = 1
@@ -419,7 +453,7 @@ class FlspMrppurchaseLine(models.Model):
                 key = current_date.month
                 rationale += 'Forecast|'
                 for month in next_6_months:
-                    field_name = 'qty_month'+str(key)
+                    field_name = 'qty_month' + str(key)
                     rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
                     key += 1
                     if key > 12:
@@ -427,7 +461,7 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += '<br/>Actual  |'
                 key = current_date.month
                 for month in next_6_months:
-                    field_name = 'consumption_month'+str(key)
+                    field_name = 'consumption_month' + str(key)
                     rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
                     key += 1
                     if key > 12:
@@ -435,16 +469,16 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += '<br/>Diff    |'
                 key = current_date.month
                 for month in next_6_months:
-                    field_name = 'qty_month'+str(key)
+                    field_name = 'qty_month' + str(key)
                     diff = getattr(planning, field_name)
-                    field_name = 'consumption_month'+str(key)
+                    field_name = 'consumption_month' + str(key)
                     diff -= getattr(planning, field_name)
                     rationale += '{0: <16.2f}|'.format(diff)
                     key += 1
                     if key > 12:
                         key = 1
                 rationale += "<br/>---------------------------------------------------------------------------------------------------------------<br/>"
-                months_to_consider = int(planning.delay/31)
+                months_to_consider = int(planning.delay / 31)
                 value_to_consider = 0
                 if months_to_consider >= 1:
                     months_to_consider += 1
@@ -460,8 +494,8 @@ class FlspMrppurchaseLine(models.Model):
                         diff -= getattr(planning, field_name)
                         if diff > 0:
                             value_to_consider += diff
-                    if current_month+1 == months_to_consider:
-                        rationale += '>|'+'{0: <16.2f}'.format(value_to_consider)
+                    if current_month + 1 == months_to_consider:
+                        rationale += '>|' + '{0: <16.2f}'.format(value_to_consider)
                     elif current_month < months_to_consider:
                         if months_to_consider >= 6 and current_month > 5:
                             rationale += '>|' + '{0: <16.2f}'.format(value_to_consider)
@@ -487,7 +521,7 @@ class FlspMrppurchaseLine(models.Model):
                 # Checking supplier quantity:
                 if suggested_qty > 0 and planning.vendor_qty > 0:
                     if suggested_qty < planning.vendor_qty:
-                            suggested_qty = planning.vendor_qty
+                        suggested_qty = planning.vendor_qty
                 # checking multiple quantities
                 if planning.qty_multiple > 1:
                     if planning.qty_multiple > suggested_qty:
@@ -502,8 +536,10 @@ class FlspMrppurchaseLine(models.Model):
                 if suggested_qty > current_balance:
                     planning.suggested_qty = suggested_qty
                     planning.adjusted_qty = suggested_qty
-                    planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
-                    planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty, planning.product_id.uom_po_id)
+                    planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty,
+                                                                                              planning.product_id.uom_po_id)
+                    planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty,
+                                                                                               planning.product_id.uom_po_id)
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
@@ -561,7 +597,7 @@ class FlspMrppurchaseLine(models.Model):
 
         return
 
-    def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
+    def _get_flattened_totals(self, bom, factor=1, totals=None, level=None, backflush=False):
         """Calculate the **unitary** product requirements of flattened BOM.
         *Unit* means that the requirements are computed for one unit of the
         default UoM of the product.
@@ -578,20 +614,20 @@ class FlspMrppurchaseLine(models.Model):
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
-                if False: # or not line.product_id.product_tmpl_id.flsp_backflush:
+                if backflush and not line.product_id.product_tmpl_id.flsp_backflush:
                     if totals.get(line.product_id):
                         totals[line.product_id]['total'] += (
-                            factor
-                            * line.product_uom_id._compute_quantity(
-                                line.product_qty, line.product_id.uom_id, round=False
-                            )
+                                factor
+                                * line.product_uom_id._compute_quantity(
+                            line.product_qty, line.product_id.uom_id, round=False
+                        )
                         )
                     else:
-                        totals[line.product_id] = {'total':(
-                            factor
-                            * line.product_uom_id._compute_quantity(
-                                line.product_qty, line.product_id.uom_id, round=False
-                            )
+                        totals[line.product_id] = {'total': (
+                                factor
+                                * line.product_uom_id._compute_quantity(
+                            line.product_qty, line.product_id.uom_id, round=False
+                        )
                         ), 'level': level, 'bom': sub_bom.code}
                     continue
                 else:
@@ -600,22 +636,22 @@ class FlspMrppurchaseLine(models.Model):
                     )
 
                 level += 1
-                self._get_flattened_totals(sub_bom, new_factor, totals, level)
+                self._get_flattened_totals(sub_bom, new_factor, totals, level, backflush)
                 level -= 1
             else:
                 if totals.get(line.product_id):
                     totals[line.product_id]['total'] += (
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
+                    )
                     )
                 else:
-                    totals[line.product_id] = {'total':(
-                        factor
-                        * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
+                    totals[line.product_id] = {'total': (
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
+                    )
                     ), 'level': level, 'bom': ''}
         return totals
 
@@ -636,10 +672,10 @@ class FlspMrppurchaseLine(models.Model):
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
-        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
+        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location + '%')]).ids
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
-        wh_stock_locations = self.env['stock.location'].search([('parent_path', 'like', stock_location+'%')]).ids
+        wh_stock_locations = self.env['stock.location'].search([('parent_path', 'like', stock_location + '%')]).ids
         if not wh_stock_locations:
             raise UserError('Stock Location is missing')
 
@@ -658,8 +694,10 @@ class FlspMrppurchaseLine(models.Model):
         else:
             current_balance = balance
 
-        prod_vendor = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', product.product_tmpl_id.id)],limit=1)
-        order_point = self.env['stock.warehouse.orderpoint'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
+        prod_vendor = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', product.product_tmpl_id.id)],
+                                                              limit=1)
+        order_point = self.env['stock.warehouse.orderpoint'].search(
+            ['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
         if order_point:
             min_qty = order_point.product_min_qty
             max_qty = order_point.product_max_qty
@@ -696,55 +734,55 @@ class FlspMrppurchaseLine(models.Model):
                     required_by = datetime.now()
                 required_by = required_by - timedelta(days=prod_vendor.delay)
 
-        #if suggested_qty+total_forecast > 0:
+        # if suggested_qty+total_forecast > 0:
 
         ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
-                     'product_id': product.id,
-                     'description': product.product_tmpl_id.name,
-                     'default_code': product.product_tmpl_id.default_code,
-                     'suggested_qty': suggested_qty,
-                     'adjusted_qty': suggested_qty,
-                     'purchase_adjusted': product.uom_id._compute_quantity(suggested_qty,product.uom_po_id),
-                     'purchase_suggested': product.uom_id._compute_quantity(suggested_qty,product.uom_po_id),
-                     'uom': product.uom_id.id,
-                     'purchase_uom': product.uom_po_id.id,
-                     'calculated': True,
-                     'product_qty': product.qty_available,
-                     'product_min_qty': min_qty,
-                     'product_max_qty': max_qty,
-                     'qty_multiple': multiple,
-                     'vendor_id': prod_vendor.name.id,
-                     'vendor_qty': prod_vendor.min_qty,
-                     'delay': prod_vendor.delay,
-                     'vendor_price': prod_vendor.price,
-                     'stock_qty': product.qty_available - pa_wip_qty,
-                     'wip_qty': pa_wip_qty,
-                     'rationale': rationale,
-                     'required_by': required_by,
-                     'consumption_month1': consumption[1],
-                     'consumption_month2': consumption[2],
-                     'consumption_month3': consumption[3],
-                     'consumption_month4': consumption[4],
-                     'consumption_month5': consumption[5],
-                     'consumption_month6': consumption[6],
-                     'consumption_month7': consumption[7],
-                     'consumption_month8': consumption[8],
-                     'consumption_month9': consumption[9],
-                     'consumption_month10': consumption[10],
-                     'consumption_month11': consumption[11],
-                     'consumption_month12': consumption[12],
-                     'qty_month1': forecast[1],
-                     'qty_month2': forecast[2],
-                     'qty_month3': forecast[3],
-                     'qty_month4': forecast[4],
-                     'qty_month5': forecast[5],
-                     'qty_month6': forecast[6],
-                     'qty_month7': forecast[7],
-                     'qty_month8': forecast[8],
-                     'qty_month9': forecast[9],
-                     'qty_month10': forecast[10],
-                     'qty_month11': forecast[11],
-                     'qty_month12': forecast[12],
-                     'balance': balance,
-                     'source': 'source', })
+                           'product_id': product.id,
+                           'description': product.product_tmpl_id.name,
+                           'default_code': product.product_tmpl_id.default_code,
+                           'suggested_qty': suggested_qty,
+                           'adjusted_qty': suggested_qty,
+                           'purchase_adjusted': product.uom_id._compute_quantity(suggested_qty, product.uom_po_id),
+                           'purchase_suggested': product.uom_id._compute_quantity(suggested_qty, product.uom_po_id),
+                           'uom': product.uom_id.id,
+                           'purchase_uom': product.uom_po_id.id,
+                           'calculated': True,
+                           'product_qty': product.qty_available,
+                           'product_min_qty': min_qty,
+                           'product_max_qty': max_qty,
+                           'qty_multiple': multiple,
+                           'vendor_id': prod_vendor.name.id,
+                           'vendor_qty': prod_vendor.min_qty,
+                           'delay': prod_vendor.delay,
+                           'vendor_price': prod_vendor.price,
+                           'stock_qty': product.qty_available - pa_wip_qty,
+                           'wip_qty': pa_wip_qty,
+                           'rationale': rationale,
+                           'required_by': required_by,
+                           'consumption_month1': consumption[1],
+                           'consumption_month2': consumption[2],
+                           'consumption_month3': consumption[3],
+                           'consumption_month4': consumption[4],
+                           'consumption_month5': consumption[5],
+                           'consumption_month6': consumption[6],
+                           'consumption_month7': consumption[7],
+                           'consumption_month8': consumption[8],
+                           'consumption_month9': consumption[9],
+                           'consumption_month10': consumption[10],
+                           'consumption_month11': consumption[11],
+                           'consumption_month12': consumption[12],
+                           'qty_month1': forecast[1],
+                           'qty_month2': forecast[2],
+                           'qty_month3': forecast[3],
+                           'qty_month4': forecast[4],
+                           'qty_month5': forecast[5],
+                           'qty_month6': forecast[6],
+                           'qty_month7': forecast[7],
+                           'qty_month8': forecast[8],
+                           'qty_month9': forecast[9],
+                           'qty_month10': forecast[10],
+                           'qty_month11': forecast[11],
+                           'qty_month12': forecast[12],
+                           'balance': balance,
+                           'source': 'source', })
         return ret
