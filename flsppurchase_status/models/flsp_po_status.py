@@ -105,14 +105,6 @@ class Flsp_PO_Status(models.Model):
         # self.write({'flsp_po_status': 'received', })
 
 # DATE
-    @api.onchange('flsp_vendor_confirmation_date')
-    def _change_vendor_confirm_change_scheduled(self):
-        """
-            Purpose: On changing vendor confirmation date change the flp scheduled date
-            Date:   Nov/20/2020/Friday
-        """
-        self.flsp_scheduled_date = self.flsp_vendor_confirmation_date
-
     @api.depends('date_approve', 'order_line.date_planned')
     def get_flsp_scheduled_date(self):
         """
@@ -213,8 +205,8 @@ class Flsp_PO_Status(models.Model):
     #         self.write({'flsp_po_status': 'non_confirmed', })
 
 
-    is_shipped = fields.Boolean(string='Is shipped', compute='_compute_is_shipped', store=True)
 # Changing to received got from PURCHASE.STOCK
+    is_shipped = fields.Boolean(string='Is shipped', compute='_compute_is_shipped', store=True)
     @api.depends('picking_ids', 'picking_ids.state')
     def _compute_is_shipped(self):
         for order in self:
@@ -224,3 +216,9 @@ class Flsp_PO_Status(models.Model):
                     order.write({'flsp_po_status': 'received', })
             else:
                 order.is_shipped = False
+
+    # def test_automated_action(self):
+    #     print("*********************Automated action executing*******************")
+    #     if self.is_shipped:
+    #         self.partner_ref = ' '
+    #         print('%%%%%%%%%%%%%%%%executed%%%%%%%%%%%%%%%')
