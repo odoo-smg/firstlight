@@ -84,7 +84,10 @@ class smgproductprd(models.Model):
                 costMap[product.id] = prod_price
 
             # set standard_price with the cost 
-            product.standard_price = prod_price
+            if prod_price > 0:
+                product.standard_price = prod_price
+            else:
+                _logger.info("Skip to reset the price because the BoM cost is 0 for product " + str(product.display_name))
 
     def calculate_price_from_bom(self, costMap, boms_to_recompute=False):
         self.ensure_one()
