@@ -578,7 +578,7 @@ class FlspMrppurchaseLine(models.Model):
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
-                if not line.product_id.product_tmpl_id.flsp_backflush:
+                if False: # or not line.product_id.product_tmpl_id.flsp_backflush:
                     if totals.get(line.product_id):
                         totals[line.product_id]['total'] += (
                             factor
