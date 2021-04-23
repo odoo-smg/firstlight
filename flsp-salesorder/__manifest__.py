@@ -24,14 +24,16 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
-    'depends': ['sale_management'],
+    'depends': ['base', 'sale', 'sale_management', 'board', 'website'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'views/flsp_customer_badge_manage_view.xml',
+        'views/flsp_customer_badge_view.xml',
         'views/flsp_customer_view.xml',
         'views/flsp_salesorder_view.xml',
         'views/flsp_saleorder_listview.xml',
+        'views/assets.xml',
     ],
 }

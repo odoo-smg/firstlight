@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tour Integration Tests -->
+    <template id="flsp_tour_customer_badge" name="flsp tour tests - customer badge" inherit_id="web.assets_tests">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/flsp-salesorder/static/tests/tours/customer_badge.js"></script>
+        </xpath>
+    </template>
+</odoo>
