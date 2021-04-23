@@ -721,7 +721,7 @@ class FlspMrppurchaseLine(models.Model):
                 if suggested_qty < prod_vendor.min_qty:
                     suggested_qty = prod_vendor.min_qty
         # checking multiple quantities
-        if multiple > 1:
+        if multiple > 1 and suggested_qty > 0:
             if multiple > suggested_qty:
                 suggested_qty += multiple - suggested_qty
             else:

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Remove assign form view-->
+    <record model="ir.ui.view" id="flsp_removeassign_inherit_form">
+        <field name="name">flsp.removeassign.inherit.form</field>
+        <field name="model">flspticketsystem.ticket</field>
+        <field name="inherit_id" ref="flspticketsystem.ticket_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="button_remove_assign" string="Remove Assigned" class="btn-oe_highlight" type="object"
+                            attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"
+                            groups="flspticketsystem.group_flspticketsystem_manager"
+                            style="background-color:#FF8C00; color:white;"/>
+<!--                            style="background-color:#FF4500; color:white;"/>-->
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="flsp_tktboarding_wizard_form">
+        <field name="name">flsp.tktboarding.wizard.form</field>
+        <field name="model">flsp.tktboarding.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select boarding type and which ticket to create">
+                <group string="Select boarding type and which ticket to create">
+                    <field name="plan"/>
+                    <field name="tickets" widget ="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="create_ticket" string="Create Ticket" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                </footer>
+                ***TICKETS WILL BE CREATED IN THE HELP DESK***
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="flsp_tktboarding_wizard_action">
+        <field name="name">Create Ticket</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.tktboarding.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flsp_tktboarding_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Version form view-->
+    <record model="ir.ui.view" id="flsp_tktboarding_employee_inherit_form">
+        <field name="name">flsp.tktboarding.employee.inherit.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(flsp_tktboarding_wizard_action)d"
+                        string="Create Tickets" class="oe_highlight" type="action"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

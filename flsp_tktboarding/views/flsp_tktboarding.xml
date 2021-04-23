@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Boarding form view-->
+    <record model="ir.ui.view" id="flsp_tktboarding_form_view">
+        <field name="name">flsp.tktboarding.form.view</field>
+        <field name="model">flspticketsystem.boarding</field>
+        <field name="arch" type="xml">
+            <form string="Boarding Form">
+                <sheet>
+                    <group string="Fill Ticket Name and select Boarding type">
+                        <field name="name" style="width:50%" />
+                        <field name="boarding" style="width:50%; height:25px;"/>
+                    </group>
+                    <group string="Fill the information below">
+                        <field name="category_id"/>
+                        <field name="short_description"/>
+                        <field name="detailed_description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Boarding tree view-->
+    <record model="ir.ui.view" id="flsp_tktboarding_tree_view">
+        <field name="name">flsp.tktboarding.tree.view</field>
+        <field name="model">flspticketsystem.boarding</field>
+        <field name="arch" type="xml">
+            <tree string="Boarding Tree" default_order="boarding asc"
+                  decoration-success="boarding==1"  decoration-warning="boarding==2" >
+                <field name="name"/>
+                <field name="boarding"/>
+                <field name="category_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Boarding Search-->
+    <record model="ir.ui.view" id="flsp_tktboarding_search_view">
+        <field name="name">flsp.tktboarding.search.view</field>
+        <field name="model">flspticketsystem.boarding</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--Can search by short description and id-->
+                <field name="name"/>
+                <field name="short_description"/>
+                <!--Filters-->
+                <filter name="on_boarding" string="On Boarding"
+                        domain="[('boarding','=','o')]"/>
+                <filter name="off_boarding" string="Off Boarding"
+                        domain="[('boarding','=','f')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!--Boarding Action Menu-->
+    <record model="ir.actions.act_window" id="flsp_tktboarding_action">
+        <field name="name">Boarding Process</field>
+        <field name="res_model">flspticketsystem.boarding</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create Boarding
+            </p>
+        </field>
+    </record>
+
+    <!--Boarding Menu item-->
+    <menuitem id="boarding_menu" name="Boarding"
+              parent="flspticketsystem.main_ticket_menu"
+              action="flsp_tktboarding_action"
+              groups="flspticketsystem.group_flspticketsystem_manager"/>
+</odoo>
+

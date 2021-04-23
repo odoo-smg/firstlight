@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--DEMO DATA LOADED IN TKT BOARDING MODEL: used to classify solutions-->
+    <data>
+    <!--Help desk        -->
+        <record model="flspticketsystem.boarding" id="tktaccess_on">
+            <field name="name">Grant Help Desk Access</field>
+            <field name="boarding">1</field>
+            <field name="short_description">Set access to Help Desk in system settings</field>
+            <field name="detailed_description">Set access to Help Desk in system settings.</field>
+        </record>
+
+        <record model="flspticketsystem.boarding" id="tktaccess_off">
+            <field name="name">Remove Help Desk Access</field>
+            <field name="boarding">2</field>
+            <field name="short_description">Remove access to Help Desk in system settings</field>
+            <field name="detailed_description">Remove access to Help Desk in system settings.</field>
+        </record>
+
+    <!--Computer-->
+        <record model="flspticketsystem.boarding" id="assign_computer">
+            <field name="name">Assign Computer</field>
+            <field name="boarding">1</field>
+            <field name="short_description">Assign Personal Computer with clean drive</field>
+            <field name="detailed_description">Assign Personal Computer with clean drive</field>
+        </record>
+
+        <record model="flspticketsystem.boarding" id="remove_computer">
+            <field name="name">Repossess Computer</field>
+            <field name="boarding">2</field>
+            <field name="short_description">Repossess computer and clean drive</field>
+            <field name="detailed_description">Repossess computer and clean drive</field>
+        </record>
+    </data>
+</odoo>
