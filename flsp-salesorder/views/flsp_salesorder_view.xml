@@ -30,23 +30,6 @@
                   <attribute name="domain">[('sale_team_id', '!=', False)]</attribute>
                   <attribute name="attrs">{'required': True}</attribute>
               </xpath>
-              <xpath expr="//form[1]/sheet[1]/group[1]/group[1]" position="after">
-                <group>
-                  <field name="flsp_cb_id" invisible="1"/>
-                  <div attrs="{'invisible':[('flsp_cb_id', '=', False)]}">
-                    <field name="flsp_cb_image" widget='image'  class="oe_left oe_avatar"/>
-                    <div>
-                      <br/><br/>
-                      <b>Rewards Pricing Disc.%: </b>
-                      <field name="flsp_cb_sale_discount"/><br/>
-                      <b>Freight Disc.% with from 5 to 10 units: </b>
-                      <field name="flsp_cb_freight_units_5_to_10_discount"/><br/>
-                      <b>Freight Disc.% with more than 10 units: </b>
-                      <field name="flsp_cb_freight_units_over_10_discount"/>
-                    </div>
-                  </div>
-                </group>
-              </xpath>
             </field>
         </record>
 
