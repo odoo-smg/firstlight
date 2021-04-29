@@ -173,6 +173,30 @@ class smgproductprd(models.Model):
         _logger.info("************ Sending 'Report for Products in a BoM Loop' ************")   
         self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0003')
         _logger.info("************ 'Report for Products in a BoM Loop' DONE ***************")
+
+    @api.model
+    def getZeroCostProducts(self):
+        """
+         Date:    Apr/29th/2021
+         Purpose: create a routine to get products with Zero cost.
+         Author:  Perry He
+        """   
+        _logger.info("Starting 'getZeroCostProducts()'.")
+        prods = {}
+
+        zero_cost_products = self.env['product.product'].search([]).filtered(lambda p: p.standard_price == 0)
+        for product in zero_cost_products:
+            move = self.env['stock.move.line'].search([('product_id', '=', product.id)], limit=1)
+            if move:
+                prods[product.id] = {'id': product.id,
+                                'default_code': product.default_code,
+                                'name': product.name,
+                                'standard_price': product.standard_price}
+        _logger.info("'getZeroCostProducts()' done for products:" + str(prods))
+
+        _logger.info("************ Sending 'Report for Products with Zero Cost' ************")   
+        self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0004')
+        _logger.info("************ 'Report for Products with Zero Cost' DONE ***************")
             
 
 class BomLoopException(Exception):
