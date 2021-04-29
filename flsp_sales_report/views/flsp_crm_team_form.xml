@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_crm_team_form_view">
+            <field name="name">flsp.crm.team.form.inherit</field>
+            <field name="model">crm.team</field>
+            <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+            <field name="priority">93</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='right']" position="inside">
+                    <field name="flsp_weekly_report" />
+                </xpath>
+            </field>
+        </record>
+</odoo>
