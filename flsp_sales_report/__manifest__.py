@@ -8,7 +8,7 @@
     'description': """
         Customizations performed:
         Specification:
-            * Sales Order - Add Other Source field. 
+            * Sales Order - Add Other Source field.
     """,
     'author': "Alexandre Sousa",
     'website': "http://www.firstlightsafety.com",
@@ -22,5 +22,6 @@
     # always loaded
     'data': [
         'views/flsp_sales_report_form.xml',
+        'views/flsp_crm_team_form.xml',
     ],
 }
