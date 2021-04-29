@@ -17,7 +17,7 @@ class SalesOrderReport(models.Model):
         self.flsp_source_name = self.source_id.name
 
 
-    def weekly_email_report(self):
+    def weekly_email_report(self, mtoshow=3):
         data = {}
         data['qty'] = {}
         data['val'] = {}
@@ -44,18 +44,26 @@ class SalesOrderReport(models.Model):
         current_date = date.today()
         current_year = current_date.year
         current_month = current_date.month
-        first_month = current_month - 2
-        if first_month < 0:
-            first_month += 12
-        second_month = current_month - 1
-        if second_month < 0:
-            second_month += 12
-        data['qty']['months'][first_month] = calendar.month_name[first_month]
-        data['qty']['months'][second_month] = calendar.month_name[second_month]
+        other_months = 0
+        for m in range(mtoshow-1, -1, -1):
+            other_months = current_month - m
+            if other_months < 0:
+                other_months += 12
+            data['qty']['months'][other_months] = calendar.month_name[other_months]
+            data['val']['months'][other_months] = calendar.month_name[other_months]
         data['qty']['months'][current_month] = calendar.month_name[current_month]
-        data['val']['months'][first_month] = calendar.month_name[first_month]
-        data['val']['months'][second_month] = calendar.month_name[second_month]
         data['val']['months'][current_month] = calendar.month_name[current_month]
+
+#        first_month = current_month - 2
+            #        if first_month < 0:
+        #            first_month += 12
+        #        second_month = current_month - 1
+            #        if second_month < 0:
+        #            second_month += 12
+        #        data['qty']['months'][first_month] = calendar.month_name[first_month]
+        #        data['qty']['months'][second_month] = calendar.month_name[second_month]
+        #        data['val']['months'][first_month] = calendar.month_name[first_month]
+        #        data['val']['months'][second_month] = calendar.month_name[second_month]
 
 
         data['qty']['salesteam'] = {}
