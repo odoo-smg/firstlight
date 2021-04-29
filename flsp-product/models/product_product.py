@@ -84,7 +84,7 @@ class smgproductprd(models.Model):
                 costMap[product.id] = prod_price
 
             # set standard_price with the cost 
-            if prod_price > 0:
+            if prod_price > 0 and product.standard_price != prod_price:
                 new_cost_products[product.id] = {'id': product.id,
                                                 'default_code': product.default_code,
                                                 'name': product.name,
