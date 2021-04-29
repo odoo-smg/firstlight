@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models, api, exceptions
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -56,10 +56,14 @@ class smgproductprd(models.Model):
         finished_products = self.env['product.product'].search([]).filtered(lambda p: p.bom_count > 0)
         _logger.info("The products to calculate: " + str(finished_products.mapped('display_name')))
 
-        finished_products.calculate_bom_cost()
-        _logger.info("'recalculateCost()' done.")
-
-        finished_products.notify_recalculateCost()
+        try:
+            finished_products.calculate_bom_cost()
+            _logger.info("'recalculateCost()' done.")
+            finished_products.notify_recalculateCost()
+        except BomLoopException as e:
+            _logger.info("'recalculateCost()' stopped due to the exception!")
+            prods_in_loop = self.browse(e.prods)
+            prods_in_loop.notify_recalculateCost(e)
 
     
     # Simialr to method action_bom_cost() in \mrp_account\models\product.py
@@ -80,14 +84,21 @@ class smgproductprd(models.Model):
                 costMap[product.id] = prod_price
 
             # set standard_price with the cost 
-            product.standard_price = prod_price
+            if prod_price > 0:
+                product.standard_price = prod_price
+            else:
+                _logger.info("Skip to reset the price because the BoM cost is 0 for product " + str(product.display_name))
 
     def calculate_price_from_bom(self, costMap, boms_to_recompute=False):
         self.ensure_one()
         bom = self.env['mrp.bom']._bom_find(product=self)
-        return self.calculate_bom_price(bom, costMap, boms_to_recompute=boms_to_recompute)
 
-    def calculate_bom_price(self, bom, costMap, boms_to_recompute=False):
+        # for given product, use prod_depended_list with product ids to detect loop based on bom dependency
+        prod_depended_list = []
+
+        return self.calculate_bom_price(bom, costMap, prod_depended_list, boms_to_recompute=boms_to_recompute)
+
+    def calculate_bom_price(self, bom, costMap, prod_depended_list, boms_to_recompute=False):
         prod_price = costMap.get(self.id)
         if prod_price:
             return prod_price
@@ -100,6 +111,18 @@ class smgproductprd(models.Model):
         if not boms_to_recompute:
             boms_to_recompute = []
 
+        if self.id in prod_depended_list:
+            # if bom exists in the list, there is a loop
+            # 1) stop the calculation; 2) send notification out with the loop
+            posOfLoop = prod_depended_list.index(self.id)
+            exp_msg = "A loop of products with BoMs exists, please check the products with ids for details: " + str(prod_depended_list[posOfLoop:])
+            _logger.warning(exp_msg)
+            raise BomLoopException(exp_msg, prod_depended_list[posOfLoop:])
+        else:
+            # add the bom in the tail of the list
+            prod_depended_list.append(self.id)
+
+        # calculate the cost based on the bom
         total = 0
         for opt in bom.routing_id.operation_ids:
             duration_expected = (
@@ -113,16 +136,36 @@ class smgproductprd(models.Model):
 
             # Compute recursive if line has `child_line_ids`
             if line.child_bom_id and line.child_bom_id in boms_to_recompute:
-                child_total = line.product_id.calculate_bom_price(line.child_bom_id, costMap, boms_to_recompute=boms_to_recompute)
+                child_total = line.product_id.calculate_bom_price(line.child_bom_id, costMap, prod_depended_list, boms_to_recompute=boms_to_recompute)
                 total += line.product_id.uom_id._compute_price(child_total, line.product_uom_id) * line.product_qty
             else:
                 total += line.product_id.uom_id._compute_price(line.product_id.standard_price, line.product_uom_id) * line.product_qty
         bom_price = bom.product_uom_id._compute_price(total / bom.product_qty, self.uom_id)
         costMap[self.id] = bom_price
+
+        # no loop found, remove the bom from the tail of the list
+        prod_depended_list.pop()
+
         return bom_price
 
-    def notify_recalculateCost(self):
-        _logger.info("************ Sending 'Products with Cost Recalculation - Daily Report' ************")
-        self.env['flspautoemails.bpmemails'].send_email(self, 'AC0002')
-        _logger.info("************ 'Products with Cost Recalculation - Daily Report' DONE ***************")
-        
+    def notify_recalculateCost(self, blexception=False):
+        prods = {}
+        for item in self:
+            prods[item.id] = {'id': item.id,
+                              'default_code': item.default_code,
+                              'name': item.name,
+                              'standard_price': item.standard_price}
+
+        if blexception:
+            _logger.info("************ Sending 'Report for Products in a BoM Loop' ************")
+            self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0003')
+            _logger.info("************ 'Report for Products in a BoM Loop' DONE ***************")
+        else:
+            _logger.info("************ Sending 'Products with Cost Recalculation - Daily Report' ************")
+            self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0002')
+            _logger.info("************ 'Products with Cost Recalculation - Daily Report' DONE ***************")
+
+class BomLoopException(Exception):
+    def __init__(self, msg, prods):
+        self.msg = msg
+        self.prods = prods
