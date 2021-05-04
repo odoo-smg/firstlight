@@ -71,6 +71,9 @@ class Flspbpmemails(models.Model):
                 'uid': self._uid,
                 'date': datetime.now(), #to be used to get the now date
                 'relative': relativedelta(days=-7), #to be used to get the customers created in 7 days
+                'relative': relativedelta(days=-7), #to be used to get the customers created in 7 days
+                'rel_seven': relativedelta(days=7),
+                'rel_5': relativedelta(days=5),
                 }
             try:
                 safe_eval(rule,
