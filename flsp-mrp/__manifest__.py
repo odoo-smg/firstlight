@@ -31,7 +31,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_bom_view.xml',
+        'views/flsp_bom_products_view.xml',
         'views/flsp_production_wizard_msg.xml',
-        #'views/flsp_production_view.xml', #modified by Sami
+        'views/flsp_production_view.xml', 
     ],
 }
