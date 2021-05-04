@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, exceptions
+from odoo.exceptions import UserError
+
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class flspproduction(models.Model):
@@ -26,3 +30,21 @@ class flspproduction(models.Model):
         else:
             action = self.action_confirm()
         return action
+
+    def button_flsp_explode_subs(self):
+        """
+            Purpose: To show products with BOMS and backflush = False in a wizard
+        """
+        view_id = self.env.ref('flsp-mrp.products_with_boms_without_backflush_form_view').id
+        return {
+            'name': 'MO Products',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'flspmrp.bom.structure',
+            'view_id': view_id,
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': {
+                'default_mo_id': self.id,
+            }
+        }
