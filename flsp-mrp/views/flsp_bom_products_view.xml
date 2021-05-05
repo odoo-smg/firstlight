@@ -25,7 +25,7 @@
                         </field>
                     </group>
                     <footer>
-                        <button name="button_create_mo" string="Create M.O." type="object" class="btn-primary" help="Create MOs for selected products"/>
+                        <button name="button_create_mo" string="Create M.O." type="object" class="btn-primary" help="Create MOs for selected products" attrs="{'invisible': [('bom_products', '=', [])]}"/>
                         <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </sheet>
@@ -48,18 +48,23 @@
             <field name="model">flspmrp.bom.structure</field>
             <field name="arch" type="xml">
                 <form string="MO created">
-                    <h5>The following M.O.(s) has(have) created: </h5>
-                    <group>
-                        <field name="new_mo_ids" nolabel="1">
-                            <tree editable="bottom" create="false" delete="false">
-                                <field name="name" readonly="1"/>
-                                <field name="origin" readonly="1"/>
-                                <field name="product_id" readonly="1"/>
-                                <field name="product_qty" readonly="1" string="Qty To Produce"/>
-                                <field name="product_uom_id" readonly="1" string="Unit of Measure"/>
-                            </tree>
-                        </field>
-                    </group>
+                    <div attrs="{'invisible': [('new_mo_ids', '=', [])]}">
+                        <h5>The following M.O.(s) has(have) created: </h5>
+                        <group>
+                            <field name="new_mo_ids" nolabel="1">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="name" readonly="1"/>
+                                    <field name="origin" readonly="1"/>
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="product_qty" readonly="1" string="Qty To Produce"/>
+                                    <field name="product_uom_id" readonly="1" string="Unit of Measure"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </div>
+                    <div attrs="{'invisible': [('new_mo_ids', '!=', [])]}"> 
+                        <h5>Warning: At least one of MO Products should be selected.</h5>
+                    </div>
                     <footer>
                         <button string="Ok" class="btn-default btn-primary" special="cancel"/>
                     </footer>
