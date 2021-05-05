@@ -12,4 +12,16 @@
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
     </record>
+    <record id="daily_zero_cost_product_cron" model="ir.cron">
+        <field name="name">FLSP Products - Daily Zero Cost Products</field>
+        <field name="model_id" ref="model_product_product"/>
+        <field name="active" eval="True" />
+        <field name="state">code</field>
+        <field name="code">model.getZeroCostProducts()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 03:00:00')" />
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
 </odoo>
