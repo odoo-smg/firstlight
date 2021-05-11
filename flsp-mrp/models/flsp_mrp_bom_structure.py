@@ -34,7 +34,6 @@ class FlspMrpBomStructure(models.TransientModel):
     def default_get(self, fields):
         res = super(FlspMrpBomStructure, self).default_get(fields)
         default_mo_id = self.env.context.get('default_mo_id')
-        _logger.info("default_mo_id: " + str(default_mo_id))
         if default_mo_id:
             mo = self.env['mrp.production'].browse(default_mo_id)
             if mo.exists():
@@ -47,7 +46,6 @@ class FlspMrpBomStructure(models.TransientModel):
                     res['bom_products'] = self._calc_bom_products(mo.bom_id, mo.product_qty)
                             
         default_new_mo_items = self.env.context.get('default_new_mo_items')
-        _logger.info("default_new_mo_items: " + str(default_new_mo_items))
         if default_new_mo_items:
             res['new_mo_ids'] = self.env['mrp.production'].browse(default_new_mo_items)
             
@@ -62,26 +60,40 @@ class FlspMrpBomStructure(models.TransientModel):
 
         # retrieve the product ids from the list
         prod_list = []
-
         for order, total_qty in totals.items():
-            # {'total': 1.0, 'level': 1, 'bom': '', 'bom_plm': '', 'track': 'lot', 'prod': product.product(1015,)}
+            # EXAMPLE of totals: {'total': 1.0, 'level': 1, 'bom': '', 'bom_plm': '', 'track': 'lot', 'prod': product.product(1015,)}
             if total_qty['bom'] and ('flsp_backflush' in self.env['product.template']._fields) and total_qty['prod'].flsp_backflush == False:
                 # add product in the list
                 prod = total_qty['prod']
-                prod.get_wip_qty()
-                prod.get_stock_qty()
-                mo_required_qty = mo_qty * total_qty['total']
-                prod_list.append([0, 0, {
-                                'production_id': self.id,
-                                'product_id': prod.id, 
-                                'part_number': prod.default_code,
-                                'product_name': prod.name,
-                                'stock_qty': prod.flsp_stock_qty,
-                                'wip_qty': prod.flsp_wip_qty,
-                                'mo_required_qty': mo_required_qty,
-                                'adjusted_qty': mo_required_qty,
-                            }])
+                required_qty = mo_qty * total_qty['total']
+                
+                # search prod in prod_list and add up mo_required_qty if found
+                prod_in_list = self.search_product_from_list(prod.id, prod_list)
+                if prod_in_list:
+                    prod_in_list['mo_required_qty'] += required_qty
+                    prod_in_list['adjusted_qty'] = prod_in_list['mo_required_qty']
+                else:
+                    prod.get_wip_qty()
+                    prod.get_stock_qty()
+                    prod_list.append([0, 0, {
+                                    'production_id': self.id,
+                                    'product_id': prod.id, 
+                                    'part_number': prod.default_code,
+                                    'product_name': prod.name,
+                                    'stock_qty': prod.flsp_stock_qty,
+                                    'wip_qty': prod.flsp_wip_qty,
+                                    'mo_required_qty': required_qty,
+                                    'adjusted_qty': required_qty,
+                                }])
+        
         return prod_list
+    
+    def search_product_from_list(self, id, prod_list):
+        for prod_entry in prod_list:
+            if id == prod_entry[2]['product_id']:
+                return prod_entry[2]
+        
+        return False
 
     def button_create_mo(self):
         self.ensure_one()
@@ -114,17 +126,41 @@ class FlspMrpBomStructure(models.TransientModel):
         date_start = date_now.today() + timedelta(days=1)
         date_end = date_now.today() + timedelta(days=15)
         
-        bom = self.env['mrp.bom']._bom_find(product=prod.product_id, picking_type=self.mo_id.picking_type_id, company_id=self.mo_id.company_id.id, bom_type='normal')
+        bom = self.get_bom(prod, self.mo_id)
+        picking_type_id = self.get_picking_type(bom, self.mo_id)
         
         new_mo = self.env['mrp.production'].create({
             'product_id': prod.product_id.id,  
             'product_qty': prod.adjusted_qty,
-            'date_planned_finished': date_end,
+            'product_uom_id': prod.product_id.uom_id.id,
             'date_planned_start': date_start,
+            'date_planned_finished': date_end,
             'user_id': self.mo_id.user_id.id,
             'origin': self.mo_id.name,
-            'product_uom_id': prod.product_id.uom_id.id,
             'bom_id': bom.id,
+            'picking_type_id': picking_type_id.id,
         })
         
+        # update 'product_list' after MO's creation because the process depends on the MO's attributes
+        self.set_bom_product(new_mo)
+        # update 'location_src_id' and 'location_dest_id' after MO's creation because the process depends on the MO's attributes
+        self.set_locations(new_mo)
+        
         return new_mo
+    
+    def get_bom(self, prod, mo_id):
+        # copy from onchange_product_id() in model 'mrp.production'
+        return self.env['mrp.bom']._bom_find(product=prod.product_id, picking_type=mo_id.picking_type_id, company_id=mo_id.company_id.id, bom_type='normal')
+    
+    def get_picking_type(self, bom_id, mo_id):
+        # copy from _onchange_bom_id() in model 'mrp.production'
+        return bom_id.picking_type_id or mo_id.picking_type_id
+    
+    def set_bom_product(self, new_mo):
+        # call _onchange_move_raw() in model 'mrp.production' 
+        new_mo._onchange_move_raw()
+    
+    def set_locations(self, new_mo):
+        # call onchange_picking_type() in model 'mrp.production' 
+        new_mo.onchange_picking_type()
+        
