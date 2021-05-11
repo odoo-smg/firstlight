@@ -5,6 +5,9 @@ from odoo import fields, models, api, exceptions
 import logging
 _logger = logging.getLogger(__name__)
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class smgproductprd(models.Model):
     _inherit = 'product.product'
     _check_company_auto = True
@@ -49,20 +52,22 @@ class smgproductprd(models.Model):
          Date:    Apr/6th/2021
          Purpose: create a routine to recalculate the cost of finished products based on BOM to run every night.
          Author:  Perry He
-        """   
+        """
         _logger.info("Starting 'recalculateCost()' for finished products.")
 
         finished_products = self.env['product.product'].search([]).filtered(lambda p: p.bom_count > 0)
+        _logger.info("The products to calculate: " + str(finished_products.mapped('display_name')))
 
         try:
-            new_cost_prods = finished_products.calculate_bom_cost()
-            _logger.info("'recalculateCost()' is done for the products with a new cost after the recalculation: " + str(new_cost_prods.values()))
-            self.notify_recalculateCost(new_cost_prods)
+            finished_products.calculate_bom_cost()
+            _logger.info("'recalculateCost()' done.")
+            finished_products.notify_recalculateCost()
         except BomLoopException as e:
             _logger.info("'recalculateCost()' stopped due to the exception!")
-            self.notify_recalculateCost_exception(e)
+            prods_in_loop = self.browse(e.prods)
+            prods_in_loop.notify_recalculateCost(e)
 
-    
+
     # Simialr to method action_bom_cost() in \mrp_account\models\product.py
     # the products exclude ones with "valuation == 'real_time'" in method action_bom_cost(), but no need to filter them out in our schedule
     def calculate_bom_cost(self):
@@ -73,9 +78,6 @@ class smgproductprd(models.Model):
         # key: product.id
         # value: product.standard_price
         costMap ={}
-        
-        # new_cost_products is for products with a new cost after recalculation 
-        new_cost_products = {}
 
         for product in self:
             prod_price = costMap.get(product.id)
@@ -83,19 +85,11 @@ class smgproductprd(models.Model):
                 prod_price = product.calculate_price_from_bom(costMap, boms_to_recompute)
                 costMap[product.id] = prod_price
 
-            # set standard_price with the cost 
-            if prod_price > 0 and product.standard_price != prod_price:
-                new_cost_products[product.id] = {'id': product.id,
-                                                'default_code': product.default_code,
-                                                'name': product.name,
-                                                'previous_price': product.standard_price,
-                                                'current_price': prod_price}
-                # set new cost
+            # set standard_price with the cost
+            if prod_price > 0:
                 product.standard_price = prod_price
             else:
                 _logger.info("Skip to reset the price because the BoM cost is 0 for product " + str(product.display_name))
-        
-        return new_cost_products
 
     def calculate_price_from_bom(self, costMap, boms_to_recompute=False):
         self.ensure_one()
@@ -156,48 +150,22 @@ class smgproductprd(models.Model):
 
         return bom_price
 
-    def notify_recalculateCost(self, new_cost_prods):
-        _logger.info("************ Sending 'Products with Cost Recalculation - Daily Report' ************")
-        self.env['flspautoemails.bpmemails'].send_email(new_cost_prods, 'AC0002')
-        _logger.info("************ 'Products with Cost Recalculation - Daily Report' DONE ***************")
-
-    def notify_recalculateCost_exception(self, blexception):
-        prods_in_loop = self.browse(blexception.prods)
+    def notify_recalculateCost(self, blexception=False):
         prods = {}
-        for product in prods_in_loop:
-            prods[product.id] = {'id': product.id,
-                                'default_code': product.default_code,
-                                'name': product.name,
-                                'standard_price': product.standard_price}
+        for item in self:
+            prods[item.id] = {'id': item.id,
+                              'default_code': item.default_code,
+                              'name': item.name,
+                              'standard_price': item.standard_price}
 
-        _logger.info("************ Sending 'Report for Products in a BoM Loop' ************")   
-        self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0003')
-        _logger.info("************ 'Report for Products in a BoM Loop' DONE ***************")
-
-    @api.model
-    def getZeroCostProducts(self):
-        """
-         Date:    Apr/29th/2021
-         Purpose: create a routine to get products with Zero cost.
-         Author:  Perry He
-        """   
-        _logger.info("Starting 'getZeroCostProducts()'.")
-        prods = {}
-
-        zero_cost_products = self.env['product.product'].search([]).filtered(lambda p: p.standard_price == 0)
-        for product in zero_cost_products:
-            move = self.env['stock.move.line'].search([('product_id', '=', product.id)], limit=1)
-            if move:
-                prods[product.id] = {'id': product.id,
-                                'default_code': product.default_code,
-                                'name': product.name,
-                                'standard_price': product.standard_price}
-        _logger.info("'getZeroCostProducts()' done for products:" + str(prods))
-
-        _logger.info("************ Sending 'Report for Products with Zero Cost' ************")   
-        self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0004')
-        _logger.info("************ 'Report for Products with Zero Cost' DONE ***************")
-            
+        if blexception:
+            _logger.info("************ Sending 'Report for Products in a BoM Loop' ************")
+            self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0003')
+            _logger.info("************ 'Report for Products in a BoM Loop' DONE ***************")
+        else:
+            _logger.info("************ Sending 'Products with Cost Recalculation - Daily Report' ************")
+            self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0002')
+            _logger.info("************ 'Products with Cost Recalculation - Daily Report' DONE ***************")
 
 class BomLoopException(Exception):
     def __init__(self, msg, prods):
