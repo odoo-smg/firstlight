@@ -14,6 +14,11 @@ class StockQuant(models.Model):
         self, product_id, location_id, quantity, lot_id=None, package_id=None, owner_id=None, in_date=None
     ):
         product_quantity = product_id.qty_available
+        if location_id:
+            stock_quant = self.env['stock.quant'].search(['&', ('product_id', '=', product_id.id), ('location_id', '=', location_id.id)]).mapped('quantity')
+            if stock_quant:
+                product_quantity = stock_quant[0]
+
         if lot_id:
             stock_quant = self.env['stock.quant'].search(['&', '&', ('product_id', '=', product_id.id), ('location_id', '=', location_id.id), ('lot_id', '=', lot_id.id)]).mapped('quantity')
             if stock_quant:
