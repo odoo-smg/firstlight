@@ -7,6 +7,7 @@
 
     'description': """
         Customizations performed:
+        
         Specification:
             * Manufacturing - Add specification to products 
     """,

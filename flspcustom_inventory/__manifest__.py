@@ -7,6 +7,7 @@
 
     'description': """
         Customizations performed:
+
         Dec/14th/2020:
             * Default filter for update quantity is internal locations.
     """,
