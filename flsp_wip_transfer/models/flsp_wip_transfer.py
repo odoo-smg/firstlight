@@ -39,7 +39,7 @@ class FlspMrpPlanningLine(models.Model):
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
 
     negative_location_id = fields.Many2one('stock.location', string="Negative Location")
-    negative_lot_id = fields.Many2one('stock.production_lot', string="Negative Serial/Lot")
+    negative_lot_id = fields.Many2one('stock.production.lot', string="Negative Serial/Lot")
 
     @api.onchange('adjusted')
     def onchange_adjusted(self):
@@ -92,8 +92,13 @@ class FlspMrpPlanningLine(models.Model):
                         lot_name = ''
                         lot_id = False
                     else:
-                        lot_name = ' lot: '+ item.lot_id.name
-                        lot_id = item.lot_id.id
+                        if item.lot_id:
+                            lot_name = ' lot: '+ item.lot_id.name
+                            lot_id = item.lot_id.id
+                        else:
+                            lot_name = ''
+                            lot_id = False
+
                     # insert new
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': item.product_id.name,
@@ -266,7 +271,7 @@ class FlspMrpPlanningLine(models.Model):
                     else:
                         if (suggested_qty % multiple) > 0:
                             suggested_qty += multiple - (suggested_qty % multiple)
-                            
+
                 if suggested_qty > 0:
                     wip = self.env['flsp.wip.transfer'].create({
                         'description': product.name,
