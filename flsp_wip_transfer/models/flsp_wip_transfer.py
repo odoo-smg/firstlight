@@ -39,7 +39,7 @@ class FlspMrpPlanningLine(models.Model):
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
 
     negative_location_id = fields.Many2one('stock.location', string="Negative Location")
-    negative_lot_id = fields.Many2one('stock.production_lot', string="Negative Serial/Lot")
+    negative_lot_id = fields.Many2one('stock.production.lot', string="Negative Serial/Lot")
 
     @api.onchange('adjusted')
     def onchange_adjusted(self):
