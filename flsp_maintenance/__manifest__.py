@@ -7,6 +7,7 @@
 
     'description': """
         Customizations performed:
+        
         Equipment:
             * FEB/02 - Added asset # and calibration certificate # on equipment 
             * FEB/02 - Added the two fields on equipment search view

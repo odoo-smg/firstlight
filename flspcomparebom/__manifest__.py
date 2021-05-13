@@ -3,12 +3,13 @@
     'name': "FLSP - Bom Compare",
 
     'summary': """
-    Module purpose is to compare BOMs""",
+        Module purpose is to compare BOMs""",
 
     'description': """
-    Customizations performed:
-    Bom Compare:
-        * MRP - Compare BOMs 
+        Customizations performed:
+        
+        Bom Compare:
+            * MRP - Compare BOMs 
     """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
