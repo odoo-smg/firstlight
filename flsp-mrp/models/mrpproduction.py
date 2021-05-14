@@ -23,6 +23,9 @@ class flspproduction(models.Model):
         for record in self:
             if record.product_id.flsp_plm_valid != True:
                 raise exceptions.ValidationError("You cannot use products that haven't been PLM Validated yet.")
+            if 'flsp_backflush' in self.env['product.template']._fields:
+                if record.product_id.product_tmpl_id.flsp_backflush:
+                    raise exceptions.ValidationError("You cannot use products marked as Backflush.")
 
     def button_flsp_confirm(self):
         if not self.bom_id.flsp_bom_plm_valid:
