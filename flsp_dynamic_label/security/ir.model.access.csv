@@ -1,3 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsp_dynamic_label,flsp_dynamic_label,model_flsp_dynamic_label,base.group_user,1,1,1,1
-access_flsp_dynamic_label_wizard,flsp_dynamic_label_wizard,model_flsp_dynamic_label_wizard,base.group_user,1,1,1,1
