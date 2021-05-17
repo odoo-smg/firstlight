@@ -7,6 +7,7 @@
 
     'description': """
         Customizations performed:
+        
         Specification:
             * Sales Order - Add Other Source field.
     """,

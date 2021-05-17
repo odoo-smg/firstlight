@@ -12,6 +12,7 @@ class EmployeeWizard(models.TransientModel):
         Author:     Sami Byaruhanga
     """
     _name = "flsp.tktboarding.wizard"
+    _description = "FLSP Ticket Boarding Wizard"
 
     plan = fields.Many2one('hr.plan', string='Boarding Type', ondelete='cascade', required=True)
     tickets = fields.Many2many('flspticketsystem.boarding', ondelete='cascade', string="Ticket To create",

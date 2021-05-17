@@ -8,6 +8,7 @@ class FlspBomAvailabilityLine(models.Model):
         Purpose:    To get the bom line information to be used in a one to one field
     """
     _name = 'flsp.bom.availability.line'
+    _description = "FLSP BOM Availability for BOM Line"
     _auto = False
     _order = 'bom_level asc'
 
@@ -99,6 +100,7 @@ class FlspBomAvailabilityLine(models.Model):
             Purpose to hold the bom values
         """
         _name = 'flsp.bom.availability'
+        _description = "FLSP BOM Availability"
         _rec_name = 'bom'
 
         bom = fields.Many2one('mrp.bom', string='BoM', required=True, ondelete='cascade')

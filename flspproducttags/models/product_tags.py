@@ -5,6 +5,7 @@ from odoo import models, fields, api
 
 class product_tags(models.Model):
     _name = 'product.tags'
+    _description = "FLSP Product Tags"
 
     name = fields.Char(string="Tag Name", required="1")
 

@@ -12,6 +12,7 @@ class FlspDynamicLabelWizard(models.TransientModel):
                     https://apps.odoo.com/apps/modules/13.0/label/
     """
     _name = 'flsp.dynamic.label.wizard'
+    _description = "FLSP Dynamic Label Wizard"
 
     template_name = fields.Many2one('flsp.dynamic.label', 'Template Name', required=True)
     result = fields.Text(string='ZPL result')
