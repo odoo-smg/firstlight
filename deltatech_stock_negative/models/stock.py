@@ -14,8 +14,8 @@ class StockQuant(models.Model):
         self, product_id, location_id, quantity, lot_id=None, package_id=None, owner_id=None, in_date=None
     ):
         allow_negaive = False
-        if 'flsp_backflush' in self.env['product.template']._fields:
-            allow_negaive = product_id.flsp_backflush and product_id.bom_count > 0
+        #if 'flsp_backflush' in self.env['product.template']._fields:
+            #allow_negaive = product_id.flsp_backflush and product_id.bom_count > 0
 
         product_quantity = product_id.qty_available
         stock_quant = self.env['stock.quant'].search(['&', '&', '&', ('product_id', '=', product_id.id), ('location_id', '=', location_id.id),('lot_id', '=', lot_id.id), ('package_id', '=', package_id.id)]).mapped('quantity')
