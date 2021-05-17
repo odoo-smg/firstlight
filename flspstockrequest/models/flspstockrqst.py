@@ -196,13 +196,14 @@ class FlspStockRequest(models.Model):
 class FlspStockRequestLine(models.Model):
     """
         Class_Name: FlspStockRequestLine
-        Model_Name: flsp_sales_forecast
-        Purpose:    To help create the flsp_sales_forecast
+        Model_Name: flspstock.request.line
+        Purpose:    To help create the flspstock.request.line
         Date:       Dec/15th/2020/W
         Updated:
         Author:     Sami Byaruhanga
     """
     _name = 'flspstock.request.line'
+    _description = "FLSP Stock Request Line"
     order_id = fields.Many2one('flspstock.request', string='Reference', required=True, ondelete='cascade', index=True, copy=False)
     product_id = fields.Many2one('product.product', string='Product', change_default=True) #domain=[('purchase_ok', '=', True)],
     product_qty = fields.Float(string='Demand', digits='Product Unit of Measure', required=True)
