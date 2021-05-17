@@ -93,6 +93,7 @@ class FlspCompareBomView(models.Model):
             Purpose to hold the bom values to compare
         """
         _name = 'flsp.comparebom'
+        _description = "FLSP BOM To Compare"
 
         bom1 = fields.Many2one('mrp.bom', string='BoM 1', required=True, ondelete='cascade')
         bom2 = fields.Many2one('mrp.bom', string='BoM 2', required=True, ondelete='cascade')
@@ -102,6 +103,7 @@ class FlspSalesForecast(models.Model):
         Purpose: To get the bom line information to be used in a one to one field
     """
     _name = 'flsp.comparebom.line'
+    _description = "FLSP BOM Line"
     _auto = False
 
     order_id = fields.Many2one('flsp.comparebom.view', string='Reference', required=True, ondelete='cascade', index=True, copy=False)
@@ -129,5 +131,5 @@ class FlspSalesForecast(models.Model):
             on			mbl1.product_id = mbl2.product_id
         );
         """
-        print("executing query #2")
+        # print("executing query #2")
         self.env.cr.execute(query)

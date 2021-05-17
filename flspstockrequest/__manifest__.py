@@ -7,6 +7,7 @@
 
     'description': """
         Customizations performed:
+        
         Stock request:
             * Stock Request from the manufacturing team to the Material Planner
             * Material Handler will create internal transfers of the products.

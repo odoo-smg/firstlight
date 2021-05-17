@@ -23,7 +23,7 @@ class FlspSerialNum(models.Model):
                                      self.env['res.company']._company_default_get('flsp.serialnum'))
                                 )
     serial_count = fields.Integer('Number of SN', default=1, required=True)
-    created_by = fields.Many2one('res.users', string="Created by", required=True, index=True, default=lambda self: self.env.user)
+    created_by = fields.Many2one('res.users', string="Created By", required=True, index=True, default=lambda self: self.env.user)
     create_date = fields.Datetime(string='Create Date', required=True, readonly=True, default=fields.Datetime.now)
     note = fields.Char(string='Notes')
     manufacturing_num = fields.Many2one('mrp.production', string='M/O num') #'name'
@@ -144,6 +144,7 @@ class FlspSerialNumLine(models.Model):
         Purpose: to display the serial numbers created above with the button create
     """
     _name = 'flsp.serialnumline'
+    _description = "FLSP Serial Numbers for Orders"
     order_id = fields.Many2one('flsp.serialnum', string='Reference', required=True, ondelete='cascade', index=True, copy=False)
     serial_num = fields.Char("Serial Numbers") #On
 

@@ -707,6 +707,7 @@ class FlspSalesForecast(models.Model):
     """
 
     _name = 'flsp.sales.forecast.line'
+    _description = "FLSP Sales Forecast Line"
     order_id = fields.Many2one('flsp.sales.forecast', string='Reference', required=True, ondelete='cascade', index=True, copy=False)
 
     source = fields.Selection([('S', 'Internal'), ('E', 'External')], string="Source")

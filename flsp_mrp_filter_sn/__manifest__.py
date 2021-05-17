@@ -5,13 +5,15 @@
     'summary': """
         Module purpose is to show only available Serial numbers on the production, produce wizard""",
 
-    'description': """ Changes
+    'description': """ 
+        Customizations performed:
+    
+        Changes
             * Mar.26th.2021 - Created the model 
             * Apr.8th.2021 - Filter SN for all internal transfers
             * Apr.15th.2021 - Modified the model to filter for both the lots and SN
-        Create scheduled action if you wish to call check_all_available_sn in stock.production.lot
-        
-        """,
+            * Apr.15th.2021 - Create scheduled action if you wish to call check_all_available_sn in stock.production.lot
+    """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
 
