@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_mrp_structure_form_view">
+            <field name="name">flsp.mrp.structure.form.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">110</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//button[@name='action_confirm']" position="after">
+                  <button name="%(action_report_flsp_mo_bom)d" type="action" class="oe_stat_button" icon="fa-bars" string="Bom Structure"/>
+              </xpath>
+            </field>
+        </record>
+</odoo>
