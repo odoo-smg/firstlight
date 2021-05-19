@@ -48,6 +48,7 @@ class MrpProduction(models.Model):
             self.flsp_qty_backflushed = total_to_backflush
 
     def backflush_flsp(self, backflush_qty=0):
+        return
         wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
         stock_virtual_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Inventory adjustment')])
         virtual_production_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Production')])
