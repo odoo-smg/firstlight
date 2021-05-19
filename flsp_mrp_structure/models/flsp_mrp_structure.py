@@ -119,7 +119,7 @@ class ReportFlspStructure(models.AbstractModel):
         lines = {
             'bom': bom,
             'bom_qty': bom_quantity,
-            'bom_prod_name': product.display_name[:40],
+            'bom_prod_name': product.display_name[:70],
             'currency': company.currency_id,
             'product': product,
             'code': bom and bom.code or '',
@@ -155,7 +155,7 @@ class ReportFlspStructure(models.AbstractModel):
             prod_on_hand = line.product_id.qty_available
             components.append({
                 'prod_id': line.product_id.id,
-                'prod_name': line.product_id.display_name[:40],
+                'prod_name': line.product_id.display_name[:70],
                 'code': line.child_bom_id and line.child_bom_id.code or '',
                 'prod_qty': line_quantity,
                 'prod_uom': line.product_uom_id.name,
