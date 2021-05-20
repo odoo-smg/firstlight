@@ -26,5 +26,7 @@
         'views/production_serial.xml',
         'views/production_serial_wiz.xml',
         'views/production_serial_wiz_two.xml',
+        'views/product_product.xml',
+        'views/flsp_serial_mrp_alert_wiz.xml',
     ],
 }

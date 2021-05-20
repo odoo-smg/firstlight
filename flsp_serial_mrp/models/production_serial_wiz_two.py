@@ -30,6 +30,8 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
                     for line in serial_mrp:
                         flsp_serial_line_ids.append([0, 0, {
                             'mo_id': line.mo_id.id,
+                            'mo_state': line.mo_id.state,
+                            'is_locked': line.mo_id.is_locked,
                             'finished_product_id': line.product_id.id,
                             'finished_lot_id': line.finished_lot_id.id,
                             'component_product_id': line.component_id.id,
@@ -46,6 +48,8 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
                     for lot in lots:
                         flsp_serial_line_ids.append([0, 0, {
                             'mo_id': mo.id,
+                            'mo_state': mo.state,
+                            'is_locked': mo.is_locked,
                             'finished_product_id': mo.product_id.id,
                             'finished_lot_id': lot.id,
                             'component_lot_ids': lot.id,
@@ -56,6 +60,17 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
         return res
 
     mo_id = fields.Many2one('mrp.production', string="MO", required=True)
+    is_locked = fields.Boolean('Is Locked', related='mo_id.is_locked')
+    mo_state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('planned', 'Planned'),
+        ('progress', 'In Progress'),
+        ('to_close', 'To Close'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled')], string='State',
+        related='mo_id.state')
+
     mo_name = fields.Char(related='mo_id.name', string="MO name", readonly=True)
     bom_id = fields.Many2one(related='mo_id.bom_id', string="Bill of Material", readonly=True)
     flsp_serial_line_ids = fields.One2many('flsp_serial_mrp.wizard.line.two', 'flsp_serial_mrp_line_id', string='Components')
@@ -102,7 +117,7 @@ class FlspMrpSerialLineTwo(models.TransientModel):
     mo_id = fields.Many2one('mrp.production', string="MO", default=_get_mo)
 
     finished_product_id = fields.Many2one('product.product', string='Finished Product')
-    finished_lot_id = fields.Many2one('stock.production.lot', 'Lot/Serial Number')
+    finished_lot_id = fields.Many2one('stock.production.lot', 'Finished Lot/Serial', readonly=True, store=True)
     component_product_id = fields.Many2one('product.product', string='Component')
 
     component_lot_ids = fields.Many2many('stock.production.lot', string='Components Lots')
@@ -114,3 +129,13 @@ class FlspMrpSerialLineTwo(models.TransientModel):
     product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', default=1.0)
     flsp_serial_mrp_id = fields.Many2one('flsp.serial.mrp.two', string='Flsp Serial MRP')
 
+    mo_state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('planned', 'Planned'),
+        ('progress', 'In Progress'),
+        ('to_close', 'To Close'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled')], string='State',
+        related='mo_id.state')
+    is_locked = fields.Boolean('Is Locked', related='mo_id.is_locked')

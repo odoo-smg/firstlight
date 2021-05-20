@@ -69,11 +69,9 @@ class FlspSerialMrpWizard(models.TransientModel):
                         'qty': line.qty,
                     })
                     current_ids.append(new.id)
-        print(current_ids)
         serial_mrp = self.env['flsp.serial.mrp'].search([('mo_id', '=', self.mo_id.id), ('id', 'not in', current_ids)])
         if serial_mrp:
             for line in serial_mrp:
-                print('deleting')
                 line.unlink()
 
 
