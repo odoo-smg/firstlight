@@ -49,25 +49,27 @@ class FlspSerialMrpWizard(models.TransientModel):
     def flsp_save(self):
         self.ensure_one()
         current_ids = []
-        for line in self.flsp_serial_line_ids:
-            current_ids.append(line.flsp_serial_mrp_id.id)
-            if line.flsp_serial_mrp_id.id:
-                serial_mrp = self.env['flsp.serial.mrp'].search([('id', '=', line.flsp_serial_mrp_id.id)])
-                if serial_mrp:
-                    serial_mrp.finished_lot_id = line.finished_lot_id.id
-                    serial_mrp.component_id = line.component_product_id.id
-                    serial_mrp.component_lot_id = line.lot_id.id
-                    serial_mrp.qty = line.qty
-            else:
-                new = self.env['flsp.serial.mrp'].create({
-                    'mo_id': line.mo_id.id,
-                    'product_id': line.finished_product_id.id,
-                    'finished_lot_id': line.finished_lot_id.id,
-                    'component_id': line.component_product_id.id,
-                    'component_lot_id': line.lot_id.id,
-                    'qty': line.qty,
-                })
-                current_ids.append(new.id)
+        if self.flsp_serial_line_ids:
+            for line in self.flsp_serial_line_ids:
+                current_ids.append(line.flsp_serial_mrp_id.id)
+                if line.flsp_serial_mrp_id.id:
+                    serial_mrp = self.env['flsp.serial.mrp'].search([('id', '=', line.flsp_serial_mrp_id.id)])
+                    if serial_mrp:
+                        serial_mrp.finished_lot_id = line.finished_lot_id.id
+                        serial_mrp.component_id = line.component_product_id.id
+                        serial_mrp.component_lot_id = line.lot_id.id
+                        serial_mrp.qty = line.qty
+                else:
+                    new = self.env['flsp.serial.mrp'].create({
+                        'mo_id': line.mo_id.id,
+                        'product_id': line.finished_product_id.id,
+                        'finished_lot_id': line.finished_lot_id.id,
+                        'component_id': line.component_product_id.id,
+                        'component_lot_id': line.lot_id.id,
+                        'qty': line.qty,
+                    })
+                    current_ids.append(new.id)
+        print(current_ids)
         serial_mrp = self.env['flsp.serial.mrp'].search([('mo_id', '=', self.mo_id.id), ('id', 'not in', current_ids)])
         if serial_mrp:
             for line in serial_mrp:

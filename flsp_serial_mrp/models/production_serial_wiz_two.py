@@ -25,6 +25,7 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
 
                 flsp_serial_line_ids = []
                 serial_mrp = self.env['flsp.serial.mrp.two'].search([('mo_id', '=', mo.id)])
+                print(serial_mrp)
                 if serial_mrp:
                     for line in serial_mrp:
                         flsp_serial_line_ids.append([0, 0, {
@@ -32,10 +33,12 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
                             'finished_product_id': line.product_id.id,
                             'finished_lot_id': line.finished_lot_id.id,
                             'component_product_id': line.component_id.id,
-                            'lot_id': line.component_lot_id.id,
+                            #'lot_id': line.component_lot_id.id,
+                            'component_lot_ids': line.component_lot_ids.ids,
                             'qty': line.qty,
                             'flsp_serial_mrp_id': line.id,
                         }])
+                        print(flsp_serial_line_ids)
                     res['flsp_serial_line_ids'] = flsp_serial_line_ids
                 else:
                     moves = self.env['stock.move'].search([('production_id', '=', mo.id)]).ids
@@ -45,7 +48,7 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
                             'mo_id': mo.id,
                             'finished_product_id': mo.product_id.id,
                             'finished_lot_id': lot.id,
-                            'component_lot_ids': False,
+                            'component_lot_ids': lot.id,
                         }])
                     res['flsp_serial_line_ids'] = flsp_serial_line_ids
 
@@ -65,17 +68,18 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
             if line.flsp_serial_mrp_id.id:
                 serial_mrp = self.env['flsp.serial.mrp.two'].search([('id', '=', line.flsp_serial_mrp_id.id)])
                 if serial_mrp:
-                    serial_mrp.finished_lot_id = line.finished_lot_id.id
-                    serial_mrp.component_id = line.component_product_id.id
-                    serial_mrp.component_lot_id = line.lot_id.id
-                    serial_mrp.qty = line.qty
+                    #serial_mrp.finished_lot_id = line.finished_lot_id.id
+                    #serial_mrp.component_id = line.component_product_id.id
+                    #serial_mrp.component_lot_id = line.lot_id.id
+                    serial_mrp.component_lot_ids = line.component_lot_ids.ids
+                    #serial_mrp.qty = line.qty
             else:
                 new = self.env['flsp.serial.mrp.two'].create({
                     'mo_id': line.mo_id.id,
                     'product_id': line.finished_product_id.id,
                     'finished_lot_id': line.finished_lot_id.id,
-                    'component_id': line.component_product_id.id,
-                    'component_lot_id': line.lot_id.id,
+                    'component_id': line.finished_product_id.id,
+                    'component_lot_ids': line.component_lot_ids,
                     'qty': line.qty,
                 })
                 current_ids.append(new.id)
@@ -95,29 +99,13 @@ class FlspMrpSerialLineTwo(models.TransientModel):
         res = self.env.context.get('default_mo_id') or self.env.context.get('active_id')
         return res
 
-    def _get_lots(self):
-        mo_id = self.env.context.get('default_mo_id') or self.env.context.get('active_id')
-        moves = self.env['stock.move'].search([('production_id', '=', mo_id)]).ids
-        res = self.env['stock.move.line'].search([('move_id', 'in', moves)]).lot_id
-        return res
-
-    def _get_moves(self):
-        mo_id = self.env.context.get('default_mo_id') or self.env.context.get('active_id')
-        moves = self.env['stock.move'].search([('production_id', '=', mo_id)]).ids
-        res = self.env['stock.move.line'].search([('move_id', 'in', moves)])
-        return res
-
     mo_id = fields.Many2one('mrp.production', string="MO", default=_get_mo)
-    finished_move_line_ids = fields.Many2many('stock.move.line', string='Move Lines', default=_get_moves)
-    #finished_lot_ids = fields.Many2many('stock.production.lot', string='Lots', default=_get_lots)
 
     finished_product_id = fields.Many2one('product.product', string='Finished Product')
     finished_lot_id = fields.Many2one('stock.production.lot', 'Lot/Serial Number')
-    component_product_id = fields.Many2one('product.product', string='Component', required=True)
-    lot_id = fields.Many2one('stock.production.lot', 'Lot/Serial Number', required=True)
+    component_product_id = fields.Many2one('product.product', string='Component')
 
     component_lot_ids = fields.Many2many('stock.production.lot', string='Components Lots')
-    component_product_ids = fields.Many2many('product.product', string='Components')
 
     qty = fields.Float('Qty', default=1, digits='Product Unit of Measure', required=True)
     flsp_serial_mrp_line_id = fields.Many2one('flsp_serial_mrp.wizard.two')

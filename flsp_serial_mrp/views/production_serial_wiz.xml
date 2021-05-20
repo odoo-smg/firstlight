@@ -23,7 +23,7 @@
                                 <field name="component_product_id" />
                                 <field name="lot_id" />
                                 <field name="qty" />
-                                <field name="flsp_serial_mrp_id" />
+                                <field name="flsp_serial_mrp_id" invisible="1" />
                             </tree>
                         </field>
                     </group>

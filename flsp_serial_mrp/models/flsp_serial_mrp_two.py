@@ -14,3 +14,5 @@ class FlspSerialMRPTwo(models.Model):
     component_id = fields.Many2one('product.product', string='Component')
     component_lot_id = fields.Many2one('stock.production.lot', 'Component Lot/Serial', )
     qty = fields.Float('Qty')
+
+    component_lot_ids = fields.Many2many('stock.production.lot', string='Components Lots')
