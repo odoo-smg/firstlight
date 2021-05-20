@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_serial_mrp_form_view">
+            <field name="name">flsp.serial.mrp.form.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">120</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//button[@name='action_confirm']" position="after">
+                  <button name="flsp_button_serial_mrp" type="object" string="Serial/Lot Entry 1"/>
+                  <button name="flsp_button_serial_mrp_two" type="object" string="Serial/Lot Entry 2"/>
+              </xpath>
+            </field>
+        </record>
+</odoo>
