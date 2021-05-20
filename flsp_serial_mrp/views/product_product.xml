@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_serial_mrp_product_form_view">
+            <field name="name">flsp.serial.mrp.product.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tracking']" position="after">
+                    <field name="flsp_serial_mrp" class="oe_inline" style="vertical-align:baseline" attrs="{'readonly': [('tracking', '=', 'none')]}"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_serial_wiz" model="ir.ui.view">
+            <field name="name">Serial/Lot Entry</field>
+            <field name="model">flsp_serial_mrp.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Attention">
+                    <h4>Serial/Lot Number Entry</h4>
+                    <group>
+                        <field name="mo_id" attrs="{'readonly': [(True)]}"/>
+                    </group>
+                    <h4>Serial/Lot Number Consumed</h4>
+                    <group>
+                        <field name="flsp_serial_line_ids" nolabel="1" >
+                            <tree editable="bottom" create="true" delete="true">
+                                <field name="sequence" invisible="1"/>
+                                <field name="mo_id" invisible="1"/>
+                                <field name="finished_product_id" invisible="1" />
+                                <field name="finished_move_line_ids" widget="many2many_tags" invisible="1"/>
+                                <field name="finished_lot_ids" widget="many2many_tags" invisible="1"/>
+                                <field name="finished_lot_id" />
+                                <field name="component_product_id" />
+                                <field name="lot_id" />
+                                <field name="qty" />
+                                <field name="flsp_serial_mrp_id" invisible="1" />
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                    <button name="flsp_save" type="object" string="Save" class="btn-primary" />
+                    <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_serial_mrp_wiz" model="ir.actions.act_window">
+            <field name="name">FLSP - Serial MRP 1</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp_serial_mrp.wizard</field>
+            <field name="view_id" ref="flsp_serial_wiz" ></field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

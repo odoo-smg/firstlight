@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_serial_mrp_alert_wiz_view" model="ir.ui.view">
+            <field name="name">** PLM Validation</field>
+            <field name="model">flsp_serial_mrp.alert.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Attention">
+                    <h4>Please, fill the Serial Numbers</h4>
+                    <group>
+                        <field name="mo_id" readonly="1"/>
+                    </group>
+                    <spam>In order to confirm the Production Order, please, inform the components' serial/lot numbers used to build each finished product.</spam>
+                    <footer>
+                        <!--button name="flsp_button_serial_mrp_two" type="object" string="Serial/Lot Entry" /-->
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_serial_alert_wiz" model="ir.actions.act_window">
+            <field name="name">FLSP - Serial/Lot Numbers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp_serial_mrp.alert.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>
