@@ -16,6 +16,8 @@ class FlspMOProduct(models.TransientModel):
     product_name = fields.Char(related='product_id.name')
     stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True) 
     wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
+    forecasted_qty = fields.Float(related='product_id.virtual_available', string='Forecasted Qty') 
+    available_qty = fields.Float('Available Qty', default=0.0, digits='Product Unit of Measure', required=True)
     mo_required_qty = fields.Float('Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
     adjusted_qty = fields.Float('Adjusted Qty', default=0.0, digits='Product Unit of Measure', required=True)
 
@@ -75,6 +77,7 @@ class FlspMrpBomStructure(models.TransientModel):
                 else:
                     prod.get_wip_qty()
                     prod.get_stock_qty()
+                    prod.get_available_qty()
                     prod_list.append([0, 0, {
                                     'production_id': self.id,
                                     'product_id': prod.id, 
@@ -82,6 +85,8 @@ class FlspMrpBomStructure(models.TransientModel):
                                     'product_name': prod.name,
                                     'stock_qty': prod.flsp_stock_qty,
                                     'wip_qty': prod.flsp_wip_qty,
+                                    'forecasted_qty': prod.virtual_available,
+                                    'available_qty': prod.flsp_available_qty,
                                     'mo_required_qty': required_qty,
                                     'adjusted_qty': required_qty,
                                 }])
