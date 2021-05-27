@@ -7,6 +7,7 @@
 
     'description': """
         Customizations performed:
+        
         Sales forecast:
             * Sales - Add sales forecast 
             * Feb/04/2021 - Added a security group for sales forecast

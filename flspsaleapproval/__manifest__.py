@@ -25,7 +25,9 @@
     'depends': ['base'],
     'depends': ['sale'],
     'depends': ['delivery'],
+    'depends': ['product'],
     'depends': ['flspstock'],
+    'depends': ['flsp-product'],
 
     # always loaded
     'data': [

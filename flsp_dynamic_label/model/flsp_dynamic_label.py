@@ -14,13 +14,14 @@ class FlspDynamicLabel(models.Model):
                     https://apps.odoo.com/apps/modules/13.0/label/
     """
     _name = 'flsp.dynamic.label'
+    _description = "FLSP Dynamic Label"
     _rec_name = 'template_name'
 
     id = fields.Integer(index=True)
     template_name = fields.Char(string='Template Name', required=True)#, copy=False)
     model_id = fields.Many2one("ir.model", "Model", required=True)#, copy='False')
     template_code = fields.Text(string='Report Code', required=True)#, copy=False)
-    created_by = fields.Many2one('res.users', string="Created by", default=lambda self: self.env.user)#, copy=False)
+    created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)#, copy=False)
     create_date = fields.Date(string="Create date", default=fields.Date.today)#, copy=False)
     create_date = fields.Date(string="Create date", default=fields.Date.today)#, copy=False)
     purpose = fields.Text(string="Purpose")

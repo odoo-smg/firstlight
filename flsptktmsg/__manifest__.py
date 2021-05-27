@@ -3,12 +3,14 @@
     'name': "FLSP - Msg",
 
     'summary': """
-    Module purpose is to create ability for user to follow up on ticket""",
+        Module purpose is to create ability for user to follow up on ticket""",
 
     'description': """
-    Customizations performed::
-        * Ticket - added charter 
-""",
+        Customizations performed:
+
+        Changes
+            * Ticket - added charter 
+    """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
 

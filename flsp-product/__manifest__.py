@@ -30,7 +30,9 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
+    'depends': ['base_automation'],
     'depends': ['stock'],
+    'depends': ['sale'],
 
 
     # always loaded
@@ -41,5 +43,6 @@
         'views/flsp_stockpicking_view.xml',
         'views/flsp_product_product.xml',
         'views/flsp_finished_product_acc.xml',
+        'data/flsp_product_feature_config.xml',
     ],
 }

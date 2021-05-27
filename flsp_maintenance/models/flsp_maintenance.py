@@ -16,5 +16,5 @@ class FlspMaintenance(models.Model):
 
     flsp_asset_num = fields.Char(string="Asset #", tracking=True)
     flsp_calibration_num = fields.Char(string="Calibration Certificate")
-    flsp_calibration_img = fields.Many2many('ir.attachment', string='Calibration Certificate',
+    flsp_calibration_img = fields.Many2many('ir.attachment', string='Calibration Certificate Image',
                                               help='Add the attachment')

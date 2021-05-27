@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Add instructor field to existing view -->
+    <!-- 
     <record model="ir.ui.view" id="flsp_stock_production_lot_form_view">
         <field name="name">flsp.stock.production.lot.form.view.inherit</field>
         <field name="model">stock.production.lot</field>
@@ -9,6 +10,34 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='ref']" position="after">
                 <field name="qty_location" widget="many2many_tags" invisible="1"/>
+            </xpath>
+        </field>
+    </record> 
+    -->
+        
+    <record model="ir.ui.view" id="flsp_mrp_product_produce_form_view">
+        <field name="name">flsp.mrp.product.produce.form.view.inherit</field>
+        <field name="model">mrp.product.produce</field>
+        <field name="priority">100</field>
+        <field name="inherit_id" ref="mrp.view_mrp_product_produce_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='raw_workorder_line_ids']/tree[1]/field[@name='move_id']" position="after">
+                <field name="lot_candidates" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='finished_workorder_line_ids']/tree[1]/field[@name='move_id']" position="after">
+                <field name="lot_candidates" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="flsp_mrp_product_produce_line_form_view">
+        <field name="name">flsp.mrp.product.produce.line.form.view.inherit</field>
+        <field name="model">mrp.product.produce.line</field>
+        <field name="priority">100</field>
+        <field name="inherit_id" ref="mrp.mrp_product_produce_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_id']" position="after">
+                <field name="lot_candidates" invisible="1"/>
             </xpath>
         </field>
     </record>

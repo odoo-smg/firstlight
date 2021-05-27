@@ -19,6 +19,8 @@
                                 <field name="product_name" readonly="1"/>
                                 <field name="stock_qty" readonly="1"/>
                                 <field name="wip_qty" readonly="1"/>
+                                <field name="forecasted_qty" readonly="1"/>
+                                <field name="available_qty" readonly="1"/>
                                 <field name="mo_required_qty" readonly="1"/>
                                 <field name="adjusted_qty" />
                             </tree>
