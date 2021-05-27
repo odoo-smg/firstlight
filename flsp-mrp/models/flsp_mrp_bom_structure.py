@@ -146,10 +146,12 @@ class FlspMrpBomStructure(models.TransientModel):
             'picking_type_id': picking_type_id.id,
         })
         
-        # update 'product_list' after MO's creation because the process depends on the MO's attributes
-        self.set_bom_product(new_mo)
         # update 'location_src_id' and 'location_dest_id' after MO's creation because the process depends on the MO's attributes
         self.set_locations(new_mo)
+
+        # update 'product_list' after MO's creation because the process depends on the MO's attributes
+        # this method must be called AFTER set_locations() above because location from the new MO is required by the bom products
+        self.set_bom_product(new_mo)
         
         return new_mo
     
