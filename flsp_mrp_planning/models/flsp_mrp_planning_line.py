@@ -1036,6 +1036,7 @@ class FlspMrpPlanningLine(models.Model):
 
     def execute_suggestion(self):
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')], limit=1)
+        mrp_picking_type = self.env['stock.picking.type'].search([('name', '=', 'Manufacturing'), ('active', '=', True), ('company_id', '=', self.env.company.id)])
         for item in self:
             bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', item.product_tmpl_id.id)], limit=1)
             if not bom_id:
@@ -1055,8 +1056,8 @@ class FlspMrpPlanningLine(models.Model):
                 'date_planned_start': datetime.combine(item.required_by, datetime.now().time()),
                 'date_planned_finished': datetime.combine(item.required_by, datetime.now().time()),
                 'date_deadline': datetime.combine(item.required_by, datetime.now().time()),
-                'location_src_id': pa_location.id,
-                'location_dest_id': pa_location.id,
+                'location_src_id': mrp_picking_type.default_location_src_id.id if mrp_picking_type else pa_location.id,
+                'location_dest_id': mrp_picking_type.default_location_dest_id.id if mrp_picking_type else pa_location.id,
                 'origin': item.source,
             })
 
