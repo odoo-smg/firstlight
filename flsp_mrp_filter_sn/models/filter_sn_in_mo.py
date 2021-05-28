@@ -20,7 +20,8 @@ class FlspMrpProduceLineFilterLot(models.TransientModel):
     _inherit = 'mrp.product.produce.line'
 
     def _get_default_lots(self):
-        mo_id = self.env.context.get('default_mo_id') or self.env.context.get('active_id')
+        res = []
+        mo_id = self.env.context.get('default_mo_id')
         if mo_id:
             mo = self.env['mrp.production'].browse(mo_id)
             res = self.env['stock.quant'].search([('location_id', '=', mo.location_src_id.id), ('product_id', '=', self.product_id.id), ('quantity', '>', 0.0), '|', ('company_id', '=', False), ('company_id', '=', self.company_id.id)]).lot_id
