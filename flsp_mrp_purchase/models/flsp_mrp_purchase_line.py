@@ -35,6 +35,8 @@ class FlspMrppurchaseLine(models.Model):
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
     purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True,
                                       help="Quantity suggested to buy or produce.")
+    po_qty = fields.Float(string='Qty Open PO')
+    rfq_qty = fields.Float(string='Qty RFQ')
 
     qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
     level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
@@ -110,7 +112,7 @@ class FlspMrppurchaseLine(models.Model):
                                                                                       self.product_id.uom_po_id)
 
     def _flsp_calc_purchase(self, standard_lead_time=1, standard_queue_time=1, indirect_lead_time=1,
-                            consider_drafts=True, consider_wip=True, consider_forecast=True):
+                            consider_drafts=True, consider_wip=True, consider_forecast=True, consider_mo=False):
         current_date = datetime.now()
         required_by = current_date
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
@@ -190,32 +192,33 @@ class FlspMrppurchaseLine(models.Model):
         # *******************************************************************************
         # ************************ Manufacturing Orders *********************************
         # *******************************************************************************
-        if consider_drafts:
-            production_orders = self.env['mrp.production'].search([('state', 'not in', ['done', 'cancel'])])
-        else:
-            production_orders = self.env['mrp.production'].search([('state', 'not in', ['done', 'cancel', 'draft'])])
-        for production in production_orders:
-            move_components = self._get_flattened_totals(production.bom_id, production.product_qty, {}, 0,True)
+        if consider_mo:
+            if consider_drafts:
+                production_orders = self.env['mrp.production'].search([('state', 'not in', ['done', 'cancel'])])
+            else:
+                production_orders = self.env['mrp.production'].search([('state', 'not in', ['done', 'cancel', 'draft'])])
+            for production in production_orders:
+                move_components = self._get_flattened_totals(production.bom_id, production.product_qty, {}, 0,True)
 
-            for prod in move_components:
-                if move_components[prod]['level'] == 1:
-                    open_moves.append([len(open_moves) + 1, 'In   ', 'MO      ',
+                for prod in move_components:
+                    if move_components[prod]['level'] == 1:
+                        open_moves.append([len(open_moves) + 1, 'In   ', 'MO      ',
+                                           production.name,
+                                           prod,
+                                           move_components[prod]['total'], prod.uom_id.id,
+                                           production.date_planned_start, move_components[prod]['level'],
+                                           standard_lead_time + (move_components[prod]['level'] * indirect_lead_time)])
+                        continue
+                    if prod.type in ['service', 'consu']:
+                        continue
+                    if move_components[prod]['total'] <= 0:
+                        continue
+                    open_moves.append([len(open_moves) + 1, 'Out  ', 'MO      ',
                                        production.name,
                                        prod,
                                        move_components[prod]['total'], prod.uom_id.id,
                                        production.date_planned_start, move_components[prod]['level'],
-                                       standard_lead_time + (move_components[prod]['level'] * indirect_lead_time)])
-                    continue
-                if prod.type in ['service', 'consu']:
-                    continue
-                if move_components[prod]['total'] <= 0:
-                    continue
-                open_moves.append([len(open_moves) + 1, 'Out  ', 'MO      ',
-                                   production.name,
-                                   prod,
-                                   move_components[prod]['total'], prod.uom_id.id,
-                                   production.date_planned_start, move_components[prod]['level'],
-                                   standard_lead_time + (indirect_lead_time * move_components[prod]['level'])])
+                                       standard_lead_time + (indirect_lead_time * move_components[prod]['level'])])
         # print(open_moves)
 
         # for move in open_moves:
@@ -232,6 +235,8 @@ class FlspMrppurchaseLine(models.Model):
         # print(move[4].default_code+' - '+str(move[7])) ## Product + Date
         # print(move[7]) ## Date
         # print(move[4])  ## Product
+        po_qty = 0
+        rfq_qty = 0
 
         # First Item
         for item in open_moves:
@@ -279,11 +284,12 @@ class FlspMrppurchaseLine(models.Model):
             if new_prod:
                 rationale += "</pre>"
                 purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip,
-                                                   consumption)
+                                                   consumption, False, po_qty)
                 if purchase_line:
                     purchase_line.level_bom = bom_level
                 bom_level = 0
                 consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                po_qty = 0
 
                 if not item:
                     break
@@ -319,6 +325,9 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
                     item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[
                                  2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]
+                if item[2] == "Purchase":
+                    po_qty = po_qty + item[5]
+
                 product = item[4]
                 if bom_level < item[8]:
                     bom_level = item[8]
@@ -518,6 +527,9 @@ class FlspMrppurchaseLine(models.Model):
                     else:
                         suggested_qty = 0
 
+                required_qty = suggested_qty
+                planning.suggested_qty = required_qty
+
                 # Checking supplier quantity:
                 if suggested_qty > 0 and planning.vendor_qty > 0:
                     if suggested_qty < planning.vendor_qty:
@@ -534,9 +546,9 @@ class FlspMrppurchaseLine(models.Model):
                 else:
                     current_balance = planning.product_qty - planning.wip_qty
                 if suggested_qty > current_balance:
-                    planning.suggested_qty = suggested_qty
+                    planning.suggested_qty = required_qty
                     planning.adjusted_qty = suggested_qty
-                    planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(suggested_qty,
+                    planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(required_qty,
                                                                                               planning.product_id.uom_po_id)
                     planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty,
                                                                                                planning.product_id.uom_po_id)
@@ -655,7 +667,7 @@ class FlspMrppurchaseLine(models.Model):
                     ), 'level': level, 'bom': ''}
         return totals
 
-    def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, forecast=False):
+    def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, forecast=False, po_qty=0.0):
 
         if not consumption:
             consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -757,6 +769,7 @@ class FlspMrppurchaseLine(models.Model):
                            'vendor_price': prod_vendor.price,
                            'stock_qty': product.qty_available - pa_wip_qty,
                            'wip_qty': pa_wip_qty,
+                           'po_qty': po_qty,
                            'rationale': rationale,
                            'required_by': required_by,
                            'consumption_month1': consumption[1],
