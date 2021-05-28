@@ -626,26 +626,26 @@ class FlspMrppurchaseLine(models.Model):
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
-                if backflush and not line.product_id.product_tmpl_id.flsp_backflush:
-                    if totals.get(line.product_id):
-                        totals[line.product_id]['total'] += (
-                                factor
-                                * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
-                        )
-                    else:
-                        totals[line.product_id] = {'total': (
-                                factor
-                                * line.product_uom_id._compute_quantity(
-                            line.product_qty, line.product_id.uom_id, round=False
-                        )
-                        ), 'level': level, 'bom': sub_bom.code}
-                    continue
-                else:
-                    new_factor = factor * line.product_uom_id._compute_quantity(
+                #if backflush and not line.product_id.product_tmpl_id.flsp_backflush:
+                if totals.get(line.product_id):
+                    totals[line.product_id]['total'] += (
+                            factor
+                            * line.product_uom_id._compute_quantity(
                         line.product_qty, line.product_id.uom_id, round=False
                     )
+                    )
+                else:
+                    totals[line.product_id] = {'total': (
+                            factor
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
+                    )
+                    ), 'level': level, 'bom': sub_bom.code}
+#                continue
+#                else:
+                new_factor = factor * line.product_uom_id._compute_quantity(
+                    line.product_qty, line.product_id.uom_id, round=False
+                )
 
                 level += 1
                 self._get_flattened_totals(sub_bom, new_factor, totals, level, backflush)
