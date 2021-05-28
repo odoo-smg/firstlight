@@ -43,6 +43,10 @@
                                 Consider Sales Forecast.
                             </div>
 
+                            <div>
+                                <field name="consider_mos"/>
+                                Consider Manufacturing Orders.
+                            </div>
 
                             <!--div>
                                &#x25CF; The standard queue time to calculate the sub-levels of the BOM is:
