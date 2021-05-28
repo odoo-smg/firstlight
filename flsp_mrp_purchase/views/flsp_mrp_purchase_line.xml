@@ -78,9 +78,10 @@
                 <field name="suggested_qty" string="Required Qty"/>
                 <field name="required_by"/>
                 <field name="adjusted_qty"/>
+                <field name="po_qty" optional="hide"/>
                 <!--field name="state"/-->
-                <field name="start_date" optional="hide"/>
-                <field name="deadline_date" string="Deadline" optional="hide"/>
+                <!--field name="start_date" optional="hide"/>
+                <field name="deadline_date" string="Deadline" optional="hide"/-->
                 <field name="balance" string="Forecasted"  optional="hide"/>
             </tree>
         </field>
