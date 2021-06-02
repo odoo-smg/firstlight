@@ -13,7 +13,7 @@
     'website': "http://www.smartrendmfg.com",
     "category": "Manufacture",
     'version': '0.1',
-    'depends': ['base', 'mrp', 'stock'],
+    'depends': ['base', 'mrp', 'stock', 'sale', 'purchase', 'flsp-product'],
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_mrp_simulation.xml',
