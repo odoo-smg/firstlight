@@ -97,10 +97,10 @@
         parent="mrp.menu_mrp_config"
         action="flsp_mrp_simulation_action"/>
 
-    <!-- flsp.mrp.simulatd.product -->
+    <!-- flsp.mrp.simulated.product -->
     <record id="flsp_mrp_simulated_pproduct_form_view" model="ir.ui.view">
-        <field name="name">flsp.mrp.simulatd.product.form</field>
-        <field name="model">flsp.mrp.simulatd.product</field>
+        <field name="name">flsp.mrp.simulated.product.form</field>
+        <field name="model">flsp.mrp.simulated.product</field>
         <field name="arch" type="xml">
             <form string="FLSP MRP Simulated Product Form">
                 <sheet>

@@ -1,4 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsp_mrp_simulation,flsp.mrp.simulation.manager,model_flsp_mrp_simulation,base.group_user,1,1,1,1
-access_flsp_mrp_simulatd_product,flsp.mrp.simulatd.product.manager,model_flsp_mrp_simulatd_product,base.group_user,1,1,1,1
+access_flsp_mrp_simulated_product,flsp.mrp.simulated.product.manager,model_flsp_mrp_simulated_product,base.group_user,1,1,1,1
 access_flsp_mrp_sub_product,flsp.mrp.sub.product.manager,model_flsp_mrp_sub_product,base.group_user,1,1,1,1
