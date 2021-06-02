@@ -13,16 +13,15 @@
                     </div>
                     <group>
                         <field name="bom_products" nolabel="1">
-                            <tree editable="bottom" create="false" delete="false">
+                            <tree editable="bottom" create="false" delete="false" limit = "20">
                                 <field name="selected"/>
-                                <field name="part_number" readonly="1"/>
-                                <field name="product_name" readonly="1"/>
+                                <field name="display_name" readonly="1"/>
+                                <field name="mo_required_qty" readonly="1"/>
+                                <field name="adjusted_qty" />
                                 <field name="stock_qty" readonly="1"/>
                                 <field name="wip_qty" readonly="1"/>
                                 <field name="forecasted_qty" readonly="1"/>
                                 <field name="available_qty" readonly="1"/>
-                                <field name="mo_required_qty" readonly="1"/>
-                                <field name="adjusted_qty" />
                             </tree>
                         </field>
                     </group>

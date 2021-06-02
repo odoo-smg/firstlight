@@ -12,8 +12,7 @@ class FlspMOProduct(models.TransientModel):
     selected = fields.Boolean('Selected')
     production_id = fields.Many2one('flspmrp.bom.structure', required=True, check_company=True)
     product_id = fields.Many2one('product.product', string='Product', required=True, check_company=True)
-    part_number = fields.Char(related='product_id.default_code')
-    product_name = fields.Char(related='product_id.name')
+    display_name = fields.Char(related='product_id.display_name')
     stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True) 
     wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
     forecasted_qty = fields.Float(related='product_id.virtual_available', string='Forecasted Qty') 
@@ -81,8 +80,7 @@ class FlspMrpBomStructure(models.TransientModel):
                     prod_list.append([0, 0, {
                                     'production_id': self.id,
                                     'product_id': prod.id, 
-                                    'part_number': prod.default_code,
-                                    'product_name': prod.name,
+                                    'display_name': prod.display_name,
                                     'stock_qty': prod.flsp_stock_qty,
                                     'wip_qty': prod.flsp_wip_qty,
                                     'forecasted_qty': prod.virtual_available,
