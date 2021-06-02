@@ -22,6 +22,7 @@ class FlspMtoStockMove(models.Model):
 
     def execute_suggestion(self):
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')], limit=1)
+        stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')], limit=1)
         mrp_picking_type = self.env['stock.picking.type'].search([('name', '=', 'Manufacturing'), ('active', '=', True), ('company_id', '=', self.env.company.id)])
         for item in self:
             if item.mo_id:
@@ -46,7 +47,7 @@ class FlspMtoStockMove(models.Model):
                 'date_planned_finished': datetime.combine(item.date_expected, datetime.now().time()),
                 'date_deadline': datetime.combine(item.date_expected, datetime.now().time()),
                 'location_src_id': mrp_picking_type.default_location_src_id.id if mrp_picking_type else pa_location.id,
-                'location_dest_id': mrp_picking_type.default_location_dest_id.id if mrp_picking_type else pa_location.id,
+                'location_dest_id': stock_location.id,
                 'origin': item.origin,
             })
 
@@ -64,4 +65,3 @@ class FlspMtoStockMove(models.Model):
             item.mo_id = mo.id
 
         return
-
