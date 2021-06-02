@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="flsp_mrp_simulation_form_view" model="ir.ui.view">
+        <field name="name">flsp.mrp.simulation.form</field>
+        <field name="model">flsp.mrp.simulation</field>
+        <field name="arch" type="xml">
+            <form string="FLSP MRP Simulation Form">
+                <sheet>
+                        <label for="simulation_name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="simulation_name" placeholder="Simulation Name" style="width:50%; height:50px;"/>
+                        </h1>
+                    <group>
+                        <field name="create_uid" optional="show" string="Created By"/>
+                    </group>
+                    <group>
+                    </group>
+                    <h4>Finished Products:</h4>
+                        <field name="simulated_products" nolabel="1">
+                            <tree editable="bottom" create="true" edit="true" delete="true">
+                                <field name="simulation_id" invisible="1"/>
+                                <field name="product_id" readonly="0"/>
+                                <field name="required_qty"/>
+                                <field name="onhand_qty" readonly="1"/>
+                                <field name="cost" readonly="1"/>
+                                <field name="bom_cost" readonly="1"/>
+                            </tree>
+                        </field>
+                    <group>
+                        <group>
+                            <field name="missed_only" widget="boolean"/>
+                            <button string="Calculate" name="button_calculate_sub_products" type="object" class="btn-default btn-primary" style="width:50%;" help="Calculate sub products in BoMs of the finished products with quantities bigger than 0"/>
+                        </group>
+                        <group>
+                            <field name="total_onhand_value" readonly="1"/>
+                            <h6></h6>
+                            <field name="total_value_needed" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <separator/>
+                    <div attrs="{'invisible': [('missed_only', '=', True)]}">
+                        <h4>Sub Products:</h4>
+                        <field name="sub_products" nolabel="1">
+                            <tree create="false" edit="false" delete="false" limit="20">
+                                <field name="simulation_id" invisible="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="required_qty" readonly="1"/>
+                                <field name="onhand_qty" readonly="1"/>
+                                <field name="diff_qty" readonly="1"/>
+                                <field name="cost" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div attrs="{'invisible': [('missed_only', '=', False)]}">
+                        <h4>Missed Sub Products:</h4>
+                        <field name="missed_sub_products" nolabel="1">
+                            <tree create="false" edit="false" delete="false" limit="20">
+                                <field name="simulation_id" invisible="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="required_qty" readonly="1"/>
+                                <field name="onhand_qty" readonly="1"/>
+                                <field name="diff_qty" readonly="1"/>
+                                <field name="cost" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_simulation_tree_view" model="ir.ui.view">
+        <field name="name">MPR Simulation Tree</field>
+        <field name="model">flsp.mrp.simulation</field>
+        <field name="arch" type="xml">
+            <tree string="List View">
+                <field name="simulation_name" optional="show"/>
+                <field name="create_uid" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- window action -->
+    <record id="flsp_mrp_simulation_action" model="ir.actions.act_window">
+        <field name="name">MPR Simulations</field>
+        <field name="res_model">flsp.mrp.simulation</field>
+        <field name="view_id" ref="flsp_mrp_simulation_tree_view"/>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first MPR Simulation</p>
+        </field>
+    </record>
+
+    <!-- menu design -->
+    <menuitem id="flsp_mrp_simulation_menu" name="MRP Simulation" 
+        parent="mrp.menu_mrp_config"
+        action="flsp_mrp_simulation_action"/>
+
+    <!-- flsp.mrp.simulatd.product -->
+    <record id="flsp_mrp_simulated_pproduct_form_view" model="ir.ui.view">
+        <field name="name">flsp.mrp.simulatd.product.form</field>
+        <field name="model">flsp.mrp.simulatd.product</field>
+        <field name="arch" type="xml">
+            <form string="FLSP MRP Simulated Product Form">
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="simulation_id"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="product_id" readonly="1"/>
+                        <field name="required_qty" readonly="0"/>
+                        <field name="onhand_qty" readonly="1"/>
+                        <field name="cost" readonly="1"/>
+                        <field name="bom_cost" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
