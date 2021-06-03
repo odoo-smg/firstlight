@@ -8,3 +8,4 @@ class Backflushproducts(models.Model):
     _check_company_auto = True
 
     flsp_backflush = fields.Boolean(string="Backflush", default=False)
+    flsp_bf_check = fields.Boolean(string="BF Check", default=False)
