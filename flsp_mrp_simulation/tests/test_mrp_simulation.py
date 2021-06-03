@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
@@ -96,7 +95,7 @@ class TestOnMrpSimulation(TransactionCase):
         postfix = str(datetime.now())
         aName = 'simulation-' + postfix
         return self.mrp_simulation_model.create({
-                        'simulation_name': aName,
+                        'name': aName,
                         'missed_only': missed_only,
                 })
         
@@ -432,7 +431,7 @@ class TestOnMrpSimulation(TransactionCase):
         self.create_mrp_simulated_product(s_1.id, prod_3.id, 5)
 
         prod_4 = self.create_simulation_product(7, 1, False)
-        # prod_5 can be broken down as 2 x prod_1 and 2 x prod_4
+        # prod_5 can be broken down as 2 x prod_1, 1 x prod_3  and 2 x prod_4
         # prod_5, onhand_qty=10, required_qty=11
         bom_lines_5 = [{"product_id": prod_1.id, "qty": 2}, {"product_id": prod_3.id, "qty": 1}, {"product_id": prod_4.id, "qty": 2}]
         prod_5 = self.create_simulation_product(65, 10, bom_lines_5)
@@ -471,27 +470,105 @@ class TestOnMrpSimulation(TransactionCase):
         self.assertEquals(p_1.diff_qty, 0, "sub_product.diff_qty")
         p_2 = s_1.sub_products[2]
         self.assertEquals(p_2.product_id.id, prod_1.id, "sub_products[2].id")
-        self.assertEquals(p_2.required_qty, 6, "sub_product.required_qty") # (40-2) * 3
+        self.assertEquals(p_2.required_qty, 6, "sub_product.required_qty")
         self.assertEquals(p_2.onhand_qty, 3, "sub_product.onhand_qty")
         self.assertEquals(p_2.diff_qty, -3, "sub_product.diff_qty")
-        p_2 = s_1.sub_products[3]
-        self.assertEquals(p_2.product_id.id, prod_2.id, "sub_products[2].id")
-        self.assertEquals(p_2.required_qty, 12, "sub_product.required_qty") # (40-2) * 3
-        self.assertEquals(p_2.onhand_qty, 100, "sub_product.onhand_qty")
-        self.assertEquals(p_2.diff_qty, 88, "sub_product.diff_qty")
-        p_2 = s_1.sub_products[4]
-        self.assertEquals(p_2.product_id.id, prod_4.id, "sub_products[2].id")
-        self.assertEquals(p_2.required_qty, 2, "sub_product.required_qty") # (40-2) * 3
-        self.assertEquals(p_2.onhand_qty, 1, "sub_product.onhand_qty")
-        self.assertEquals(p_2.diff_qty, -1, "sub_product.diff_qty")
+        p_3 = s_1.sub_products[3]
+        self.assertEquals(p_3.product_id.id, prod_2.id, "sub_products[2].id")
+        self.assertEquals(p_3.required_qty, 12, "sub_product.required_qty") 
+        self.assertEquals(p_3.onhand_qty, 100, "sub_product.onhand_qty")
+        self.assertEquals(p_3.diff_qty, 88, "sub_product.diff_qty")
+        p_4 = s_1.sub_products[4]
+        self.assertEquals(p_4.product_id.id, prod_4.id, "sub_products[2].id")
+        self.assertEquals(p_4.required_qty, 2, "sub_product.required_qty") 
+        self.assertEquals(p_4.onhand_qty, 1, "sub_product.onhand_qty")
+        self.assertEquals(p_4.diff_qty, -1, "sub_product.diff_qty")
 
         self.assertEquals(len(s_1.missed_sub_products), 2, "missed_sub_products.len")
-        sp_0 = s_1.missed_sub_products[0]
-        self.assertEquals(sp_0.product_id.id, prod_1.id, "missed_sub_products[0].id")
-        self.assertEquals(sp_0.diff_qty, -3, "missed_sub_products.id")
-        sp_1 = s_1.missed_sub_products[1]
-        self.assertEquals(sp_1.product_id.id, prod_4.id, "missed_sub_products[1].id")
-        self.assertEquals(sp_1.diff_qty, -1, "missed_sub_products.id")
+        ssp_0 = s_1.missed_sub_products[0]
+        self.assertEquals(ssp_0.product_id.id, prod_1.id, "missed_sub_products[0].id")
+        self.assertEquals(ssp_0.diff_qty, -3, "missed_sub_products.id")
+        ssp_1 = s_1.missed_sub_products[1]
+        self.assertEquals(ssp_1.product_id.id, prod_4.id, "missed_sub_products[1].id")
+        self.assertEquals(ssp_1.diff_qty, -1, "missed_sub_products.id")
         
         # add info to make sure the test case is done
         _logger.info("test_mutiple_simulation_products_with_bom() is done.")
+
+    def test_mutiple_simulation_products_with_bom_1(self):
+        # onhand_qty in stock does not meet the required qty, but prod_3 is met for the first time
+
+        # prepare test data
+        prod_1 = self.create_simulation_product(2.7, 3, False)
+        prod_2 = self.create_simulation_product(5.1, 100, False)
+        # prod_3 can be broken down as 1 x prod_1 and 3 x prod_2
+        # prod_3, onhand_qty=4, required_qty=3
+        bom_lines_3 = [{"product_id": prod_1.id, "qty": 1}, {"product_id": prod_2.id, "qty": 3}]
+        prod_3 = self.create_simulation_product(20.3, 4, bom_lines_3)
+        s_1 = self.create_mrp_simulation(False)
+        self.create_mrp_simulated_product(s_1.id, prod_3.id, 3)
+
+        prod_4 = self.create_simulation_product(7, 1, False)
+        # prod_5 can be broken down as 2 x prod_1, 3 x prod_3 and 1 x prod_4
+        # prod_5, onhand_qty=6, required_qty=8
+        bom_lines_5 = [{"product_id": prod_1.id, "qty": 2}, {"product_id": prod_3.id, "qty": 3}, {"product_id": prod_4.id, "qty": 1}]
+        prod_5 = self.create_simulation_product(73, 6, bom_lines_5)
+        self.create_mrp_simulated_product(s_1.id, prod_5.id, 8)
+
+        # call the method
+        s_1.button_calculate_sub_products()
+        
+        # validate the result
+        self.assertEquals(s_1.total_onhand_value, 20.3 * 4 + 73 * 6, "total_onhand_value") 
+        # prod_1 2.7 * 6 + prod_4 7 * 1 = 23.2
+        self.assertEquals(float_compare(s_1.total_value_needed, 23.2, precision_rounding=prod_5.product_tmpl_id.uom_id.rounding), 0, "total_value_needed")
+
+        self.assertEquals(len(s_1.simulated_products), 2, "simulated_products.len")
+        sp_0 = s_1.simulated_products[0]
+        self.assertEquals(sp_0.product_id.id, prod_3.id, "simulated_products[0].id")
+        self.assertEquals(sp_0.required_qty, 3, "simulated_products.required_qty")
+        self.assertEquals(sp_0.onhand_qty, 4, "simulated_products.onhand_qty")
+        self.assertEquals(sp_0.bom_cost, 2.7 + 5.1 * 3, "simulated_products.bom_cost")
+        sp_1 = s_1.simulated_products[1]
+        self.assertEquals(sp_1.product_id.id, prod_5.id, "simulated_products[1].id")
+        self.assertEquals(sp_1.required_qty, 8, "simulated_products.required_qty")
+        self.assertEquals(sp_1.onhand_qty, 6, "simulated_products.onhand_qty")
+        self.assertEquals(sp_1.bom_cost, 2.7 * 2 + (2.7 + 5.1 * 3) * 3 + 7 * 1, "simulated_products.bom_cost")
+
+        self.assertEquals(len(s_1.sub_products), 5, "sub_products.len")
+        p_0 = s_1.sub_products[0]
+        self.assertEquals(p_0.product_id.id, prod_3.id, "sub_products[0].id")
+        self.assertEquals(p_0.required_qty, 4, "sub_product.required_qty")
+        self.assertEquals(p_0.onhand_qty, 4, "sub_product.onhand_qty")
+        self.assertEquals(p_0.diff_qty, 0, "sub_product.diff_qty")
+        p_1 = s_1.sub_products[1]
+        self.assertEquals(p_1.product_id.id, prod_5.id, "sub_products[1].id")
+        self.assertEquals(p_1.required_qty, 6, "sub_product.required_qty")
+        self.assertEquals(p_1.onhand_qty, 6, "sub_product.onhand_qty")
+        self.assertEquals(p_1.diff_qty, 0, "sub_product.diff_qty")
+        p_2 = s_1.sub_products[2]
+        self.assertEquals(p_2.product_id.id, prod_1.id, "sub_products[2].id")
+        self.assertEquals(p_2.required_qty, 9, "sub_product.required_qty") 
+        self.assertEquals(p_2.onhand_qty, 3, "sub_product.onhand_qty")
+        self.assertEquals(p_2.diff_qty, -6, "sub_product.diff_qty")
+        p_3 = s_1.sub_products[3]
+        self.assertEquals(p_3.product_id.id, prod_4.id, "sub_products[2].id")
+        self.assertEquals(p_3.required_qty, 2, "sub_product.required_qty")
+        self.assertEquals(p_3.onhand_qty, 1, "sub_product.onhand_qty")
+        self.assertEquals(p_3.diff_qty, -1, "sub_product.diff_qty")
+        p_4 = s_1.sub_products[4]
+        self.assertEquals(p_4.product_id.id, prod_2.id, "sub_products[2].id")
+        self.assertEquals(p_4.required_qty, 15, "sub_product.required_qty") 
+        self.assertEquals(p_4.onhand_qty, 100, "sub_product.onhand_qty")
+        self.assertEquals(p_4.diff_qty, 85, "sub_product.diff_qty")
+
+        self.assertEquals(len(s_1.missed_sub_products), 2, "missed_sub_products.len")
+        ssp_0 = s_1.missed_sub_products[0]
+        self.assertEquals(ssp_0.product_id.id, prod_1.id, "missed_sub_products[0].id")
+        self.assertEquals(ssp_0.diff_qty, -6, "missed_sub_products.id")
+        ssp_1 = s_1.missed_sub_products[1]
+        self.assertEquals(ssp_1.product_id.id, prod_4.id, "missed_sub_products[1].id")
+        self.assertEquals(ssp_1.diff_qty, -1, "missed_sub_products.id")
+        
+        # add info to make sure the test case is done
+        _logger.info("test_mutiple_simulation_products_with_bom_1() is done.")
