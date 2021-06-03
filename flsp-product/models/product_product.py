@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api, exceptions
-
-import logging
-_logger = logging.getLogger(__name__)
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -166,6 +164,11 @@ class smgproductprd(models.Model):
             _logger.info("************ Sending 'Products with Cost Recalculation - Daily Report' ************")
             self.env['flspautoemails.bpmemails'].send_email(prods, 'AC0002')
             _logger.info("************ 'Products with Cost Recalculation - Daily Report' DONE ***************")
+    
+    @api.onchange('tracking')
+    def onchange_tracking_for_onhand(self):
+        if self.qty_available > 0:
+            raise UserError(_("Traceability can't be changed because the change is only for products without any quantity in stock. Current OnHand quantity is " + str(self.qty_available)))
 
 class BomLoopException(Exception):
     def __init__(self, msg, prods):

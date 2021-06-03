@@ -27,7 +27,7 @@ class FlspMtoStockMove(models.Model):
         for item in self:
             if item.mo_id:
                 continue
-            bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
+            bom_id = self.env['mrp.bom']._bom_find(product=item.product_id)
             if not bom_id:
                 raise ValidationError(("BOM not found for product: "+item.product_id.default_code))
                 #item.rationale += "<br/> |"
