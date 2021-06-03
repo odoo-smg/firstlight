@@ -5,17 +5,19 @@
             <t t-foreach="docs" t-as="serial">
                 <t t-foreach="serial.serial_num_line" t-as="move">
                         <t t-translation="off">
+                        <t t-set="size" t-value=""/>
                         <t t-set="product_code" t-value="serial.product_id.default_code"/>
                         <t t-set="product_desc" t-value="serial.product_id.name"/>
                         <t t-foreach="serial.product_id.customerscode_ids" t-as="customercode_id">
                             <t t-set="product_code" t-value="customercode_id.part_number"/>
                             <t t-set="product_desc" t-value="customercode_id.description"/>
+                            <t t-set="size" t-value="customercode_id.size"/>
                         </t>
 ~SD23
 ^XA
 ^FO460,60
 ^BQN,2,10
-^FDMA,PN: <t t-esc="product_code"/> SMG PN: <t t-esc="serial.product_id.default_code"/> SN: <t t-esc="move.serial_num[-6:]"/>^FS
+^FDMA,<t t-esc="product_code"/>,<t t-esc="move.serial_num[-6:]"/>,<t t-esc="serial.product_id.default_code"/>,<t t-esc="size"/> ^FS
 ^FO60,380
 ^A0N,70,70^FDPN: <t t-esc="product_code"/>   SN: <t t-esc="move.serial_num[-6:]"/>^FS
 ^FO300,490
