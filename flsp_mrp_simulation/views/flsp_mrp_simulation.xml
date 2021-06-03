@@ -6,9 +6,9 @@
         <field name="arch" type="xml">
             <form string="FLSP MRP Simulation Form">
                 <sheet>
-                        <label for="simulation_name" class="oe_edit_only"/>
+                        <label for="name" class="oe_edit_only"/>
                         <h1>
-                            <field name="simulation_name" placeholder="Simulation Name" style="width:50%; height:50px;"/>
+                            <field name="name" placeholder="Simulation Name" style="width:50%; height:50px;"/>
                         </h1>
                     <group>
                         <field name="create_uid" optional="show" string="Created By"/>
@@ -29,10 +29,10 @@
                     <group>
                         <group>
                             <field name="missed_only" widget="boolean"/>
-                            <button string="Calculate" name="button_calculate_sub_products" type="object" class="btn-default btn-primary" style="width:50%;" help="Calculate sub products in BoMs of the finished products with quantities bigger than 0"/>
+                            <button string="Calculate" name="button_calculate_sub_products" type="object" class="btn-default btn-primary" style="width:50%;" help="Calculate sub products in BoMs of the finished products with Qty Required bigger than 0"/>
                         </group>
                         <group>
-                            <field name="total_onhand_value" readonly="1"/>
+                            <field name="total_onhand_value" invisible="1"/>
                             <h6></h6>
                             <field name="total_value_needed" readonly="1"/>
                         </group>
@@ -42,7 +42,7 @@
                     <div attrs="{'invisible': [('missed_only', '=', True)]}">
                         <h4>Sub Products:</h4>
                         <field name="sub_products" nolabel="1">
-                            <tree create="false" edit="false" delete="false" limit="20">
+                            <tree create="false" edit="false" delete="false" limit="20" decoration-danger="diff_qty &lt; 0" >
                                 <field name="simulation_id" invisible="1"/>
                                 <field name="product_id" readonly="1"/>
                                 <field name="required_qty" readonly="1"/>
@@ -75,7 +75,7 @@
         <field name="model">flsp.mrp.simulation</field>
         <field name="arch" type="xml">
             <tree string="List View">
-                <field name="simulation_name" optional="show"/>
+                <field name="name" optional="show"/>
                 <field name="create_uid" optional="show"/>
             </tree>
         </field>
@@ -115,6 +115,30 @@
                         <field name="onhand_qty" readonly="1"/>
                         <field name="cost" readonly="1"/>
                         <field name="bom_cost" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- flsp.mrp.sub.product -->
+    <record id="flsp_mrp_sub_pproduct_form_view" model="ir.ui.view">
+        <field name="name">flsp.mrp.sub.product.form</field>
+        <field name="model">flsp.mrp.sub.product</field>
+        <field name="arch" type="xml">
+            <form string="FLSP MRP Sub Product Form">
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="simulation_id"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="product_id" readonly="1"/>
+                        <field name="required_qty" readonly="1"/>
+                        <field name="onhand_qty" readonly="1"/>
+                        <field name="diff_qty" readonly="1" decoration-danger="diff_qty &lt; 0" />
+                        <field name="cost" readonly="1"/>
                     </group>
                 </sheet>
             </form>

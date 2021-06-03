@@ -5,7 +5,7 @@ from odoo.tools import float_compare
 import queue
 
 import logging
-# _logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
     
 class FlspMrpSimulatedProduct(models.Model):
     _name = 'flsp.mrp.simulated.product'
@@ -43,7 +43,7 @@ class FlspMrpPlanningLine(models.Model):
     _name = 'flsp.mrp.simulation'
     _description = 'FLSP MRP Simulation Tool'
 
-    simulation_name = fields.Char(string='Description', required=True)
+    name = fields.Char(string='Description', required=True)
     simulated_products = fields.One2many(comodel_name='flsp.mrp.simulated.product', inverse_name='simulation_id', string="Simulated Products")
     missed_only = fields.Boolean('Missed Only', default=False,
         help="By checking the field, you may only see sub products with missed quantities in BoMs of the selected finished products.")
@@ -166,18 +166,20 @@ class FlspMrpPlanningLine(models.Model):
                     # has bom for the product, add all in stock in list
                     self.update_sub_product_entry(self.id, prod.id, onhand_qty, 0, True)
 
-                    # create new products in bom of the product with extra qty into the queue
-                    extra_qty = 0 - diff_qty
+                    # create new products in bom of the product in breakdown qty into the queue
+                    breakdown_qty = 0 - diff_qty
                     for line in bom.bom_line_ids:
                         if line._skip_bom_line(prod):
                             continue
-                        new_required_qty = line.product_qty * extra_qty
+                        new_required_qty = line.product_qty * breakdown_qty
                         prod_queue.put({ "id": line.product_id, "onhand_qty": line.product_id.qty_available, "required_qty": new_required_qty})
 
-    def update_sub_product_entry(self, simulation_id, product_id, required_qty, diff_qty, required_not_bigger_than_onhand=False):
+    def update_sub_product_entry(self, simulation_id, product_id, required_qty, diff_qty, is_fixed_required_qty=False):
         sub_prod = self.env['flsp.mrp.sub.product'].search([('simulation_id', '=', simulation_id), ('product_id', '=', product_id)])
         if sub_prod:
-            if not required_not_bigger_than_onhand:
+            if is_fixed_required_qty:
+                sub_prod.required_qty = required_qty
+            else:
                 sub_prod.required_qty += required_qty
             sub_prod.diff_qty = sub_prod.onhand_qty - sub_prod.required_qty
         else:
