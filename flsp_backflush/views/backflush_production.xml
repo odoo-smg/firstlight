@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_backflush_production_form_view">
+            <field name="name">flspbackflush.production.form.inherit</field>
+            <field name="model">stock.move</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_raw_tree"/>
+            <field name="arch" type="xml">
+              <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-muted">is_done</attribute>
+                <attribute name="decoration-warning">quantity_done&gt;product_uom_qty</attribute>
+                <attribute name="decoration-success">not is_done and quantity_done==product_uom_qty</attribute>
+                <attribute name="decoration-info">flsp_backflush == True</attribute>
+                <attribute name="decoration-danger">not flsp_backflush and not is_done and reserved_availability &lt; product_uom_qty</attribute>
+              </xpath>
+              <xpath expr="//field[@name='picking_type_id']" position="after">
+                  <field name="flsp_backflush" string="Backflush"/>
+              </xpath>
+            </field>
+        </record>
+</odoo>

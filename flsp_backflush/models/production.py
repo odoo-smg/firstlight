@@ -9,20 +9,44 @@ class MrpProduction(models.Model):
 
     flsp_qty_backflushed = fields.Float(string="Qty Backflushed")
 
+    def open_produce_product(self):
+        self.ensure_one()
+        self.action_assign()
+        res = super(MrpProduction, self).open_produce_product()
+        if self.product_id.tracking in ['none', 'lot']:
+            # needs the total quantity
+            raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
+            for move in raw_moves:
+                if move.flsp_backflush:
+                    qtt_to_wip = move.product_uom_qty - move.reserved_availability
+                    if qtt_to_wip > 0:
+                        self.create_wip_qty(move.product_id, qtt_to_wip)
+                        self.action_assign()
+        else:
+            # needs only qty to produce 1
+            raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
+            for move in raw_moves:
+                if move.flsp_backflush:
+                    qtt_to_wip = move.product_uom_qty - move.reserved_availability
+                    if qtt_to_wip > 0:
+                        self.create_wip_qty(move.product_id, 1)
+                        self.action_assign()
+        return res
+
     def button_mark_done(self):
         self.ensure_one()
         self.action_assign()
-        res = super(MrpProduction, self).button_mark_done()
         backflush_qty = self.product_qty - self.flsp_qty_backflushed
-        self.backflush_flsp(backflush_qty)
+        self.new_backflush_flsp(backflush_qty)
         self.flsp_qty_backflushed = self.product_qty
+        res = super(MrpProduction, self).button_mark_done()
         return res
 
     def post_inventory(self):
         self.ensure_one()
         self.action_assign()
-        res = super(MrpProduction, self).post_inventory()
         self.backflush_partials_flsp()
+        res = super(MrpProduction, self).post_inventory()
         return res
 
     def backflush_partials_flsp(self):
@@ -41,18 +65,20 @@ class MrpProduction(models.Model):
         else:
             total_to_backflush = total_backflushable
 
-        self.backflush_flsp(total_to_backflush)
+        self.new_backflush_flsp(total_to_backflush)
         if self.flsp_qty_backflushed:
             self.flsp_qty_backflushed += total_to_backflush
         else:
             self.flsp_qty_backflushed = total_to_backflush
 
-    def backflush_flsp(self, backflush_qty=0):
-        return
+    def new_backflush_flsp(self, backflush_qty=0):
+
         wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
         stock_virtual_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Inventory adjustment')])
         virtual_production_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Production')])
         stock_picking_type = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')])
+        pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
+        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
         if not stock_picking_type:
             raise UserError('Picking type Internal is missing')
         if not stock_virtual_location:
@@ -61,84 +87,16 @@ class MrpProduction(models.Model):
             raise UserError('Stock Virtual Production is missing')
         if not wip_location:
             raise UserError('WIP Stock Location is missing')
-
-        pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
         if not pa_location:
             raise UserError('WIP Stock Location is missing')
-        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location+'%')]).ids
         if not pa_wip_locations:
             raise UserError('WIP Stock Location is missing')
 
+        ## Check if backflush is already done
         if backflush_qty <= 0:
             backflush_qty = self.product_qty - self.flsp_qty_backflushed
-        ## Verifing the quantity of any production sub part if negative make it zero:
-        ## (The sub parts will not be transferred to WIP).
-        # for components in self.move_raw_ids:
-        #     for line in components.move_line_ids:
-        #         pa_stock_tmp = self.env['stock.quant'].search(['&', ('product_id', '=', line.product_id.id), ('location_id', '=', line.location_id.id)])
-        #         pa_stock_quantity = 0
-        #         for serial_location in pa_stock_tmp:
-        #             pa_stock_quantity += serial_location.quantity
-        #
-        #         if pa_stock_quantity < 0 and line.product_id.bom_count > 0 and line.product_id.flsp_backflush:
-        #             create_val = {
-        #                 'origin': self.name + ' FLSP-AUTO-PA-ADJUST',
-        #                 'picking_type_id': stock_picking_type.id,
-        #                 'location_id': stock_virtual_location.id,
-        #                 'location_dest_id': line.location_id.id,
-        #                 'state': 'assigned',
-        #             }
-        #             stock_picking = self.env['stock.picking'].create(create_val)
-        #             if line.product_id.tracking == 'none':
-        #                 stock_move = self.env['stock.move'].create({
-        #                     'name': line.product_id.name,
-        #                     'product_id': line.product_id.id,
-        #                     'product_uom': line.product_id.uom_id.id,
-        #                     'product_uom_qty': line.qty_done,
-        #                     'picking_id': stock_picking.id,
-        #                     'location_id': stock_virtual_location.id,
-        #                     'location_dest_id': line.location_id.id,
-        #                     'state': 'assigned',
-        #                 })
-        #                 move_line = self.env['stock.move.line'].create({
-        #                     'product_id': line.product_id.id,
-        #                     'product_uom_id': line.product_id.uom_id.id,
-        #                     'qty_done': line.qty_done,
-        #                     'lot_id': line.lot_id.id,
-        #                     'picking_id': stock_picking.id,
-        #                     'move_id' : stock_move.id,
-        #                     'location_id': stock_virtual_location.id,
-        #                     'location_dest_id': line.location_id.id,
-        #                     'state': 'assigned',
-        #                     'done_move': True,
-        #                 })
-        #             else:
-        #                 for serial_location in pa_stock_tmp:
-        #                     if serial_location.quantity < 0:
-        #                         stock_move = self.env['stock.move'].create({
-        #                             'name': line.product_id.name,
-        #                             'product_id': line.product_id.id,
-        #                             'product_uom': line.product_id.uom_id.id,
-        #                             'product_uom_qty': serial_location.quantity*(-1),
-        #                             'picking_id': stock_picking.id,
-        #                             'location_id': stock_virtual_location.id,
-        #                             'location_dest_id': line.location_id.id,
-        #                             'state': 'assigned',
-        #                         })
-        #                         move_line = self.env['stock.move.line'].create({
-        #                             'product_id': line.product_id.id,
-        #                             'product_uom_id': line.product_id.uom_id.id,
-        #                             'qty_done': serial_location.quantity*(-1),
-        #                             'lot_id': serial_location.lot_id.id,
-        #                             'picking_id': stock_picking.id,
-        #                             'move_id': stock_move.id,
-        #                             'location_id': stock_virtual_location.id,
-        #                             'location_dest_id': line.location_id.id,
-        #                             'state': 'assigned',
-        #                             'done_move': True,
-        #                         })
-        #             stock_picking.button_validate()
-
+        if backflush_qty <= 0:
+            return
 
         ## Verifing quantities of components in PA/WIP if available move the quantity needed on MO to virtual production:
         bom_components = self._get_flattened_totals(self.bom_id, backflush_qty)
@@ -167,6 +125,15 @@ class MrpProduction(models.Model):
                 ## Need to check if the quantity is available in WIP, if it is not do not transfer.
                 stock_wip = self.env['stock.quant'].search(['&', ('product_id', '=', prod.id), ('location_id', 'in', pa_wip_locations)])
                 qty_needed = bom_components[prod]['total']
+                pa_wip_qty = 0
+                for stock_lin in stock_wip:
+                    pa_wip_qty += stock_lin.quantity
+                qty_needed = bom_components[prod]['total']
+                if qty_needed > pa_wip_qty:
+                    qtt = qty_needed - pa_wip_qty
+                    self.create_wip_qty(prod, qtt)
+                    stock_wip = self.env['stock.quant'].search(['&', ('product_id', '=', prod.id), ('location_id', 'in', pa_wip_locations)])
+
                 for lot in stock_wip:
                     if lot.quantity > 0:
                         if lot.quantity - qty_needed >= 0:
@@ -186,6 +153,18 @@ class MrpProduction(models.Model):
                         new_lot = self.create_lot(prod, int(qty_needed))
                         for lot in new_lot:
                             wip_lot[lot] = {'qty': 1, 'location': wip_location}
+            else:
+                qty_needed = bom_components[prod]['total']
+                pa_wip_qty = 0
+                stock_wip = self.env['stock.quant'].search(['&', ('product_id', '=', prod.id), ('location_id', 'in', pa_wip_locations)])
+                for stock_lin in stock_wip:
+                    pa_wip_qty += stock_lin.quantity
+                qty_needed = bom_components[prod]['total']
+
+                if qty_needed > pa_wip_qty:
+                    qtt = qty_needed - pa_wip_qty
+                    self.create_wip_qty(prod, qtt)
+                    stock_wip = self.env['stock.quant'].search(['&', ('product_id', '=', prod.id), ('location_id', 'in', pa_wip_locations)])
 
             stock_move = self.env['stock.move'].create({
                 'name': prod.name,
@@ -225,8 +204,6 @@ class MrpProduction(models.Model):
                 })
         if stock_picking:
             stock_picking.button_validate()
-
-
 
     def _get_flattened_totals(self, bom, factor=1, totals=None, level=None):
         """Calculate the **unitary** product requirements of flattened BOM.
@@ -301,8 +278,111 @@ class MrpProduction(models.Model):
             lot = self.env['stock.production.lot'].create({
                 'name': '999999_'+next_lot,
                 'product_id': prod.id,
-                'ref': 'Backflush TEMP',
+                'ref': 'Backflush Adjust',
             })
             next_lot = ('00000' + str(int(next_lot[1:6]) + 1))[-5:]
             ret.append(lot)
         return ret
+
+    def create_wip_qty(self, prod, qty):
+        wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
+        stock_virtual_location = self.env['stock.location'].search([('complete_name', '=', 'Virtual Locations/My Company: Inventory adjustment')])
+        stock_picking_type = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')])
+        if qty <= 0:
+            return
+        prod.flsp_bf_check = True
+        if prod.tracking == 'none':
+            create_val = {
+                 'origin': self.name + ' FLSP-BF-ADJUST',
+                 'picking_type_id': stock_picking_type.id,
+                 'location_id': stock_virtual_location.id,
+                 'location_dest_id': wip_location.id,
+                 'state': 'assigned',}
+            stock_picking = self.env['stock.picking'].create(create_val)
+            stock_move = self.env['stock.move'].create({
+                     'name': prod.name,
+                     'product_id': prod.id,
+                     'product_uom': prod.uom_id.id,
+                     'product_uom_qty': qty,
+                     'picking_id': stock_picking.id,
+                     'location_id': stock_virtual_location.id,
+                     'location_dest_id': wip_location.id,
+                     'state': 'assigned',
+                 })
+            move_line = self.env['stock.move.line'].create({
+                     'product_id': prod.id,
+                     'product_uom_id': prod.uom_id.id,
+                     'qty_done': qty,
+                     'picking_id': stock_picking.id,
+                     'move_id' : stock_move.id,
+                     'location_id': stock_virtual_location.id,
+                     'location_dest_id': wip_location.id,
+                     'state': 'assigned',
+                     'done_move': True,
+                 })
+            stock_picking.button_validate()
+        elif prod.tracking == 'lot':
+            new_lot = self.create_lot(prod, 1)
+            create_val = {
+                 'origin': self.name + ' FLSP-BF-ADJUST',
+                 'picking_type_id': stock_picking_type.id,
+                 'location_id': stock_virtual_location.id,
+                 'location_dest_id': wip_location.id,
+                 'state': 'assigned',}
+            stock_picking = self.env['stock.picking'].create(create_val)
+            stock_move = self.env['stock.move'].create({
+                     'name': prod.name,
+                     'product_id': prod.id,
+                     'product_uom': prod.uom_id.id,
+                     'product_uom_qty': qty,
+                     'picking_id': stock_picking.id,
+                     'location_id': stock_virtual_location.id,
+                     'location_dest_id': wip_location.id,
+                     'state': 'assigned',
+                 })
+            move_line = self.env['stock.move.line'].create({
+                     'product_id': prod.id,
+                     'product_uom_id': prod.uom_id.id,
+                     'qty_done': qty,
+                     'picking_id': stock_picking.id,
+                     'move_id' : stock_move.id,
+                     'lot_id': new_lot[0].id,
+                     'location_id': stock_virtual_location.id,
+                     'location_dest_id': wip_location.id,
+                     'state': 'assigned',
+                     'done_move': True,
+                 })
+            stock_picking.button_validate()
+        else:
+            new_lot = self.create_lot(prod, int(qty))
+            create_val = {
+                 'origin': self.name + ' FLSP-BF-ADJUST',
+                 'picking_type_id': stock_picking_type.id,
+                 'location_id': stock_virtual_location.id,
+                 'location_dest_id': wip_location.id,
+                 'state': 'assigned',}
+            stock_picking = self.env['stock.picking'].create(create_val)
+            stock_move = self.env['stock.move'].create({
+                     'name': prod.name,
+                     'product_id': prod.id,
+                     'product_uom': prod.uom_id.id,
+                     'product_uom_qty': qty,
+                     'picking_id': stock_picking.id,
+                     'location_id': stock_virtual_location.id,
+                     'location_dest_id': wip_location.id,
+                     'state': 'assigned',
+                 })
+            for lot in new_lot:
+                move_line = self.env['stock.move.line'].create({
+                         'product_id': prod.id,
+                         'product_uom_id': prod.uom_id.id,
+                         'qty_done': 1,
+                         'picking_id': stock_picking.id,
+                         'move_id': stock_move.id,
+                         'lot_id': lot.id,
+                         'location_id': stock_virtual_location.id,
+                         'location_dest_id': wip_location.id,
+                         'state': 'assigned',
+                         'done_move': True,
+                     })
+            stock_picking.button_validate()
