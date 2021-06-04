@@ -13,24 +13,24 @@ class MrpProduction(models.Model):
         self.ensure_one()
         self.action_assign()
         res = super(MrpProduction, self).open_produce_product()
-        if self.product_id.tracking in ['none', 'lot']:
+        #if self.product_id.tracking in ['none', 'lot']:
             # needs the total quantity
-            raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
-            for move in raw_moves:
-                if move.flsp_backflush:
-                    qtt_to_wip = move.product_uom_qty - move.reserved_availability
-                    if qtt_to_wip > 0:
-                        self.create_wip_qty(move.product_id, qtt_to_wip)
-                        self.action_assign()
-        else:
-            # needs only qty to produce 1
-            raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
-            for move in raw_moves:
-                if move.flsp_backflush:
-                    qtt_to_wip = move.product_uom_qty - move.reserved_availability
-                    if qtt_to_wip > 0:
-                        self.create_wip_qty(move.product_id, 1)
-                        self.action_assign()
+        raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
+        for move in raw_moves:
+            if move.flsp_backflush:
+                qtt_to_wip = move.product_uom_qty - move.reserved_availability
+                if qtt_to_wip > 0:
+                    self.create_wip_qty(move.product_id, qtt_to_wip)
+                    self.action_assign()
+#        else:
+#            # needs only qty to produce 1
+            #            raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
+            #for move in raw_moves:
+                    #                if move.flsp_backflush:
+                    #qtt_to_wip = move.product_uom_qty - move.reserved_availability
+                    #if qtt_to_wip > 0:
+                        #                        self.create_wip_qty(move.product_id, 1)
+                        #self.action_assign()
         return res
 
     def button_mark_done(self):
@@ -266,6 +266,7 @@ class MrpProduction(models.Model):
 
     def create_lot(self, prod, qty):
         ret = []
+        company_id = self.env.company.id
         self._cr.execute("select max(name) as code from stock_production_lot where name like '999999%' ")
         retvalue = self._cr.fetchall()
         returned_registre = retvalue[0]
@@ -279,6 +280,7 @@ class MrpProduction(models.Model):
                 'name': '999999_'+next_lot,
                 'product_id': prod.id,
                 'ref': 'Backflush Adjust',
+                'company_id': company_id,
             })
             next_lot = ('00000' + str(int(next_lot[1:6]) + 1))[-5:]
             ret.append(lot)
