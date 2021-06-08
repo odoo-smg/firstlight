@@ -8,9 +8,9 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//label[@for='list_price']" position="before">
-                    <field name="flsp_inv_count" readonly="1" />
+                    <field name="flsp_inv_count"  />
                     <field name="flsp_inv_date" readonly="1"/>
-                    <field name="flsp_inv_user_id" readonly="1"/>
+                    <field name="flsp_inv_user_id" />
                 </xpath>
             </field>
         </record>
