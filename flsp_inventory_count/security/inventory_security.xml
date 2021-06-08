@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    show groups-->
+    <record model="ir.module.category" id="inv_count_groups_users">
+        <field name="name">Inventory Count</field>
+        <field name="description">FLSP Inv. Count</field>
+        <field name="sequence">4</field>
+    </record>
+
+<!--    groups in csv-->
+   <record id="group_iventory_count_manager" model="res.groups">
+        <field name="name">FLSP - Inventory Count</field>
+        <field name="category_id" ref="inv_count_groups_users"/>
+    </record>
+
+</odoo>
+
+
