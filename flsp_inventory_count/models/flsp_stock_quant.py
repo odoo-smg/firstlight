@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 
 class FlspStockQuant(models.Model):
     _inherit = 'stock.quant'
-    _check_company_auto = True
+    # _check_company_auto = True
 
     default_code = fields.Char(String='Product', related="product_id.default_code")
     flsp_check_inv = fields.Boolean('Can edit', compute='_compute_flsp_inv')
