@@ -9,7 +9,7 @@ class Smgproduct(models.Model):
 
     flsp_inv_count = fields.Boolean('To count', default=False)
     flsp_inv_date = fields.Date('Last Count')
-    flsp_inv_user_id = fields.Many2one('res.users', 'Responsible')
+    flsp_inv_user_id = fields.Many2one('res.users', 'Count Responsible')
 
     @api.model
     def _flsp_set_to_count(self):
@@ -31,4 +31,3 @@ class Smgproduct(models.Model):
                     'flsp_counted': False,
                 })
         return
-
