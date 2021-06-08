@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flsp_inv_count,fls_inv_count_list,model_flsp_inv_count,group_iventory_count_manager,1,1,1,1
