@@ -16,7 +16,7 @@ class Smgproduct(models.Model):
         for product_tmpl in self:
             to_count = self.env['flsp.inv.count'].search([('product_tmpl_id', '=', product_tmpl.id)], limit=1)
             product_prd = self.env['product.product'].search([('product_tmpl_id', '=', product_tmpl.id)], limit=1)
-            if to_count:
+            if to_count and not to_count.flsp_counted and to_count.flsp_inv_count:
                 product_tmpl.flsp_inv_count = True
                 to_count.flsp_inv_count = True
                 to_count.flsp_counted = False
