@@ -59,5 +59,5 @@ class FlspMrpPlanningLine(models.Model):
         else:
             self = self.with_context(product_tmpl_ids=self.product_product.ids)
         ctx = dict(self.env.context)
-        ctx.update({'no_at_date': True, 'search_default_on_hand': True})
+        ctx.update({'no_at_date': True, 'search_default_internal_loc': True})
         return self.env['stock.quant'].with_context(ctx)._get_quants_action(domain)
