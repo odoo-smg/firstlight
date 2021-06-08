@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_inv_count_prod_tmpl_form_view">
+            <field name="name">product.template.flsp.inv.count.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='list_price']" position="before">
+                    <field name="flsp_inv_count" readonly="1" />
+                    <field name="flsp_inv_date" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--record id="action_flsp_set_to_count_exe" model="ir.actions.server">
+            <field name="name">Set to count</field>
+            <field name="model_id" ref="model_product_template"/>
+            <field name="binding_model_id" ref="product.product_template_tree_view"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+            if records:
+                records._flsp_set_to_count()
+            </field>
+        </record-->
+        <record id="action_flsp_set_to_count_exe" model="ir.actions.server">
+            <field name="name">Set to count</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+            if records:
+                records._flsp_set_to_count()
+            </field>
+        </record>
+
+</odoo>
