@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <!-- Replaced by flsp_inventory_count Ticket: #443 by Alex
     <record model="ir.ui.view" id="view_stock_quant_tree_onhandqty_inherit">
         <field name="name">stock.quant.tree.onhandqty.inherit</field>
         <field name="model">stock.quant</field>
@@ -10,4 +11,5 @@
             </xpath>
         </field>
     </record>
+  -->
 </odoo>
