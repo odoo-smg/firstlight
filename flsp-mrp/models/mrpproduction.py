@@ -51,3 +51,14 @@ class flspproduction(models.Model):
                 'default_mo_id': self.id,
             }
         }
+    
+    def copy(self, default=None):
+        """
+            Date:    2021-06-04
+            Purpose: After copy the MO, the src location of each stock.move is set with default wrong one, so reset it with MO's location_src_id
+            Author:  Perry He
+        """
+        copied_mrp = super(flspproduction, self).copy(default=default)
+        for move in copied_mrp.move_raw_ids:
+            move.location_id = copied_mrp.location_src_id
+        return copied_mrp

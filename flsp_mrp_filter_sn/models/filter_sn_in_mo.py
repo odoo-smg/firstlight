@@ -1,9 +1,45 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+
 import logging
 _logger = logging.getLogger(__name__)
 
+class FlspMrpProduceFilterLot(models.TransientModel):
+    """
+        Related classes:
+            1) 'mrp.abstract.workorder', defined in \addons\mrp\models\mrp_abstract_workorder.py, with field 'lot_id'
+            2) 'mrp.product.produce', defined in \addons\mrp\wizard\mrp_product_produce.py, inherits 'mrp.abstract.workorder'
+        Purpose:
+            1) inherit model 'mrp.product.produce' to check lot location, move.line location and mrp location 
+    """
+    
+    _inherit = 'mrp.product.produce'
+
+    def do_produce(self):
+        # check lot locations before saving the produce
+        mrp_src_location = self.production_id.location_src_id
+        for line in self._workorder_line_ids():
+            if line.lot_id:
+                lot_qty_at_location = self.get_lot_qty_at_location(line.lot_id.id, mrp_src_location.id)
+                if lot_qty_at_location < line.qty_to_consume:
+                    raise UserError(
+                        _(
+                            "The quantity of lot/SN at the MO's location is smaller than required, and it may result in negative stock.\
+                            Location of the Manufacuring Order %s is %s. \
+                            The quantity of the lot/SN %s at the location is %s, but a number of %s is required."
+                        )
+                        % (self.production_id.name, mrp_src_location.complete_name, line.lot_id.name, lot_qty_at_location, line.qty_to_consume)
+                    )
+        super(FlspMrpProduceFilterLot, self).do_produce()
+
+    def get_lot_qty_at_location(self, lot_id, location_id):
+        lot_qty = 0
+        quants = self.env['stock.quant'].search([('lot_id', '=', lot_id), ('location_id', '=', location_id)])
+        for q in quants:
+            lot_qty += q.quantity
+        return lot_qty
     
 class FlspMrpProduceLineFilterLot(models.TransientModel):
     """
@@ -14,7 +50,6 @@ class FlspMrpProduceLineFilterLot(models.TransientModel):
             1) inherit model 'mrp.product.produce.line' because abstract model 'mrp.abstract.workorder.line' cannot be used directly
             2) update field 'lot_id' with field parameter 'domain' in order to search lots with additional filters 
             3) add a new filed 'lot_candidates' to get default lot candidats for given product in the MO as the filters cannot be done in the 'domain' directly
-            
     """
     
     _inherit = 'mrp.product.produce.line'

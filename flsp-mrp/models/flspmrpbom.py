@@ -45,7 +45,7 @@ class flspmrpbom(models.Model):
         default['flsp_bom_plm_valid'] = False
         return super(flspmrpbom, self).copy(default)
 
-    @api.constrains('parent_product_tmpl_id','type')
+    @api.constrains('product_tmpl_id','type')
     def _constraint_phanthom_consumable(self):
         if self.type == 'phantom' and self.product_tmpl_id.type != 'consu':
             raise ValidationError('The BOM Type Phantom can be used only for consumable products.'

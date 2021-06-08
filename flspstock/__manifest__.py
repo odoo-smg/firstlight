@@ -53,5 +53,6 @@
         'views/flsp_antena_lable_zpl_2x1.xml',
         'views/flsp_stock_package_label_zpl_2x3.xml',
         'views/flsp_stock_track_confirmation.xml',
+        'views/flsp_stock_quantity.xml',
     ],
 }
