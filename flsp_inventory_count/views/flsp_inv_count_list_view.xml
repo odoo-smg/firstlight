@@ -36,7 +36,9 @@
         <field name="arch" type="xml">
             <search string="Product">
                 <field name="name" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('name', 'ilike', self)]"/>
-                <filter name="flsp_inv_user_id" string="My Counts" domain="[('flsp_inv_user_id', '=', uid)]"/>
+                <filter name="flsp_inv_user_id" string="My Counts" domain="[('flsp_inv_user_id', '=', uid), ('flsp_inv_count', '=', True)]"/>
+                <filter name="flsp_inv_count" string="To Count" domain="[('flsp_inv_count', '=', True)]"/>
+                <filter name="flsp_inv_count" string="Counted" domain="[('flsp_counted', '=', True)]"/>
             </search>
         </field>
     </record>
@@ -49,7 +51,7 @@
         <!--field name="view_id" ref="flsp_quant_tree_editable"/-->
         <field name="search_view_id" ref="flsp_inv_count_search_view"/>
         <field name="context">{'search_default_flsp_inv_user_id': 1}</field>
-        <field name="domain">[('flsp_inv_count', '=', True)]</field>
+        <!--field name="domain">[('flsp_inv_count', '=', True)]</field-->
         <field name = "view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You don't have any products to adjust</p>
