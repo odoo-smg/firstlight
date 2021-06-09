@@ -37,7 +37,8 @@ class FlspMrpPlanningLine(models.Model):
                 product_prd.product_tmpl_id.flsp_inv_user_id = self.env.user
                 product_prd.product_tmpl_id.flsp_inv_count = False
                 self.flsp_inv_count = False
-                self.flsp_inv_user_id = self.env.user
+                if not self.flsp_inv_user_id:
+                    self.flsp_inv_user_id = self.env.user
 
     def confirm(self):
         #print('checking this product')
