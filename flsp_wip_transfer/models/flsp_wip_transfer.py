@@ -125,6 +125,11 @@ class FlspMrpPlanningLine(models.Model):
                         })
         else:
             for production in production_orders:
+                if production.origin:
+                    if production.origin[0:1] != 'S' or production.origin == 'Stock':
+                        continue
+                else:
+                    continue
                 components = self._get_flattened_totals(production.bom_id, production.product_qty)
                 for prod in components:
                     if prod.type in ['service', 'consu']:
@@ -136,40 +141,40 @@ class FlspMrpPlanningLine(models.Model):
                         for stock_lin in stock_quant:
                             pa_wip_qty += stock_lin.quantity
 
-                        if pa_wip_qty < components[prod]['total']:
-                            if wip_trans:
-                                #update current
-                                wip_trans.mfg_demand = components[prod]['total']
-                                wip_trans.suggested = 1
-                                wip_trans.adjusted = components[prod]['total']
-                                wip_trans.stock_qty = prod.qty_available - pa_wip_qty
-                                wip_trans.pa_wip_qty = pa_wip_qty
-                                wip_trans.purchase_uom = prod.uom_po_id.id
-                                wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
-                                wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
-                                wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
-                                wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
-                            else:
-                                #insert new
-                                wip = self.env['flsp.wip.transfer'].create({
-                                    'description': prod.name,
-                                    'default_code': prod.default_code,
-                                    'product_id': prod.id,
-                                    'uom': prod.uom_id.id,
-                                    'stock_qty': prod.qty_available - pa_wip_qty,
-                                    'pa_wip_qty': pa_wip_qty,
-                                    'source': production.name,
-                                    'mfg_demand': components[prod]['total'],
-                                    'suggested': 1,
-                                    'adjusted': components[prod]['total'],
-                                    'state': 'transfer',
-                                    'production_id': production.id,
-                                    'purchase_uom': prod.uom_po_id.id,
-                                    'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
-                                    'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
-                                    'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
-                                    'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
-                                })
+                        #if pa_wip_qty < components[prod]['total']:
+                        if wip_trans:
+                            #update current
+                            wip_trans.mfg_demand = components[prod]['total']
+                            wip_trans.suggested = 1
+                            wip_trans.adjusted = components[prod]['total']
+                            wip_trans.stock_qty = prod.qty_available - pa_wip_qty
+                            wip_trans.pa_wip_qty = pa_wip_qty
+                            wip_trans.purchase_uom = prod.uom_po_id.id
+                            wip_trans.purchase_stock_qty = prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id)
+                            wip_trans.purchase_pa_wip_qty = prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id)
+                            wip_trans.purchase_mfg_demand = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                            wip_trans.purchase_adjusted = prod.uom_id._compute_quantity(components[prod]['total'],prod.uom_po_id)
+                        else:
+                            #insert new
+                            wip = self.env['flsp.wip.transfer'].create({
+                                'description': prod.name,
+                                'default_code': prod.default_code,
+                                'product_id': prod.id,
+                                'uom': prod.uom_id.id,
+                                'stock_qty': prod.qty_available - pa_wip_qty,
+                                'pa_wip_qty': pa_wip_qty,
+                                'source': production.name,
+                                'mfg_demand': components[prod]['total'],
+                                'suggested': 1,
+                                'adjusted': components[prod]['total'],
+                                'state': 'transfer',
+                                'production_id': production.id,
+                                'purchase_uom': prod.uom_po_id.id,
+                                'purchase_stock_qty': prod.uom_id._compute_quantity(prod.qty_available - pa_wip_qty, prod.uom_po_id),
+                                'purchase_pa_wip_qty': prod.uom_id._compute_quantity(pa_wip_qty, prod.uom_po_id),
+                                'purchase_mfg_demand': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                                'purchase_adjusted': prod.uom_id._compute_quantity(components[prod]['total'], prod.uom_po_id),
+                            })
 
             ## Minimal quantity
             # products already suggested:
@@ -319,26 +324,9 @@ class FlspMrpPlanningLine(models.Model):
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
-                if not line.product_tmpl_id.flsp_backflush:
-                    if totals.get(line.product_id):
-                        totals[line.product_id]['total'] += (
-                            factor
-                            * line.product_uom_id._compute_quantity(
-                                line.product_qty, line.product_id.uom_id, round=False
-                            )
-                        )
-                    else:
-                        totals[line.product_id] = {'total':(
-                            factor
-                            * line.product_uom_id._compute_quantity(
-                                line.product_qty, line.product_id.uom_id, round=False
-                            )
-                        ), 'level': level, 'bom': sub_bom.code}
-                    continue
-                else:
-                    new_factor = factor * line.product_uom_id._compute_quantity(
-                        line.product_qty, line.product_id.uom_id, round=False
-                    )
+                new_factor = factor * line.product_uom_id._compute_quantity(
+                    line.product_qty, line.product_id.uom_id, round=False
+                )
 
                 level += 1
                 self._get_flattened_totals(sub_bom, new_factor, totals, level)
