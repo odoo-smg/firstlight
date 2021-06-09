@@ -20,7 +20,11 @@ class StockQuant(models.Model):
         product_quantity = product_id.qty_available
         stock_quant = self.env['stock.quant'].search(['&', '&', '&', ('product_id', '=', product_id.id), ('location_id', '=', location_id.id),('lot_id', '=', lot_id.id), ('package_id', '=', package_id.id)]).mapped('quantity')
         if stock_quant:
+            # if there is record found, returned '[number]', set qty with number, even when it is 0.0 sometimes
             product_quantity = stock_quant[0]
+        else:
+            # if there is no record found, returned '[]', set qty with 0
+            product_quantity = 0
 
         if (
             not location_id.allow_negative_stock
