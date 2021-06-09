@@ -19,13 +19,11 @@
         <field name="arch" type="xml">
             <tree string="Inventory Count" create="0" delete="0"  >
                 <field name="default_code"/>
-                <button name="confirm" type="object" string="Count" class="oe_highlight"/>
-                <button name="mark_done" type="object" string="Mark as Done" class="oe_highlight"/>
+                <button name="confirm" type="object" attrs="{'invisible': [('flsp_inv_count', '=', False)]}" string="Count" class="oe_highlight"/>
+                <button name="mark_done" type="object" attrs="{'invisible': [('flsp_inv_count', '=', False)]}" string="Mark as Done" class="oe_highlight"/>
                 <field name="name"/>
                 <field name="flsp_inv_user_id"/>
-                <!--field name="product_id"/>
-                <field name="flsp_inv_date"/>
-                <field name="flsp_inv_user_id"/-->
+                <field name="flsp_inv_count" invisible="1"/>
             </tree>
         </field>
     </record>
