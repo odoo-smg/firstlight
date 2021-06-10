@@ -66,4 +66,11 @@
               sequence="270"
               action="flsp_sale_delivery_check_action"/>
 
+    <menuitem id="flsp_sale_delivery_prd_menu"
+              name="Sales Delivery Monitor"
+              parent="mrp.menu_mrp_reporting"
+              sequence="100"
+              action="flsp_sale_delivery_check_action"/>
+
+
 </odoo>
