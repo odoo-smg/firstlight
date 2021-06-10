@@ -10,6 +10,7 @@
                 <xpath expr="//label[@for='list_price']" position="before">
                     <field name="flsp_inv_count" readonly="1" />
                     <field name="flsp_inv_date" readonly="1"/>
+                    <field name="flsp_inv_user_id" readonly="1" />
                 </xpath>
             </field>
         </record>

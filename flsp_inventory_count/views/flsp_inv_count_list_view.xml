@@ -1,61 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="action_replicate_responsible" model="ir.actions.server">
+        <field name="name">Replicate Responsible</field>
+        <field name="model_id" ref="flsp_inventory_count.model_flsp_inv_count"/>
+        <field name="binding_model_id" ref="flsp_inventory_count.model_flsp_inv_count"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+        if records:
+            records._replicate_resp()
+        </field>
+    </record>
+
     <record id="flsp_inv_count_list_view" model="ir.ui.view">
         <field name="name">Inventory Count</field>
         <field name="model">flsp.inv.count</field>
         <field name="arch" type="xml">
             <tree string="Inventory Count" create="0" delete="0"  >
                 <field name="default_code"/>
+                <button name="confirm" type="object" attrs="{'invisible': [('flsp_inv_count', '=', False)]}" string="Count" class="oe_highlight"/>
+                <button name="mark_done" type="object" attrs="{'invisible': [('flsp_inv_count', '=', False)]}" string="Mark as Done" class="oe_highlight"/>
                 <field name="name"/>
-                <field name="product_tmpl_id"/>
-                <field name="product_id"/>
-                <field name="flsp_inv_date"/>
                 <field name="flsp_inv_user_id"/>
+                <field name="flsp_inv_count" invisible="1"/>
             </tree>
         </field>
     </record>
 
-    <record id="flsp_inv_count_list_view" model="ir.ui.view">
-        <field name="name">Inventory Count</field>
+    <record id="flsp_inv_count_search_view" model="ir.ui.view">
+        <field name="name">flsp_inv_count.search</field>
         <field name="model">flsp.inv.count</field>
         <field name="arch" type="xml">
-            <tree string="Inventory Count" create="0" delete="0"  >
-                <field name="default_code"/>
-                <button name="confirm" type="object" string="Count" class="oe_highlight"/>
-                <button name="mark_done" type="object" string="Mark as Done" class="oe_highlight"/>
-                <field name="name"/>
-                <field name="product_tmpl_id"/>
-                <!--field name="product_id"/>
-                <field name="flsp_inv_date"/>
-                <field name="flsp_inv_user_id"/-->
-            </tree>
+            <search string="Product">
+                <field name="name" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('name', 'ilike', self)]"/>
+                <filter name="flsp_inv_user_id" string="My Counts" domain="[('flsp_inv_user_id', '=', uid), ('flsp_inv_count', '=', True)]"/>
+                <filter name="flsp_inv_count" string="To Count" domain="[('flsp_inv_count', '=', True)]"/>
+                <filter name="flsp_inv_count" string="Counted" domain="[('flsp_counted', '=', True)]"/>
+            </search>
         </field>
     </record>
-
-
-    <record id="flsp_quant_tree_editable" model="ir.ui.view">
-        <field name="name">Inventory Count Adjust</field>
-        <field name="model">stock.quant</field>
-        <field name="arch" type="xml">
-            <tree decoration-danger="inventory_quantity &lt; 0" editable="bottom" create="1" edit="1" import="0" js_class="singleton_list">
-                <field name="id" invisible="1"/>
-                <field name="tracking" invisible="1"/>
-                <field name="product_id" attrs="{'readonly': [('id', '!=', False)]}" invisible="context.get('single_product', False)" readonly="context.get('single_product', False)" force_save="1" options="{'no_create': True}"/>
-                <field name="location_id" attrs="{'readonly': [('id', '!=', False)]}" invisible="context.get('hide_location', False)" options="{'no_create': True}"/>
-                <field name="lot_id" groups="stock.group_production_lot" attrs="{                             'readonly': ['|', ('id', '!=', False), ('tracking', 'not in', ['serial', 'lot'])],                             'required': [('tracking', '!=', 'none')]                        }" invisible="context.get('hide_lot', False)" context="{'default_product_id': product_id, 'default_company_id': company_id}"/>
-                <field name="package_id" groups="stock.group_tracking_lot" attrs="{'readonly': [('id', '!=', False)]}"/>
-                <field name="owner_id" groups="stock.group_tracking_owner" attrs="{'readonly': [('id', '!=', False)]}" options="{'no_create': True}"/>
-                <field name="quantity" string="On Hand Quantity" invisible="1"/>
-                <field name="inventory_quantity" string="On Hand Quantity" readonly="0"/>
-                <field name="reserved_quantity" optional="hide"/>
-                <field name="product_uom_id" groups="uom.group_uom"/>
-                <field name="company_id" groups="base.group_multi_company" optional="show"/>
-            </tree>
-        </field>
-    </record>
-
-
 
     <record id="flsp_inv_count_view_action" model="ir.actions.act_window">
         <field name="name">Inventory Count</field>
@@ -63,7 +47,9 @@
         <field name="type">ir.actions.act_window</field>
         <field name ="view_id" eval="False"/>
         <!--field name="view_id" ref="flsp_quant_tree_editable"/-->
-        <field name="domain">[('flsp_inv_count', '=', True)]</field>
+        <field name="search_view_id" ref="flsp_inv_count_search_view"/>
+        <field name="context">{'search_default_flsp_inv_user_id': 1}</field>
+        <!--field name="domain">[('flsp_inv_count', '=', True)]</field-->
         <field name = "view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You don't have any products to adjust</p>

@@ -20,6 +20,15 @@ class FlspMrpPlanningLine(models.Model):
     flsp_inv_count = fields.Boolean('To count', default=True)
     flsp_counted = fields.Boolean('Counting', default=False)
 
+    def _replicate_resp(self):
+        resp = ''
+        for line in self:
+            if line.flsp_inv_user_id:
+                resp = line.flsp_inv_user_id
+
+        for line in self:
+            line.flsp_inv_user_id = resp
+
     def mark_done(self):
         if self.flsp_counted:
             product_prd = self.env['product.product'].search([('product_tmpl_id', '=', self.product_tmpl_id.id)], limit=1)
@@ -28,6 +37,8 @@ class FlspMrpPlanningLine(models.Model):
                 product_prd.product_tmpl_id.flsp_inv_user_id = self.env.user
                 product_prd.product_tmpl_id.flsp_inv_count = False
                 self.flsp_inv_count = False
+                if not self.flsp_inv_user_id:
+                    self.flsp_inv_user_id = self.env.user
 
     def confirm(self):
         #print('checking this product')
