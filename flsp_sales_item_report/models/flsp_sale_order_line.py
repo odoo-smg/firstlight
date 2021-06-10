@@ -7,7 +7,7 @@ class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
 
     flsp_partner_id = fields.Many2one('res.partner', 'Customer', store=True, readonly=True, related="order_id.partner_id")
-    flsp_ship_date = fields.Datetime('Shipping Date', readonly=True, srelated="order_id.commitment_date")
+    flsp_ship_date = fields.Datetime('Shipping Date', readonly=True, related="order_id.commitment_date")
     flsp_bpm_status = fields.Selection([
         ('quote', 'Quote'),
         ('wait', 'Waiting Approval'),
