@@ -21,10 +21,14 @@ class Flspwipwizard(models.TransientModel):
 
     def flsp_recalc(self):
         self.env['flsp.wip.transfer']._flsp_calc_demands(self.consider_days_ahead, self.negative_items)
-        #action = self.env.ref('flsp_wip_transfer.flsp_wip_transfer_action').read()[0]
-        action = self.env.ref('flsp_wip_transfer.flsp_wip_view_action').read()[0]
+
+        action = self.env.ref('flsp_wip_transfer.flsp_wip_transfer_action').read()[0]
+        action['domain'] = [('state', '!=', 'done')]
         action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
         return action
+        #action = self.env.ref('flsp_wip_transfer.flsp_wip_view_action').read()[0]
+        #action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
+        #return action
 
     def flsp_details_report(self):
         self.ensure_one()

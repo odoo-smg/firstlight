@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="action_flsp_wip_exe" model="ir.actions.server">
+        <field name="name">Execute Suggestions</field>
+        <field name="model_id" ref="flsp_wip_transfer.model_flsp_wip_transfer"/>
+        <field name="binding_model_id" ref="flsp_wip_transfer.model_flsp_wip_transfer"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+        if records:
+            records.execute_suggestion()
+        </field>
+    </record>
+
     <!--record id="action_compute_planning" model="ir.actions.server">
         <field name="name">Create Manufacture Orders</field>
         <field name="model_id" ref="flsp_mrp_planning.model_flsp_mrp_planning_line"/>
