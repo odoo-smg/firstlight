@@ -12,6 +12,23 @@ class FlspMtoStockMove(models.Model):
 
     sale_id = fields.Many2one('sale.order', string="Customer", compute='_cal_sale_order', store=True)
     mo_id = fields.Many2one('mrp.production', string="MO")
+    is_today = fields.Boolean('Today', compute='_compute_shipping_date')
+    is_week = fields.Boolean('Week', compute='_compute_shipping_date')
+
+    @api.depends('date_expected')
+    def _compute_shipping_date(self):
+        current_date = datetime.now()
+        current_date_str = str(current_date)[0:10]
+        date_week = current_date + timedelta(days=6-current_date.weekday())
+        date_week_str = str(date_week)[0:10]
+        for move in self:
+            move.is_today = False
+            move.is_week = False
+            if str(move.date_expected)[0:10] == current_date_str:
+                move.is_today = True
+            elif str(move.date_expected)[0:10] <= date_week_str:
+                move.is_week = True
+
 
     @api.depends('picking_id')
     def _cal_sale_order(self):
