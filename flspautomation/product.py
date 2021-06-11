@@ -40,3 +40,14 @@ class FlspProductAutomation():
           aName = name_prefix + '-' + postfix
           default_code = name_prefix + '-code-' + postfix
           return self.create_product(default_code, aName, cost, onhand_qty)
+        
+     def create_uom(self, name_prefix):
+          postfix = str(datetime.now())
+          aName = name_prefix + '-' + postfix
+          return self.caller.env['uom.uom'].create({
+                        'name': aName,
+                        'category_id': 1,
+                        'factor': 1,
+                        'rounding': 0.01,
+                        'uom_type': 'smaller',
+               })
