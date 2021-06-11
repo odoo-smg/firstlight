@@ -1,26 +1,21 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "FLSP Automation Module",
+    'name': "FLSP Automation Test Module",
 
-    'summary': """This module is designed to run Automation Test """,
+    'summary': """This module is designed to run Automation Test and provide functions referred by tests in other modules.""",
 
     'description': """
-        for testing
+        This module is designed to run Automation Test and provide functions referred by tests in other modules.
     """,
 
-    'author': "Perry",
-    'website': "http://www.yourcompany.com.ca",
+    'author': "Perry He",
+    'website': "http://www.smartrendmfg.com",
 
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'TestCategory',
+    'category': 'AutomationTest',
     'version': '0.1',
 
-    # any module necessary for this one to work correctly
-    'depends': ['base', 'board', 'website', 'mrp', 'sale', 'stock', 'delivery'],
+    'depends': ['base', 'sale', 'purchase', 'mrp', 'stock', 'flsp-product'],
 
-    # always loaded
     'data': [
         'views/assets.xml',
     ],

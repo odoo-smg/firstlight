@@ -35,7 +35,7 @@ class Flsp_PO_Status(models.Model):
         ('confirmed', 'PO confirmed'),
         ('received', 'Received'),
         ('late', 'Late')],
-        string='FLSP Status',   eval=True, store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
+        string='FLSP Status', eval=True, store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
 
     # Dates
     flsp_scheduled_date = fields.Datetime(string="FLSP Scheduled Date",
@@ -49,15 +49,13 @@ class Flsp_PO_Status(models.Model):
 # STATUS
     @api.onchange('partner_id', 'date_order')  # 'date_order' is defined in addons\purchase\models\purchase.py
     def _change_status_to_request(self):
-        if self.state == 'draft':
-            self.write({'flsp_po_status': 'request', })
         self.write({'flsp_po_status': 'request', })
 
     @api.onchange('flsp_vendor_confirmation_date')
     def _change_status_to_confirmed(self):
-        if self.flsp_po_status == 'cancelled':
-            self.write({'flsp_po_status': 'cancelled', })
-        self.write({'flsp_po_status': 'confirmed', })
+        # if self.flsp_po_status == 'cancelled':
+        #     self.write({'flsp_po_status': 'cancelled', })
+        self.write({'flsp_po_status': 'confirmed', }) 
 
 # STATUS BASED OFF ORIGINAL PURCHASE BUTTONS
     # Getting the purchase button method to add status
@@ -83,8 +81,10 @@ class Flsp_PO_Status(models.Model):
             else:
                 order.write({'state': 'to approve'})
         if self.flsp_vendor_confirmation_date:
-            order.write({'flsp_po_status': 'confirmed'})
-
+            if order.is_shipped:
+                order.write({'flsp_po_status': 'received', })
+            else:
+                order.write({'flsp_po_status': 'confirmed'})
         else:
             order.write({'flsp_po_status': 'non_confirmed'})
         return True
