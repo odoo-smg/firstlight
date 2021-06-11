@@ -356,6 +356,8 @@ class FlspMrppurchaseLine(models.Model):
                 if forecast_bom:
                     forecast_components = self._get_flattened_totals(forecast_bom, 1)
                     for component in forecast_components:
+                        if route_buy not in component.route_ids.ids:
+                            continue
                         purchase_planning = self.env['flsp.mrp.purchase.line'].search(
                             [('product_id', '=', component.id)], limit=1)
                         if not purchase_planning:
