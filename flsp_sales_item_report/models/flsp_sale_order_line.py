@@ -10,7 +10,7 @@ class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
 
     flsp_partner_id = fields.Many2one('res.partner', 'Customer Name', store=True, readonly=True, related="order_id.partner_id")
-    flsp_ship_date = fields.Datetime('Shipping Date', store=True, compute='_compute_shipping_line_date')
+    flsp_ship_date = fields.Datetime('Shipping Date', store=True)
     flsp_date_order = fields.Datetime('Order Date', store=True, readonly=True, related="order_id.date_order")
     is_today = fields.Boolean('Today', compute='_compute_shipping_date')
     flsp_bpm_status = fields.Selection([
@@ -39,7 +39,6 @@ class flspsalesorderline(models.Model):
 
     @api.depends('order_partner_id')
     def _compute_shipping_date(self):
-        print('is today')
         current_date = datetime.now()
         current_date_str = str(current_date)[0:10]
         date_week = current_date + timedelta(days=6-current_date.weekday())
