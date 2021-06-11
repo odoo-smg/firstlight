@@ -13,13 +13,14 @@
                   decoration-bf="flsp_ship_date==False and flsp_bpm_status in ['dd-sale', 'ee-confirmed', 'ff-packed']"
             >
                 <field name="order_id" readonly="1"/>
-                <field name="flsp_partner_id" string="Customer" readonly="1"/>
-                <field name="create_date" widget="date" />
-                <field name="flsp_ship_date"  widget="date"  />
-                <field name="product_id" readonly="1" />
-                <field name="product_uom_qty" string="Qty" readonly="1"/>
-                <field name="product_uom" string="UofM" readonly="1"/>
-                <field name="flsp_bpm_status" readonly="1"/>
+                <field name="flsp_partner_id" string="Customer" readonly="1" optional="show"/>
+                <field name="flsp_date_order" widget="date" optional="show"/>
+                <field name="flsp_ship_date"  widget="date" readonly="1" optional="show"/>
+                <field name="product_id" readonly="1" optional="show"/>
+                <field name="product_uom_qty" string="Qty" readonly="1" optional="show"/>
+                <field name="product_uom" string="UofM" readonly="1" optional="show"/>
+                <field name="flsp_bpm_status" readonly="1" optional="show"/>
+                <field name="is_today" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -51,6 +52,7 @@
         <field name="view_id" ref="flsp_sales_item_view_tree"/>
         <field name="search_view_id" ref="flsp_sales_item_report_search_view"/>
         <field name="context">{'search_default_flsp_bpm_status':1}</field>
+        <field name="domain">[('product_id', '!=', False)]</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You don't have any order items.</p>
         </field>
