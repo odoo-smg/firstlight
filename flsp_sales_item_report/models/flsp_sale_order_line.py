@@ -54,3 +54,4 @@ class flspsalesorderline(models.Model):
                 move.is_today = True
             #elif str(move.date_expected)[0:10] <= date_week_str:
                 #move.is_week = True
+                
