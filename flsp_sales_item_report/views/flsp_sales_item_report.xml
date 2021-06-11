@@ -58,6 +58,7 @@
         </field>
     </record>
 
+
     <menuitem id="flsp_sales_item_report"
               name="Sales Item Report"
               parent="sale.menu_sale_report"
