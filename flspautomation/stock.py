@@ -60,7 +60,7 @@ class FlspStockAutomation():
                         'origin': purchase_order.name,
                })
 
-     def create_stock_move(self, name_prefix, product_id, location_id, location_dest_id, picking_id, product_uom_qty):
+     def create_stock_move(self, name_prefix, product_id, location_id, location_dest_id, picking_id, product_uom_qty, purchase_line_id=False):
           postfix = str(datetime.now())
           aName = name_prefix + '-' + postfix
           return self.caller.env['stock.move'].create({
@@ -75,6 +75,7 @@ class FlspStockAutomation():
                         'location_dest_id': location_dest_id,
                         'procure_method': 'make_to_stock',
                         'picking_id': picking_id,
+                        'purchase_line_id': purchase_line_id,
                })
 
      def create_stock_move_line(self, location_id, location_dest_id, picking_id, product, product_uom_qty):

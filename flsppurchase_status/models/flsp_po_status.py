@@ -53,9 +53,12 @@ class Flsp_PO_Status(models.Model):
 
     @api.onchange('flsp_vendor_confirmation_date')
     def _change_status_to_confirmed(self):
-        # if self.flsp_po_status == 'cancelled':
-        #     self.write({'flsp_po_status': 'cancelled', })
-        self.write({'flsp_po_status': 'confirmed', }) 
+        if self.is_shipped:
+            self.write({'flsp_po_status': 'received', })
+        elif self.flsp_po_status == 'cancelled':
+            self.write({'flsp_po_status': 'cancelled', })
+        else:
+            self.write({'flsp_po_status': 'confirmed', }) 
 
 # STATUS BASED OFF ORIGINAL PURCHASE BUTTONS
     # Getting the purchase button method to add status
