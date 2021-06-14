@@ -24,4 +24,22 @@
               </xpath>
             </field>
         </record>
+
+        <record id="flsp_production_tree_search" model='ir.ui.view'>
+            <field name="name">flsp.mrp.production.search.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="user_id"/>
+                    <separator/>
+                    <filter string="Alma" name="filter_alma" domain="[('user_id.name', 'ilike', 'Alma')]"/>
+                    <filter string="Bryan" name="filter_bryan" domain="[('user_id.name', 'ilike', 'Bryan')]"/>
+                    <filter string="Jenny" name="filter_jenny" domain="[('user_id.name', 'ilike', 'Jenny')]"/>
+                    <filter string="Jovita" name="filter_jovi" domain="[('user_id.name', 'ilike', 'Jovita')]"/>
+                    <filter string="No Responsible" name="filter_resp" domain="[('user_id.name', '=', False)]"/>
+                </field>
+            </field>
+        </record>
+
 </odoo>
