@@ -618,6 +618,8 @@ class FlspMrppurchaseLine(models.Model):
         :returns: dict: keys are components and values are aggregated quantity
         in the product default UoM.
         """
+        route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
+
         if level is None:
             level = 0
         if totals is None:
@@ -627,6 +629,9 @@ class FlspMrppurchaseLine(models.Model):
         )
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
+            ## Ticket #461 - MRP Purchase should not suggest sublevel of "buy" products.
+            if route_buy in line.product_id.route_ids.ids:
+                sub_bom = False
             if sub_bom:
                 #if backflush and not line.product_id.product_tmpl_id.flsp_backflush:
                 if totals.get(line.product_id):
