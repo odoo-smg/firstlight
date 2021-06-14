@@ -41,6 +41,8 @@
                 <field name="product_id" string="Product" filter_domain="['|', ('product_id.default_code', 'ilike', self),('product_id.name', 'ilike', self)]"/>
                 <separator/>
                 <field name="partner_id" string="Customer" filter_domain="[('partner_id.name', 'ilike', self)]"/>
+                <field name="sale_id" string="Sale Order" filter_domain="[('sale_id.name', 'ilike', self)]"/>
+                <field name="mo_id" string="MO" filter_domain="[('mo_id.name', 'ilike', self)]"/>
                 <separator/>
                 <group string="Grouped by">
                     <filter name="product" string="product"
