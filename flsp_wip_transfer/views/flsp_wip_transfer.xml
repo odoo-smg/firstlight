@@ -74,33 +74,28 @@
                 <field name="purchase_adjusted" string="Adjusted PO UOM" optional="hide" readonly="1"/>
                 <field name="purchase_uom" string="Purchase UofM" optional="hide"/>
                 <field name="state" optional="hide"/>
+                <field name="short_on_wip" optional="hide"/>
             </tree>
         </field>
     </record>
 
-    <record id="flsp_wip_transfer_search_view" model="ir.ui.view">
+    <record id="flsp_wip_transfer_search" model="ir.ui.view">
         <field name="name">flsp_wip_transfer.search</field>
         <field name="model">flsp.wip.transfer</field>
         <field name="arch" type="xml">
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
-                <separator/>
-                <group expand="1" string="Group By">
-                    <filter string="Product" name="product_id" context="{'group_by':'product_id'}"/>
-                </group>
+                <filter string="Short on WIP" name="short" domain="[('short_on_wip', '=', True)]"/>
             </search>
         </field>
     </record>
-
-
 
     <record id="flsp_wip_transfer_action" model="ir.actions.act_window">
         <field name="name">Weekly Transfer</field>
         <field name="res_model">flsp.wip.transfer</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="flsp_wip_transfer_view_tree"/>
-        <!--field name="search_view_id" ref="purchase_suggestion_search_view"/>
-        <field name="context">{'search_default_can_be_none': 1}</field-->
+        <field name="search_view_id" ref="flsp_wip_transfer_search"/>
         <field name="domain">[]</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You have nothing to be transferred.</p>
