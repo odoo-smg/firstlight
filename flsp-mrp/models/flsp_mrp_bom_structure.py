@@ -12,7 +12,8 @@ class FlspMOProduct(models.TransientModel):
     selected = fields.Boolean('Selected')
     production_id = fields.Many2one('flspmrp.bom.structure', required=True, check_company=True)
     product_id = fields.Many2one('product.product', string='Product', required=True, check_company=True)
-    display_name = fields.Char(related='product_id.display_name')
+    part_number = fields.Char(related='product_id.default_code')
+    name = fields.Char(related='product_id.name')
     stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True) 
     wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
     forecasted_qty = fields.Float(related='product_id.virtual_available', string='Forecasted Qty') 
@@ -61,9 +62,21 @@ class FlspMrpBomStructure(models.TransientModel):
 
         # retrieve the product ids from the list
         prod_list = []
+        route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         for order, total_qty in totals.items():
-            # EXAMPLE of totals: {'total': 1.0, 'level': 1, 'bom': '', 'bom_plm': '', 'track': 'lot', 'prod': product.product(1015,)}
-            if total_qty['bom'] and ('flsp_backflush' in self.env['product.template']._fields) and total_qty['prod'].flsp_backflush == False:
+            # EXAMPLE of totals: {'total': 1.0, 'level': 1, 'bom': '20201029195521', 'bom_plm': True, 'type':normal, 'track': 'lot', 'prod': product.product(1015,)}
+            if (not total_qty['prod']) or (not total_qty['type']):
+                continue
+            
+            if (
+                (
+                    (not 'flsp_backflush' in self.env['product.template']._fields) 
+                    or 
+                    (('flsp_backflush' in self.env['product.template']._fields) and total_qty['prod'].flsp_backflush == False)
+                )
+                and route_mfg in total_qty['prod'].route_ids.ids 
+                and total_qty['type'] == 'normal'
+                ):
                 # add product in the list
                 prod = total_qty['prod']
                 required_qty = mo_qty * total_qty['total']
@@ -80,7 +93,8 @@ class FlspMrpBomStructure(models.TransientModel):
                     prod_list.append([0, 0, {
                                     'production_id': self.id,
                                     'product_id': prod.id, 
-                                    'display_name': prod.display_name,
+                                    'part_number': prod.default_code,
+                                    'name': prod.name,
                                     'stock_qty': prod.flsp_stock_qty,
                                     'wip_qty': prod.flsp_wip_qty,
                                     'forecasted_qty': prod.virtual_available,
