@@ -9,6 +9,7 @@ class FlspStockQuant(models.Model):
 
     default_code = fields.Char(String='Product', related="product_id.default_code")
     flsp_check_inv = fields.Boolean('Can edit', compute='_compute_flsp_inv')
+    flsp_sd_location = fields.Many2one(related='product_id.flsp_sd_location', string='Standard Location', store=True, readonly=True)
 
     def _compute_flsp_inv(self):
         if self.user_has_groups('flsp_inventory_count.group_iventory_count_manager'):
