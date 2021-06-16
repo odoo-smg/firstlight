@@ -1,4 +1,8 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class flspstockpicking2(models.Model):
@@ -46,3 +50,34 @@ class flspstockpicking2(models.Model):
                 'default_order_id': self.id,  # getting the default id
             }
         }
+
+    def button_validate(self):
+        """
+            Purpose:    Check qty before validation
+            Note:       Original method is defined in addons\stock\models\stock_picking.py
+        """
+        self.ensure_one()
+        if not self.move_lines and not self.move_line_ids:
+            raise UserError(_('Please add some items to move.'))
+
+        # Check qty required with available_qty_in_source_location
+        for line in self.move_line_ids:
+            qty_to_transfer = line.qty_done
+            if not qty_to_transfer:
+                qty_to_transfer = line.product_uom_qty
+
+            precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+            if float_compare(qty_to_transfer, 0, precision_digits=precision_digits) <= 0:
+                raise UserError(_("Please update quantity in 'Done' or 'Reserved' with a number bigger than 0."))
+            
+            available_qty_in_source_location = self.env['stock.quant'].get_flsp_stock_quantity(line.product_id, line.location_id, line.lot_id, line.package_id)
+            if float_compare(available_qty_in_source_location, qty_to_transfer, precision_digits=precision_digits) == -1:
+                raise UserError(
+                    _( """There is not enough quantity available in the Source Location. 
+%s pieces of %s are remaining in location %s, but you want to transfer %s pieces. 
+Please adjust your quantities or correct your stock with an inventory adjustment."""
+                    )
+                    % (available_qty_in_source_location, "["+ line.product_id.default_code+ "] " + line.product_id.name, line.location_id.name, qty_to_transfer)
+                )
+
+        return super(flspstockpicking2, self).button_validate()
