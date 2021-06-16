@@ -40,6 +40,14 @@ class FlspMrpPlanningLine(models.Model):
 
     negative_location_id = fields.Many2one('stock.location', string="Negative Location")
     negative_lot_id = fields.Many2one('stock.production.lot', string="Negative Serial/Lot")
+    short_on_wip = fields.Boolean('Short On WIP', store=True, compute='_compute_short_wip')
+
+    def _compute_short_wip(self):
+        for line in self:
+            if line.mfg_demand > line.pa_wip_qty:
+                line.short_on_wip = True
+            else:
+                line.short_on_wip = False
 
     @api.onchange('adjusted')
     def onchange_adjusted(self):
@@ -79,50 +87,7 @@ class FlspMrpPlanningLine(models.Model):
 
         # Add products with negative quantity in WIP:
         if bring_negative:
-            negative_stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', pa_wip_locations), ('quantity', '<', 0)])
-            for item in negative_stock_quant:
-                if item.product_id.type not in ['service', 'consu']:
-                    stock_quant = self.env['stock.quant'].search(
-                        ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', item.product_id.id)])
-                    pa_wip_qty = 0
-                    for stock_lin in stock_quant:
-                        pa_wip_qty += stock_lin.quantity
-                    lot_id = False
-                    if item.product_id.tracking == 'none':
-                        lot_name = ''
-                        lot_id = False
-                    else:
-                        if item.lot_id:
-                            lot_name = ' lot: '+ item.lot_id.name
-                            lot_id = item.lot_id.id
-                        else:
-                            lot_name = ''
-                            lot_id = False
-
-                    # insert new
-                    wip = self.env['flsp.wip.transfer'].create({
-                        'description': item.product_id.name,
-                        'default_code': item.product_id.default_code,
-                        'product_id': item.product_id.id,
-                        'uom': item.product_id.uom_id.id,
-                        'stock_qty': item.product_id.qty_available - pa_wip_qty,
-                        'pa_wip_qty': pa_wip_qty,
-                        'source': 'Negative Adjustment - location: '+item.location_id.name+lot_name,
-                        'mfg_demand': item.quantity * (-1),
-                        'suggested': 1,
-                        'adjusted': item.quantity * (-1),
-                        'state': 'negative',
-                        'negative_location_id': item.location_id.id,
-                        'negative_lot_id': lot_id,
-                        'purchase_uom': item.product_id.uom_po_id.id,
-                        'purchase_stock_qty': item.product_id.uom_id._compute_quantity(item.product_id.qty_available - pa_wip_qty,
-                                                                            item.product_id.uom_po_id),
-                        'purchase_pa_wip_qty': item.product_id.uom_id._compute_quantity(pa_wip_qty, item.product_id.uom_po_id),
-                        'purchase_mfg_demand': item.product_id.uom_id._compute_quantity(item.quantity * (-1),
-                                                                             item.product_id.uom_po_id),
-                        'purchase_adjusted': item.product_id.uom_id._compute_quantity(item.quantity * (-1),
-                                                                           item.product_id.uom_po_id),
-                        })
+            print('negative')
         else:
             for production in production_orders:
                 if production.origin:
@@ -141,6 +106,7 @@ class FlspMrpPlanningLine(models.Model):
                         for stock_lin in stock_quant:
                             pa_wip_qty += stock_lin.quantity
 
+
                         if wip_trans:
                             #update current
                             wip_trans.mfg_demand = wip_trans.mfg_demand + components[prod]['total']
@@ -155,7 +121,16 @@ class FlspMrpPlanningLine(models.Model):
                             wip_trans.purchase_adjusted = wip_trans.purchase_mfg_demand
                             #wip_trans.source = wip_trans.source + ' / ' + production.name
 
+                            if wip_trans.mfg_demand > wip_trans.pa_wip_qty:
+                                wip_trans.short_on_wip = True
+                            else:
+                                wip_trans.short_on_wip = False
                         else:
+                            if components[prod]['total'] > pa_wip_qty:
+                                short_on_wip = True
+                            else:
+                                short_on_wip = False
+
                             #insert new
                             wip = self.env['flsp.wip.transfer'].create({
                                 'description': prod.name,
@@ -166,6 +141,7 @@ class FlspMrpPlanningLine(models.Model):
                                 'pa_wip_qty': pa_wip_qty,
                                 'source': production.name,
                                 'mfg_demand': components[prod]['total'],
+                                'short_on_wip': short_on_wip,
                                 'suggested': 1,
                                 'adjusted': components[prod]['total'],
                                 'state': 'transfer',
