@@ -8,7 +8,7 @@
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "category": "Generic Modules/Stock",
-    "depends": ["stock"],
+    'depends': ['base', 'mrp', 'stock', 'sale', 'purchase', 'flsp-product', 'flspautomation'],
     "license": "LGPL-3",
     "data": ["views/res_config_view.xml", "views/stock_location_view.xml"],
     "images": ["static/description/main_screenshot.png"],
