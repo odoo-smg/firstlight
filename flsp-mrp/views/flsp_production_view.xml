@@ -33,11 +33,11 @@
                 <field name="origin" position="after">
                     <field name="user_id"/>
                     <separator/>
-                    <filter string="Alma" name="filter_alma" domain="[('user_id.name', 'ilike', 'Alma')]"/>
-                    <filter string="Bryan" name="filter_bryan" domain="[('user_id.name', 'ilike', 'Bryan')]"/>
-                    <filter string="Jenny" name="filter_jenny" domain="[('user_id.name', 'ilike', 'Jenny')]"/>
-                    <filter string="Jovita" name="filter_jovi" domain="[('user_id.name', 'ilike', 'Jovita')]"/>
-                    <filter string="No Responsible" name="filter_resp" domain="[('user_id.name', '=', False)]"/>
+                    <filter string="Alma" name="filter_alma" domain="[('user_id.name', 'ilike', 'Alma'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Bryan" name="filter_bryan" domain="[('user_id.name', 'ilike', 'Bryan'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Jenny" name="filter_jenny" domain="[('user_id.name', 'ilike', 'Jenny'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Jovita" name="filter_jovi" domain="[('user_id.name', 'ilike', 'Jovita'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="No Responsible" name="filter_resp" domain="[('user_id.name', '=', False), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
                 </field>
             </field>
         </record>
