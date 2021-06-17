@@ -4,6 +4,7 @@
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
 
 
 class StockQuant(models.Model):
@@ -16,6 +17,8 @@ class StockQuant(models.Model):
         allow_negaive = False
         #if 'flsp_backflush' in self.env['product.template']._fields:
             #allow_negaive = product_id.flsp_backflush and product_id.bom_count > 0
+        
+        precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
 
         # product_id.qty_available is not a correct qty for product because there may be moves in other locations
         # product_quantity = product_id.qty_available
@@ -25,7 +28,7 @@ class StockQuant(models.Model):
             not location_id.allow_negative_stock
             and not allow_negaive
             and location_id.usage == "internal"
-            and (product_quantity + quantity) < 0
+            and float_compare(product_quantity + quantity, 0, precision_digits=precision_digits) < 0
         ):
             if location_id.company_id.no_negative_stock:
                 raise UserError(
@@ -33,7 +36,7 @@ class StockQuant(models.Model):
 %s pieces of %s are remaining in location %s, but you want to transfer %s pieces. 
 Please adjust your quantities or correct your stock with an inventory adjustment."""
                     )
-                    % (product_quantity, "["+product_id.default_code+"] "+product_id.name, location_id.name, quantity)
+                    % (product_quantity, "["+product_id.default_code+"] "+product_id.name, location_id.name, 0 - quantity)
                 )
 
         return super(StockQuant, self)._update_available_quantity(
