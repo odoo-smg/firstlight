@@ -16,6 +16,9 @@
                 <xpath expr="//field[@name='type_id']" position="attributes">
                     <attribute name="domain">[["flsp_plm_valid","=",flsp_product_valid]]</attribute>
                 </xpath>
+                <xpath expr="//field[@name='stage_id']" position="replace">
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"    attrs="{'invisible': ['|', ('active', '=', False), ('id', '=', False)]}"/>
+                </xpath>
             </field>
         </record>
 

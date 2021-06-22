@@ -27,6 +27,7 @@
     'depends': ['sale'],
     'depends': ['stock'],
     'depends': ['delivery'],
+    'depends': ['deltatech_stock_negative'],
 
     # always loaded
     'data': [
