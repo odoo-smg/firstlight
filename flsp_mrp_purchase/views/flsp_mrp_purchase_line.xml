@@ -83,6 +83,8 @@
                 <!--field name="start_date" optional="hide"/>
                 <field name="deadline_date" string="Deadline" optional="hide"/-->
                 <field name="balance" string="Forecasted"  optional="hide"/>
+                <field name="balance_neg" optional="hide"/>
+                <field name="negative_by" optional="hide"/>
             </tree>
         </field>
     </record>

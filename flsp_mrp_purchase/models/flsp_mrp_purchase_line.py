@@ -67,6 +67,9 @@ class FlspMrppurchaseLine(models.Model):
     required_by = fields.Date(String="Required by", readonly=True)
     balance = fields.Float(string='Balance', readonly=True)
 
+    balance_neg = fields.Float(string='Negative Balance', readonly=True)
+    negative_by = fields.Date(String="Negative by", readonly=True)
+
     uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True)
     purchase_uom = fields.Many2one('uom.uom', 'Purchase Unit of Measure', readonly=True)
 
@@ -237,6 +240,8 @@ class FlspMrppurchaseLine(models.Model):
         # print(move[4])  ## Product
         po_qty = 0
         rfq_qty = 0
+        balance_neg = 0
+        negative_by = False
 
         # First Item
         for item in open_moves:
@@ -283,8 +288,10 @@ class FlspMrppurchaseLine(models.Model):
                 new_prod = (item[4] != product)
             if new_prod:
                 rationale += "</pre>"
-                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip,
+                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, balance_neg, negative_by,
                                                    consumption, False, po_qty)
+                #def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+
                 if purchase_line:
                     purchase_line.level_bom = bom_level
                 bom_level = 0
@@ -321,7 +328,18 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance += item[5]
                 if not required_by:
                     if current_balance < 0:
+                        balance_neg = current_balance
+                        negative_by = item[7]
                         required_by = item[7]
+                print('checking***************************')
+                print(item[7])
+                print(item[5])
+                print(item[1])
+                print(item[8])
+                print(item[9])
+                print(item[3])
+                if not item[3]:
+                    item[3] = ''
                 rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
                     item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[
                                  2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]
@@ -335,6 +353,8 @@ class FlspMrppurchaseLine(models.Model):
         # ########################################
         # ### Other products without movements ###
         # ########################################
+        balance_neg = 0
+        negative_by = current_date
         products = self.env['product.product'].search(['&', ('type', '=', 'product'), ('route_ids', 'in', [route_buy])])
         required_by = current_date
         for product in products:
@@ -342,13 +362,16 @@ class FlspMrppurchaseLine(models.Model):
             if not purchase_planning:
                 current_balance = False
                 rationale = 'No open movements - Product Selected based on Min qty.'
-                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip,
+                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, balance_neg, negative_by,
                                                    consumption)
+                #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
 
         # ########################################
         # ######## FORECAST   ####################
         # ########################################
         if consider_forecast:
+            balance_neg = 0
+            negative_by = False
             sales_forecast = self.env['flsp.sales.forecast'].search([])
             for forecast in sales_forecast:
                 forecast_bom = self.env['mrp.bom'].search(
@@ -376,8 +399,9 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[10] = forecast.qty_month10 * forecast_components[component]['total']
                             forecasted[11] = forecast.qty_month11 * forecast_components[component]['total']
                             forecasted[12] = forecast.qty_month12 * forecast_components[component]['total']
-                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip,
+                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip, balance_neg, negative_by,
                                                                False, forecasted)
+                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1 * forecast_components[component][
                                 'total']
@@ -425,7 +449,9 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[11] = forecast.qty_month11
                             forecasted[12] = forecast.qty_month12
                             purchase_line = self._include_prod(product, rationale, current_balance, current_date,
-                                                               consider_wip, False, forecasted)
+                                                               consider_wip, balance_neg, negative_by, False, forecasted)
+                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1
                             purchase_planning.qty_month2 += forecast.qty_month2
@@ -618,6 +644,7 @@ class FlspMrppurchaseLine(models.Model):
         :returns: dict: keys are components and values are aggregated quantity
         in the product default UoM.
         """
+        route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
 
         if level is None:
@@ -629,7 +656,6 @@ class FlspMrppurchaseLine(models.Model):
         )
         for line in bom.bom_line_ids:
             sub_bom = bom._bom_find(product=line.product_id)
-            ## Ticket #461 - MRP Purchase should not suggest sublevel of "buy" products.
             if route_buy in line.product_id.route_ids.ids:
                 sub_bom = False
             if sub_bom:
@@ -674,8 +700,7 @@ class FlspMrppurchaseLine(models.Model):
                     ), 'level': level, 'bom': ''}
         return totals
 
-    def _include_prod(self, product, rationale, balance, required_by, consider_wip, consumption=False, forecast=False, po_qty=0.0):
-
+    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
         if not consumption:
             consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if not forecast:
@@ -747,11 +772,15 @@ class FlspMrppurchaseLine(models.Model):
                 if (suggested_qty % multiple) > 0:
                     suggested_qty += multiple - (suggested_qty % multiple)
         # Checking Vendor lead time:
+        tmp_delay = 180
         if prod_vendor:
+            if prod_vendor.delay:
+                if prod_vendor.delay > 180:
+                    tmp_delay = prod_vendor.delay
             if prod_vendor.delay and prod_vendor.delay > 0:
                 if not required_by:
                     required_by = datetime.now()
-                required_by = required_by - timedelta(days=prod_vendor.delay)
+                required_by = required_by - timedelta(days=tmp_delay)
 
         # if suggested_qty+total_forecast > 0:
 
@@ -772,7 +801,7 @@ class FlspMrppurchaseLine(models.Model):
                            'qty_multiple': multiple,
                            'vendor_id': prod_vendor.name.id,
                            'vendor_qty': prod_vendor.min_qty,
-                           'delay': prod_vendor.delay,
+                           'delay': tmp_delay,
                            'vendor_price': prod_vendor.price,
                            'stock_qty': product.qty_available - pa_wip_qty,
                            'wip_qty': pa_wip_qty,
@@ -804,5 +833,7 @@ class FlspMrppurchaseLine(models.Model):
                            'qty_month11': forecast[11],
                            'qty_month12': forecast[12],
                            'balance': balance,
+                           'balance_neg': balance_neg,
+                           'negative_by': negative_by,
                            'source': 'source', })
         return ret
