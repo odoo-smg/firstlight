@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -19,16 +20,17 @@ class FlspMrpProduceFilterLot(models.TransientModel):
 
     def do_produce(self):
         # check lot locations before saving the produce
+        precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         mrp_src_location = self.production_id.location_src_id
         for line in self._workorder_line_ids():
             if line.lot_id:
                 lot_qty_at_location = self.get_lot_qty_at_location(line.lot_id.id, mrp_src_location.id)
-                if lot_qty_at_location < line.qty_to_consume:
+                if float_compare(lot_qty_at_location, line.qty_to_consume, precision_digits=precision_digits) < 0:
                     raise UserError(
                         _(
-                            "The quantity of lot/SN at the MO's location is smaller than required, and it may result in negative stock.\
-                            Location of the Manufacuring Order %s is %s. \
-                            The quantity of the lot/SN %s at the location is %s, but a number of %s is required."
+"""The quantity of lot/SN at the MO's location is smaller than required, and it may result in negative stock.
+Location of the Manufacuring Order %s is %s. 
+The quantity of the lot/SN %s at the location is %s, but a number of %s is required. """
                         )
                         % (self.production_id.name, mrp_src_location.complete_name, line.lot_id.name, lot_qty_at_location, line.qty_to_consume)
                     )

@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+
+        <record id="flsp_mrp_gantt_view" model="ir.ui.view">
+            <field name="name">MRP Gantt</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">10</field>
+            <field name="type">dhx_gantt</field>
+            <field name="arch" type="xml">
+                <dhx_gantt
+                    id_field="id"
+                    text="name"
+                    date_start="date_planned_start"
+                    duration="planned_duration"
+                    links_serialized_json="links_serialized_json"
+                    link_model="flsp.depending.mos"
+                />
+            </field>
+        </record>
+
+        <record id="view_mrp_gantt_data_form" model="ir.ui.view">
+            <field name="name">flsp.mrp.gant.data.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page string="Dependencies">
+                        <group string="Gantt Info">
+                            <field name="date_planned_start"/>
+                            <field name="date_planned_finished" readonly="1"/>
+                            <field name="planned_duration"/>
+                        </group>
+                        <separator string="Predecessors"/>
+                        <field name="dependency_mo_ids">
+                            <tree editable="buttom">
+                                <field name="task_id" domain="[]"/>
+                                <field name="relation_type"/>
+                            </tree>
+                        </field>
+                        <separator string="Successors"/>
+                        <field name="depending_mo_ids">
+                            <tree editable="buttom">
+                                <field name="depending_task_id" domain="[]"/>
+                                <field name="relation_type"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp.mrp_production_action" model="ir.actions.act_window">
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,dhx_gantt</field>
+        </record>
+
+
+    </data>
+</odoo>
