@@ -8,6 +8,8 @@
             <form string="Negative Forecast Stock Form" create="false" edit="false">
                 <sheet>
                     <field name="product_name"/>
+                    <field name="prod_purcahseable"/>
+                    <field name="prod_manufacturable"/>
                     <field name="negative_forecast_qty"/>
                     <field name="negative_forecast_date"/>
                     <field name="non_negative_forecast_qty"/>
@@ -22,12 +24,14 @@
         <field name="name">flsp.negative.forecast.stock.tree</field>
         <field name="model">flsp.negative.forecast.stock</field>
         <field name="arch" type="xml">
-            <tree default_order='negative_forecast_qty' create="0" delete="0" limit="50">
+            <tree default_order='negative_forecast_qty' create="0" delete="0" limit="20" decoration-success="duration > 0">
                 <field name="product_name"/>
-                <field name="negative_forecast_qty" type="char"/>
+                <field name="prod_purcahseable"/>
+                <field name="prod_manufacturable"/>
                 <field name="negative_forecast_date"/>
-                <field name="non_negative_forecast_qty" type="char"/>
+                <field name="negative_forecast_qty" type="char"/>
                 <field name="non_negative_forecast_date"/>
+                <field name="non_negative_forecast_qty" type="char"/>
                 <field name="duration" type="char"/>
             </tree>
         </field>

@@ -9,11 +9,13 @@ class FlspNegativeForecastStock(models.Model):
 
     product_id = fields.Many2one('product.product', string='Product')
     product_name = fields.Char(related='product_id.display_name', string='Product Name')
+    prod_purcahseable = fields.Boolean(compute='_compute_purcahseable', string='Purcahseable', store=True)
+    prod_manufacturable = fields.Boolean(compute='_compute_manufacturable', string='Manufacturable', store=True)
     negative_forecast_qty = fields.Float(string='Negative Qty')
     negative_forecast_date = fields.Datetime(string='Negative Forecast Date')
     non_negative_forecast_qty = fields.Float(string='Non Negative Qty')
     non_negative_forecast_date = fields.Datetime(string='Non Negative Forecast Date')
-    duration = fields.Float('Duration', default=0, compute='_compute_duration', store=True)
+    duration = fields.Float('Duration', compute='_compute_duration')
 
     @api.depends('negative_forecast_date', 'non_negative_forecast_date')
     def _compute_duration(self):
@@ -22,6 +24,30 @@ class FlspNegativeForecastStock(models.Model):
                 elapsed_seconds = (r.non_negative_forecast_date - r.negative_forecast_date).total_seconds()
                 seconds_in_day = 24 * 60 * 60
                 r.duration = elapsed_seconds / seconds_in_day
+            else:
+                r.duration = False
+    
+    @api.depends('product_id')
+    def _compute_purcahseable(self):
+        route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
+        for r in self:
+            if route_buy in r.product_id.route_ids.ids:
+                r.product_id.flsp_route_buy = 'buy'
+                r.prod_purcahseable = True
+            else:
+                r.product_id.flsp_route_buy = 'na'
+                r.prod_purcahseable = False
+    
+    @api.depends('product_id')
+    def _compute_manufacturable(self):
+        route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
+        for r in self:
+            if route_mfg in r.product_id.route_ids.ids:
+                r.product_id.flsp_route_mfg = 'mfg'
+                r.prod_manufacturable = True
+            else:
+                r.product_id.flsp_route_mfg = 'na'
+                r.prod_manufacturable = False
 
     @api.model
     def _update_data(self):
