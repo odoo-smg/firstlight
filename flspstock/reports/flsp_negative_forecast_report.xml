@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <!-- negative forecast stock -->
+    <record id="flsp_negative_forecast_stock_form_view" model="ir.ui.view">
+        <field name="name">flsp.negative.forecast.stock.form</field>
+        <field name="model">flsp.negative.forecast.stock</field>
+        <field name="arch" type="xml">
+            <form string="Negative Forecast Stock Form" create="false" edit="false">
+                <sheet>
+                    <field name="product_name"/>
+                    <field name="negative_forecast_qty"/>
+                    <field name="negative_forecast_date"/>
+                    <field name="non_negative_forecast_qty"/>
+                    <field name="non_negative_forecast_date"/>
+                    <field name="duration"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_negative_forecast_stock_view_tree" model="ir.ui.view">
+        <field name="name">flsp.negative.forecast.stock.tree</field>
+        <field name="model">flsp.negative.forecast.stock</field>
+        <field name="arch" type="xml">
+            <tree default_order='negative_forecast_qty' create="0" delete="0" limit="50">
+                <field name="product_name"/>
+                <field name="negative_forecast_qty" type="char"/>
+                <field name="negative_forecast_date"/>
+                <field name="non_negative_forecast_qty" type="char"/>
+                <field name="non_negative_forecast_date"/>
+                <field name="duration" type="char"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- window action -->
+    <record id="flsp_negative_forecast_stock_action" model="ir.actions.act_window">
+        <field name="name">flsp.negative.forecast.stock.views</field>
+        <field name="res_model">flsp.negative.forecast.stock</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">No Negative Forecasted Inventory</p>
+        </field>
+    </record>
+
+    <!-- server action -->
+    <record model="ir.actions.server" id="flsp_negative_forecast_report_action"> 
+        <field name="name">Negative Forecasted Inventory</field>
+        <field name="model_id" ref="model_flsp_negative_forecast_stock"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_view_negative_forecast()
+        </field>
+    </record>
+
+    <!-- menu item -->
+    <menuitem 
+        id="menu_negative_forecast_inventory" 
+        name="Negative Forecasted Inventory" 
+        parent="stock.menu_warehouse_report" 
+        sequence="100" 
+        action="flsp_negative_forecast_report_action"
+    />
+ </odoo>
