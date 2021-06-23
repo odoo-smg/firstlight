@@ -60,7 +60,7 @@
         <field name="name">MPR purchase</field>
         <field name="model">flsp.mrp.purchase.line</field>
         <field name="arch" type="xml">
-            <tree string="Suggestion View"  create="0" delete="0">
+            <tree string="Suggestion View"  create="0" delete="0" decoration-bf="suggested_qty&gt;0 and balance_neg&lt;0" decoration-danger="suggested_qty&gt;0 and balance_neg&lt;0" >
                 <field name="product_tmpl_id" optional="show" />
                 <field name="default_code" optional="hide"/>
                 <field name="description" optional="hide"/>
@@ -96,7 +96,7 @@
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
                 <separator/>
-                <filter string="Zero Filter" name="filter_zero" domain="[('adjusted_qty','>', 0)]"/>
+                <filter string="Zero Filter" name="filter_zero" domain="['|', ('adjusted_qty','>', 0), ('balance_neg', '<', 0)]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Supplier" name="vendor" context="{'group_by':'vendor_id'}"/>
