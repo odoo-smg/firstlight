@@ -58,7 +58,4 @@
         </field>
     </record>
 
-<!--     options="{'no_open': True, 'no_create': True}"-->
-<!--    options="{'no_create': True}" attrs="{'column_invisible': [('parent.picking_type_code', '=', 'incoming')]}" -->
-
 </odoo>
