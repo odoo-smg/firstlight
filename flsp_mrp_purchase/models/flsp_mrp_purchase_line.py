@@ -840,5 +840,7 @@ class FlspMrppurchaseLine(models.Model):
                            'balance': balance,
                            'balance_neg': balance_neg,
                            'negative_by': negative_by,
+                           'avg_per_sbs': 1,
+                           'avg_per_ssa': 1,
                            'source': 'source', })
         return ret
