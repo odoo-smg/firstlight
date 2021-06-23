@@ -333,13 +333,6 @@ class FlspMrppurchaseLine(models.Model):
                         balance_neg = current_balance
                         negative_by = item[7]
                         required_by = item[7]
-                print('checking***************************')
-                print(item[7])
-                print(item[5])
-                print(item[1])
-                print(item[8])
-                print(item[9])
-                print(item[3])
                 if not item[3]:
                     item[3] = ''
                 rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
@@ -559,6 +552,7 @@ class FlspMrppurchaseLine(models.Model):
 
                 required_qty = suggested_qty
                 planning.suggested_qty = required_qty
+                planning.adjusted_qty = suggested_qty
 
                 # Checking supplier quantity:
                 if suggested_qty > 0 and planning.vendor_qty > 0:
