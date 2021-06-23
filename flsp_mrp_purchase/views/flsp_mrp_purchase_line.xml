@@ -96,7 +96,7 @@
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
                 <separator/>
-                <filter string="Zero Filter" name="filter_zero" domain="['|', ('adjusted_qty','>', 0), ('balance_neg', '<', 0)]"/>
+                <filter string="Zero Filter" name="filter_zero" domain="['|', ('adjusted_qty','&gt;', 0), ('balance_neg', '&lt;', 0)]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Supplier" name="vendor" context="{'group_by':'vendor_id'}"/>
