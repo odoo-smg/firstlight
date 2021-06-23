@@ -161,8 +161,12 @@ class FlspMrppurchaseLine(models.Model):
         for receipt in open_receipts:
             stock_move_product = self.env['stock.move'].search([('picking_id', '=', receipt.id)])
             for move in stock_move_product:
+                if receipt.origin:
+                    doc = (receipt.origin + '                 ')[0:-17]
+                else:
+                    doc = '                 '
                 open_moves.append([len(open_moves) + 1, 'In   ', 'Purchase',
-                                   receipt.origin,
+                                   doc,
                                    move.product_id,
                                    move.product_uom_qty, move.product_uom,
                                    receipt.scheduled_date, 0, 0, 0, 0])
@@ -192,11 +196,18 @@ class FlspMrppurchaseLine(models.Model):
                         if move_components[prod]['total'] <= 0:
                             continue
                         if move.product_id.categ_id.flsp_name_report == 'ISBS':
-                            avg_per_sbs = move_components[prod]['total']/move.product_uom_qty
+                            if 'SET' in move.product_id.name:
+                                avg_per_sbs = move_components[prod]['total']/(move.product_uom_qty*2)
+                            else:
+                                avg_per_sbs = move_components[prod]['total'] / move.product_uom_qty
                         if move.product_id.categ_id.flsp_name_report == 'FISA':
                             avg_per_ssa = move_components[prod]['total']/move.product_uom_qty
+                        if delivery.origin:
+                            doc = (delivery.origin + '                 ')[0:-17]
+                        else:
+                            doc = '                 '
                         open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
-                                           delivery.origin,
+                                           doc,
                                            prod,
                                            move_components[prod]['total'], prod.uom_id.id,
                                            delivery.scheduled_date, move_components[prod]['level'],
@@ -225,8 +236,12 @@ class FlspMrppurchaseLine(models.Model):
                         continue
                     if move_components[prod]['total'] <= 0:
                         continue
+                    if production.name:
+                        doc = (production.name + '                 ')[0:-17]
+                    else:
+                        doc = '                 '
                     open_moves.append([len(open_moves) + 1, 'Out  ', 'MO      ',
-                                       production.name,
+                                       doc,
                                        prod,
                                        move_components[prod]['total'], prod.uom_id.id,
                                        production.date_planned_start, move_components[prod]['level'],
@@ -843,4 +858,5 @@ class FlspMrppurchaseLine(models.Model):
                            'avg_per_sbs': 1,
                            'avg_per_ssa': 1,
                            'source': 'source', })
+
         return ret
