@@ -538,6 +538,7 @@ class FlspMrppurchaseLine(models.Model):
                 for month in next_6_months:
                     field_name = 'qty_month' + str(key)
                     rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
+                    six_month_forecast += getattr(planning, field_name)
                     key += 1
                     if key > 12:
                         key = 1
@@ -546,7 +547,6 @@ class FlspMrppurchaseLine(models.Model):
                 for month in next_6_months:
                     field_name = 'consumption_month' + str(key)
                     rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
-                    six_month_forecast += getattr(planning, field_name)
                     key += 1
                     if key > 12:
                         key = 1
