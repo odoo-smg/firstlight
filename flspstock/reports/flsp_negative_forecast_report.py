@@ -88,6 +88,14 @@ class FlspNegativeForecastStock(models.Model):
                 self.env.cr.execute(query_create, query_create_params)
         except Error as e:
             _logger.info("an error occured while updating database 'flsp_negative_forecast_stock': %s", e.pgerror)
+        
+    @api.model
+    def action_calculate_negative_forecast(self, calculateFlspRoutes=True):
+        # update product data
+        self._update_product_flsp_routes(calculateFlspRoutes)
+
+        # update report data in DB
+        self._update_report_data()
 
     @api.model
     def view_negative_forecast_report(self):
@@ -101,16 +109,12 @@ class FlspNegativeForecastStock(models.Model):
                 <p class="o_view_nocontent_empty_folder">No Negative Forecasted Inventory</p>
                 """
         }
-        
         return action
         
     @api.model
-    def action_view_negative_forecast(self, calculateFlspRoutes=False):
-        # update product data
-        self._update_product_flsp_routes(calculateFlspRoutes)
-
-        # update report data in DB
-        self._update_report_data()
+    def action_view_negative_forecast(self, calculateFlspRoutes=True):
+        # update data
+        self.action_calculate_negative_forecast(calculateFlspRoutes)
 
         # set view for the page to show up
         return self.view_negative_forecast_report()
