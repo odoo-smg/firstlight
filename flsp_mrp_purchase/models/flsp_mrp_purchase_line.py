@@ -307,7 +307,7 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------"
                 required_by = False
                 negative_by = False
-                required_by = 0
+                balance_neg = 0
                 pa_wip_qty = 0
                 stock_quant = self.env['stock.quant'].search(
                     ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
