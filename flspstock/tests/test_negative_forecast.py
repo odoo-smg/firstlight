@@ -87,6 +87,7 @@ CREATE TABLE test_table(
         self.add_forecast_entry_in_report(prod_3.id, 'forecast', now, -3, company_id)
         self.add_forecast_entry_in_report(prod_3.id, 'out', now + timedelta(days = 1) , 3, company_id)
         self.add_forecast_entry_in_report(prod_3.id, 'forecast', now + timedelta(days = 1), -6, company_id)
+        self.product_auto.create_product_route(prod_3.product_tmpl_id.id, 11) # 11 is route id of 'Buy'
         
         # qty of prod_4 is postive now , negative tomorrow and then positve later
         prod_4 = self.product_auto.create_typical_product('test_negative_forecast_report', 4, -2)
@@ -96,12 +97,15 @@ CREATE TABLE test_table(
         self.add_forecast_entry_in_report(prod_4.id, 'forecast', now + timedelta(days = 22), -8, company_id)
         self.add_forecast_entry_in_report(prod_4.id, 'in', now + timedelta(days = 30), 100, company_id)
         self.add_forecast_entry_in_report(prod_4.id, 'forecast', now + timedelta(days = 30), 92, company_id)
+        # prod_4.write(dict(categ_id=9,)) # default value is 8 which is saleable, change it as 9 for consumable
+        self.product_auto.create_product_route(prod_4.product_tmpl_id.id, 12) # 12 is route id of 'Manufacture'
+        self.product_auto.unlink_product_route(prod_4.product_tmpl_id.id, 11) # 11 is route id of 'Buy'. this action make sure 11 is not set
         
         # update view for test
         self.init_report_stock_quantity()
 
         # call the method and verify
-        self.negative_forecast._update_data()
+        self.negative_forecast.action_view_negative_forecast()
 
         # verfiy data with prod_3 and prod_4
         neg_forecast_entries = self.negative_forecast.search([])
@@ -114,6 +118,8 @@ CREATE TABLE test_table(
         self.assertEquals(False, p1.non_negative_forecast_qty, "non_negative_forecast_qty")
         self.assertEquals(0, p1.non_negative_forecast_date, "non_negative_forecast_date")
         self.assertEquals(0, p1.duration, "duration")
+        self.assertEquals('buy', p1.purcahseable, "purcahseable")
+        self.assertEquals('na', p1.manufacturable, "manufacturable")
 
         p2 = neg_forecast_entries[1]
         self.assertEquals(prod_4.id, p2.product_id.id, "product_id")
@@ -122,6 +128,8 @@ CREATE TABLE test_table(
         self.assertEquals(92, p2.non_negative_forecast_qty, "non_negative_forecast_qty")
         self.assertEquals((now + timedelta(days = 30)).strftime(fmt), p2.non_negative_forecast_date.strftime(fmt), "non_negative_forecast_date")
         self.assertEquals(30-1, p2.duration, "duration")
+        self.assertEquals('na', p2.purcahseable, "purcahseable")
+        self.assertEquals('mfg', p2.manufacturable, "manufacturable")
         
         # clean db
         self.drop_table()

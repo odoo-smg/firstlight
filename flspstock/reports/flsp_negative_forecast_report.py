@@ -8,14 +8,14 @@ class FlspNegativeForecastStock(models.Model):
     _description = "Negative Forecasted Stock"
 
     product_id = fields.Many2one('product.product', string='Product')
-    product_name = fields.Char(related='product_id.display_name', string='Product Name')
-    prod_purcahseable = fields.Boolean(compute='_compute_purcahseable', string='Purcahseable', store=True)
-    prod_manufacturable = fields.Boolean(compute='_compute_manufacturable', string='Manufacturable', store=True)
+    product_name = fields.Char(related='product_id.display_name', string='Product')
+    purcahseable = fields.Selection(related='product_id.flsp_route_buy', string='Purcahseable')
+    manufacturable = fields.Selection(related='product_id.flsp_route_mfg', string='Manufacturable')
     negative_forecast_qty = fields.Float(string='Negative Qty')
     negative_forecast_date = fields.Datetime(string='Negative Forecast Date')
     non_negative_forecast_qty = fields.Float(string='Non Negative Qty')
     non_negative_forecast_date = fields.Datetime(string='Non Negative Forecast Date')
-    duration = fields.Float('Duration', compute='_compute_duration')
+    duration = fields.Float(string='Duration', compute='_compute_duration')
 
     @api.depends('negative_forecast_date', 'non_negative_forecast_date')
     def _compute_duration(self):
@@ -26,31 +26,29 @@ class FlspNegativeForecastStock(models.Model):
                 r.duration = elapsed_seconds / seconds_in_day
             else:
                 r.duration = False
-    
-    @api.depends('product_id')
-    def _compute_purcahseable(self):
-        route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
-        for r in self:
-            if route_buy in r.product_id.route_ids.ids:
-                r.product_id.flsp_route_buy = 'buy'
-                r.prod_purcahseable = True
-            else:
-                r.product_id.flsp_route_buy = 'na'
-                r.prod_purcahseable = False
-    
-    @api.depends('product_id')
-    def _compute_manufacturable(self):
-        route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
-        for r in self:
-            if route_mfg in r.product_id.route_ids.ids:
-                r.product_id.flsp_route_mfg = 'mfg'
-                r.prod_manufacturable = True
-            else:
-                r.product_id.flsp_route_mfg = 'na'
-                r.prod_manufacturable = False
 
     @api.model
-    def _update_data(self):
+    def _update_product_flsp_routes(self, skipped):
+        # scan all products and make sure their fields 'flsp_route_buy' and 'flsp_route_mfg' are up-to-date
+        if skipped:
+            return
+        
+        route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
+        route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
+        products = self.env['product.product'].search([])
+        for prod in products:
+            if route_buy in prod.route_ids.ids:
+                prod.flsp_route_buy = 'buy'
+            else:
+                prod.flsp_route_buy = 'na'
+
+            if route_mfg in prod.route_ids.ids:
+                prod.flsp_route_mfg = 'mfg'
+            else:
+                prod.flsp_route_mfg = 'na'
+
+    @api.model
+    def _update_report_data(self):
         query_unlink = """ DELETE FROM flsp_negative_forecast_stock"""
 
         query_create = """WITH
@@ -93,8 +91,11 @@ class FlspNegativeForecastStock(models.Model):
 
     @api.model
     def action_view_negative_forecast(self):
-        # update data in DB
-        self._update_data()
+        # update product data
+        self._update_product_flsp_routes(False)
+
+        # update report data in DB
+        self._update_report_data()
 
         # set view for the page to show up
         action = {
