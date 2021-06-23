@@ -306,6 +306,8 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += "<br/>DATE        | QTY         |Balance      |Type |Source  |BOM Level|Mfg Lead time| Doc"
                 rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------"
                 required_by = False
+                negative_by = False
+                required_by = 0
                 pa_wip_qty = 0
                 stock_quant = self.env['stock.quant'].search(
                     ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', product.id)])
@@ -354,7 +356,7 @@ class FlspMrppurchaseLine(models.Model):
         # ### Other products without movements ###
         # ########################################
         balance_neg = 0
-        negative_by = current_date
+        negative_by = False
         products = self.env['product.product'].search(['&', ('type', '=', 'product'), ('route_ids', 'in', [route_buy])])
         required_by = current_date
         for product in products:
