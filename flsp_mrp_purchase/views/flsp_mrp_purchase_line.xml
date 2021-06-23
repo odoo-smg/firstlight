@@ -41,6 +41,7 @@
                             <field name="adjusted_qty" string="Adjusted Qty" invisible="False" />
                             <field name="uom" string="Unit of Measure"/>
                             <field name="required_by"/>
+                            <field name="six_month_forecast"/>
                         </group>
                         <group name="material_purchase_2nd" string="Purchase UofM" >
                             <field name="purchase_suggested" string="Required 2nd" invisible="False" readonly="1" />
@@ -56,7 +57,7 @@
                             <field name="avg_per_sbs" readonly="1"/>
                         </group>
                         <group>
-                            <field name="avg_per_sbs" readonly="1"/>
+                            <field name="avg_per_ssa" readonly="1"/>
                         </group>
                     </group>
                 </sheet>
@@ -84,6 +85,7 @@
                 <field name="qty_multiple"  optional="hide"/>
                 <!--field name="source"/-->
                 <field name="suggested_qty" string="Required Qty"/>
+                <field name="uom" string="UofM" optional="hide"/>
                 <field name="required_by"/>
                 <field name="adjusted_qty"/>
                 <field name="po_qty" optional="hide"/>
@@ -95,6 +97,7 @@
                 <field name="negative_by" optional="hide"/>
                 <field name="avg_per_sbs" optional="hide"/>
                 <field name="avg_per_ssa" optional="hide"/>
+                <field name="six_month_forecast" optional="hide"/>
             </tree>
         </field>
     </record>
