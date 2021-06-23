@@ -162,7 +162,7 @@ class FlspMrppurchaseLine(models.Model):
             stock_move_product = self.env['stock.move'].search([('picking_id', '=', receipt.id)])
             for move in stock_move_product:
                 if receipt.origin:
-                    doc = (receipt.origin + '                 ')[0:-17]
+                    doc = (receipt.origin + '                 ')[0:17]
                 else:
                     doc = '                 '
                 open_moves.append([len(open_moves) + 1, 'In   ', 'Purchase',
@@ -181,11 +181,21 @@ class FlspMrppurchaseLine(models.Model):
                 move_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', move.product_id.product_tmpl_id.id)],
                                                       limit=1)
                 if not move_bom:
+                    avg_per_sbs = 0
+                    avg_per_ssa = 0
+                    if move.product_id.categ_id.flsp_name_report == 'ISBS':
+                        avg_per_sbs = move.product_uom_qty
+                    if move.product_id.categ_id.flsp_name_report == 'FISA':
+                        avg_per_ssa = move.product_uom_qty
+                    if delivery.origin:
+                        doc = (delivery.origin + '                 ')[0:17]
+                    else:
+                        doc = '                 '
                     open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
-                                       receipt.origin,
+                                       doc,
                                        move.product_id,
                                        move.product_uom_qty, move.product_uom,
-                                       receipt.scheduled_date, 0, standard_lead_time])
+                                       receipt.scheduled_date, 0, standard_lead_time, avg_per_sbs, avg_per_ssa])
                 else:
                     move_components = self._get_flattened_totals(move_bom, move.product_uom_qty, {}, 0, True)
                     for prod in move_components:
@@ -203,7 +213,7 @@ class FlspMrppurchaseLine(models.Model):
                         if move.product_id.categ_id.flsp_name_report == 'FISA':
                             avg_per_ssa = move_components[prod]['total']/move.product_uom_qty
                         if delivery.origin:
-                            doc = (delivery.origin + '                 ')[0:-17]
+                            doc = (delivery.origin + '                 ')[0:17]
                         else:
                             doc = '                 '
                         open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
@@ -230,7 +240,7 @@ class FlspMrppurchaseLine(models.Model):
                                            prod,
                                            move_components[prod]['total'], prod.uom_id.id,
                                            production.date_planned_start, move_components[prod]['level'],
-                                           standard_lead_time + (move_components[prod]['level'] * indirect_lead_time)])
+                                           standard_lead_time + (move_components[prod]['level'] * indirect_lead_time), 0, 0])
                         continue
                     if prod.type in ['service', 'consu']:
                         continue
@@ -266,6 +276,8 @@ class FlspMrppurchaseLine(models.Model):
         rfq_qty = 0
         balance_neg = 0
         negative_by = False
+        avg_per_sbs = 0
+        avg_per_ssa = 0
 
         # First Item
         for item in open_moves:
@@ -312,9 +324,10 @@ class FlspMrppurchaseLine(models.Model):
                 new_prod = (item[4] != product)
             if new_prod:
                 rationale += "</pre>"
-                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, balance_neg, negative_by,
+                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa,
                                                    consumption, False, po_qty)
-                #def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+                #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+
 
                 if purchase_line:
                     purchase_line.level_bom = bom_level
@@ -331,6 +344,8 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------------|------|------|"
                 required_by = False
                 negative_by = False
+                avg_per_sbs = 0
+                avg_per_ssa = 0
                 balance_neg = 0
                 pa_wip_qty = 0
                 stock_quant = self.env['stock.quant'].search(
@@ -362,6 +377,11 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
                     item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[
                                  2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]+'|'+'{0: <6}|'.format(item[10]) +'{0: <6}|'.format(item[11])
+                if item[10] > 0:
+                    avg_per_sbs = (avg_per_sbs+item[10])/2
+                if item[11] > 0:
+                    avg_per_ssa = (avg_per_ssa+item[11])/2
+
                 if item[2] == "Purchase":
                     po_qty = po_qty + item[5]
 
@@ -381,9 +401,10 @@ class FlspMrppurchaseLine(models.Model):
             if not purchase_planning:
                 current_balance = False
                 rationale = 'No open movements - Product Selected based on Min qty.'
-                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, balance_neg, negative_by,
+                purchase_line = self._include_prod(product, rationale, current_balance, required_by, consider_wip, balance_neg, negative_by, 0, 0,
                                                    consumption)
-                #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+                #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+
 
         # ########################################
         # ######## FORECAST   ####################
@@ -418,9 +439,10 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[10] = forecast.qty_month10 * forecast_components[component]['total']
                             forecasted[11] = forecast.qty_month11 * forecast_components[component]['total']
                             forecasted[12] = forecast.qty_month12 * forecast_components[component]['total']
-                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip, balance_neg, negative_by,
+                            purchase_line = self._include_prod(product, rationale, False, current_date, consider_wip, balance_neg, negative_by, 0, 0,
                                                                False, forecasted)
-                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1 * forecast_components[component][
                                 'total']
@@ -468,8 +490,9 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[11] = forecast.qty_month11
                             forecasted[12] = forecast.qty_month12
                             purchase_line = self._include_prod(product, rationale, current_balance, current_date,
-                                                               consider_wip, balance_neg, negative_by, False, forecasted)
-                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+                                                               consider_wip, balance_neg, negative_by, 0, 0, False, forecasted)
+                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+
 
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1
@@ -720,7 +743,7 @@ class FlspMrppurchaseLine(models.Model):
                     ), 'level': level, 'bom': ''}
         return totals
 
-    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, consumption=False, forecast=False, po_qty=0.0):
+    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
         if not consumption:
             consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if not forecast:
@@ -855,8 +878,8 @@ class FlspMrppurchaseLine(models.Model):
                            'balance': balance,
                            'balance_neg': balance_neg,
                            'negative_by': negative_by,
-                           'avg_per_sbs': 1,
-                           'avg_per_ssa': 1,
+                           'avg_per_sbs': avg_per_sbs,
+                           'avg_per_ssa': avg_per_ssa,
                            'source': 'source', })
 
         return ret

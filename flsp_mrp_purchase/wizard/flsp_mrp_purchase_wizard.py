@@ -16,7 +16,7 @@ class FlspMrppurchaseWizard(models.TransientModel):
     standard_queue_time = fields.Integer(String="Lead time", default=1, help="Standard queue time.")
     orders_to_confirm = fields.Boolean(String="Orders to confirm", default=False)
     consider_drafts = fields.Boolean(String="Consider Draft MOs", default=False)
-    consider_wip = fields.Boolean(String="Consider WIP balance", default=True)
+    consider_wip = fields.Boolean(String="Consider WIP balance", default=False)
     consider_forecast = fields.Boolean(String="Consider Forecast", default=True)
     consider_mos = fields.Boolean(String="Consider Manufacturing Orders", default=False)
 

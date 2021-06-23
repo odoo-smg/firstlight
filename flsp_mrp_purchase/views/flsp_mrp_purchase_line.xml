@@ -51,6 +51,14 @@
                     <group>
                         <field name="rationale" string="Notes" readonly="1"/>
                     </group>
+                    <group name="avg" >
+                        <group>
+                            <field name="avg_per_sbs" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="avg_per_sbs" readonly="1"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -85,6 +93,8 @@
                 <field name="balance" string="Forecasted"  optional="hide"/>
                 <field name="balance_neg" optional="hide"/>
                 <field name="negative_by" optional="hide"/>
+                <field name="avg_per_sbs" optional="hide"/>
+                <field name="avg_per_ssa" optional="hide"/>
             </tree>
         </field>
     </record>
