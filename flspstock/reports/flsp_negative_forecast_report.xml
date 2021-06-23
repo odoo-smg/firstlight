@@ -47,7 +47,7 @@
         </field>
     </record>
 
-    <!-- server action -->
+    <!-- server action
     <record model="ir.actions.server" id="flsp_negative_forecast_report_action"> 
         <field name="name">Negative Forecasted Inventory</field>
         <field name="model_id" ref="model_flsp_negative_forecast_stock"/>
@@ -57,12 +57,12 @@
         </field>
     </record>
 
-    <!-- menu item -->
+    menu item
     <menuitem 
         id="menu_negative_forecast_inventory" 
         name="Negative Forecasted Inventory" 
         parent="stock.menu_warehouse_report" 
         sequence="100" 
         action="flsp_negative_forecast_report_action"
-    />
+    /> -->
  </odoo>

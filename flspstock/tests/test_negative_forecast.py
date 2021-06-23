@@ -105,7 +105,7 @@ CREATE TABLE test_table(
         self.init_report_stock_quantity()
 
         # call the method and verify
-        self.negative_forecast.action_view_negative_forecast()
+        self.negative_forecast.action_view_negative_forecast(True)
 
         # verfiy data with prod_3 and prod_4
         neg_forecast_entries = self.negative_forecast.search([])

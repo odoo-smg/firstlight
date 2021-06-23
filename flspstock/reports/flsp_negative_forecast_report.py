@@ -28,9 +28,9 @@ class FlspNegativeForecastStock(models.Model):
                 r.duration = False
 
     @api.model
-    def _update_product_flsp_routes(self, skipped):
+    def _update_product_flsp_routes(self, calculateFlspRoutes):
         # scan all products and make sure their fields 'flsp_route_buy' and 'flsp_route_mfg' are up-to-date
-        if skipped:
+        if not calculateFlspRoutes:
             return
         
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
@@ -90,14 +90,7 @@ class FlspNegativeForecastStock(models.Model):
             _logger.info("an error occured while updating database 'flsp_negative_forecast_stock': %s", e.pgerror)
 
     @api.model
-    def action_view_negative_forecast(self):
-        # update product data
-        self._update_product_flsp_routes(False)
-
-        # update report data in DB
-        self._update_report_data()
-
-        # set view for the page to show up
+    def view_negative_forecast_report(self):
         action = {
             'name': _('Negative Forecasted Inventory'),
             'res_model': 'flsp.negative.forecast.stock',
@@ -110,3 +103,14 @@ class FlspNegativeForecastStock(models.Model):
         }
         
         return action
+        
+    @api.model
+    def action_view_negative_forecast(self, calculateFlspRoutes=False):
+        # update product data
+        self._update_product_flsp_routes(calculateFlspRoutes)
+
+        # update report data in DB
+        self._update_report_data()
+
+        # set view for the page to show up
+        return self.view_negative_forecast_report()
