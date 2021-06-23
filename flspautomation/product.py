@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+from psycopg2 import Error
+import logging
+_logger = logging.getLogger(__name__)
 
 class FlspProductAutomation():
 
@@ -22,7 +25,7 @@ class FlspProductAutomation():
                         ))
         
      def create_product(self, default_code, name, cost, onhand_qty):
-          prod_template = self.create_product_tmpl(name, 'product', 8, 1, 1, 'none', cost, 'no-message', 'no-message')
+          prod_template = self.create_product_tmpl(name, 'product', 10, 1, 1, 'none', cost, 'no-message', 'no-message')
           p = prod_template.product_variant_ids[0]
           p.default_code = default_code
           p.active = True
@@ -51,3 +54,35 @@ class FlspProductAutomation():
                         'rounding': 0.01,
                         'uom_type': 'smaller',
                })
+        
+     def create_product_route(self, product_id, route_id):
+          self.caller.env.cr.execute("""
+                         SELECT * FROM stock_route_product
+                         WHERE route_id = %s and product_id = %s
+                    """, 
+                    (route_id, product_id))
+          res = self.caller.env.cr.fetchall()
+          # _logger.info("res: %s", res)
+          if not res:
+               query = """
+                    INSERT INTO stock_route_product(route_id, product_id) 
+                                             VALUES(%s, %s)
+                    """
+               query_params = (route_id, product_id)
+               self.caller.env.cr.execute(query, query_params)
+        
+     def unlink_product_route(self, product_id, route_id):
+          self.caller.env.cr.execute("""
+                         SELECT * FROM stock_route_product
+                         WHERE route_id = %s and product_id = %s
+                    """, 
+                    (route_id, product_id))
+          res = self.caller.env.cr.fetchall()
+          # _logger.info("res: %s", res)
+          if res:
+               query = """
+                    DELETE FROM stock_route_product
+                    WHERE route_id = %s and  product_id = %s
+                    """
+               query_params = (route_id, product_id)
+               self.caller.env.cr.execute(query, query_params)
