@@ -101,6 +101,7 @@ class Flsp_PO_Status(models.Model):
 
         self.write({'state': 'cancel'})
         self.write({'flsp_po_status': 'cancelled', })
+        res = super(Flsp_PO_Status, self).button_cancel()
 
     # Getting PURCHASE BUTTON and adding status
     def button_done(self):
