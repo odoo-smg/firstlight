@@ -159,12 +159,14 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             gantt.ext.zoom.zoomOut();
         },
         on_attach_callback: function () {
+            // console.log('on_attach_callback:: Renderer');
             this.renderGantt();
             // console.log('on_attach_callback');
             // console.log(this.$el);
         },
         renderGantt: function(){
             // console.log('renderGantt');
+
             gantt.init(this.$('.o_dhx_gantt').get(0));
             this.trigger_up('gantt_config');
             this.trigger_up('gantt_create_dp');
@@ -178,6 +180,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
                 });
                 this.events_set = true;
             }
+
             gantt.clearAll();
             var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
             gantt.addMarker({
@@ -190,10 +193,53 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             var headerHeight = this.$('.o_dhx_gantt_header').height();
             this.$('.o_dhx_gantt').height(rootHeight - headerHeight);
             gantt.parse(this.state.records);
+
+            // reset scroll positions with ones previously stored
+            this.restoreScrollPositions();
+        },
+        saveScrollPositions: function () {
+            // console.log('saveScrollPositions...');
+            if (!gantt.$layout) {
+                return;
+            }
+                    
+            var cells = gantt.$layout.$cells
+            for (let i = 0; i < cells.length; i++) {
+                var cell = cells[i]
+                if (cell.$name == "viewCell" && cell.$config.view == "scrollbar" && cell.$config.id == "scrollHor") {
+                    localStorage.setItem('gantt_scroll_left', cell.$content.$scroll_hor.scrollLeft);
+                }
+
+                if (cell.$name == "layout") {
+                    var verCells = cell.$cells
+                    for (let v = 0; v < verCells.length; v++) {
+                        var verCell = verCells[v]
+                        if (verCell.$name == "viewCell" && verCell.$config.view == "scrollbar" && verCell.$config.id == "scrollVer") {
+                            localStorage.setItem('gantt_scroll_top',  verCell.$content.$scroll_ver.scrollTop);
+                        }
+                    }
+                }
+            }
+        },
+        restoreScrollPositions: function () {
+            // console.log('restoreScrollPositions:: Renderer');
+            var scrollLeft = localStorage.getItem('gantt_scroll_left');
+            var scrollTop = localStorage.getItem('gantt_scroll_top');
+
+            if (scrollLeft && scrollTop) gantt.scrollTo(scrollLeft, scrollTop);
+            else if (scrollLeft) gantt.scrollTo(scrollLeft, 0);
+            else if (scrollTop) gantt.scrollTo(0, scrollTop);
+            // else gantt.scrollTo(0, 0);
         },
         _onUpdate: function () {
+            // console.log('_onUpdate:: Renderer');
         },
         updateState: function (state, params) {
+            // console.log('updateState:: Renderer');
+
+            // save current scroll positions
+            this.saveScrollPositions();
+
             // this method is called by the controller when the search view is changed. we should 
             // clear the gantt chart, and add the new tasks resulting from the search
             var res = this._super.apply(this, arguments);
@@ -210,6 +256,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.$('.o_dhx_gantt_header').find('button').prop('disabled', false);
         },
         undoRenderCriticalTasks: function(data){
+            // console.log('undoRenderCriticalTasks:: Renderer');
             gantt.eachTask(function(item){
                 item.color = "";
             });
@@ -219,6 +266,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             gantt.render();
         },
         renderCriticalTasks: function(data){
+            // console.log('renderCriticalTasks:: Renderer');
             data.tasks.forEach(function(item){
                 var task = gantt.getTask(item);
                 if(task){
@@ -236,6 +284,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             }
         },
         destroy: function () {
+            // console.log('destroy:: Renderer');
             gantt.clearAll();
             this._super.apply(this, arguments);
         },
