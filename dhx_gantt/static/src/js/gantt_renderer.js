@@ -193,9 +193,6 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             var headerHeight = this.$('.o_dhx_gantt_header').height();
             this.$('.o_dhx_gantt').height(rootHeight - headerHeight);
             gantt.parse(this.state.records);
-
-            // reset scroll positions with ones previously stored
-            this.restoreScrollPositions();
         },
         saveScrollPositions: function () {
             // console.log('saveScrollPositions...');
@@ -245,6 +242,10 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             var res = this._super.apply(this, arguments);
             gantt.clearAll();
             this.renderGantt();
+
+            // reset scroll positions with ones previously stored
+            this.restoreScrollPositions();
+
             return res;
         },
         disableAllButtons: function(){
