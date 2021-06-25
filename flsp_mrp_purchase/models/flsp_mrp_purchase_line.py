@@ -514,7 +514,7 @@ class FlspMrppurchaseLine(models.Model):
             purchase_planning = self.env['flsp.mrp.purchase.line'].search([])
             months = ['', 'January         ', 'February        ', 'March           ', 'April           ',
                       'May             ', 'June            ', 'July            ', 'August          ',
-                      'October         ', 'September       ', 'November        ', 'December        ']
+                      'September       ', 'October         ', 'November        ', 'December        ']
             next_6_months = []
             key = current_date.month
             count = 1
