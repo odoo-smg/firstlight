@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="daily_negative_forecast_report_cron" model="ir.cron">
+        <field name="name">FLSP Stock - Daily Negative Forecasted Report</field>
+        <field name="model_id" ref="model_flsp_negative_forecast_stock"/>
+        <field name="active" eval="True" />
+        <field name="state">code</field>
+        <field name="code">model.action_calculate_negative_forecast()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 07:00:00')" />
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
+</odoo>
