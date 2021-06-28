@@ -3,6 +3,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
 
     var AbstractModel = require('web.AbstractModel');
     var time = require('web.time');
+    const colors = ['red', 'dodgerblue', 'purple', 'teal', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan', 'gray'];
     // var BasicModel = require('web.BasicModel');
     var GanttModel = AbstractModel.extend({
         get: function(){
@@ -51,6 +52,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.map_text = params.text;
             this.map_date_start = params.date_start;
             this.map_duration = params.duration;
+            this.map_responsible = params.responsible;
             this.map_progress = params.progress;
             this.map_open = params.open;
             this.map_links_serialized_json = params.links_serialized_json;
@@ -73,6 +75,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.modelName = params.modelName || this.modelName;
             var self = this;
             var fieldNames = [this.map_text, this.map_date_start, this.map_duration];
+            this.map_responsible && fieldNames.push(this.map_responsible);
             this.map_open && fieldNames.push(this.map_open);
             this.map_links_serialized_json && fieldNames.push(this.map_links_serialized_json);
             this.map_total_float && fieldNames.push(this.map_total_float);
@@ -100,6 +103,11 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             var self = this;
             this.res_ids = [];
             var links = [];
+
+            // map to assign color to users
+            var colorIndex = 0;
+            let user_color_map = new Map()
+
             records.forEach(function(record){ 
                 self.res_ids.push(record[self.map_id]);
                 // value.add(-self.getSession().getTZOffset(value), 'minutes')
@@ -136,9 +144,24 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.start_date = datetime;
                 task.duration = record[self.map_duration];
                 task.progress = record[self.map_progress];
+                task.responsible = record[self.map_responsible];
                 task.open = record[self.map_open];
                 task.links_serialized_json = record[self.map_links_serialized_json];
                 task.total_float = record[self.map_total_float];
+
+                // update tasks with colors
+                var user_color = user_color_map.get(task.responsible);
+                if (user_color){
+                    task.color = user_color;
+                } else {
+                    colorIndex++;
+                    if (colorIndex == colors.length) {
+                        // reset index to reuse colors
+                        colorIndex = 0;
+                    }
+                    user_color_map.set(task.responsible, colors[colorIndex]);
+                    task.color = colors[colorIndex];
+                }
 
                 data.push(task);
                 links.push.apply(links, JSON.parse(record.links_serialized_json))
