@@ -3,6 +3,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
 
     var AbstractModel = require('web.AbstractModel');
     var time = require('web.time');
+    const colors = ['red', 'dodgerblue', 'purple', 'teal', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan', 'gray'];
     // var BasicModel = require('web.BasicModel');
     var GanttModel = AbstractModel.extend({
         get: function(){
@@ -102,6 +103,11 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             var self = this;
             this.res_ids = [];
             var links = [];
+
+            // map to assign color to users
+            var colorIndex = 0;
+            let user_color_map = new Map()
+
             records.forEach(function(record){ 
                 self.res_ids.push(record[self.map_id]);
                 // value.add(-self.getSession().getTZOffset(value), 'minutes')
@@ -142,6 +148,20 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.open = record[self.map_open];
                 task.links_serialized_json = record[self.map_links_serialized_json];
                 task.total_float = record[self.map_total_float];
+
+                // update tasks with colors
+                var user_color = user_color_map.get(task.responsible);
+                if (user_color){
+                    task.color = user_color;
+                } else {
+                    colorIndex++;
+                    if (colorIndex == colors.length) {
+                        // reset index to reuse colors
+                        colorIndex = 0;
+                    }
+                    user_color_map.set(task.responsible, colors[colorIndex]);
+                    task.color = colors[colorIndex];
+                }
 
                 data.push(task);
                 links.push.apply(links, JSON.parse(record.links_serialized_json))

@@ -160,31 +160,6 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             // console.log('_onClickZoomOut');
             gantt.ext.zoom.zoomOut();
         },
-        updateColors: function () {
-            // assign color to users
-            const colors = ['red', 'dodgerblue', 'purple', 'teal', 'yellow', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan', 'gray'];
-            var colorIndex = 0;
-
-            let user_color_map = new Map()
-            // example: user_color_map.set('Jenny', 'green'); 
-
-            // update tasks with colors
-            for (let i = 0; i < gantt.getTaskCount(); i++) {
-                var task = gantt.getTaskByIndex(i);
-                var user_color = user_color_map.get(task.responsible);
-                if (user_color){
-                    task.color = user_color;
-                } else {
-                    colorIndex++;
-                    if (colorIndex == colors.length) {
-                        // reset index to reuse colors
-                        colorIndex = 0;
-                    }
-                    user_color_map.set(task.responsible, colors[colorIndex]);
-                    task.color = colors[colorIndex];
-                }
-            }
-        },
         on_attach_callback: function () {
             // console.log('on_attach_callback:: Renderer');
             this.renderGantt();
@@ -220,9 +195,6 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             var headerHeight = this.$('.o_dhx_gantt_header').height();
             this.$('.o_dhx_gantt').height(rootHeight - headerHeight);
             gantt.parse(this.state.records);
-
-            // update colors for each task
-            this.updateColors();
         },
         saveScrollPositions: function () {
             // console.log('saveScrollPositions...');
@@ -288,9 +260,9 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
         },
         undoRenderCriticalTasks: function(data){
             // console.log('undoRenderCriticalTasks:: Renderer');
-            gantt.eachTask(function(item){
-                item.color = "";
-            });
+            // gantt.eachTask(function(item){
+            //     item.color = "";
+            // });
             gantt.getLinks().forEach(function(item){
                 item.color = "";
             });
@@ -298,12 +270,12 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
         },
         renderCriticalTasks: function(data){
             // console.log('renderCriticalTasks:: Renderer');
-            data.tasks.forEach(function(item){
-                var task = gantt.getTask(item);
-                if(task){
-                    task.color = "red";
-                }
-            });
+            // data.tasks.forEach(function(item){
+            //     var task = gantt.getTask(item);
+            //     if(task){
+            //         task.color = "red";
+            //     }
+            // });
             data.links.forEach(function(item){
                 var link = gantt.getLink(item);
                 if(link){
