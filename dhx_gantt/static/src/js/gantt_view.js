@@ -30,6 +30,7 @@ odoo.define('dhx_gantt.GanttView', function (require) {
             this.loadParams.id_field = this.arch.attrs.id_field;
             this.loadParams.date_start = this.arch.attrs.date_start;
             this.loadParams.duration = this.arch.attrs.duration;
+            this.loadParams.responsible = this.arch.attrs.responsible;
             this.loadParams.open = this.arch.attrs.open;
             this.loadParams.progress = this.arch.attrs.progress;
             this.loadParams.text = this.arch.attrs.text;
@@ -43,6 +44,7 @@ odoo.define('dhx_gantt.GanttView', function (require) {
                 this.arch.attrs.id_field,
                 this.arch.attrs.date_start,
                 this.arch.attrs.duration,
+                this.arch.attrs.responsible,
                 this.arch.attrs.open,
                 this.arch.attrs.progress,
                 this.arch.attrs.text,
@@ -57,6 +59,7 @@ odoo.define('dhx_gantt.GanttView', function (require) {
             this.rendererParams.map_id_field = this.arch.attrs.id_field;
             this.rendererParams.map_date_start = this.arch.attrs.date_start;
             this.rendererParams.map_duration = this.arch.attrs.duration;
+            this.rendererParams.map_responsible = this.arch.attrs.responsible;
             this.rendererParams.map_open = this.arch.attrs.open;
             this.rendererParams.map_progress = this.arch.attrs.progress;
             this.rendererParams.map_text = this.arch.attrs.text;

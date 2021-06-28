@@ -38,6 +38,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.map_id_field = params.map_id_field;
             this.map_date_start = params.map_date_start;
             this.map_duration = params.map_duration;
+            this.map_responsible = params.map_responsible;
             this.map_open = params.map_open;
             this.map_progress = params.map_progress;
             this.map_links_serialized_json = params.map_links_serialized_json;
@@ -60,9 +61,10 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             // console.log(gantt.config.columns);
 
             gantt.config.columns = [
-                {name: "text", tree: true, resize: true},
-                {name: "start_date", align: "center", resize: true},
-                {name: "duration", align: "center"},
+                { name: "text", align: "center", width: "*", resize: true },
+                { name: "responsible", align: "center", resize: true },
+                { name: "start_date", align: "center", resize: true },
+                { name: "duration", align: "center" },
                 // {name: "add", width: 44, min_width: 44, max_width: 44}
             ]
             if(this.is_total_float){
@@ -179,7 +181,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
                     self.$('.o_dhx_gantt').height(rootHeight - headerHeight);
                 });
                 this.events_set = true;
-            }
+            };
 
             gantt.clearAll();
             var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
@@ -200,17 +202,17 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
                 return;
             }
                     
-            var cells = gantt.$layout.$cells
+            var cells = gantt.$layout.$cells;
             for (let i = 0; i < cells.length; i++) {
-                var cell = cells[i]
+                var cell = cells[i];
                 if (cell.$name == "viewCell" && cell.$config.view == "scrollbar" && cell.$config.id == "scrollHor") {
                     localStorage.setItem('gantt_scroll_left', cell.$content.$scroll_hor.scrollLeft);
                 }
 
                 if (cell.$name == "layout") {
-                    var verCells = cell.$cells
+                    var verCells = cell.$cells;
                     for (let v = 0; v < verCells.length; v++) {
-                        var verCell = verCells[v]
+                        var verCell = verCells[v];
                         if (verCell.$name == "viewCell" && verCell.$config.view == "scrollbar" && verCell.$config.id == "scrollVer") {
                             localStorage.setItem('gantt_scroll_top',  verCell.$content.$scroll_ver.scrollTop);
                         }
@@ -258,9 +260,9 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
         },
         undoRenderCriticalTasks: function(data){
             // console.log('undoRenderCriticalTasks:: Renderer');
-            gantt.eachTask(function(item){
-                item.color = "";
-            });
+            // gantt.eachTask(function(item){
+            //     item.color = "";
+            // });
             gantt.getLinks().forEach(function(item){
                 item.color = "";
             });
@@ -268,12 +270,12 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
         },
         renderCriticalTasks: function(data){
             // console.log('renderCriticalTasks:: Renderer');
-            data.tasks.forEach(function(item){
-                var task = gantt.getTask(item);
-                if(task){
-                    task.color = "red";
-                }
-            });
+            // data.tasks.forEach(function(item){
+            //     var task = gantt.getTask(item);
+            //     if(task){
+            //         task.color = "red";
+            //     }
+            // });
             data.links.forEach(function(item){
                 var link = gantt.getLink(item);
                 if(link){
