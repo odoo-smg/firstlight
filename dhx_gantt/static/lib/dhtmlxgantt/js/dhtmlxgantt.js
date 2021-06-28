@@ -16418,6 +16418,8 @@ function _get_skin(force, gantt) {
 		config[1].width = skinset._second_column_width;
 	if (config[2] && !gantt.defined(config[2].width))
 		config[2].width = skinset._third_column_width;
+    if (config[3] && !gantt.defined(config[3].width))
+        config[3].width = skinset._forth_column_width;
 	
 	for (var i=0; i<config.length; i++) {
 		var column = config[i];
@@ -21149,6 +21151,7 @@ var ScrollbarCell = (function (_super) {
 		this.$scroll_hor.scrollLeft = left;
 		this.$config.codeScrollLeft = left;
 		left = this.$scroll_hor.scrollLeft;
+        // console.log('this.$scroll_hor.scrollLeft in scrollHorizontally()=' + this.$scroll_hor.scrollLeft);
 
 		var views = this._getLinkedViews();
 		for(var i = 0; i < views.length; i++){
@@ -28146,8 +28149,9 @@ module.exports = function(gantt) {
 			link_arrow_size: 7,
 			lightbox_additional_height: 86
 		},
-		_second_column_width: 90,
-		_third_column_width: 80,
+		_second_column_width: 100,
+		_third_column_width: 100,
+		_forth_column_width: 90,
 
 		_lightbox_template: "<div class='gantt_cal_ltitle'><span class='gantt_mark'>&nbsp;</span><span class='gantt_time'></span><span class='gantt_title'></span><div class='gantt_cancel_btn'></div></div><div class='gantt_cal_larea'></div>",
 		_config_buttons_left: {},
@@ -28178,7 +28182,8 @@ gantt.skins["contrast_black"] = {
 		lightbox_additional_height:75
 	},
 	_second_column_width:100,
-	_third_column_width:80
+	_third_column_width: 100,
+    _forth_column_width: 80,
 };
 
 };
@@ -28202,8 +28207,9 @@ gantt.skins["contrast_white"] = {
 		link_arrow_size:6,
 		lightbox_additional_height:75
 	},
-	_second_column_width:100,
-	_third_column_width:80
+	_second_column_width: 100,
+	_third_column_width: 100,
+    _forth_column_width: 80,
 };
 
 };
@@ -28220,7 +28226,7 @@ gantt.skins["contrast_white"] = {
 module.exports = function(gantt) {
 	gantt.skins.material = {
 		config: {
-			grid_width: 411,
+			grid_width: 400,
 			row_height: 34,
 			task_height_offset: 6,
 			scale_height: 36,
@@ -28228,8 +28234,9 @@ module.exports = function(gantt) {
 			link_arrow_size: 6,
 			lightbox_additional_height: 80
 		},
-		_second_column_width: 110,
-		_third_column_width: 75,
+		_second_column_width: 100,
+		_third_column_width: 100,
+		_forth_column_width: 75,
 		_redefine_lightbox_buttons: {
 			"buttons_left": ["dhx_delete_btn"],
 			"buttons_right": ["dhx_save_btn", "dhx_cancel_btn"]
@@ -28270,8 +28277,9 @@ gantt.skins.meadow = {
 		link_arrow_size:6,
 		lightbox_additional_height:72
 	},
-	_second_column_width:95,
-	_third_column_width:80
+	_second_column_width: 95,
+	_third_column_width: 95,
+    _forth_column_width: 80,
 };
 
 };
@@ -28295,8 +28303,9 @@ gantt.skins.skyblue = {
 		link_arrow_size:8,
 		lightbox_additional_height:75
 	},
-	_second_column_width:95,
-	_third_column_width:80
+	_second_column_width: 95,
+	_third_column_width: 95,
+    _forth_column_width: 80,
 };
 
 };
@@ -28320,8 +28329,9 @@ gantt.skins.terrace = {
 		link_arrow_size:6,
 		lightbox_additional_height:75
 	},
-	_second_column_width:90,
-	_third_column_width:70		
+	_second_column_width: 90,
+	_third_column_width: 90,
+    _forth_column_width: 70,
 };
 
 };
@@ -28392,6 +28402,7 @@ module.exports = function (gantt) {
 		/* grid columns */
 		column_wbs: "WBS",
 		column_text: "Task name",
+		column_responsible: "Responsible",
 		column_start_date: "Start time",
 		column_duration: "Duration",
 		column_add: "",

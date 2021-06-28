@@ -51,6 +51,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.map_text = params.text;
             this.map_date_start = params.date_start;
             this.map_duration = params.duration;
+            this.map_responsible = params.responsible;
             this.map_progress = params.progress;
             this.map_open = params.open;
             this.map_links_serialized_json = params.links_serialized_json;
@@ -73,6 +74,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.modelName = params.modelName || this.modelName;
             var self = this;
             var fieldNames = [this.map_text, this.map_date_start, this.map_duration];
+            this.map_responsible && fieldNames.push(this.map_responsible);
             this.map_open && fieldNames.push(this.map_open);
             this.map_links_serialized_json && fieldNames.push(this.map_links_serialized_json);
             this.map_total_float && fieldNames.push(this.map_total_float);
@@ -136,6 +138,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.start_date = datetime;
                 task.duration = record[self.map_duration];
                 task.progress = record[self.map_progress];
+                task.responsible = record[self.map_responsible];
                 task.open = record[self.map_open];
                 task.links_serialized_json = record[self.map_links_serialized_json];
                 task.total_float = record[self.map_total_float];
