@@ -13125,16 +13125,29 @@ module.exports = function (gantt) {
 		this.callEvent("onLightbox", [id]);
 	};
 
-	function _generate_task_tootip_content(task) {
-		var topPos = '-100px';
-        if (task.$index <= 2) topPos = '40px';
+    function _convert_position_to_number(pxPosition) {
+        if (!pxPosition) return 0;
+        if (!pxPosition.split('px')) return 0;
+
+        return parseInt(pxPosition.split('px')[0]);
+    }
+
+	function _generate_task_tootip_content(task, taskElement) {
+        const minHeight = 160;
+		var topPos = 0 - minHeight + 'px';
+        var taskElementTopPos = _convert_position_to_number(taskElement.style.top);
+        var scrollTopPos = gantt.$scroll_ver.scrollTop;
+        if (taskElementTopPos - scrollTopPos < minHeight) topPos = '40px';
         
         const undefinedValue = "N/A";
-        const productNameLen = 30;
+        const prodNameLen = 120;
         var styleStr = 'visibility:1;background-color:DimGrey;font-size:8pt;color:white;line-height:20px;z-index:1;position:absolute;' + 'top:' + topPos + ';';
-        var responsibleStr = (task.responsible) ? task.responsible: undefinedValue;
-        var productStr = (task.product && task.product[1]) ? task.product[1].substring(0, productNameLen): undefinedValue;
-        var sourceStr = (task.source) ? task.source: undefinedValue;
+        var responsibleStr = task.responsible ? task.responsible : undefinedValue;
+        var startDateStr = task.date_start ? task.date_start : undefinedValue;
+        var finishedDateStr = task.date_finished ? task.date_finished : undefinedValue;
+        var productPartNoStr = task.product_part_number ? task.product_part_number : undefinedValue;
+        var productNameStr = task.product_name ? task.product_name.substring(0, prodNameLen) : undefinedValue;
+        var sourceStr = task.source ? task.source : undefinedValue;
         var stateStr = undefinedValue;
         if (task.state) {
             // map field 'state' from value to title strings, defined in \addons\mrp\models\mrp_production.py
@@ -13170,7 +13183,10 @@ module.exports = function (gantt) {
                                 + ">" 
                                 + "<b>Task: </b>" + task.text
                                 + "<br><b>Responsible: </b>" + responsibleStr
-                                + "<br><b>Product: </b>" + productStr
+                                + "<br><b>Planned Date: </b>" + startDateStr
+                                + "<br><b>Planned End Date: </b>" + finishedDateStr
+                                + "<br><b>Product Part#: </b>" + productPartNoStr
+                                + "<br><b>Product Name: </b>" + productNameStr
                                 + "<br><b>Source: </b>" + sourceStr
                                 + "<br><b>State: </b>" + stateStr
                                 + "</div>";
@@ -13210,15 +13226,15 @@ module.exports = function (gantt) {
             var width_gantt_left = gantt.$container.getElementsByClassName('grid_cell')[0].clientWidth;
             var posTooltip = posX - width_gantt_left + gantt.$scroll_hor.scrollLeft;
             for(let i = 0; i< taskBoxes.length; i++){
-                var leftX = parseInt(taskBoxes[i].style.left.split('px')[0]);
-                var width = parseInt(taskBoxes[i].style.width.split('px')[0]);
+                var leftX = _convert_position_to_number(taskBoxes[i].style.left);
+                var width = _convert_position_to_number(taskBoxes[i].style.width);
                 if (leftX <= posTooltip  && leftX + width >= posTooltip) {
                     taskBox = taskBoxes[i];
                     break;
                 }
             }
             if (taskBox && taskBox.innerHTML == '') {
-                taskBox.innerHTML = _generate_task_tootip_content(task);
+                taskBox.innerHTML = _generate_task_tootip_content(task, taskElement);
             }
         }
 	};

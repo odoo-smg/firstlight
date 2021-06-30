@@ -32,6 +32,8 @@ class GanttMO(models.Model):
     dependency_mo_ids = fields.One2many('flsp.depending.mos', 'depending_task_id')
     links_serialized_json = fields.Char('Serialized Links JSON', compute="compute_links_json")
     responsible_name = fields.Char(related='user_id.partner_id.name')
+    product_part_number = fields.Char(related='product_id.default_code')
+    product_name = fields.Char(related='product_id.name')
 
     recursive_dependency_mo_ids = fields.Many2many(
         string='Recursive Dependencies',

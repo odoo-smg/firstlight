@@ -30,8 +30,10 @@ odoo.define('dhx_gantt.GanttView', function (require) {
             this.loadParams.id_field = this.arch.attrs.id_field;
             this.loadParams.date_start = this.arch.attrs.date_start;
             this.loadParams.duration = this.arch.attrs.duration;
+            this.loadParams.date_finished = this.arch.attrs.date_finished;
             this.loadParams.responsible = this.arch.attrs.responsible;
-            this.loadParams.product = this.arch.attrs.product;
+            this.loadParams.product_part_number = this.arch.attrs.product_part_number;
+            this.loadParams.product_name = this.arch.attrs.product_name;
             this.loadParams.source = this.arch.attrs.source;
             this.loadParams.state = this.arch.attrs.state;
             this.loadParams.open = this.arch.attrs.open;
@@ -47,8 +49,10 @@ odoo.define('dhx_gantt.GanttView', function (require) {
                 this.arch.attrs.id_field,
                 this.arch.attrs.date_start,
                 this.arch.attrs.duration,
+                this.arch.attrs.date_finished,
                 this.arch.attrs.responsible,
-                this.arch.attrs.product,
+                this.arch.attrs.product_part_number,
+                this.arch.attrs.product_name,
                 this.arch.attrs.source,
                 this.arch.attrs.state,
                 this.arch.attrs.open,
@@ -64,9 +68,11 @@ odoo.define('dhx_gantt.GanttView', function (require) {
             this.rendererParams.modelName = params.modelName;
             this.rendererParams.map_id_field = this.arch.attrs.id_field;
             this.rendererParams.map_date_start = this.arch.attrs.date_start;
+            this.rendererParams.map_date_finished = this.arch.attrs.date_finished;
             this.rendererParams.map_duration = this.arch.attrs.duration;
             this.rendererParams.map_responsible = this.arch.attrs.responsible;
-            this.rendererParams.map_product = this.arch.attrs.product;
+            this.rendererParams.map_product_part_number = this.arch.attrs.product_part_number;
+            this.rendererParams.map_product_name = this.arch.attrs.product_name;
             this.rendererParams.map_source = this.arch.attrs.source;
             this.rendererParams.map_state = this.arch.attrs.state;
             this.rendererParams.map_open = this.arch.attrs.open;

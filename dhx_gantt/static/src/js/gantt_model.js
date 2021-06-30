@@ -51,9 +51,11 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.map_id = params.id_field;
             this.map_text = params.text;
             this.map_date_start = params.date_start;
+            this.map_date_finished = params.date_finished;
             this.map_duration = params.duration;
             this.map_responsible = params.responsible;
-            this.map_product = params.product;
+            this.map_product_part_number = params.product_part_number;
+            this.map_product_name = params.product_name;
             this.map_source = params.source;
             this.map_state = params.state;
             this.map_progress = params.progress;
@@ -78,8 +80,10 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.modelName = params.modelName || this.modelName;
             var self = this;
             var fieldNames = [this.map_text, this.map_date_start, this.map_duration];
+            this.map_date_finished && fieldNames.push(this.map_date_finished);
             this.map_responsible && fieldNames.push(this.map_responsible);
-            this.map_product && fieldNames.push(this.map_product);
+            this.map_product_part_number && fieldNames.push(this.map_product_part_number);
+            this.map_product_name && fieldNames.push(this.map_product_name);
             this.map_source && fieldNames.push(this.map_source);
             this.map_state && fieldNames.push(this.map_state);
             this.map_open && fieldNames.push(this.map_open);
@@ -148,10 +152,12 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.id = record[self.map_id];
                 task.text = record[self.map_text];
                 task.start_date = datetime;
+                task.date_finished = record[self.map_date_finished];
                 task.duration = record[self.map_duration];
                 task.progress = record[self.map_progress];
                 task.responsible = record[self.map_responsible];
-                task.product = record[self.map_product];
+                task.product_part_number = record[self.map_product_part_number];
+                task.product_name = record[self.map_product_name];
                 task.source = record[self.map_source];
                 task.state = record[self.map_state];
                 task.open = record[self.map_open];
