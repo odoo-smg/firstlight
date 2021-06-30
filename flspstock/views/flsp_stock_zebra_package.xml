@@ -41,7 +41,7 @@
 ^FO2240,80
 ^A0R,80,95^FDFrom:^FS
 ^A0R,80,95^FO1890,80
-^FB1420,4,,
+^FB1560,4,,
 ^FD<t t-esc="company.name"/>^FS
 ^FO1940,80
 ^A0R,80,95^FD<t t-esc="company.street"/>^FS
@@ -66,14 +66,18 @@
 ^FO1550,80
 ^A0R,80,95^FDCUST (P)^FS
 ^FO1470,930^BY9
-^BCR,300,Y,N,N
+^BCR,300,N,N,N
+^A0R,80,95^FDP<t t-esc="product_code"/>^FS
+^FO1370,930
 ^A0R,80,95^FD<t t-esc="product_code"/>^FS
 
 ^FO1350,20^GB6,3580,10,^FS
 ^FO1200,80
 ^A0R,80,95^FDQUANTITY(Q)^FS
 ^FO1020,930^BY9
-^BCR,300,Y,N,N
+^BCR,300,N,N,N
+^A0R,80,95^FDQ<t t-esc="total_count"/>^FS
+^FO920,930
 ^A0R,80,95^FD<t t-esc="total_count"/>^FS
 
 ^FO900,20^GB6,3580,10,^FS
@@ -82,7 +86,9 @@
 ^FO650,80
 ^A0R,80,95^FDCUST ASSIGN (V)^FS
 ^FO570,930^BY9
-^BCR,300,Y,N,N
+^BCR,300,N,N,N
+^A0R,80,95^FDV<t t-esc="package.stock_picking_id.partner_id.flsp_supplier_id"/>^FS
+^FO480,930
 ^A0R,80,95^FD<t t-esc="package.stock_picking_id.partner_id.flsp_supplier_id"/>^FS
 
 
