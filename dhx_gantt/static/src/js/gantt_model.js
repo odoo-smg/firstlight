@@ -51,7 +51,6 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.map_id = params.id_field;
             this.map_text = params.text;
             this.map_date_start = params.date_start;
-            this.map_date_finished = params.date_finished;
             this.map_duration = params.duration;
             this.map_responsible = params.responsible;
             this.map_product_part_number = params.product_part_number;
@@ -80,7 +79,6 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.modelName = params.modelName || this.modelName;
             var self = this;
             var fieldNames = [this.map_text, this.map_date_start, this.map_duration];
-            this.map_date_finished && fieldNames.push(this.map_date_finished);
             this.map_responsible && fieldNames.push(this.map_responsible);
             this.map_product_part_number && fieldNames.push(this.map_product_part_number);
             this.map_product_name && fieldNames.push(this.map_product_name);
@@ -152,7 +150,6 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.id = record[self.map_id];
                 task.text = record[self.map_text];
                 task.start_date = datetime;
-                task.date_finished = record[self.map_date_finished];
                 task.duration = record[self.map_duration];
                 task.progress = record[self.map_progress];
                 task.responsible = record[self.map_responsible];

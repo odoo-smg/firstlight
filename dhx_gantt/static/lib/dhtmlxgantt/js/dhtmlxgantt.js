@@ -13132,6 +13132,19 @@ module.exports = function (gantt) {
         return parseInt(pxPosition.split('px')[0]);
     }
 
+    function _get_local_date_string(task_date) {
+        /*
+            date_planned_start: Thu Jun 03 2021 00:00:00 GMT-0500 (Central Daylight Time)
+            date_planned_start: 2021-06-08 05:00:00
+            moment(task.start_date).toString(): "Thu Jun 03 2021 00:00:00 GMT-0500"
+            task.start_date.toLocaleString(): "6/3/2021, 12:00:00 AM"
+            task.start_date.toUTCString(): Thu, 03 Jun 2021 05:00:00 GMT
+            task.start_date.toString(): "Thu Jun 03 2021 00:00:00 GMT-0500 (Central Daylight Time)"
+        */
+
+        return task_date.toLocaleString();
+    }
+
 	function _generate_task_tootip_content(task, taskElement) {
         const minHeight = 160;
 		var topPos = 0 - minHeight + 'px';
@@ -13143,8 +13156,8 @@ module.exports = function (gantt) {
         const prodNameLen = 120;
         var styleStr = 'visibility:1;background-color:DimGrey;font-size:8pt;color:white;line-height:20px;z-index:1;position:absolute;' + 'top:' + topPos + ';';
         var responsibleStr = task.responsible ? task.responsible : undefinedValue;
-        var startDateStr = task.date_start ? task.date_start : undefinedValue;
-        var finishedDateStr = task.date_finished ? task.date_finished : undefinedValue;
+        var startDateStr = task.start_date ? _get_local_date_string(task.start_date) : undefinedValue;
+        var finishedDateStr = task.end_date ? _get_local_date_string(task.end_date) : undefinedValue;
         var productPartNoStr = task.product_part_number ? task.product_part_number : undefinedValue;
         var productNameStr = task.product_name ? task.product_name.substring(0, prodNameLen) : undefinedValue;
         var sourceStr = task.source ? task.source : undefinedValue;

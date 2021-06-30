@@ -12,7 +12,6 @@
                     text="name"
                     date_start="date_planned_start"
                     duration="planned_duration"
-                    date_finished="date_planned_finished"
                     responsible="responsible_name"
                     product_part_number="product_part_number"
                     product_name="product_name"
