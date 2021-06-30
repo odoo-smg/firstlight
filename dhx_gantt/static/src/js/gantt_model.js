@@ -3,7 +3,7 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
 
     var AbstractModel = require('web.AbstractModel');
     var time = require('web.time');
-    const colors = ['red', 'dodgerblue', 'purple', 'teal', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan', 'gray'];
+    const colors = ['red', 'dodgerblue', 'purple', 'teal', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan'];
     // var BasicModel = require('web.BasicModel');
     var GanttModel = AbstractModel.extend({
         get: function(){
@@ -53,6 +53,9 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.map_date_start = params.date_start;
             this.map_duration = params.duration;
             this.map_responsible = params.responsible;
+            this.map_product = params.product;
+            this.map_source = params.source;
+            this.map_state = params.state;
             this.map_progress = params.progress;
             this.map_open = params.open;
             this.map_links_serialized_json = params.links_serialized_json;
@@ -76,6 +79,9 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             var self = this;
             var fieldNames = [this.map_text, this.map_date_start, this.map_duration];
             this.map_responsible && fieldNames.push(this.map_responsible);
+            this.map_product && fieldNames.push(this.map_product);
+            this.map_source && fieldNames.push(this.map_source);
+            this.map_state && fieldNames.push(this.map_state);
             this.map_open && fieldNames.push(this.map_open);
             this.map_links_serialized_json && fieldNames.push(this.map_links_serialized_json);
             this.map_total_float && fieldNames.push(this.map_total_float);
@@ -145,6 +151,9 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.duration = record[self.map_duration];
                 task.progress = record[self.map_progress];
                 task.responsible = record[self.map_responsible];
+                task.product = record[self.map_product];
+                task.source = record[self.map_source];
+                task.state = record[self.map_state];
                 task.open = record[self.map_open];
                 task.links_serialized_json = record[self.map_links_serialized_json];
                 task.total_float = record[self.map_total_float];

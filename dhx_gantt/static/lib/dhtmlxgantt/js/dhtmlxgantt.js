@@ -13125,6 +13125,131 @@ module.exports = function (gantt) {
 		this.callEvent("onLightbox", [id]);
 	};
 
+	function _generate_task_tootip_content(task) {
+		var topPos = '-100px';
+        if (task.$index <= 2) topPos = '40px';
+        
+        const undefinedValue = "N/A";
+        const productNameLen = 30;
+        var styleStr = 'visibility:1;background-color:DimGrey;font-size:8pt;color:white;line-height:20px;z-index:1;position:absolute;' + 'top:' + topPos + ';';
+        var responsibleStr = (task.responsible) ? task.responsible: undefinedValue;
+        var productStr = (task.product && task.product[1]) ? task.product[1].substring(0, productNameLen): undefinedValue;
+        var sourceStr = (task.source) ? task.source: undefinedValue;
+        var stateStr = undefinedValue;
+        if (task.state) {
+            // map field 'state' from value to title strings, defined in \addons\mrp\models\mrp_production.py
+            switch (task.state) {
+                case 'draft':
+                    stateStr = 'Draft';
+                    break;
+                case 'confirmed':
+                    stateStr = 'Confirmed';
+                    break;
+                case 'planned':
+                    stateStr = 'Planned';
+                    break;
+                case 'progress':
+                    stateStr = 'In Progress';
+                    break;
+                case 'to_close':
+                    stateStr = 'To Close';
+                    break;
+                case 'done':
+                    stateStr = 'Done';
+                    break;
+                case 'cancel':
+                    stateStr = 'Cancelled';
+                    break;
+                default:
+                    stateStr = undefinedValue;
+            }
+        }
+
+        var task_tooltip = "<div class='gantt_task_tooltip'"
+                                + " style=" + styleStr
+                                + ">" 
+                                + "<b>Task: </b>" + task.text
+                                + "<br><b>Responsible: </b>" + responsibleStr
+                                + "<br><b>Product: </b>" + productStr
+                                + "<br><b>Source: </b>" + sourceStr
+                                + "<br><b>State: </b>" + stateStr
+                                + "</div>";
+        return task_tooltip;
+	}
+
+	gantt.showTaskTooltip = function (id, posX) {
+        // console.log('showTaskTooltip')
+		if (!id || gantt.isReadonly(this.getTask(id))) return;
+
+		var task = this.getTask(id);
+         
+        var tasks = document.getElementsByClassName('gantt_task_row');
+        var taskElement;
+        for(let i = 0; i< tasks.length; i++){
+            if (tasks[i].getAttribute('task_id') == task.id) {
+                taskElement = tasks[i];
+                break;
+            }
+        }
+        if (taskElement) {
+            var taskBoxes = taskElement.getElementsByClassName('gantt_task_cell')
+            var tooltipFound = false;
+            for(let i = 0; i< taskBoxes.length; i++){
+                if (taskBoxes[i].firstChild && taskBoxes[i].firstChild.className == 'gantt_task_tooltip') {
+                    // gantt_task_tooltip has been set
+                    tooltipFound = true;
+                    break;
+                }
+            }
+            
+            if (tooltipFound) {
+                return;
+            }
+            
+            var taskBox;
+            var width_gantt_left = gantt.$container.getElementsByClassName('grid_cell')[0].clientWidth;
+            var posTooltip = posX - width_gantt_left + gantt.$scroll_hor.scrollLeft;
+            for(let i = 0; i< taskBoxes.length; i++){
+                var leftX = parseInt(taskBoxes[i].style.left.split('px')[0]);
+                var width = parseInt(taskBoxes[i].style.width.split('px')[0]);
+                if (leftX <= posTooltip  && leftX + width >= posTooltip) {
+                    taskBox = taskBoxes[i];
+                    break;
+                }
+            }
+            if (taskBox && taskBox.innerHTML == '') {
+                taskBox.innerHTML = _generate_task_tootip_content(task);
+            }
+        }
+	};
+
+	gantt.disableTaskTooltip = function (id) {
+        // console.log('disableTaskTooltip')
+		if (!id || gantt.isReadonly(this.getTask(id))) return;
+
+		var task = this.getTask(id);
+         
+        var tasks = document.getElementsByClassName('gantt_task_row');
+        var taskElement;
+        for(let i = 0; i< tasks.length; i++){
+            if (tasks[i].getAttribute('task_id') == task.id) {
+                taskElement = tasks[i];
+                break;
+            }
+        }
+
+        if (taskElement) {
+            var taskBoxes = taskElement.getElementsByClassName('gantt_task_cell')
+            for(let i = 0; i< taskBoxes.length; i++){
+                if (taskBoxes[i].firstChild && taskBoxes[i].firstChild.className == 'gantt_task_tooltip') {
+                    // gantt_task_tooltip has been set
+                    taskBoxes[i].innerHTML = '';
+                    break;
+                }
+            }
+        }
+	};
+
 	function _is_chart_visible(gantt) {
 		var timeline = gantt.$ui.getView("timeline");
 		if (timeline && timeline.isVisible()) {
@@ -17877,6 +18002,14 @@ module.exports = {
 			}
 			return true;
 		});
+
+		gantt.attachEvent("onTaskMouseOver", function (id, e) {
+			return true;
+		});
+
+		gantt.attachEvent("onTaskMouseOut", function (id, e) {
+			return true;
+		});
 	},
 
 	onShow: function (controller, placeholder, grid) {
@@ -18015,6 +18148,12 @@ module.exports = {
 		});
 		gantt.attachEvent("onEmptyClick", function () {
 			self.save();
+			return true;
+		});
+		gantt.attachEvent("onTaskMouseOver", function(id,e){
+			return true;
+		});
+		gantt.attachEvent("onTaskMouseOut", function(id,e){
 			return true;
 		});
 
@@ -21967,6 +22106,8 @@ var createMouseHandler = (function(domHelpers) {
 		var eventHandlers = {
 			"click": {},
 			"doubleclick": {},
+			"mouseover": {},
+			"mouseout": {},
 			"contextMenu": {}
 		};
 
@@ -22099,6 +22240,44 @@ var createMouseHandler = (function(domHelpers) {
 			}
 		}
 
+		function onMouseOver(e) {
+            // console.log('onMouseOver...');
+			e = e || window.event;
+			var id = gantt.locate(e);
+            if (!id) {
+                // when mouseover fired not on task, id === null
+                return;
+            }
+
+			var handlers = findEventHandlers(e, eventHandlers.mouseover);
+			var res = !gantt.checkEvent("onTaskMouseOver") || gantt.callEvent("onTaskMouseOver", [id, e]);
+			if (res) {
+				var default_action = callEventHandlers(handlers, e, id);
+				if (!default_action)
+					return;
+
+				if (gantt.getTask(id)) {
+					gantt.showTaskTooltip(id, e.pageX);
+				}
+			}
+		}
+
+		function onMouseOut(e) {
+            // console.log('onMouseOut...');
+			e = e || window.event;
+			var id = gantt.locate(e);
+            if (!id) {
+                // when mouseout fired not on task, id === null
+                return;
+            }
+            
+            if (gantt.checkEvent("onTaskMouseOut")) {
+				if (id !== null && gantt.getTask(id)) {
+                    gantt.disableTaskTooltip(id);
+                }
+			}
+		}
+
 		function detach(eventName, className, handler, root) {
 			if (eventHandlers[eventName] && eventHandlers[eventName][className]) {
 				var handlers = eventHandlers[eventName];
@@ -22127,6 +22306,8 @@ var createMouseHandler = (function(domHelpers) {
 				domEvents.attach(node, "dblclick", onDoubleClick);
 				domEvents.attach(node, "mousemove", onMouseMove);
 				domEvents.attach(node, "contextmenu", onContextMenu);
+				domEvents.attach(node, "mouseover", onMouseOver);
+				domEvents.attach(node, "mouseout", onMouseOut);
 			}
 		}
 
@@ -22143,6 +22324,8 @@ var createMouseHandler = (function(domHelpers) {
 			onDoubleClick: onDoubleClick,
 			onMouseMove: onMouseMove,
 			onContextMenu: onContextMenu,
+			onMouseOver: onMouseOver,
+			onMouseOut: onMouseOut,
 			onClick: onClick,
 			destructor: function(){
 				reset();
@@ -23138,6 +23321,7 @@ function createTaskRenderer(gantt){
 			"line-height:" + (Math.max(height < 30 ? height - 2 : height, 0)) + 'px',
 			"width:" + width + 'px'
 		];
+        
 		if (task.color) {
 			styles.push("background-color:" + task.color);
 		}
@@ -25531,10 +25715,9 @@ function createTaskDND(timeline, gantt){
 			gantt.assert(trigger, "Unknown after drop mode:{" + mode + "}");
 			gantt.assert(params, "Invalid event arguments");
 
-
 			if (!gantt.checkEvent(trigger))
 				return true;
-
+            
 			return gantt.callEvent(trigger, params);
 		},
 
