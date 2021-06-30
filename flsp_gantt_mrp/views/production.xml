@@ -13,6 +13,10 @@
                     date_start="date_planned_start"
                     duration="planned_duration"
                     responsible="responsible_name"
+                    product_part_number="product_part_number"
+                    product_name="product_name"
+                    source="origin"
+                    state="state"
                     links_serialized_json="links_serialized_json"
                     link_model="flsp.depending.mos"
                 />

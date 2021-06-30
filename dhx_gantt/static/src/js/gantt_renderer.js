@@ -39,6 +39,10 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.map_date_start = params.map_date_start;
             this.map_duration = params.map_duration;
             this.map_responsible = params.map_responsible;
+            this.map_product_part_number = params.map_product_part_number;
+            this.map_product_name = params.map_product_name;
+            this.map_source = params.map_source;
+            this.map_state = params.map_state;
             this.map_open = params.map_open;
             this.map_progress = params.map_progress;
             this.map_links_serialized_json = params.map_links_serialized_json;
