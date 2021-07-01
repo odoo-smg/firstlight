@@ -125,7 +125,6 @@ class FlspMrpWipWiz(models.TransientModel):
                 'picking_type_id': picking_type_id.id,
                 'location_id': picking_type_id.default_location_src_id.id,
                 'location_dest_id': picking_type_id.default_location_dest_id.id,
-                'scheduled_date': date_start,
                 'flsp_mo_wip_id': self.mo_id.id,
             }
             _logger.info("Transfer READY ----------------------------->:")
