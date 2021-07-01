@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_mrp_wip_production_form_view">
+            <field name="name">flsp.mrp.wip.production.form.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">110</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//button[@name='action_cancel']" position="after">
+                  <button name="button_flsp_mrp_wip" id="action_mrp_wip" string="WIP Transfer" type="object" attrs="{'invisible': ['|', ('bom_id', '=', 'False'), ('state','in', ('draft', 'to_close', 'done', 'cancel'))]}"/>
+              </xpath>
+            </field>
+        </record>
+</odoo>
