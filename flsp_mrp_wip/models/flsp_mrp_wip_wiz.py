@@ -248,12 +248,12 @@ class FlspMrpWipWizProduct(models.TransientModel):
     _description = "Product in the BoM structure for wip transfer"
 
     selected = fields.Boolean('Selected')
-    production_id = fields.Many2one('flspmrp.bom.structure', required=True, check_company=True)
-    product_id = fields.Many2one('product.product', string='Product', store=True, check_company=True)
+    production_id = fields.Many2one('flspmrp.bom.structure')
+    product_id = fields.Many2one('product.product', string='Product')
     part_number = fields.Char(related='product_id.default_code')
     product_name = fields.Char(related='product_id.name')
-    stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
-    wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
-    mo_required_qty = fields.Float('Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True, required=True)
+    stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    mo_required_qty = fields.Float('Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
     adjusted_qty = fields.Float('Adjusted Qty', default=0.0, digits='Product Unit of Measure', required=True)
     bom_level = fields.Integer(string="BOM Level")
