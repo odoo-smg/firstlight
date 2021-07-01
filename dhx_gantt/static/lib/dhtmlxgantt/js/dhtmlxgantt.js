@@ -13145,11 +13145,57 @@ module.exports = function (gantt) {
         return task_date.toLocaleString();
     }
 
+    gantt.getAccurateScrollLeft = function () {
+        // gantt.$scroll_hor.scrollLeft is not accurate sometimes and it is not rewritable by code directly
+        // cell.$content.$scroll_hor.scrollLeft is the only one that is always right 
+        var scrollLeftPos = 0;
+        if (!gantt.$layout || !gantt.$layout.$cells) {
+            return scrollLeftPos;
+        }
+
+        var cells = gantt.$layout.$cells;
+        for (let i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            if (cell.$name == "viewCell" && cell.$config.view == "scrollbar" && cell.$config.id == "scrollHor") {
+                scrollLeftPos = cell.$content.$scroll_hor.scrollLeft;
+                break; 
+            }
+        }
+
+        return scrollLeftPos;
+    }
+
+    gantt.getAccurateScrollTop = function () {
+        // gantt.$scroll_ver.scrollTop is not accurate sometimes and it is not rewritable by code directly
+        // verCell.$content.$scroll_ver.scrollTop is the only one that is always right 
+        var scrollTopPos = 0;
+        if (!gantt.$layout || !gantt.$layout.$cells) {
+            return scrollLeftPos;
+        }
+
+        var cells = gantt.$layout.$cells;
+        for (let i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            if (cell.$name == "layout") {
+                var verCells = cell.$cells;
+                for (let v = 0; v < verCells.length; v++) {
+                    var verCell = verCells[v];
+                    if (verCell.$name == "viewCell" && verCell.$config.view == "scrollbar" && verCell.$config.id == "scrollVer") {
+                        scrollTopPos = verCell.$content.$scroll_ver.scrollTop;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return scrollTopPos;
+    }
+
 	function _generate_task_tootip_content(task, taskElement) {
         const minHeight = 160;
 		var topPos = 0 - minHeight + 'px';
         var taskElementTopPos = _convert_position_to_number(taskElement.style.top);
-        var scrollTopPos = gantt.$scroll_ver.scrollTop;
+        var scrollTopPos = gantt.getAccurateScrollTop();
         if (taskElementTopPos - scrollTopPos < minHeight) topPos = '40px';
         
         const undefinedValue = "N/A";
@@ -13237,7 +13283,8 @@ module.exports = function (gantt) {
             
             var taskBox;
             var width_gantt_left = gantt.$container.getElementsByClassName('grid_cell')[0].clientWidth;
-            var posTooltip = posX - width_gantt_left + gantt.$scroll_hor.scrollLeft;
+            var scrollLeftPos = gantt.getAccurateScrollLeft();
+            var posTooltip = posX - width_gantt_left + scrollLeftPos;
             for(let i = 0; i< taskBoxes.length; i++){
                 var leftX = _convert_position_to_number(taskBoxes[i].style.left);
                 var width = _convert_position_to_number(taskBoxes[i].style.width);

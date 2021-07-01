@@ -202,27 +202,8 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
         },
         saveScrollPositions: function () {
             // console.log('saveScrollPositions...');
-            if (!gantt.$layout) {
-                return;
-            }
-                    
-            var cells = gantt.$layout.$cells;
-            for (let i = 0; i < cells.length; i++) {
-                var cell = cells[i];
-                if (cell.$name == "viewCell" && cell.$config.view == "scrollbar" && cell.$config.id == "scrollHor") {
-                    localStorage.setItem('gantt_scroll_left', cell.$content.$scroll_hor.scrollLeft);
-                }
-
-                if (cell.$name == "layout") {
-                    var verCells = cell.$cells;
-                    for (let v = 0; v < verCells.length; v++) {
-                        var verCell = verCells[v];
-                        if (verCell.$name == "viewCell" && verCell.$config.view == "scrollbar" && verCell.$config.id == "scrollVer") {
-                            localStorage.setItem('gantt_scroll_top',  verCell.$content.$scroll_ver.scrollTop);
-                        }
-                    }
-                }
-            }
+            localStorage.setItem('gantt_scroll_left', gantt.getAccurateScrollLeft());
+            localStorage.setItem('gantt_scroll_top', gantt.getAccurateScrollTop());
         },
         restoreScrollPositions: function () {
             // console.log('restoreScrollPositions:: Renderer');
@@ -231,7 +212,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
 
             if (scrollLeft && scrollTop) gantt.scrollTo(scrollLeft, scrollTop);
             else if (scrollLeft) gantt.scrollTo(scrollLeft, 0);
-            else if (scrollTop) gantt.scrollTo(0, scrollTop);
+            else if (scrollTop)  gantt.scrollTo(0, scrollTop);
             // else gantt.scrollTo(0, 0);
         },
         _onUpdate: function () {
