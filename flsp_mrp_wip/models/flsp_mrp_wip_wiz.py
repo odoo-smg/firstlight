@@ -121,15 +121,22 @@ class FlspMrpWipWiz(models.TransientModel):
         if count_products > 0:
             _logger.info("Creating the transfer")
             create_val = {
-                'origin': ' WIP-FOR '+self.mo_id.name,
+                'origin': self.mo_id.name+'WIP-TRANSFER',
                 'picking_type_id': picking_type_id.id,
                 'location_id': picking_type_id.default_location_src_id.id,
                 'location_dest_id': picking_type_id.default_location_dest_id.id,
                 'scheduled_date': date_start,
                 'flsp_mo_wip_id': self.mo_id.id,
             }
+            _logger.info("Transfer READY ----------------------------->:")
+            _logger.info("origin: "+self.mo_id.name+'WIP-TRANSFER')
+            _logger.info("picking_type_id: "+str(picking_type_id.id))
+            _logger.info("location_id: "+str(picking_type_id.default_location_src_id.id))
+            _logger.info("location_dest_id: "+str(picking_type_id.default_location_dest_id.id))
+            _logger.info("scheduled_date: "+str(date_start))
+            _logger.info("flsp_mo_wip_id: "+str(self.mo_id.id))
             stock_picking = self.env['stock.picking'].create(create_val)
-            _logger.info("Transfer created:"+stock_picking.name)
+            _logger.info("Transfer created: "+stock_picking.name)
 
             if stock_picking:
 
