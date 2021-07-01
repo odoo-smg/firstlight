@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_mrp_batch_production_form_view">
+            <field name="name">flsp.mrp.batch.production.form.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">110</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='bom_id']" position="before">
+                  <field name="flsp_is_serial" invisible="1" />
+                  <field name="flsp_batch_serial_id" string="Serial Batch" attrs="{'invisible': [('flsp_is_serial', '=', False)]}"/>
+              </xpath>
+            </field>
+        </record>
+</odoo>
