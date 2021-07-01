@@ -104,33 +104,6 @@ class FlspMrpWipWiz(models.TransientModel):
 
         return False
 
-    def button_create_mo(self):
-        self.ensure_one()
-
-        for prod in self.bom_products:
-            prod.write({'production_id': self.id})
-
-        targetProd = self.env['flspmrp.mo.product'].search(
-            ['&', ('production_id', '=', self.id), ('selected', '=', True)])
-
-        new_mos = []
-        for prod in targetProd:
-            new_mo = self.create_mo(prod)
-            new_mos.append(new_mo.id)
-
-        return {
-            'name': 'MO Creation',
-            'view_mode': 'form',
-            'view_id': self.env.ref('flsp-mrp.flsp_mrp_message_form_view').id,
-            'res_model': 'flspmrp.bom.structure',
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'context': {
-                'default_mo_id': self.mo_id.id,
-                'default_new_mo_items': new_mos,
-            }
-        }
-
     def button_create_wip(self):
         date_now = datetime.now()
         date_start = date_now.today() + timedelta(days=1)
@@ -248,7 +221,7 @@ class FlspMrpWipWizProduct(models.TransientModel):
     _description = "Product in the BoM structure for wip transfer"
 
     selected = fields.Boolean('Selected')
-    production_id = fields.Many2one('flspmrp.bom.structure')
+    production_id = fields.Many2one('flsp.mrp.wip.wiz')
     product_id = fields.Many2one('product.product', string='Product')
     part_number = fields.Char(related='product_id.default_code')
     product_name = fields.Char(related='product_id.name')
