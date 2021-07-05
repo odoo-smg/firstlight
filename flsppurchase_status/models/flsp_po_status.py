@@ -58,7 +58,7 @@ class Flsp_PO_Status(models.Model):
         elif self.flsp_po_status == 'cancelled':
             self.write({'flsp_po_status': 'cancelled', })
         else:
-            self.write({'flsp_po_status': 'confirmed', }) 
+            self.write({'flsp_po_status': 'confirmed', })
 
 # STATUS BASED OFF ORIGINAL PURCHASE BUTTONS
     # Getting the purchase button method to add status
@@ -144,6 +144,14 @@ class Flsp_PO_Status(models.Model):
             largest_date = max(date_list)
             self.flsp_scheduled_date = largest_date
 
+        for order in self:
+            moves = self.env["stock.move"].search([("purchase_line_id", "in", order.order_line.ids),
+                                                   ("state", "not in", ("cancel", "done"))])
+            for move in moves:
+                print(move.date_expected)
+                print(move.purchase_line_id.date_planned)
+                move.date_expected = move.purchase_line_id.date_planned
+
 # CHANGING THE STOCK MOVE DATE BASED OFF THE SCHEDULED DATE.
     @api.depends('flsp_scheduled_date')
     def write(self, values):
@@ -160,24 +168,29 @@ class Flsp_PO_Status(models.Model):
                     ("state", "not in", ("cancel", "done")),
                 ]
             )
-            pickings = moves.mapped("picking_id")
-            pickings_by_date = {}
-            for pick in pickings:
-                pickings_by_date[pick.scheduled_date.date()] = pick
-            order_lines = moves.mapped("purchase_line_id")
-            date_groups = groupby(order_lines) #, lambda l: l._get_group_keys(l.order_id, l))
-            for key, lines in date_groups:
-                # date_key = fields.Date.from_string(key[0]["date_planned"])
-                date_key = self.flsp_scheduled_date
-                for line in lines:
-                    for move in line.move_ids:
-                        if move.state in ("cancel", "done"):
-                            continue
-                        if move.picking_id.scheduled_date.date() != date_key:
-                            move.date_expected = date_key
-            for picking in pickings_by_date.values():
-                if len(picking.move_lines) == 0:
-                    picking.write({"state": "cancel"})
+            for move in moves:
+                print(move.date_expected)
+                print(move.purchase_line_id.date_planned)
+                move.date_expected = move.purchase_line_id.date_planned
+
+#            pickings = moves.mapped("picking_id")
+#            pickings_by_date = {}
+#            for pick in pickings:
+#                pickings_by_date[pick.scheduled_date.date()] = pick
+#            order_lines = moves.mapped("purchase_line_id")
+#            date_groups = groupby(order_lines) #, lambda l: l._get_group_keys(l.order_id, l))
+#            for key, lines in date_groups:
+#                # date_key = fields.Date.from_string(key[0]["date_planned"])
+#                date_key = self.flsp_scheduled_date
+#                for line in lines:
+#                    for move in line.move_ids:
+#                        if move.state in ("cancel", "done"):
+#                            continue
+#                        if move.picking_id.scheduled_date.date() != date_key:
+#                            move.date_expected = date_key
+#            for picking in pickings_by_date.values():
+#                if len(picking.move_lines) == 0:
+#                    picking.write({"state": "cancel"})
 
 # Late Status
 #     @api.onchange('flsp_scheduled_date')
