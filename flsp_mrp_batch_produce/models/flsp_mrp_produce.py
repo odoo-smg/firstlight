@@ -47,9 +47,29 @@ class flspmrpbatchproduction(models.TransientModel):
             self.flsp_batch_serial_id = False
             self.flsp_serial_num_line = False
 
-    #def _fields_view_get_address(self, arch):
-    #def fields_view_get(self, cr, user, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
-    #def fields_view_get(self, arch):
+    def _update_workorder_lines(self):
+
+        """
+        Overrides the function to call it again
+        used to sort the items by tracking.
+        """
+        res = super(flspmrpbatchproduction, self)._update_workorder_lines()
+        tmp = []
+        for line in res['to_create']:
+            #print('move_id: '+str(line['move_id'])+' prod_id:'+str(line['product_id'])+' qty: '+str(line['qty_to_consume']))
+            product_id = self.env['product.product'].search([('id', '=', line['product_id'])])
+            if product_id.tracking == 'serial':
+                line['product_tracking'] = '1'
+            elif product_id.tracking == 'lot':
+                line['product_tracking'] = '2'
+            else:
+                line['product_tracking'] = '3'
+            tmp.append(line)
+        tmp.sort(key=lambda x: x['product_tracking'])
+
+        res['to_create'] = tmp
+        return res
+
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
 
