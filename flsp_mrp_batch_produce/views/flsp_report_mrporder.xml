@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <template id="report_mrporder_flsp" inherit_id="mrp.report_mrporder">
+        <xpath expr="//table[@t-if='o.move_raw_ids']" position="after">
+                <div t-if="o.flsp_batch_serial_id">
+                    <strong><h3>Serial Numbers Assigned:</h3></strong><br/>
+                    <table class="table table-sm" style="width: 100%" t-if="o.flsp_batch_serial_id">
+                        <thead>
+                            <th>Serial</th>
+                            <th>Sign Front</th>
+                            <th>Sign Rear</th>
+                            <th>PCB</th>
+                        </thead>
+                        <tbody>
+                            <t t-if="o.flsp_batch_serial_id.serial_num_line">
+                                <tr t-foreach="o.flsp_batch_serial_id.serial_num_line" t-as="flsp_lot">
+                                    <td><span t-field="flsp_lot.lot_id.name" /></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+        </xpath>
+    </template>
+</odoo>
