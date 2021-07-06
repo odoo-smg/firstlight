@@ -116,6 +116,13 @@ class FlspMrpWipWiz(models.TransientModel):
 
         count_products = 0
         for prod in targetProd:
+            _logger.info("---------------------------------Checkin Product ----------------------------->:")
+            _logger.info("Product name: "+prod.product_id.name)
+            _logger.info("product_id: "+str(prod.product_id.id))
+            _logger.info("product_uom: "+str(prod.product_id.uom_id.id))
+            _logger.info("product_uom_qty: "+str(prod.adjusted_qty))
+            _logger.info("location_id: "+str(picking_type_id.default_location_src_id.id))
+            _logger.info("location_dest_id: "+str(picking_type_id.default_location_dest_id.id))
             count_products += 1
 
         if count_products > 0:
@@ -140,6 +147,13 @@ class FlspMrpWipWiz(models.TransientModel):
             if stock_picking:
 
                 for prod in targetProd:
+                    _logger.info("---------------------------------Creating Stock Move ----------------------------->:")
+                    _logger.info("Product name: "+prod.product_id.name)
+                    _logger.info("product_id: "+str(prod.product_id.id))
+                    _logger.info("product_uom: "+str(prod.product_id.uom_id.id))
+                    _logger.info("product_uom_qty: "+str(prod.adjusted_qty))
+                    _logger.info("location_id: "+str(picking_type_id.default_location_src_id.id))
+                    _logger.info("location_dest_id: "+str(picking_type_id.default_location_dest_id.id))
                     stock_move = self.env['stock.move'].create({
                         'name': prod.product_id.name,
                         'product_id': prod.product_id.id,
