@@ -23,7 +23,7 @@
                             <tree editable="bottom" create="false" delete="false">
                                 <field name="selected"/>
                                 <field name="part_number" readonly="1" optional="show"/>
-                                <field name="product_id" readonly="1" optional="hide"/>
+                                <field name="product_id" readonly="0" optional="hide"/>
                                 <field name="product_name" readonly="1" optional="show"/>
                                 <field name="flsp_sd_location" readonly="1" optional="hide"/>
                                 <field name="stock_qty" readonly="1" optional="show"/>
