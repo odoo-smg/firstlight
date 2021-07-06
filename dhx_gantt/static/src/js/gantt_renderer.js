@@ -37,6 +37,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.map_text = params.map_text;
             this.map_id_field = params.map_id_field;
             this.map_date_start = params.map_date_start;
+            this.map_date_finished = params.map_date_finished;
             this.map_duration = params.map_duration;
             this.map_responsible = params.map_responsible;
             this.map_product_part_number = params.map_product_part_number;
@@ -89,6 +90,15 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             // };
             var zoomConfig = {
                 levels: [
+                    {
+                        name:"hour",
+                        scale_height: 50,
+                        min_column_width:45,
+                        scales:[
+                            {unit: "day", step: 1, format: "%d %M"},
+                            {unit: "hour", step: 1, format: "%H:00"}
+                        ]
+                    },
                     {
                         name:"day",
                         scale_height: 27,
@@ -234,6 +244,15 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.restoreScrollPositions();
 
             return res;
+        },
+        rerender: function () {
+            // save current scroll positions
+            this.saveScrollPositions();
+
+            this.renderGantt();
+
+            // reset scroll positions with ones previously stored
+            this.restoreScrollPositions();
         },
         disableAllButtons: function(){
             // console.log('disableAllButtons:: Renderer');
