@@ -12,7 +12,7 @@
     'website': "http://www.smartrendmfg.com",
     "category": "Manufacture",
     'version': '0.1',
-    'depends': ['base', 'mrp', 'stock'],
+    'depends': ['base', 'mrp', 'stock', 'flsp_pdct_standard_location'],
 
     # always loaded
     'data': [

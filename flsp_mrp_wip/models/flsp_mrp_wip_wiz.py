@@ -239,3 +239,4 @@ class FlspMrpWipWizProduct(models.TransientModel):
     mo_required_qty = fields.Float('Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
     adjusted_qty = fields.Float('Adjusted Qty', default=0.0, digits='Product Unit of Measure', required=True)
     bom_level = fields.Integer(string="BOM Level")
+    flsp_sd_location = fields.Many2one('stock.location', string='Standard Location', related='product_id.flsp_sd_location')
