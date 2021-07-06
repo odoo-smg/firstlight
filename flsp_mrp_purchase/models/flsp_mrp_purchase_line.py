@@ -602,9 +602,9 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += '</pre>'
 
                 if consider_wip:
-                    current_balance = (planning.stock_qty+planning.wip_qty) - (planning.late_delivery + value_to_consider)
+                    current_balance = (planning.stock_qty+planning.wip_qty+planning.po_qty) - (planning.late_delivery + value_to_consider)
                 else:
-                    current_balance = planning.stock_qty - (planning.late_delivery + value_to_consider)
+                    current_balance = (planning.stock_qty+planning.po_qty) - (planning.late_delivery + value_to_consider)
 
                 # Checking Minimal Quantity
                 if current_balance < 0:
