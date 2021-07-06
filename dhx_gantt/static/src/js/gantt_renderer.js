@@ -91,6 +91,15 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             var zoomConfig = {
                 levels: [
                     {
+                        name:"hour",
+                        scale_height: 50,
+                        min_column_width:80,
+                        scales:[
+                            {unit: "day", step: 1, format: "%d %M"},
+                            {unit: "hour", step: 1, format: "%H:00"}
+                        ]
+                    },
+                    {
                         name:"day",
                         scale_height: 27,
                         min_column_width:80,
