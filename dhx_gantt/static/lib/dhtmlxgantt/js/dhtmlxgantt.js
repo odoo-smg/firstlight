@@ -7778,6 +7778,7 @@ module.exports = function(gantt) {
 	};
 
 	gantt._init_task_timing = function (task) {
+        // console.log('gantt._init_task_timing...');
 		var task_mode = gantt._get_task_timing_mode(task, true);
 
 		var dirty = task.$rendered_type != task_mode.type;
@@ -7989,14 +7990,15 @@ module.exports = function(gantt) {
 	};
 
 	gantt.correctTaskWorkTime = function (task) {
-		if (gantt.config.work_time && gantt.config.correct_work_time) {
-			if (!this.isWorkTime(task.start_date, undefined, task)) {
-				task.start_date = this.getClosestWorkTime({date: task.start_date, dir: 'future', task: task});
-				task.end_date = this.calculateEndDate(task);
-			} else if (!this.isWorkTime(new Date(+task.end_date - 1), undefined, task)) {
-				task.end_date = this.calculateEndDate(task);
-			}
-		}
+        // console.log('correctTaskWorkTime...');
+		// if (gantt.config.work_time && gantt.config.correct_work_time) {
+		// 	if (!this.isWorkTime(task.start_date, undefined, task)) {
+		// 		task.start_date = this.getClosestWorkTime({date: task.start_date, dir: 'future', task: task});
+		// 		task.end_date = this.calculateEndDate(task);
+		// 	} else if (!this.isWorkTime(new Date(+task.end_date - 1), undefined, task)) {
+		// 		task.end_date = this.calculateEndDate(task);
+		// 	}
+		// }
 	};
 
 	gantt.attachEvent("onBeforeTaskUpdate", function (id, task) {
@@ -9207,6 +9209,7 @@ var DataProcessorEvents = /** @class */ (function () {
                     }
                     tasks = null;
                     links = null;
+                    gantt.refreshData();
                 });
                 if (tasks) {
                     gantt._dp.setGanttMode("tasks");
@@ -15814,7 +15817,6 @@ function createResourceMethods(gantt){
 	}
 
 	function calculateResourceLoad(resource, resourceProperty, scale, timeline) {
-
 		var tasks;
 		if(resource.$role == "task"){
 			tasks = [];
@@ -21366,7 +21368,6 @@ var ScrollbarCell = (function (_super) {
 		this.$scroll_hor.scrollLeft = left;
 		this.$config.codeScrollLeft = left;
 		left = this.$scroll_hor.scrollLeft;
-        // console.log('this.$scroll_hor.scrollLeft in scrollHorizontally()=' + this.$scroll_hor.scrollLeft);
 
 		var views = this._getLinkedViews();
 		for(var i = 0; i < views.length; i++){
@@ -25375,6 +25376,7 @@ function createTaskDND(timeline, gantt){
 			this.dragMultiple = {};
 		},
 		_resize: function (ev, shift, drag) {
+            // console.log('_resize...');
 			var cfg = timeline.$getConfig();
 			var coords_x = this._drag_task_coords(ev, drag);
 			if (drag.left) {
@@ -25389,13 +25391,19 @@ function createTaskDND(timeline, gantt){
 				}
 			}
 
-			if (ev.end_date - ev.start_date < cfg.min_duration) {
-				if (drag.left)
-					ev.start_date = gantt.calculateEndDate({start_date: ev.end_date, duration: -1, task: ev});
-				else
-					ev.end_date = gantt.calculateEndDate({start_date: ev.start_date, duration: 1, task: ev});
-			}
+            this._check_dates(ev, cfg, drag);
+
 			gantt._init_task_timing(ev);
+		},
+		_check_dates: function (ev, cfg, drag) {
+            // cfg.min_duration = 3600000
+			if (ev.end_date - ev.start_date < cfg.min_duration) {
+				if (drag.left){
+                    ev.end_date = new Date(ev.start_date.getTime() + cfg.min_duration);
+                } else{
+                    ev.start_date = new Date(ev.end_date.getTime() - cfg.min_duration);
+                }
+			}
 		},
 		_resize_progress: function (ev, shift, drag) {
 			var coords_x = this._drag_task_coords(ev, drag);
@@ -25673,13 +25681,14 @@ function createTaskDND(timeline, gantt){
 		},
 
 		_finalize_mouse_up: function(taskId, config, drag, e){
+            // console.log('_finalize_mouse_up...');
 			var ev = gantt.getTask(taskId);
 
 			if (config.work_time && config.correct_work_time) {
 				this._fix_working_times(ev, drag);
 			}
 
-			this._fix_dnd_scale_time(ev, drag);
+			// this._fix_dnd_scale_time(ev, drag);
 
 			if (!this._fireEvent("before_finish", drag.mode, [taskId, drag.mode, gantt.copy(drag.obj), e])) {
 				//drag.obj._dhx_changed = false;
@@ -25698,6 +25707,7 @@ function createTaskDND(timeline, gantt){
 
 				this.clear_drag_state();
 				gantt.updateTask(ev.id);
+                gantt.refreshData();
 				this._fireEvent("after_finish", drag.mode, [drag_id, drag.mode, e]);
 			}
 
@@ -25803,7 +25813,7 @@ function createTaskDND(timeline, gantt){
 			if (!drag_state) {
 				drag_state = {mode: config.drag_mode.move};
 			}
-			this._fix_dnd_scale_time(task, drag_state);
+			// this._fix_dnd_scale_time(task, drag_state);
 		},
 		destructor: function(){
 			this._domEvents.detachAll();
@@ -27804,6 +27814,14 @@ CalendarWorkTimeStrategy.prototype = {
 			res = this._getWorkUnitsBetweenGeneric(from, to, unit, step);
 		}
 
+        // reset it as hours, rather than days
+        var unit_hour = 60 * 60 * 1000;
+        if (from >= to) {
+            res = 0;
+        } else {
+            res = (to.getTime() - from.getTime()) / unit_hour;
+        }
+
 		// getWorkUnits.. returns decimal durations
 		return Math.round(res);
 	},
@@ -27923,7 +27941,6 @@ CalendarWorkTimeStrategy.prototype = {
 	},
 
 	_calculateMinuteEndDate: function (from, duration, step) {
-
 		var start = new Date(from),
 			added = 0;
 		step = step || 1;
@@ -28108,6 +28125,14 @@ CalendarDisabledTimeStrategy.prototype = {
 				res += (to - from) / (dateHelper.add(from, step, unit) - from);
 			}
 		}
+
+        // reset it as hours, rather than days
+        var unit_hour = 60 * 60 * 1000;
+        if (start >= end) {
+            res = 0;
+        } else {
+            res = (end.getTime() - start.getTime()) / unit_hour;
+        }
 
 		return Math.round(res);
 	},
@@ -28356,10 +28381,11 @@ TimeCalculator.prototype = {
 		return calendar.hasDuration(config);
 	},
 	calculateEndDate: function (config) { // start_date, duration, unit, task
-		var config = this.argumentsHelper.calculateEndDateArguments.apply(this.argumentsHelper, arguments);
+        // console.log('TimeCalculator.calculateEndDate...');
+		var newConfig = this.argumentsHelper.calculateEndDateArguments.apply(this.argumentsHelper, arguments);
 
-		var calendar = this._getCalendar(config);
-		return calendar.calculateEndDate(config);
+		var calendar = this._getCalendar(newConfig);
+		return calendar.calculateEndDate(newConfig);
 	}
 };
 
