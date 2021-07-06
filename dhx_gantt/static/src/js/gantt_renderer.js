@@ -93,7 +93,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
                     {
                         name:"hour",
                         scale_height: 50,
-                        min_column_width:80,
+                        min_column_width:45,
                         scales:[
                             {unit: "day", step: 1, format: "%d %M"},
                             {unit: "hour", step: 1, format: "%H:00"}
