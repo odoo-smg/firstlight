@@ -11,8 +11,13 @@
                     id_field="id"
                     text="name"
                     date_start="date_planned_start"
+                    date_finished="date_planned_finished"
                     duration="planned_duration"
                     responsible="responsible_name"
+                    product_part_number="product_part_number"
+                    product_name="product_name"
+                    source="origin"
+                    state="state"
                     links_serialized_json="links_serialized_json"
                     link_model="flsp.depending.mos"
                 />
@@ -28,8 +33,8 @@
                     <page string="Dependencies">
                         <group string="Gantt Info">
                             <field name="date_planned_start"/>
-                            <field name="date_planned_finished" readonly="1"/>
-                            <field name="planned_duration"/>
+                            <field name="date_planned_finished"/>
+                            <field name="planned_duration" readonly="1"/>
                         </group>
                         <separator string="Predecessors"/>
                         <field name="dependency_mo_ids">

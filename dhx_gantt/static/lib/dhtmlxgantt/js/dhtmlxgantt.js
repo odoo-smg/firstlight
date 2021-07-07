@@ -7778,6 +7778,7 @@ module.exports = function(gantt) {
 	};
 
 	gantt._init_task_timing = function (task) {
+        // console.log('gantt._init_task_timing...');
 		var task_mode = gantt._get_task_timing_mode(task, true);
 
 		var dirty = task.$rendered_type != task_mode.type;
@@ -7989,14 +7990,15 @@ module.exports = function(gantt) {
 	};
 
 	gantt.correctTaskWorkTime = function (task) {
-		if (gantt.config.work_time && gantt.config.correct_work_time) {
-			if (!this.isWorkTime(task.start_date, undefined, task)) {
-				task.start_date = this.getClosestWorkTime({date: task.start_date, dir: 'future', task: task});
-				task.end_date = this.calculateEndDate(task);
-			} else if (!this.isWorkTime(new Date(+task.end_date - 1), undefined, task)) {
-				task.end_date = this.calculateEndDate(task);
-			}
-		}
+        // console.log('correctTaskWorkTime...');
+		// if (gantt.config.work_time && gantt.config.correct_work_time) {
+		// 	if (!this.isWorkTime(task.start_date, undefined, task)) {
+		// 		task.start_date = this.getClosestWorkTime({date: task.start_date, dir: 'future', task: task});
+		// 		task.end_date = this.calculateEndDate(task);
+		// 	} else if (!this.isWorkTime(new Date(+task.end_date - 1), undefined, task)) {
+		// 		task.end_date = this.calculateEndDate(task);
+		// 	}
+		// }
 	};
 
 	gantt.attachEvent("onBeforeTaskUpdate", function (id, task) {
@@ -9207,6 +9209,7 @@ var DataProcessorEvents = /** @class */ (function () {
                     }
                     tasks = null;
                     links = null;
+                    gantt.refreshData();
                 });
                 if (tasks) {
                     gantt._dp.setGanttMode("tasks");
@@ -13125,6 +13128,207 @@ module.exports = function (gantt) {
 		this.callEvent("onLightbox", [id]);
 	};
 
+    function _convert_position_to_number(pxPosition) {
+        if (!pxPosition) return 0;
+        if (!pxPosition.split('px')) return 0;
+
+        return parseInt(pxPosition.split('px')[0]);
+    }
+
+    function _get_local_date_string(task_date) {
+        /*
+            date_planned_start: Thu Jun 03 2021 00:00:00 GMT-0500 (Central Daylight Time)
+            date_planned_start: 2021-06-08 05:00:00
+            moment(task.start_date).toString(): "Thu Jun 03 2021 00:00:00 GMT-0500"
+            task.start_date.toLocaleString(): "6/3/2021, 12:00:00 AM"
+            task.start_date.toUTCString(): Thu, 03 Jun 2021 05:00:00 GMT
+            task.start_date.toString(): "Thu Jun 03 2021 00:00:00 GMT-0500 (Central Daylight Time)"
+        */
+
+        return task_date.toLocaleString();
+    }
+
+    gantt.getAccurateScrollLeft = function () {
+        // gantt.$scroll_hor.scrollLeft is not accurate sometimes and it is not rewritable by code directly
+        // cell.$content.$scroll_hor.scrollLeft is the only one that is always right 
+        var scrollLeftPos = 0;
+        if (!gantt.$layout || !gantt.$layout.$cells) {
+            return scrollLeftPos;
+        }
+
+        var cells = gantt.$layout.$cells;
+        for (let i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            if (cell.$name == "viewCell" && cell.$config.view == "scrollbar" && cell.$config.id == "scrollHor") {
+                scrollLeftPos = cell.$content.$scroll_hor.scrollLeft;
+                break; 
+            }
+        }
+
+        return scrollLeftPos;
+    }
+
+    gantt.getAccurateScrollTop = function () {
+        // gantt.$scroll_ver.scrollTop is not accurate sometimes and it is not rewritable by code directly
+        // verCell.$content.$scroll_ver.scrollTop is the only one that is always right 
+        var scrollTopPos = 0;
+        if (!gantt.$layout || !gantt.$layout.$cells) {
+            return scrollLeftPos;
+        }
+
+        var cells = gantt.$layout.$cells;
+        for (let i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            if (cell.$name == "layout") {
+                var verCells = cell.$cells;
+                for (let v = 0; v < verCells.length; v++) {
+                    var verCell = verCells[v];
+                    if (verCell.$name == "viewCell" && verCell.$config.view == "scrollbar" && verCell.$config.id == "scrollVer") {
+                        scrollTopPos = verCell.$content.$scroll_ver.scrollTop;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return scrollTopPos;
+    }
+
+	function _generate_task_tootip_content(task, taskElement) {
+        const minHeight = 160;
+		var topPos = 0 - minHeight + 'px';
+        var taskElementTopPos = _convert_position_to_number(taskElement.style.top);
+        var scrollTopPos = gantt.getAccurateScrollTop();
+        if (taskElementTopPos - scrollTopPos < minHeight) topPos = '40px';
+        
+        const undefinedValue = "N/A";
+        const prodNameLen = 120;
+        var styleStr = 'visibility:1;background-color:DimGrey;font-size:8pt;color:white;line-height:20px;z-index:1;position:absolute;' + 'top:' + topPos + ';';
+        var responsibleStr = task.responsible ? task.responsible : undefinedValue;
+        var startDateStr = task.start_date ? _get_local_date_string(task.start_date) : undefinedValue;
+        var finishedDateStr = task.end_date ? _get_local_date_string(task.end_date) : undefinedValue;
+        var productPartNoStr = task.product_part_number ? task.product_part_number : undefinedValue;
+        var productNameStr = task.product_name ? task.product_name.substring(0, prodNameLen) : undefinedValue;
+        var sourceStr = task.source ? task.source : undefinedValue;
+        var stateStr = undefinedValue;
+        if (task.state) {
+            // map field 'state' from value to title strings, defined in \addons\mrp\models\mrp_production.py
+            switch (task.state) {
+                case 'draft':
+                    stateStr = 'Draft';
+                    break;
+                case 'confirmed':
+                    stateStr = 'Confirmed';
+                    break;
+                case 'planned':
+                    stateStr = 'Planned';
+                    break;
+                case 'progress':
+                    stateStr = 'In Progress';
+                    break;
+                case 'to_close':
+                    stateStr = 'To Close';
+                    break;
+                case 'done':
+                    stateStr = 'Done';
+                    break;
+                case 'cancel':
+                    stateStr = 'Cancelled';
+                    break;
+                default:
+                    stateStr = undefinedValue;
+            }
+        }
+
+        var task_tooltip = "<div class='gantt_task_tooltip'"
+                                + " style=" + styleStr
+                                + ">" 
+                                + "<b>Task: </b>" + task.text
+                                + "<br><b>Responsible: </b>" + responsibleStr
+                                + "<br><b>Planned Date: </b>" + startDateStr
+                                + "<br><b>Planned End Date: </b>" + finishedDateStr
+                                + "<br><b>Product Part#: </b>" + productPartNoStr
+                                + "<br><b>Product Name: </b>" + productNameStr
+                                + "<br><b>Source: </b>" + sourceStr
+                                + "<br><b>State: </b>" + stateStr
+                                + "</div>";
+        return task_tooltip;
+	}
+
+	gantt.showTaskTooltip = function (id, posX) {
+        // console.log('showTaskTooltip')
+		if (!id || gantt.isReadonly(this.getTask(id))) return;
+
+		var task = this.getTask(id);
+         
+        var tasks = document.getElementsByClassName('gantt_task_row');
+        var taskElement;
+        for(let i = 0; i< tasks.length; i++){
+            if (tasks[i].getAttribute('task_id') == task.id) {
+                taskElement = tasks[i];
+                break;
+            }
+        }
+        if (taskElement) {
+            var taskBoxes = taskElement.getElementsByClassName('gantt_task_cell')
+            var tooltipFound = false;
+            for(let i = 0; i< taskBoxes.length; i++){
+                if (taskBoxes[i].firstChild && taskBoxes[i].firstChild.className == 'gantt_task_tooltip') {
+                    // gantt_task_tooltip has been set
+                    tooltipFound = true;
+                    break;
+                }
+            }
+            
+            if (tooltipFound) {
+                return;
+            }
+            
+            var taskBox;
+            var width_gantt_left = gantt.$container.getElementsByClassName('grid_cell')[0].clientWidth;
+            var scrollLeftPos = gantt.getAccurateScrollLeft();
+            var posTooltip = posX - width_gantt_left + scrollLeftPos;
+            for(let i = 0; i< taskBoxes.length; i++){
+                var leftX = _convert_position_to_number(taskBoxes[i].style.left);
+                var width = _convert_position_to_number(taskBoxes[i].style.width);
+                if (leftX <= posTooltip  && leftX + width >= posTooltip) {
+                    taskBox = taskBoxes[i];
+                    break;
+                }
+            }
+            if (taskBox && taskBox.innerHTML == '') {
+                taskBox.innerHTML = _generate_task_tootip_content(task, taskElement);
+            }
+        }
+	};
+
+	gantt.disableTaskTooltip = function (id) {
+        // console.log('disableTaskTooltip')
+		if (!id || gantt.isReadonly(this.getTask(id))) return;
+
+		var task = this.getTask(id);
+         
+        var tasks = document.getElementsByClassName('gantt_task_row');
+        var taskElement;
+        for(let i = 0; i< tasks.length; i++){
+            if (tasks[i].getAttribute('task_id') == task.id) {
+                taskElement = tasks[i];
+                break;
+            }
+        }
+
+        if (taskElement) {
+            var taskBoxes = taskElement.getElementsByClassName('gantt_task_cell')
+            for(let i = 0; i< taskBoxes.length; i++){
+                if (taskBoxes[i].firstChild && taskBoxes[i].firstChild.className == 'gantt_task_tooltip') {
+                    // gantt_task_tooltip has been set
+                    taskBoxes[i].innerHTML = '';
+                    break;
+                }
+            }
+        }
+	};
+
 	function _is_chart_visible(gantt) {
 		var timeline = gantt.$ui.getView("timeline");
 		if (timeline && timeline.isVisible()) {
@@ -15613,7 +15817,6 @@ function createResourceMethods(gantt){
 	}
 
 	function calculateResourceLoad(resource, resourceProperty, scale, timeline) {
-
 		var tasks;
 		if(resource.$role == "task"){
 			tasks = [];
@@ -17877,6 +18080,14 @@ module.exports = {
 			}
 			return true;
 		});
+
+		gantt.attachEvent("onTaskMouseOver", function (id, e) {
+			return true;
+		});
+
+		gantt.attachEvent("onTaskMouseOut", function (id, e) {
+			return true;
+		});
 	},
 
 	onShow: function (controller, placeholder, grid) {
@@ -18015,6 +18226,12 @@ module.exports = {
 		});
 		gantt.attachEvent("onEmptyClick", function () {
 			self.save();
+			return true;
+		});
+		gantt.attachEvent("onTaskMouseOver", function(id,e){
+			return true;
+		});
+		gantt.attachEvent("onTaskMouseOut", function(id,e){
 			return true;
 		});
 
@@ -21151,7 +21368,6 @@ var ScrollbarCell = (function (_super) {
 		this.$scroll_hor.scrollLeft = left;
 		this.$config.codeScrollLeft = left;
 		left = this.$scroll_hor.scrollLeft;
-        // console.log('this.$scroll_hor.scrollLeft in scrollHorizontally()=' + this.$scroll_hor.scrollLeft);
 
 		var views = this._getLinkedViews();
 		for(var i = 0; i < views.length; i++){
@@ -21967,6 +22183,8 @@ var createMouseHandler = (function(domHelpers) {
 		var eventHandlers = {
 			"click": {},
 			"doubleclick": {},
+			"mouseover": {},
+			"mouseout": {},
 			"contextMenu": {}
 		};
 
@@ -22099,6 +22317,44 @@ var createMouseHandler = (function(domHelpers) {
 			}
 		}
 
+		function onMouseOver(e) {
+            // console.log('onMouseOver...');
+			e = e || window.event;
+			var id = gantt.locate(e);
+            if (!id) {
+                // when mouseover fired not on task, id === null
+                return;
+            }
+
+			var handlers = findEventHandlers(e, eventHandlers.mouseover);
+			var res = !gantt.checkEvent("onTaskMouseOver") || gantt.callEvent("onTaskMouseOver", [id, e]);
+			if (res) {
+				var default_action = callEventHandlers(handlers, e, id);
+				if (!default_action)
+					return;
+
+				if (gantt.getTask(id)) {
+					gantt.showTaskTooltip(id, e.pageX);
+				}
+			}
+		}
+
+		function onMouseOut(e) {
+            // console.log('onMouseOut...');
+			e = e || window.event;
+			var id = gantt.locate(e);
+            if (!id) {
+                // when mouseout fired not on task, id === null
+                return;
+            }
+            
+            if (gantt.checkEvent("onTaskMouseOut")) {
+				if (id !== null && gantt.getTask(id)) {
+                    gantt.disableTaskTooltip(id);
+                }
+			}
+		}
+
 		function detach(eventName, className, handler, root) {
 			if (eventHandlers[eventName] && eventHandlers[eventName][className]) {
 				var handlers = eventHandlers[eventName];
@@ -22127,6 +22383,8 @@ var createMouseHandler = (function(domHelpers) {
 				domEvents.attach(node, "dblclick", onDoubleClick);
 				domEvents.attach(node, "mousemove", onMouseMove);
 				domEvents.attach(node, "contextmenu", onContextMenu);
+				domEvents.attach(node, "mouseover", onMouseOver);
+				domEvents.attach(node, "mouseout", onMouseOut);
 			}
 		}
 
@@ -22143,6 +22401,8 @@ var createMouseHandler = (function(domHelpers) {
 			onDoubleClick: onDoubleClick,
 			onMouseMove: onMouseMove,
 			onContextMenu: onContextMenu,
+			onMouseOver: onMouseOver,
+			onMouseOut: onMouseOut,
 			onClick: onClick,
 			destructor: function(){
 				reset();
@@ -23138,6 +23398,7 @@ function createTaskRenderer(gantt){
 			"line-height:" + (Math.max(height < 30 ? height - 2 : height, 0)) + 'px',
 			"width:" + width + 'px'
 		];
+        
 		if (task.color) {
 			styles.push("background-color:" + task.color);
 		}
@@ -25115,6 +25376,7 @@ function createTaskDND(timeline, gantt){
 			this.dragMultiple = {};
 		},
 		_resize: function (ev, shift, drag) {
+            // console.log('_resize...');
 			var cfg = timeline.$getConfig();
 			var coords_x = this._drag_task_coords(ev, drag);
 			if (drag.left) {
@@ -25129,13 +25391,19 @@ function createTaskDND(timeline, gantt){
 				}
 			}
 
-			if (ev.end_date - ev.start_date < cfg.min_duration) {
-				if (drag.left)
-					ev.start_date = gantt.calculateEndDate({start_date: ev.end_date, duration: -1, task: ev});
-				else
-					ev.end_date = gantt.calculateEndDate({start_date: ev.start_date, duration: 1, task: ev});
-			}
+            this._check_dates(ev, cfg, drag);
+
 			gantt._init_task_timing(ev);
+		},
+		_check_dates: function (ev, cfg, drag) {
+            // cfg.min_duration = 3600000
+			if (ev.end_date - ev.start_date < cfg.min_duration) {
+				if (drag.left){
+                    ev.end_date = new Date(ev.start_date.getTime() + cfg.min_duration);
+                } else{
+                    ev.start_date = new Date(ev.end_date.getTime() - cfg.min_duration);
+                }
+			}
 		},
 		_resize_progress: function (ev, shift, drag) {
 			var coords_x = this._drag_task_coords(ev, drag);
@@ -25413,13 +25681,14 @@ function createTaskDND(timeline, gantt){
 		},
 
 		_finalize_mouse_up: function(taskId, config, drag, e){
+            // console.log('_finalize_mouse_up...');
 			var ev = gantt.getTask(taskId);
 
 			if (config.work_time && config.correct_work_time) {
 				this._fix_working_times(ev, drag);
 			}
 
-			this._fix_dnd_scale_time(ev, drag);
+			// this._fix_dnd_scale_time(ev, drag);
 
 			if (!this._fireEvent("before_finish", drag.mode, [taskId, drag.mode, gantt.copy(drag.obj), e])) {
 				//drag.obj._dhx_changed = false;
@@ -25438,6 +25707,7 @@ function createTaskDND(timeline, gantt){
 
 				this.clear_drag_state();
 				gantt.updateTask(ev.id);
+                gantt.refreshData();
 				this._fireEvent("after_finish", drag.mode, [drag_id, drag.mode, e]);
 			}
 
@@ -25531,10 +25801,9 @@ function createTaskDND(timeline, gantt){
 			gantt.assert(trigger, "Unknown after drop mode:{" + mode + "}");
 			gantt.assert(params, "Invalid event arguments");
 
-
 			if (!gantt.checkEvent(trigger))
 				return true;
-
+            
 			return gantt.callEvent(trigger, params);
 		},
 
@@ -25544,7 +25813,7 @@ function createTaskDND(timeline, gantt){
 			if (!drag_state) {
 				drag_state = {mode: config.drag_mode.move};
 			}
-			this._fix_dnd_scale_time(task, drag_state);
+			// this._fix_dnd_scale_time(task, drag_state);
 		},
 		destructor: function(){
 			this._domEvents.detachAll();
@@ -27545,6 +27814,14 @@ CalendarWorkTimeStrategy.prototype = {
 			res = this._getWorkUnitsBetweenGeneric(from, to, unit, step);
 		}
 
+        // reset it as hours, rather than days
+        var unit_hour = 60 * 60 * 1000;
+        if (from >= to) {
+            res = 0;
+        } else {
+            res = (to.getTime() - from.getTime()) / unit_hour;
+        }
+
 		// getWorkUnits.. returns decimal durations
 		return Math.round(res);
 	},
@@ -27664,7 +27941,6 @@ CalendarWorkTimeStrategy.prototype = {
 	},
 
 	_calculateMinuteEndDate: function (from, duration, step) {
-
 		var start = new Date(from),
 			added = 0;
 		step = step || 1;
@@ -27849,6 +28125,14 @@ CalendarDisabledTimeStrategy.prototype = {
 				res += (to - from) / (dateHelper.add(from, step, unit) - from);
 			}
 		}
+
+        // reset it as hours, rather than days
+        var unit_hour = 60 * 60 * 1000;
+        if (start >= end) {
+            res = 0;
+        } else {
+            res = (end.getTime() - start.getTime()) / unit_hour;
+        }
 
 		return Math.round(res);
 	},
@@ -28097,10 +28381,11 @@ TimeCalculator.prototype = {
 		return calendar.hasDuration(config);
 	},
 	calculateEndDate: function (config) { // start_date, duration, unit, task
-		var config = this.argumentsHelper.calculateEndDateArguments.apply(this.argumentsHelper, arguments);
+        // console.log('TimeCalculator.calculateEndDate...');
+		var newConfig = this.argumentsHelper.calculateEndDateArguments.apply(this.argumentsHelper, arguments);
 
-		var calendar = this._getCalendar(config);
-		return calendar.calculateEndDate(config);
+		var calendar = this._getCalendar(newConfig);
+		return calendar.calculateEndDate(newConfig);
 	}
 };
 

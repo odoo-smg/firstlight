@@ -1,13 +1,14 @@
 import json
 from datetime import timedelta
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
 
 
 class DependingMOs(models.Model):
-    _name = "flsp.depending.mos"
+    _name = 'flsp.depending.mos'
     _description = "Mos Dependency (m2m)"
 
     task_id = fields.Many2one('mrp.production')
@@ -25,13 +26,15 @@ class DependingMOs(models.Model):
     ]
 
 class GanttMO(models.Model):
-    _inherit = "mrp.production"
+    _inherit = 'mrp.production'
 
-    planned_duration = fields.Float('Duration', default=7, compute='_compute_planned_duration', inverse='_inverse_planned_duration', store=True)
+    planned_duration = fields.Float('Duration', compute='_compute_planned_duration', store=True)
     depending_mo_ids = fields.One2many('flsp.depending.mos', 'task_id')
     dependency_mo_ids = fields.One2many('flsp.depending.mos', 'depending_task_id')
     links_serialized_json = fields.Char('Serialized Links JSON', compute="compute_links_json")
     responsible_name = fields.Char(related='user_id.partner_id.name')
+    product_part_number = fields.Char(related='product_id.default_code')
+    product_name = fields.Char(related='product_id.name')
 
     recursive_dependency_mo_ids = fields.Many2many(
         string='Recursive Dependencies',
@@ -44,15 +47,11 @@ class GanttMO(models.Model):
         for r in self:
             if r.date_planned_start and r.date_planned_finished:
                 elapsed_seconds = (r.date_planned_finished - r.date_planned_start).total_seconds()
-                seconds_in_day = 24 * 60 * 60
-                r.planned_duration = elapsed_seconds / seconds_in_day
-                r = r.with_context(ignore_onchange_planned_duration=True)
-
-    @api.onchange('planned_duration', 'date_planned_start')
-    def _inverse_planned_duration(self):
-        for r in self:
-            if r.date_planned_start and r.planned_duration and not self.env.context.get('ignore_onchange_planned_duration', False):
-                r.date_planned_finished = r.date_planned_start + timedelta(days=r.planned_duration)
+                seconds_in_hour = 60 * 60
+                # keep it as integer for hours
+                r.planned_duration = round(elapsed_seconds / seconds_in_hour, 0) 
+            else:
+                r.planned_duration = 0
 
     @api.depends('dependency_mo_ids')
     def _compute_recursive_dependency_mo_ids(self):
@@ -84,4 +83,4 @@ class GanttMO(models.Model):
                 }
                 links.append(json_obj)
             r.links_serialized_json = json.dumps(links)
-
+            

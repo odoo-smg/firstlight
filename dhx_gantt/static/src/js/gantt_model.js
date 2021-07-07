@@ -3,7 +3,8 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
 
     var AbstractModel = require('web.AbstractModel');
     var time = require('web.time');
-    const colors = ['red', 'dodgerblue', 'purple', 'teal', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan', 'gray'];
+    const colors = ['red', 'dodgerblue', 'purple', 'teal', 'pink', 'green', 'orange', 'tomato', 'mediumseagreen', 'blue', 'violet', 'cyan'];
+    const minimal_duration = 1000 * 60 * 60;
     // var BasicModel = require('web.BasicModel');
     var GanttModel = AbstractModel.extend({
         get: function(){
@@ -51,8 +52,13 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.map_id = params.id_field;
             this.map_text = params.text;
             this.map_date_start = params.date_start;
+            this.map_date_finished = params.date_finished;
             this.map_duration = params.duration;
             this.map_responsible = params.responsible;
+            this.map_product_part_number = params.product_part_number;
+            this.map_product_name = params.product_name;
+            this.map_source = params.source;
+            this.map_state = params.state;
             this.map_progress = params.progress;
             this.map_open = params.open;
             this.map_links_serialized_json = params.links_serialized_json;
@@ -63,19 +69,23 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             return this._load(params);
         },
         reload: function(id, params){
-            // console.log('reload()');
+            // console.log('reload()...');
             return this._load(params);
         },
         _load: function(params){
-            // console.log('_load()');
+            // console.log('_load()...');
             // console.log(this);
-            // console.log(params);
+            // console.log("_load.params=" + params);
             params = params ? params : {};
             this.domain = params.domain || this.domain || [];
             this.modelName = params.modelName || this.modelName;
             var self = this;
-            var fieldNames = [this.map_text, this.map_date_start, this.map_duration];
+            var fieldNames = [this.map_text, this.map_date_start, this.map_date_finished, this.map_duration];
             this.map_responsible && fieldNames.push(this.map_responsible);
+            this.map_product_part_number && fieldNames.push(this.map_product_part_number);
+            this.map_product_name && fieldNames.push(this.map_product_name);
+            this.map_source && fieldNames.push(this.map_source);
+            this.map_state && fieldNames.push(this.map_state);
             this.map_open && fieldNames.push(this.map_open);
             this.map_links_serialized_json && fieldNames.push(this.map_links_serialized_json);
             this.map_total_float && fieldNames.push(this.map_total_float);
@@ -119,6 +129,11 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                     datetime = false;
                 }
 
+                var datetime_end = false;
+                if(record[self.map_date_finished]){
+                    datetime_end = formatFunc(record[self.map_date_finished]);
+                }
+
                 var task = {};
                 if(self.map_parent){
                     var projectFound = data.find(function(element) {
@@ -142,9 +157,14 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
                 task.id = record[self.map_id];
                 task.text = record[self.map_text];
                 task.start_date = datetime;
+                task.end_date = datetime_end;
                 task.duration = record[self.map_duration];
                 task.progress = record[self.map_progress];
                 task.responsible = record[self.map_responsible];
+                task.product_part_number = record[self.map_product_part_number];
+                task.product_name = record[self.map_product_name];
+                task.source = record[self.map_source];
+                task.state = record[self.map_state];
                 task.open = record[self.map_open];
                 task.links_serialized_json = record[self.map_links_serialized_json];
                 task.total_float = record[self.map_total_float];
@@ -170,17 +190,15 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
             this.links = links;
         },
         updateTask: function(data){
+            // console.log('updateTask');
             if(data.isProject){
                 return $.when();
             }
-            // console.log('updateTask');
-            // console.log(data);
             var args = [];
             var values = {};
 
             var id = data.id;
             values[this.map_text] = data.text;
-            values[this.map_duration] = data.duration;
             if (this.map_open){
                 values[this.map_open] = data.open;
             }
@@ -190,13 +208,24 @@ odoo.define('dhx_gantt.GanttModel', function (require) {
 
             // convert time from dhx's string, to a javascript datetime, then to odoo's sting format :D
             var formatFunc = gantt.date.str_to_date("%d-%m-%Y %h:%i");
-            values[this.map_date_start] = time.datetime_to_str(formatFunc(data.start_date));
-            // console.log('time');
-            // console.log(values[this.map_date_start]);
+            if ( !data.end_date) {
+                data.end_date = data.start_date;
+            }
+            var start_date_str = time.datetime_to_str(formatFunc(data.start_date));
+            var end_date_str = time.datetime_to_str(formatFunc(data.end_date));
+            var start = new Date(start_date_str);
+			var end = new Date(end_date_str);
+            if ( end.getTime() < start.getTime()) {
+                end = start;
+                end_date_str = start_date_str;
+            }
+            data.duration = Math.round((end.getTime() - start.getTime()) / minimal_duration);
+            values[this.map_date_start] = start_date_str;
+            values[this.map_date_finished] = end_date_str;
+            values[this.map_duration] = data.duration;
+
             args.push(id);
             args.push(values)
-            // console.log({values});
-            // console.log({args});
             return this._rpc({
                 model: this.modelName,
                 method: 'write',

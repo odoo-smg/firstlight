@@ -37,8 +37,13 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.map_text = params.map_text;
             this.map_id_field = params.map_id_field;
             this.map_date_start = params.map_date_start;
+            this.map_date_finished = params.map_date_finished;
             this.map_duration = params.map_duration;
             this.map_responsible = params.map_responsible;
+            this.map_product_part_number = params.map_product_part_number;
+            this.map_product_name = params.map_product_name;
+            this.map_source = params.map_source;
+            this.map_state = params.map_state;
             this.map_open = params.map_open;
             this.map_progress = params.map_progress;
             this.map_links_serialized_json = params.map_links_serialized_json;
@@ -85,6 +90,15 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             // };
             var zoomConfig = {
                 levels: [
+                    {
+                        name:"hour",
+                        scale_height: 50,
+                        min_column_width:45,
+                        scales:[
+                            {unit: "day", step: 1, format: "%d %M"},
+                            {unit: "hour", step: 1, format: "%H:00"}
+                        ]
+                    },
                     {
                         name:"day",
                         scale_height: 27,
@@ -198,27 +212,8 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
         },
         saveScrollPositions: function () {
             // console.log('saveScrollPositions...');
-            if (!gantt.$layout) {
-                return;
-            }
-                    
-            var cells = gantt.$layout.$cells;
-            for (let i = 0; i < cells.length; i++) {
-                var cell = cells[i];
-                if (cell.$name == "viewCell" && cell.$config.view == "scrollbar" && cell.$config.id == "scrollHor") {
-                    localStorage.setItem('gantt_scroll_left', cell.$content.$scroll_hor.scrollLeft);
-                }
-
-                if (cell.$name == "layout") {
-                    var verCells = cell.$cells;
-                    for (let v = 0; v < verCells.length; v++) {
-                        var verCell = verCells[v];
-                        if (verCell.$name == "viewCell" && verCell.$config.view == "scrollbar" && verCell.$config.id == "scrollVer") {
-                            localStorage.setItem('gantt_scroll_top',  verCell.$content.$scroll_ver.scrollTop);
-                        }
-                    }
-                }
-            }
+            localStorage.setItem('gantt_scroll_left', gantt.getAccurateScrollLeft());
+            localStorage.setItem('gantt_scroll_top', gantt.getAccurateScrollTop());
         },
         restoreScrollPositions: function () {
             // console.log('restoreScrollPositions:: Renderer');
@@ -227,7 +222,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
 
             if (scrollLeft && scrollTop) gantt.scrollTo(scrollLeft, scrollTop);
             else if (scrollLeft) gantt.scrollTo(scrollLeft, 0);
-            else if (scrollTop) gantt.scrollTo(0, scrollTop);
+            else if (scrollTop)  gantt.scrollTo(0, scrollTop);
             // else gantt.scrollTo(0, 0);
         },
         _onUpdate: function () {
@@ -249,6 +244,15 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
             this.restoreScrollPositions();
 
             return res;
+        },
+        rerender: function () {
+            // save current scroll positions
+            this.saveScrollPositions();
+
+            this.renderGantt();
+
+            // reset scroll positions with ones previously stored
+            this.restoreScrollPositions();
         },
         disableAllButtons: function(){
             // console.log('disableAllButtons:: Renderer');
