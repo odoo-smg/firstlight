@@ -48,12 +48,12 @@ class MrpComponentFinishedProductXlsx(models.AbstractModel):
         sheet.set_row(0, None, None, {"collapsed": 1})
         sheet.write_row(1, 0, sheet_title, title_style)
         
-        sheet.write(2, 0, mo.name)
+        sheet.write(2, 0, mo.name or "")
         sheet.write(2, 1, mo.product_id.display_name or "")
         sheet.write(2, 2, mo.product_qty or 0)
-        sheet.write(2, 3, mo.product_uom_id.name)
-        sheet.write(2, 4, mo.origin)
-        sheet.write(2, 5, mo.user_id.name)
+        sheet.write(2, 3, mo.product_uom_id.name or "")
+        sheet.write(2, 4, mo.origin or "")
+        sheet.write(2, 5, mo.user_id.name or "")
 
     def generate_mrp_component_finished_product(self, workbook, mo):
         # create sheet for components and finished products
@@ -108,7 +108,7 @@ class MrpComponentFinishedProductXlsx(models.AbstractModel):
                         i += 1
                 else:
                     sheet.write(i, 0, move_id.product_id.display_name or "")
-                    sheet.write(i, 1, " ")
+                    sheet.write(i, 1, "")
                     sheet.write(i, 2, move_id.product_uom_qty or 0)
                     sheet.write(i, 3, move_id.product_uom.name or "")
                     sheet.write(i, 4, move_id.location_id.complete_name or "")
