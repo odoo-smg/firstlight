@@ -26,6 +26,7 @@
     'depends': ['stock'],
     'depends': ['mrp'],
     'depends': ['mrp_plm'],
+    'depends': ['flspstock'],
 
     # always loaded
     'data': [
@@ -34,6 +35,7 @@
         'views/flsp_bom_products_view.xml',
         'views/flsp_production_wizard_msg.xml',
         'views/flsp_production_view.xml', 
+        'views/flsp_mrp_negative_forecast_view.xml', 
         'report/flsp_production_component_finished.xml', 
     ],
 }

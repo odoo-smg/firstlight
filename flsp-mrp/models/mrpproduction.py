@@ -17,7 +17,6 @@ class flspproduction(models.Model):
         readonly=True, required=True, check_company=True,
         states={'draft': [('readonly', False)]})
 
-
     @api.constrains('product_id')
     def _check_done_eco(self):
         for record in self:
@@ -62,3 +61,23 @@ class flspproduction(models.Model):
         for move in copied_mrp.move_raw_ids:
             move.location_id = copied_mrp.location_src_id
         return copied_mrp
+
+    
+
+    def button_flsp_negative_forecast(self):
+        """
+            Purpose: To show negative forecast for Assemblies for the MO
+        """
+        view_id = self.env.ref('flsp-mrp.flsp_mrp_components_negative_forecast_wizard_form_view').id
+        return {
+            'name': 'Recompute Negative Forecasted Report',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'flsp.mrp.negative.forecast.wizard',
+            'view_id': view_id,
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': {
+                'default_mo_id': self.id,
+            }
+        }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="flspmrp_negative_forecast_components_form_view">
+        <field name="name">flspmrp.negative.forecast.form</field>
+        <field name="model">flspmrp.negative.forecast</field>
+        <field name="arch" type="xml">
+            <form string="MO Negative Forecast Components Form">
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="mo_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="negative_forecast_components" nolabel="1">
+                            <tree edit="false" create="false" delete="false" limit="20">
+                                <field name="product_name"/>
+                                <field name="purcahseable"/>
+                                <field name="manufacturable"/>
+                                <field name="negative_forecast_qty"/>
+                                <field name="negative_forecast_date"/>
+                                <field name="non_negative_forecast_qty" optional="hide"/>
+                                <field name="non_negative_forecast_date" optional="hide"/>
+                                <field name="duration" optional="hide"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_components_negative_forecast_wizard_form_view" model="ir.ui.view">
+            <field name="name">Recompute Negative Forecasted Report</field>
+            <field name="model">flsp.mrp.negative.forecast.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Recompute Negative Forecasted Report">
+                    <h4>Would you like to recalculate the Negative Forecasted Report?</h4>
+                    <p>The Negative Forecasted Report is automatically calculated every night. This routine could take around 1 minute to run.</p>
+                    <h5>More option:</h5>
+                    <div>
+                        <field name="calculate_product_flsp_routes"/>
+                        Calculate Product FLSP Routes
+                    </div>
+                    <footer>
+                        <button name="flsp_components_report" type="object" string="No" class="btn-primary" />
+                        <button name="flsp_components_recalculate" type="object" string="Yes" class="btn-default btn-secondary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+    </record>
+</odoo>
