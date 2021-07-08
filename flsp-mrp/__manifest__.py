@@ -34,6 +34,6 @@
         'views/flsp_bom_products_view.xml',
         'views/flsp_production_wizard_msg.xml',
         'views/flsp_production_view.xml', 
-        'views/flsp_production_component_finished.xml', 
+        'report/flsp_production_component_finished.xml', 
     ],
 }

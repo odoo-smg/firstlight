@@ -11,15 +11,7 @@
                                 </div>
                             </div>
                             <div class="row mt32 mb32">
-                                <div class="col-3" t-if="o.origin">
-                                    <strong>Source Document:</strong><br/>
-                                    <span t-field="o.origin"/>
-                                </div>
-                                <div class="col-3">
-                                    <strong>Responsible:</strong><br/>
-                                    <span t-field="o.user_id"/>
-                                </div>
-                                <div class="col-3">
+                                <div class="col-4">
                                     <strong>Finished Product:</strong><br/>
                                     <span t-field="o.product_id"/>
                                 </div>
@@ -27,6 +19,14 @@
                                     <strong>Quantity to Produce:</strong><br/>
                                     <span t-field="o.product_qty"/>
                                     <span t-field="o.product_uom_id.name" groups="uom.group_uom"/>
+                                </div>
+                                <div class="col-3" t-if="o.origin">
+                                    <strong>Source Document:</strong><br/>
+                                    <span t-field="o.origin"/>
+                                </div>
+                                <div class="col-2">
+                                    <strong>Responsible:</strong><br/>
+                                    <span t-field="o.user_id"/>
                                 </div>
                             </div>
 
@@ -39,11 +39,11 @@
                                 <thead>
                                     <tr>
                                         <th width="5%" class="text-center">#</th>
-                                        <th width="35%" class="text-left">Components</th>
-                                        <th width="15%" class="text-center">Lot/Serial #</th>
+                                        <th width="45%" class="text-left">Product</th>
+                                        <th width="10%" class="text-center">Lot/Serial #</th>
                                         <th width="10%" class="text-center">Qty</th>
                                         <th width="10%" class="text-center">Location</th>
-                                        <th width="15%" class="text-center">Lot/Serial #(FP)</th>
+                                        <th width="10%" class="text-center">Lot/Serial #(FP)</th>
                                         <th width="10%" class="text-center">Qty(FP)</th>
                                     </tr>
                                 </thead>
@@ -55,10 +55,10 @@
                                                     <span t-esc="line_number"/> 
                                                     <t t-set="line_number" t-value="line_number + 1"/> 
                                                 </td>
-                                                <td width="35%" class="text-left">
+                                                <td width="45%" class="text-left">
                                                     <span t-field="move_id.product_id"/>
                                                 </td>
-                                                <td width="15%" class="text-center">
+                                                <td width="10%" class="text-center">
                                                     <span></span>
                                                 </td>
                                                 <td width="10%" class="text-center">
@@ -68,7 +68,7 @@
                                                 <td width="10%" class="text-center">
                                                     <span t-field="move_id.location_id"/>
                                                 </td>
-                                                <td width="15%" class="text-center">
+                                                <td width="10%" class="text-center">
                                                     <span></span>
                                                 </td>
                                                 <td width="10%" class="text-center">
@@ -82,10 +82,10 @@
                                                     <span t-esc="line_number"/> 
                                                     <t t-set="line_number" t-value="line_number + 1"/> 
                                                 </td>
-                                                <td width="35%" class="text-left">
+                                                <td width="45%" class="text-left">
                                                     <span t-field="move_line.product_id"/>
                                                 </td>
-                                                <td width="15%" class="text-center">
+                                                <td width="10%" class="text-center">
                                                     <span t-field="move_line.lot_id"/>
                                                 </td>
                                                 <td width="10%" class="text-center">
@@ -100,7 +100,7 @@
                                                 <td width="10%" class="text-center">
                                                     <span t-field="move_line.location_id"/>
                                                 </td>
-                                                <td t-if="move_line.lot_produced_ids" width="15%" class="text-center">
+                                                <td t-if="move_line.lot_produced_ids" width="10%" class="text-center">
                                                     <span t-field="move_line.lot_produced_ids"/>
                                                 </td>
                                                 <td t-if="move_line.lot_produced_ids" width="10%" class="text-center">
@@ -121,13 +121,23 @@
     
     <data>
         <report 
-            id="flsp_mrp_component_finished"
-            string="Components x Finished Products"
+            id="flsp_mrp_component_finished_pdf"
+            string="Components x Finished Products (PDF)"
             model="mrp.production"
             name="flsp-mrp.flsp_production_component_finished"   
-            file="flsp-mrp.views.flsp_production_component_finished" 
+            file="flsp-mrp.report.flsp_production_component_finished" 
             report_type="qweb-pdf"
             print_report_name="'Components x Finished Products - %s' % object.name"
+        />
+
+        <report
+            id="flsp_mrp_component_finished_xlsx"
+            string="Components x Finished Products (Excel)"
+            model="mrp.production"
+            name="flsp_mrp_component_finished_xlsx"   
+            file="Components x Finished Products"
+            report_type="xlsx"
+            attachment_use="False"
         />
     </data>
 </odoo>
