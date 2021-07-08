@@ -13,7 +13,7 @@
                     </div>
                     <group>
                         <field name="negative_forecast_components" nolabel="1">
-                            <tree edit="false" create="false" delete="false" limit="20">
+                            <tree edit="false" create="false" delete="false" default_order="negative_forecast_qty" limit="20">
                                 <field name="product_name"/>
                                 <field name="purcahseable"/>
                                 <field name="manufacturable"/>
@@ -26,7 +26,7 @@
                         </field>
                     </group>
                     <footer>
-                        <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                        <button string="Close" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </sheet>
             </form>
@@ -46,8 +46,8 @@
                         Calculate Product FLSP Routes
                     </div>
                     <footer>
-                        <button name="flsp_components_report" type="object" string="No" class="btn-primary" />
-                        <button name="flsp_components_recalculate" type="object" string="Yes" class="btn-default btn-secondary" />
+                        <button name="flsp_components_report" type="object" string="No" class="btn-primary" help="Display 'Negative Forecast Components' without recomputing"/>
+                        <button name="flsp_components_recalculate" type="object" string="Yes" class="btn-default btn-secondary" help="Display 'Negative Forecast Components' after recomputing"/>
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </form>
