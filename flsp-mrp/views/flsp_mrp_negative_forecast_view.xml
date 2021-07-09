@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="flspmrp_negative_forecast_components_form_view">
+        <field name="name">flspmrp.negative.forecast.comp.wizard.form</field>
+        <field name="model">flsp.mrp.comp.wizard</field>
+        <field name="arch" type="xml">
+            <form string="MO Negative Forecast Components Form">
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="mo_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <field name="negative_forecast_components" nolabel="1" context="{'tree_view_ref': 'flspstock.flsp_negative_forecast_stock_view_tree'}" />
+                    <footer>
+                        <button string="Close" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_negative_forecast_wizard_form_view" model="ir.ui.view">
+            <field name="name">Recompute Negative Forecasted Report</field>
+            <field name="model">flsp.mrp.negative.forecast.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Recompute Negative Forecasted Report">
+                    <h4>Would you like to recalculate the Negative Forecasted Report?</h4>
+                    <p>The Negative Forecasted Report is automatically calculated every night. This routine could take around 1 minute to run.</p>
+                    <h5>More option:</h5>
+                    <div>
+                        <field name="calculate_product_flsp_routes"/>
+                        Calculate Product FLSP Routes
+                    </div>
+                    <footer>
+                        <button name="flsp_components_report" type="object" string="No" class="btn-primary" help="Display 'Negative Forecast Components' without recomputing"/>
+                        <button name="flsp_components_recalculate" type="object" string="Yes" class="btn-default btn-secondary" help="Display 'Negative Forecast Components' after recomputing"/>
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+    </record>
+</odoo>

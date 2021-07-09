@@ -26,13 +26,13 @@
         <field name="arch" type="xml">
             <tree default_order='negative_forecast_qty' create="0" delete="0" limit="20" decoration-success="duration > 0">
                 <field name="product_name"/>
-                <field name="purcahseable"/>
-                <field name="manufacturable"/>
-                <field name="negative_forecast_date"/>
-                <field name="negative_forecast_qty" type="char"/>
-                <field name="non_negative_forecast_date"/>
-                <field name="non_negative_forecast_qty" type="char"/>
-                <field name="duration" type="char"/>
+                <field name="purcahseable" optional="show"/>
+                <field name="manufacturable" optional="show"/>
+                <field name="negative_forecast_date" optional="show"/>
+                <field name="negative_forecast_qty" type="char" optional="show"/>
+                <field name="non_negative_forecast_date" optional="hide"/>
+                <field name="non_negative_forecast_qty" type="char" optional="hide"/>
+                <field name="duration" type="char" optional="hide"/>
             </tree>
         </field>
     </record>
