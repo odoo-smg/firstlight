@@ -62,13 +62,11 @@ class flspproduction(models.Model):
             move.location_id = copied_mrp.location_src_id
         return copied_mrp
 
-    
-
     def button_flsp_negative_forecast(self):
         """
             Purpose: To show negative forecast for Assemblies for the MO
         """
-        view_id = self.env.ref('flsp-mrp.flsp_mrp_components_negative_forecast_wizard_form_view').id
+        view_id = self.env.ref('flsp-mrp.flsp_mrp_negative_forecast_wizard_form_view').id
         return {
             'name': 'Recompute Negative Forecasted Report',
             'type': 'ir.actions.act_window',

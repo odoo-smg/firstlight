@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record model="ir.ui.view" id="flspmrp_negative_forecast_components_form_view">
-        <field name="name">flspmrp.negative.forecast.form</field>
-        <field name="model">flspmrp.negative.forecast</field>
+        <field name="name">flspmrp.negative.forecast.comp.wizard.form</field>
+        <field name="model">flsp.mrp.comp.wizard</field>
         <field name="arch" type="xml">
             <form string="MO Negative Forecast Components Form">
                 <sheet>
@@ -11,20 +11,7 @@
                             <field name="mo_id" readonly="1"/>
                         </h1>
                     </div>
-                    <group>
-                        <field name="negative_forecast_components" nolabel="1">
-                            <tree edit="false" create="false" delete="false" default_order="negative_forecast_qty" limit="20">
-                                <field name="product_name"/>
-                                <field name="purcahseable"/>
-                                <field name="manufacturable"/>
-                                <field name="negative_forecast_qty"/>
-                                <field name="negative_forecast_date"/>
-                                <field name="non_negative_forecast_qty" optional="hide"/>
-                                <field name="non_negative_forecast_date" optional="hide"/>
-                                <field name="duration" optional="hide"/>
-                            </tree>
-                        </field>
-                    </group>
+                    <field name="negative_forecast_components" nolabel="1" context="{'tree_view_ref': 'flspstock.flsp_negative_forecast_stock_view_tree'}" />
                     <footer>
                         <button string="Close" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
@@ -33,7 +20,7 @@
         </field>
     </record>
 
-    <record id="flsp_mrp_components_negative_forecast_wizard_form_view" model="ir.ui.view">
+    <record id="flsp_mrp_negative_forecast_wizard_form_view" model="ir.ui.view">
             <field name="name">Recompute Negative Forecasted Report</field>
             <field name="model">flsp.mrp.negative.forecast.wizard</field>
             <field name="arch" type="xml">

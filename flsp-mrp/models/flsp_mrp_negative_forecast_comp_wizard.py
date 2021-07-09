@@ -4,8 +4,8 @@ from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
-class FlspMrpNegativeForecast(models.Model):
-    _name = 'flspmrp.negative.forecast'
+class FlspMrpNegativeForecastCompWizard(models.TransientModel):
+    _name = 'flsp.mrp.comp.wizard'
     _description = "Display component products with negative forecast for the MO"
     
     mo_id = fields.Many2one('mrp.production', string="MO", required=True)
@@ -13,16 +13,14 @@ class FlspMrpNegativeForecast(models.Model):
         
     @api.model
     def default_get(self, fields):
-        res = super(FlspMrpNegativeForecast, self).default_get(fields)
+        res = super(FlspMrpNegativeForecastCompWizard, self).default_get(fields)
 
         default_mo_id = self.env.context.get('default_mo_id')
         if default_mo_id:
             mo = self.env['mrp.production'].browse(default_mo_id)
             if mo.exists():
                 res['mo_id'] = mo.id
-                # calculate negative_forecast_components
-                components = mo.move_raw_ids.product_id.ids
-                res['negative_forecast_components'] = self.env['flsp.negative.forecast.stock'].search([('product_id', 'in', components)])
+                res['negative_forecast_components'] = self.env['flsp.negative.forecast.stock'].search([('product_id', 'in', mo.move_raw_ids.product_id.ids)])
             else:
                 _logger.warning("The REQUIRED MO does NOT exist!")
         else:
@@ -33,15 +31,12 @@ class FlspMrpNegativeForecast(models.Model):
 
     @api.model
     def view_negative_forecast_component(self, mo_id):
-        self.mo_id = mo_id
-        self.mo_id = self.env['flsp.negative.forecast.stock'].search([('product_id', 'in', mo_id.move_raw_ids.product_id.ids)])
-
         view_id = self.env.ref('flsp-mrp.flspmrp_negative_forecast_components_form_view').id
         return {
             'name': 'FLSP - Negative Forecast Components',
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'flspmrp.negative.forecast',
+            'res_model': 'flsp.mrp.comp.wizard',
             'view_id': view_id,
             'views': [(view_id, 'form')],
             'target': 'new',

@@ -4,7 +4,7 @@ from odoo import models, fields, api
 import logging
 _logger = logging.getLogger(__name__)
 
-class FlspMrpComponentsNegativeForecastWizard(models.TransientModel):
+class FlspMrpNegativeForecastWizard(models.TransientModel):
     _name = 'flsp.mrp.negative.forecast.wizard'
     _description = "Wizard: Recalculate MRP Negative Forecasted Report"
 
@@ -13,7 +13,7 @@ class FlspMrpComponentsNegativeForecastWizard(models.TransientModel):
         
     @api.model
     def default_get(self, fields):
-        res = super(FlspMrpComponentsNegativeForecastWizard, self).default_get(fields)
+        res = super(FlspMrpNegativeForecastWizard, self).default_get(fields)
 
         default_mo_id = self.env.context.get('default_mo_id')
         if default_mo_id:
@@ -31,8 +31,7 @@ class FlspMrpComponentsNegativeForecastWizard(models.TransientModel):
     def flsp_components_report(self):
         self.ensure_one()
 
-        return self.env['flspmrp.negative.forecast'].view_negative_forecast_component(self.mo_id)
+        return self.env['flsp.mrp.comp.wizard'].view_negative_forecast_component(self.mo_id)
 
     def flsp_components_recalculate(self):
-        return self.env['flspmrp.negative.forecast'].view_negative_forecast_components_after_recompute(self.mo_id, self.calculate_product_flsp_routes)
-        
+        return self.env['flsp.mrp.comp.wizard'].view_negative_forecast_components_after_recompute(self.mo_id, self.calculate_product_flsp_routes)
