@@ -12,37 +12,65 @@
                         </h1>
                         <field name="show_sublevels" attrs="{'invisible': [(True)]}"/>
                         <group>
+                            <button name="button_show_lv1" string="Show only first level" type="object" class="btn-primary" help="Create MOs for selected products" attrs="{'invisible': [('show_sublevels', '=', False)]}"/>
+                        </group>
+                        <group>
                             <button name="button_show_all" string="Show all products" type="object" class="btn-primary" help="Create MOs for selected products" attrs="{'invisible': [('show_sublevels', '=', True)]}"/>
                         </group>
                         <group>
-                            <button name="button_show_lv1" string="Show only first level" type="object" class="btn-primary" help="Create MOs for selected products" attrs="{'invisible': [('show_sublevels', '=', False)]}"/>
+                            <field name="show_missing" />
                         </group>
                     </div>
                     <group>
-                        <field name="bom_products" nolabel="1" domain="[('bom_level', '=', 1)]">
-                            <tree editable="bottom" create="false" delete="false">
-                                <field name="selected"/>
-                                <field name="part_number" readonly="1" optional="show"/>
-                                <field name="product_id" readonly="0" optional="hide"/>
-                                <field name="product_name" readonly="1" optional="show"/>
-                                <field name="flsp_sd_location" readonly="1" optional="hide"/>
-                                <field name="stock_qty" readonly="1" optional="show"/>
-                                <field name="wip_qty" readonly="1" optional="show"/>
-                                <field name="mo_required_qty" readonly="1" optional="show"/>
-                                <field name="adjusted_qty" />
-                                <field name="bom_level" invisible="1"/>
-                            </tree>
-                        </field>
                     </group>
+                    <field name="bom_products" attrs="{'invisible': [('show_missing', '=', True)]}" context="{'tree_view_ref': 'flsp_mrp_wip.flsp_mrp_wip_wiz_item_view', 'search_view_id': 'flsp_mrp_wip_filter',  'show_missing': show_missing, 'production_id': mo_id, 'domain_force': [('is_missing', '=', False)] }" />
+                    <field name="bom_missed" attrs="{'invisible': [('show_missing', '=', False)]}" context="{'tree_view_ref': 'flsp_mrp_wip.flsp_mrp_wip_wiz_item_view', 'search_view_id': 'flsp_mrp_wip_filter',  'show_missing': show_missing, 'production_id': mo_id, 'domain_force': [('is_missing', '=', False)] }" />
                     <group>
-                        <field name="wip_id" readonly="1" attrs="{'invisible': [('wip_id', '=', False)]}" />
+                        <field name="wip_id" readonly="1" attrs="{'invisible': [(True)]}" />
                     </group>
+                    <h3>Transfers Created:</h3>
+                    <field name="flsp_wip_transfer_ids" readonly="1" attrs="{'invisible': [('wip_id', '=', False)]}" />
                     <footer>
-                        <button name="button_create_wip" string="Create WIP Transfer" type="object" class="btn-primary" help="Create MOs for selected products" attrs="{'invisible': ['|', ('bom_products', '=', []), ('wip_id', '!=', False)]}"/>
+                        <button name="button_create_wip" string="Create WIP Transfer" type="object" class="btn-primary" help="Create MOs for selected products" attrs="{'invisible': ['|', ('bom_products', '=', [])]}"/>
                         <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="flsp_mrp_wip_wiz_item_view">
+        <field name="name">flsp.mrp.wip.wiz.item</field>
+        <field name="model">flsp.mrp.wip.wiz.product</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="false" delete="false" decoration-muted="remaining_qty==0"
+                  decoration-danger="bom_level==1 and remaining_qty&gt;0"
+                  decoration-warning="bom_level!=1 and wip_qty == 0" >
+                <field name="selected" string="Check" attrs="{'readonly': [('adjusted_qty', '=', 0)]}" />
+                <field name="part_number" string="Part#" readonly="1" optional="show"/>
+                <field name="product_id" readonly="0" optional="hide"/>
+                <field name="product_name" readonly="1" optional="show"/>
+                <field name="flsp_sd_location" readonly="1" optional="show"/>
+                <field name="stock_qty" readonly="1" optional="show"/>
+                <field name="wip_qty" readonly="1" optional="show"/>
+                <field name="mo_required_qty" readonly="1" optional="hide"/>
+                <field name="reserved_qty" readonly="1" optional="hide"/>
+                <field name="remaining_qty" readonly="1" optional="hide"/>
+                <field name="adjusted_qty" />
+                <field name="bom_level" optional="hide"/>
+                <field name="is_missing" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_wip_filter" model="ir.ui.view">
+        <field name="name">flsp.mrp.wip.filter</field>
+        <field name="model">flsp.mrp.wip.wiz.product</field>
+        <field name="arch" type="xml">
+            <search string="Search Products">
+                <filter string="Missed" name="missed" domain="[('is_missing', '=', False)]"/>
+            </search>
         </field>
     </record>
 
