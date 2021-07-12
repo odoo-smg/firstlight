@@ -71,7 +71,7 @@ class FlspMrpWipWiz(models.TransientModel):
             move_raw = self.env['stock.move'].search([('raw_material_production_id', '=', mo.id)])
             if move_raw:
                 for raw_line in move_raw:
-                    totals[len(totals)+1] = {'total': raw_line.product_qty, 'level': 1, 'bom': False, 'type': False, 'bom_plm': True, 'track': raw_line.product_id.tracking, 'prod': raw_line.product_id}
+                    totals[len(totals)+1] = {'total': raw_line.product_qty/mo_qty, 'level': 1, 'bom': False, 'type': False, 'bom_plm': True, 'track': raw_line.product_id.tracking, 'prod': raw_line.product_id}
         else:
             totals = bom_id._get_flattened_totals(factor=starting_factor)
 
