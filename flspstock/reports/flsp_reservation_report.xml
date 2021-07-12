@@ -48,28 +48,36 @@
                                 <t t-set="line_number" t-value="1" />
                                 <thead>
                                     <tr>
-                                        <th width="10%" class="text-center">#</th>
-                                        <th width="30%" class="text-center">Reserved Qty</th>
-                                        <th width="30%" class="text-center">Reference</th>
-                                        <th width="30%" class="text-center">Date</th>
+                                        <th width="5%" class="text-center">#</th>
+                                        <th width="15%" class="text-center">Reserved Qty</th>
+                                        <th width="15%" class="text-center">Reference</th>
+                                        <th width="30%" class="text-center">Stock Move</th>
+                                        <th width="15%" class="text-center">Manufacturing Order</th>
+                                        <th width="20%" class="text-center">Date</th> 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <t t-if="o.reservation_lines">
                                         <t t-foreach="o.reservation_lines" t-as="reservation_line">
                                             <tr>
-                                                <td width="10%" class="text-center">
+                                                <td width="5%" class="text-center">
                                                     <span t-esc="line_number"/> 
                                                     <t t-set="line_number" t-value="line_number + 1"/> 
                                                 </td>
-                                                <td width="30%" class="text-center">
+                                                <td width="15%" class="text-center">
                                                     <span t-field="reservation_line.product_qty"/>
                                                     <span t-field="reservation_line.product_uom_id.name"/>
                                                 </td>
-                                                <td width="30%" class="text-center">
+                                                <td width="15%" class="text-center">
                                                     <span t-field="reservation_line.reference"/>
                                                 </td>
                                                 <td width="30%" class="text-center">
+                                                    <span t-field="reservation_line.move_id"/>
+                                                </td>
+                                                <td width="15%" class="text-center">
+                                                    <span t-field="reservation_line.production_id"/>
+                                                </td>
+                                                <td width="20%" class="text-center">
                                                     <span t-field="reservation_line.date"/>
                                                 </td>
                                             </tr>
