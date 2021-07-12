@@ -207,6 +207,7 @@ class FlspMrpWipWiz(models.TransientModel):
                 count_by_resp['prod'][each.responsible.id] = []
 
         for prod in targetProd:
+            included = False
             for responsible in wip_resp:
                 loc_name = ''
                 included = False
