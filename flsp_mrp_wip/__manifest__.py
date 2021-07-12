@@ -18,5 +18,7 @@
     'data': [
         'views/flsp_mrp_wip_wiz.xml',
         'views/flsp_production.xml',
+        'security/ir.model.access.csv',
+        'views/flsp_wip_responsible.xml',
     ],
 }
