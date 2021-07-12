@@ -57,6 +57,7 @@
         'views/flsp_stock_quantity.xml',
         'reports/flsp_negative_forecast_report.xml',
         'reports/flsp_negative_forecast_schedule_task.xml',
+        'reports/flsp_reservation_report.xml',
         'wizard/flsp_negative_forecast_wizard.xml',
     ],
 }
