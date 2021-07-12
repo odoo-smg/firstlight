@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="flsp_reservation_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.internal_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-7">
+                                    <h2><span t-field="o.id"/></h2>
+                                </div>
+                            </div>
+                            <div class="row mt32 mb32">
+                                <div class="col-4">
+                                    <strong>Product:</strong><br/>
+                                    <span t-field="o.product_id"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Location:</strong><br/>
+                                    <span t-field="o.location_id"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Reserved Quantity:</strong><br/>
+                                    <span t-field="o.reserved_quantity"/>
+                                    <span t-field="o.product_uom_id.name" groups="uom.group_uom"/>
+                                </div>
+                            </div>
+
+                            <h3>Reservations</h3>
+                            
+                            <table class="table table-sm">
+                                <t t-set="line_number" t-value="1" />
+                                <thead>
+                                    <tr>
+                                        <th width="5%" class="text-center">#</th>
+                                        <th width="15%" class="text-left">Reserved Qty</th>
+                                        <th width="15%" class="text-center">Responsible</th>
+                                        <th width="15%" class="text-center">Reference</th>
+                                        <th width="20%" class="text-center">Location</th>
+                                        <th width="15%" class="text-center">Lot/Serial #</th>
+                                        <th width="15%" class="text-center">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="o.reservation_lines">
+                                        <t t-foreach="o.reservation_lines" t-as="reservation_line">
+                                            <tr>
+                                                <td width="5%" class="text-center">
+                                                    <span t-esc="line_number"/> 
+                                                    <t t-set="line_number" t-value="line_number + 1"/> 
+                                                </td>
+                                                <td width="15%" class="text-center">
+                                                    <span t-field="reservation_line.product_qty"/>
+                                                    <span t-field="reservation_line.product_uom_id.name"/>
+                                                </td>
+                                                <td width="15%" class="text-center">
+                                                    <span t-field="reservation_line.owner_id"/>
+                                                </td>
+                                                <td width="15%" class="text-center">
+                                                    <span t-field="reservation_line.reference"/>
+                                                </td>
+                                                <td width="20%" class="text-center">
+                                                    <span t-field="reservation_line.location_id"/>
+                                                </td>
+                                                <td width="15%" class="text-center">
+                                                    <span t-field="reservation_line.lot_name"/>
+                                                </td>
+                                                <td width="15%" class="text-center">
+                                                    <span t-field="reservation_line.date"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+    </template>
+    
+    <data>
+        <report 
+            id="flsp_stock_quant_reservation_report"
+            string="Quantity Reservation Report"
+            model="stock.quant"
+            name="flspstock.flsp_reservation_report"   
+            file="flspstock.report.flsp_reservation_report" 
+            report_type="qweb-pdf"
+            print_report_name="'Qty Reservation Report - %s' % object.id"
+        />
+    </data>
+</odoo>
+
