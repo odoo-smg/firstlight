@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="flsp_production_component_finished">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.internal_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-7">
+                                    <h2><span t-field="o.name"/></h2>
+                                </div>
+                            </div>
+                            <div class="row mt32 mb32">
+                                <div class="col-4">
+                                    <strong>Finished Product:</strong><br/>
+                                    <span t-field="o.product_id"/>
+                                </div>
+                                <div class="col-3">
+                                    <strong>Quantity to Produce:</strong><br/>
+                                    <span t-field="o.product_qty"/>
+                                    <span t-field="o.product_uom_id.name" groups="uom.group_uom"/>
+                                </div>
+                                <div class="col-3" t-if="o.origin">
+                                    <strong>Source Document:</strong><br/>
+                                    <span t-field="o.origin"/>
+                                </div>
+                                <div class="col-2">
+                                    <strong>Responsible:</strong><br/>
+                                    <span t-field="o.user_id"/>
+                                </div>
+                            </div>
+
+                            <h3 t-if="o.move_raw_ids">
+                                Components and Finished Products(FP)
+                            </h3>
+                            
+                            <table class="table table-sm" t-if="o.move_raw_ids">
+                                <t t-set="line_number" t-value="1" />
+                                <thead>
+                                    <tr>
+                                        <th width="5%" class="text-center">#</th>
+                                        <th width="45%" class="text-left">Product</th>
+                                        <th width="10%" class="text-center">Lot/Serial #</th>
+                                        <th width="10%" class="text-center">Qty</th>
+                                        <th width="10%" class="text-center">Location</th>
+                                        <th width="10%" class="text-center">Lot/Serial #(FP)</th>
+                                        <th width="10%" class="text-center">Qty(FP)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="o.move_raw_ids">
+                                        <t t-foreach="o.move_raw_ids" t-as="move_id">
+                                            <tr t-if="not move_id.move_line_ids ">
+                                                <td width="5%" class="text-center">
+                                                    <span t-esc="line_number"/> 
+                                                    <t t-set="line_number" t-value="line_number + 1"/> 
+                                                </td>
+                                                <td width="45%" class="text-left">
+                                                    <span t-field="move_id.product_id"/>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <span></span>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                     <span t-field="move_id.product_uom_qty"/>
+                                                    <span t-field="move_id.product_uom"/>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <span t-field="move_id.location_id"/>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <span></span>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <span t-field="o.product_qty"/>
+                                                    <span t-field="o.product_uom_id"/>
+                                                </td>
+                                            </tr>
+                                            <t t-if="move_id.move_line_ids">
+                                                <tr t-foreach="move_id.move_line_ids" t-as="move_line">
+                                                <td width="5%" class="text-center">
+                                                    <span t-esc="line_number"/> 
+                                                    <t t-set="line_number" t-value="line_number + 1"/> 
+                                                </td>
+                                                <td width="45%" class="text-left">
+                                                    <span t-field="move_line.product_id"/>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <span t-field="move_line.lot_id"/>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <t t-if="o.state == 'done'">
+                                                        <span t-field="move_line.qty_done"/>
+                                                    </t>
+                                                    <t t-if="o.state != 'done'">
+                                                        <span t-field="move_line.product_uom_qty"/>
+                                                    </t>
+                                                    <span t-field="move_line.product_uom_id"/>
+                                                </td>
+                                                <td width="10%" class="text-center">
+                                                    <span t-field="move_line.location_id"/>
+                                                </td>
+                                                <td t-if="move_line.lot_produced_ids" width="10%" class="text-center">
+                                                    <span t-field="move_line.lot_produced_ids"/>
+                                                </td>
+                                                <td t-if="move_line.lot_produced_ids" width="10%" class="text-center">
+                                                    <span t-field="move_line.lot_produced_ids.product_qty"/>
+                                                    <span t-field="move_line.lot_produced_ids.product_uom_id"/>
+                                                </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+    </template>
+    
+    <data>
+        <report 
+            id="flsp_mrp_component_finished_pdf"
+            string="Components x Finished Products (PDF)"
+            model="mrp.production"
+            name="flsp-mrp.flsp_production_component_finished"   
+            file="flsp-mrp.report.flsp_production_component_finished" 
+            report_type="qweb-pdf"
+            print_report_name="'Components x Finished Products - %s' % object.name"
+        />
+
+        <report
+            id="flsp_mrp_component_finished_xlsx"
+            string="Components x Finished Products (Excel)"
+            model="mrp.production"
+            name="flsp_mrp_component_finished_xlsx"   
+            file="Components x Finished Products"
+            report_type="xlsx"
+            attachment_use="False"
+        />
+    </data>
+</odoo>

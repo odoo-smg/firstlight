@@ -12,9 +12,9 @@ class FlspNegativeForecastStock(models.Model):
     purcahseable = fields.Selection(related='product_id.flsp_route_buy', string='Purcahseable')
     manufacturable = fields.Selection(related='product_id.flsp_route_mfg', string='Manufacturable')
     negative_forecast_qty = fields.Float(string='Negative Qty')
-    negative_forecast_date = fields.Datetime(string='Negative Forecast Date')
+    negative_forecast_date = fields.Date(string='Negative By')
     non_negative_forecast_qty = fields.Float(string='Non Negative Qty')
-    non_negative_forecast_date = fields.Datetime(string='Non Negative Forecast Date')
+    non_negative_forecast_date = fields.Date(string='Non Negative By')
     duration = fields.Float(string='Duration', compute='_compute_duration')
 
     @api.depends('negative_forecast_date', 'non_negative_forecast_date')
@@ -75,7 +75,7 @@ class FlspNegativeForecastStock(models.Model):
                             WHERE r.product_id = nonneg.product_id and r.date = nonneg.date and r.company_id = %s  and r.state = 'forecast'
                         )
                     INSERT INTO flsp_negative_forecast_stock (product_id, negative_forecast_date, negative_forecast_qty, non_negative_forecast_date, non_negative_forecast_qty)
-                    SELECT negreport.product_id, negreport.date, negreport.product_qty, nonnegreport.date, nonnegreport.product_qty
+                    SELECT negreport.product_id, CAST(negreport.date AS DATE), negreport.product_qty, CAST(nonnegreport.date AS DATE), nonnegreport.product_qty
                     FROM negreport
 				    LEFT JOIN nonnegreport
                     ON negreport.product_id = nonnegreport.product_id
