@@ -59,12 +59,21 @@ class FlspMrpWipWiz(models.TransientModel):
         return res
 
     def _calc_bom_products(self, mo, show_sublevels, missing):
+
         bom_id = mo.bom_id
         mo_qty = mo.product_qty
         starting_factor = bom_id.product_uom_id._compute_quantity(
             bom_id.product_qty, bom_id.product_tmpl_id.uom_id, round=False
         )
-        totals = bom_id._get_flattened_totals(factor=starting_factor)
+        if not show_sublevels:
+            totals = {}
+            # shows only the first level - those are products in the stock_move.
+            move_raw = self.env['stock.move'].search([('raw_material_production_id', '=', mo.id)])
+            if move_raw:
+                for raw_line in move_raw:
+                    totals[len(totals)+1] = {'total': raw_line.product_qty, 'level': 1, 'bom': False, 'type': False, 'bom_plm': True, 'track': raw_line.product_id.tracking, 'prod': raw_line.product_id}
+        else:
+            totals = bom_id._get_flattened_totals(factor=starting_factor)
 
         # retrieve the product ids from the list
         prod_list = []
@@ -107,7 +116,8 @@ class FlspMrpWipWiz(models.TransientModel):
                 if keep_creating:
                     if prod_in_list:
                         prod_in_list['mo_required_qty'] += required_qty
-                        prod_in_list['adjusted_qty'] = prod_in_list['mo_required_qty']
+                        prod_in_list['remaining_qty'] = prod_in_list['mo_required_qty']-prod_in_list['reserved_qty']
+                        prod_in_list['adjusted_qty'] = prod_in_list['remaining_qty']
                     else:
                         prod_list.append([0, 0, {
                             'production_id': self.id,
