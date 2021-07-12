@@ -6,13 +6,9 @@
                     <t t-call="web.internal_layout">
                         <div class="page">
                             <div class="row mt32 mb32">
-                                <div class="col-8">
+                                <div class="col-12">
                                     <strong>Product:</strong><br/>
                                     <span t-field="o.product_id"/>
-                                </div>
-                                <div class="col-4">
-                                    <strong>Location:</strong><br/>
-                                    <span t-field="o.location_id"/>
                                 </div>
                             </div>
                             <div class="row mt32 mb32">
@@ -30,6 +26,10 @@
                                 </div>
                             </div>
                             <div class="row mt32 mb32">
+                                <div class="col-4">
+                                    <strong>Location:</strong><br/>
+                                    <span t-field="o.location_id"/>
+                                </div>
                                 <div class="col-4">
                                     <strong>Quantity On Hand:</strong><br/>
                                     <span t-field="o.quantity"/>
