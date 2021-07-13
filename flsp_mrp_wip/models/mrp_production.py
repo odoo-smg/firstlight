@@ -11,6 +11,8 @@ class flspmrpwipproduction(models.Model):
     _inherit = 'mrp.production'
     _check_company_auto = True
 
+    flsp_wip_transfer_ids = fields.One2many('stock.picking', inverse_name='flsp_mo_wip_id', string="Transfer Created: ")
+
     def button_flsp_mrp_wip(self):
         """
             Purpose: To transfer components from Stock to WIP

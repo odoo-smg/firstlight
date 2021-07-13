@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Tree view-->
+	<record id="flsp_wip_responsible_tree" model="ir.ui.view">
+        <field name="name">flsp.wip.responsible.tree</field>
+        <field name="model">flsp.wip.responsible</field>
+        <field name="arch" type="xml">
+            <tree string="WIP Transfer Responsible">
+                <!--Fields to display on report-->
+                <field name="sequence" widget="handle"/>
+                <field name="responsible"/>
+                <field name="parent_location" />
+                <field name="text_location"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="flsp_wip_responsible_form_view">
+        <field name="name">flsp.wip.responsible.form</field>
+        <field name="model">flsp.wip.responsible</field>
+        <field name="arch" type="xml">
+            <form  class="o_mo_products_form">
+                <sheet>
+                    <div>
+                        <h1>
+                            <!--field name="mo_id" readonly="1"/-->
+                        </h1>
+                        <group>
+                            <field name="responsible" />
+                            <field name="parent_location" />
+                            <field name="text_location"/>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Search
+    <record id="flsp_mrp_sales_report_search" model="ir.ui.view">
+        <field name="name">flsp.mrp.sales.report.search</field>
+        <field name="model">flsp.mrp.sales.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Sale Report">
+                <field name="product_id"/>
+                <field name="default_code"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product" context="{'group_by':'product_id'}"/>
+                    <filter string="Order" name="order" context="{'group_by':'order_id'}"/>
+                    <filter string="Customer" name="customer" context="{'group_by':'partner_id'}"/>
+                    <filter string="Delivery Date" name="delivery" context="{'group_by':'commitment_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    -->
+
+    <!--Action-->
+    <record id="flsp_wip_responsible_action" model="ir.actions.act_window">
+        <field name="name">WIP Transfer Responsible</field>
+        <field name="res_model">flsp.wip.responsible</field>
+        <field name="view_mode">tree,form</field>
+        <!--field name="view_id" ref="flsp_wip_responsible_tree"/-->
+        <!--field name="context">{'group_by': ['product_id']}</field-->
+    </record>
+
+    <!--Menuitem-->
+    <menuitem name="WIP Transfer Responsible"
+              id="flsp_wip_responsible_menu"
+              parent="stock.menu_stock_config_settings"
+              action="flsp_wip_responsible_action"
+    />
+</odoo>
