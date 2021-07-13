@@ -30,6 +30,13 @@
                     </group>
                     <field name="flsp_packingdesc" string="Packaging Information:" readonly="1" />
                 </xpath>
+                <notebook position="inside">
+                    <page string="Attachment/Picture">
+                        <group>
+                          <field name="attachment_ids" widget="many2many_binary" string="Attach another file/picture" nolabel="1" colspan="2"/>
+                        </group>
+                    </page>
+                </notebook>
             </field>
         </record>
  </odoo>
