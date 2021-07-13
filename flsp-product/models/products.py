@@ -134,12 +134,11 @@ class Smgproduct(models.Model):
         if default:
             prefix = '00000'
             self._cr.execute(
-                "select max(flsp_part_suffix) as suffix from product_template where active ='false'")
+                "select max(CAST(flsp_part_suffix AS INT)) as suffix from product_template where active ='false'")
             table = self._cr.fetchall()
             for line in table:
-                if type(line[0]) == str:
-                    value = int(line[0])
-                    suf = str(value + 1) + ""
+                if type(line[0]) == int:
+                    suf = str(line[0] + 1) + ""
                 else:
                     suf = '0'
             suffix = suf
