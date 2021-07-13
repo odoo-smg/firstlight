@@ -139,9 +139,11 @@ class FlspMrpBomStructure(models.TransientModel):
         }
 
     def create_mo(self, prod):
-        date_now = datetime.now()
-        date_start = date_now.today() + timedelta(days=1)
-        date_end = date_now.today() + timedelta(days=15)
+        date_start = datetime.now().today() + timedelta(days=1)
+        date_parent_start = self.mo_id.date_planned_start
+        if date_parent_start:
+            date_start = date_parent_start + timedelta(days=-1)
+        date_end = date_start + timedelta(hours=4)
         
         bom = self.get_bom(prod, self.mo_id)
         picking_type_id = self.get_picking_type(bom, self.mo_id)

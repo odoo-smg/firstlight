@@ -79,3 +79,10 @@ class flspproduction(models.Model):
                 'default_mo_id': self.id,
             }
         }
+
+    @api.onchange('date_planned_start')
+    def _onchange_date_planned_start(self):
+        if not self.date_planned_start:
+            raise UserError("'Planned Start Date' is required")
+        
+        super(flspproduction, self)._onchange_date_planned_start()
