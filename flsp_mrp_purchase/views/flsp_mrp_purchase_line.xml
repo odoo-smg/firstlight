@@ -60,6 +60,11 @@
                             <field name="avg_per_ssa" readonly="1"/>
                         </group>
                     </group>
+                    <group>
+                        <group>
+                            <field name="create_date" string="Last update" readonly="1"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
