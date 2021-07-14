@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <data>
+
+        <record model="ir.ui.view" id="flsp_product_mrp_purchase_form_view">
+            <field name="name">flsp.product.mrp.purchase.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="priority">110</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="action_view_mrp_purchase"
+                        type="object" icon="fa-search-plus" attrs="{'invisible': [('purchase_ok', '=', False)]}" help="See the open POs for this product">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">MRP Purchase</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
