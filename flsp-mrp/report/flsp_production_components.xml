@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="flsp_mrp_components_xlsx"
+            string="Components (Excel)"
+            model="mrp.production"
+            name="flsp_mrp_components_xlsx"   
+            file="Components"
+            report_type="xlsx"
+            attachment_use="False"
+        />
+    </data>
+</odoo>

@@ -37,5 +37,6 @@
         'views/flsp_production_view.xml', 
         'views/flsp_mrp_negative_forecast_view.xml', 
         'report/flsp_production_component_finished.xml', 
+        'report/flsp_production_components.xml', 
     ],
 }
