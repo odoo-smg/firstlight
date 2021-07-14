@@ -172,7 +172,7 @@ class FlspMrppurchaseLine(models.Model):
                                    doc,
                                    move.product_id,
                                    move.product_uom_qty, move.product_uom,
-                                   receipt.scheduled_date, 0, 0, 0, 0])
+                                   move.date_expected, 0, 0, 0, 0])
         # *******************************************************************************
         # ***************************** Sales Orders ************************************
         # *******************************************************************************
