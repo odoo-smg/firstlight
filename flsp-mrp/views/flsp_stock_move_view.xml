@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_mrp_stock_move_lots_view">
+            <field name="name">flsp.mrp.stock.move.lots.view</field>
+            <field name="model">stock.move</field>
+            <field name="priority">100</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='move_line_ids']/tree" position="attributes">
+                  <attribute name="default_order">lot_produced_ids, lot_id</attribute>
+              </xpath>
+            </field>
+        </record>
+</odoo>
