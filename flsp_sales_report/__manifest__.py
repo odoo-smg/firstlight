@@ -24,5 +24,6 @@
     'data': [
         'views/flsp_sales_report_form.xml',
         'views/flsp_crm_team_form.xml',
+        'views/flsp_unconfirmed_sale_orders.xml',
     ],
 }
