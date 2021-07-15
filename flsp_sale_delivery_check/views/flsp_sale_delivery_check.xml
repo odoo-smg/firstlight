@@ -37,6 +37,8 @@
                 <separator/>
                 <field name="partner_id" string="Customer" filter_domain="[('partner_id.name', 'ilike', self)]"/>
                 <separator/>
+                <field name="sale_id" string="Sales Order" filter_domain="[('sale_id.name', 'ilike', self)]"/>
+                <separator/>
                 <group string="Grouped by">
                     <filter name="product" string="product"
                         context="{'group_by': 'product_id'}"/>

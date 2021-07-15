@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import calendar
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
-
+import logging
+_logger = logging.getLogger(__name__)
 
 class SalesOrderReport(models.Model):
     _inherit = "sale.order"
@@ -461,3 +462,19 @@ class SalesOrderReport(models.Model):
                 a_ret[lead_team][lead_month][lead_categ][3] = True
 
         return a_ret
+
+    def cal_unconfirmed_sale_orders(self):
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+        unconfirmed_sos = self.env['sale.order'].search([('flsp_bpm_status', '=', 'dd-sale'), ( 'create_date', '<=', yesterday)], order="create_date")
+        orders = {}
+        for so in unconfirmed_sos:
+            orders[so.id] = {'name': so.name,
+                              'user': so.user_id.name,
+                              'customer': so.partner_id.display_name,
+                              'create_date': so.create_date.strftime('%Y-%m-%d %H:%M:%S'),
+                            }
+
+        _logger.info("************ Sending 'FLSP Sales - Unconfirmed Sales Orders' ************")
+        self.env['flspautoemails.bpmemails'].send_email(orders, 'SO0018')
+        _logger.info("************ 'FLSP Sales - Unconfirmed Sales Orders' DONE ***************")
+        
