@@ -632,6 +632,7 @@ class FlspMrppurchaseLine(models.Model):
                 planning.adjusted_qty = suggested_qty
                 planning.six_month_forecast = six_month_forecast
                 planning.twelve_month_forecast = twelve_month_forecast
+                planning.total_price = required_qty * planning.vendor_price
 
                 # Checking supplier quantity:
                 if suggested_qty > 0 and planning.vendor_qty > 0:
@@ -655,7 +656,7 @@ class FlspMrppurchaseLine(models.Model):
                                                                                               planning.product_id.uom_po_id)
                     planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty,
                                                                                                planning.product_id.uom_po_id)
-                    planning.total_price = planning.vendor_price * planning.purchase_suggested
+                    planning.total_price = planning.vendor_price * planning.suggested_qty
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
@@ -865,14 +866,14 @@ class FlspMrppurchaseLine(models.Model):
         twelve_month_actual = 0
         six_months_ago = datetime.now() - timedelta(days=180)
         one_year_ago = datetime.now() - timedelta(days=365)
-        movements = self.env['stock.move.line'].search(['&', ('state', '=', 'done'), '&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)])
+
+        movements = self.env['stock.move.line'].search(['&', ('state', '=', 'done'), ('product_id', '=', product.id)])
         for move in movements:
-            if move.location_dest_id == production_location or move.location_dest_id == customer_location:
+            if move.location_dest_id.id in [production_location, customer_location]:
                 if move.date > six_months_ago:
                     six_month_actual += move.qty_done
                 if move.date > one_year_ago:
                     twelve_month_actual += move.qty_done
-
 
         ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
                            'product_id': product.id,
