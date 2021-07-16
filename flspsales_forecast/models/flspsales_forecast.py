@@ -72,7 +72,12 @@ class FlspSalesForecast(models.Model):
                 forecast = line.forecast_date
                 # this_year = datetime.today().year #2020
                 # nxt_year = datetime.today().year + 1 #2021
-                if forecast and (forecast <= datetime.today() + relativedelta(months=6)):
+                if forecast:
+                    if ((forecast.year > datetime.today().year + 1) or (forecast.year == datetime.today().year + 1 and forecast.month >= datetime.today().month)):
+                        continue
+                    if (forecast.year < datetime.today().year or (forecast.year == datetime.today().year and forecast.month < datetime.today().month)):
+                        continue
+
                     if forecast.month == 1:
                         # if forecast.year < this_year:
                         #     qty1 =0
@@ -693,7 +698,7 @@ class FlspSalesForecast(models.Model):
                     node.set('name', 'qty_month4')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
-        return result
+        return 
 
 
 class FlspSalesForecast(models.Model):
