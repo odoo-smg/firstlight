@@ -698,7 +698,7 @@ class FlspSalesForecast(models.Model):
                     node.set('name', 'qty_month4')
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
-        return 
+        return result
 
 
 class FlspSalesForecast(models.Model):
