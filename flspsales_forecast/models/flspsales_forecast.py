@@ -72,7 +72,7 @@ class FlspSalesForecast(models.Model):
                 forecast = line.forecast_date
                 # this_year = datetime.today().year #2020
                 # nxt_year = datetime.today().year + 1 #2021
-                if forecast:
+                if forecast and (forecast <= datetime.today() + relativedelta(months=6)):
                     if forecast.month == 1:
                         # if forecast.year < this_year:
                         #     qty1 =0
@@ -738,7 +738,7 @@ class FlspSalesForecast(models.Model):
             Purpose: To ensure that the forecast date is greater than the current date
             Addon:   feb/01/2021 added ability to add forecast for only 12 months
         """
-        next_year = datetime.now() + relativedelta(months=12)
+        end_date = datetime.now() + relativedelta(months=13)
         # print(next_year)
         now = datetime.now()
         current_hour = now.strftime("%H")
@@ -750,8 +750,8 @@ class FlspSalesForecast(models.Model):
                 line.forecast_date += relativedelta(hour=int(current_hour), minute=int(current_min), second=int(current_sec))
                 if line.forecast_date < datetime.today():
                     raise ValidationError("Please enter a future forecast date")
-                elif line.forecast_date > next_year:
-                    raise ValidationError("Please enter Forecast within the next 12 months only")
+                elif line.forecast_date > end_date:
+                    raise ValidationError("Please enter Forecast within the next 13 months only")
                 print(line.forecast_date)
 
 
