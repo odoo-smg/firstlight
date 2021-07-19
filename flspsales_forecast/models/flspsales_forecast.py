@@ -700,6 +700,26 @@ class FlspSalesForecast(models.Model):
 
         return result
 
+    @api.model
+    def get_import_templates(self):
+        return [{
+                    'label': _('Import Template for Sale Forecast'),
+                    'template': '/flspsales_forecast/static/xls/Sales_forecast_template.xlsx'
+                }]
+    
+        
+    def button_sale_forecast_lines(self):
+        view_id = self.env.ref('flspsales_forecast.flsp_sales_forecast_line_tree').id
+        return {
+            'name': 'Sales Forecast Lines',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree',
+            'res_model': 'flsp.sales.forecast.line',
+            'view_id': view_id,
+            'views': [(view_id, 'tree')],
+            'target': 'new',
+        }
+
 
 class FlspSalesForecast(models.Model):
     """
