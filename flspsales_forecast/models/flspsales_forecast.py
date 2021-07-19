@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import datetime
 from odoo.exceptions import ValidationError
 from lxml import etree
@@ -699,14 +699,6 @@ class FlspSalesForecast(models.Model):
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
         return result
-
-    @api.model
-    def get_import_templates(self):
-        return [{
-                    'label': _('Import Template for Sale Forecast'),
-                    'template': '/flspsales_forecast/static/xls/Sales_forecast_template.xlsx'
-                }]
-    
         
     def button_sale_forecast_lines(self):
         view_id = self.env.ref('flspsales_forecast.flsp_sales_forecast_line_tree').id
@@ -779,6 +771,12 @@ class FlspSalesForecast(models.Model):
                     raise ValidationError("Please enter Forecast within the next 13 months only")
                 print(line.forecast_date)
 
+    @api.model
+    def get_import_templates(self):
+        return [{
+                    'label': _('Import Template for Sale Forecast'),
+                    'template': '/flspsales_forecast/static/xls/Sales_forecast_template.xlsx'
+                }]
 
 ##ADD TO SCHEDULED ACTION SO AS TO ARCHIEVE LAST MONTHS RECORDS
 # for line in env['flsp.sales.forecast.line'].search([]):
