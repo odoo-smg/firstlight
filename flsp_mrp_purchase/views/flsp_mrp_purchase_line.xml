@@ -33,6 +33,7 @@
                             <field name="vendor_qty"/>
                             <field name="vendor_price"/>
                             <field name="delay" readonly="1"/>
+                            <field name="vendor_price" readonly="1"/>
                         </group>
                     </group>
                     <group>
@@ -42,6 +43,9 @@
                             <field name="uom" string="Unit of Measure"/>
                             <field name="required_by"/>
                             <field name="six_month_forecast"/>
+                            <field name="twelve_month_forecast"/>
+                            <field name="six_month_actual" />
+                            <field name="twelve_month_actual" />
                         </group>
                         <group name="material_purchase_2nd" string="Purchase UofM" >
                             <field name="purchase_suggested" string="Required 2nd" invisible="False" readonly="1" />
@@ -103,6 +107,11 @@
                 <field name="avg_per_sbs" optional="hide"/>
                 <field name="avg_per_ssa" optional="hide"/>
                 <field name="six_month_forecast" optional="hide"/>
+                <field name="twelve_month_forecast" optional="hide"/>
+                <field name="vendor_price" optional="hide" />
+                <field name="total_price" optional="hide" />
+                <field name="six_month_actual" optional="hide" />
+                <field name="twelve_month_actual" optional="hide" />
             </tree>
         </field>
     </record>

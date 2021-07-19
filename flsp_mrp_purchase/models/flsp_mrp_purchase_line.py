@@ -62,11 +62,12 @@ class FlspMrppurchaseLine(models.Model):
     wip_qty = fields.Float(string='WIP Qty', readonly=True)
     vendor_id = fields.Many2one('res.partner', string='Supplier')
     vendor_qty = fields.Float(string='Quantity', readonly=True)
-    vendor_price = fields.Float(string='Price', readonly=True)
+    vendor_price = fields.Float(string='Unit Price', readonly=True)
     delay = fields.Integer(string="Delivery Lead Time")
     required_by = fields.Date(String="Required by", readonly=True)
     balance = fields.Float(string='Balance', readonly=True)
     late_delivery = fields.Float(string='Balance', readonly=True)
+    total_price = fields.Float(string='Total Price', readonly=True)
 
     balance_neg = fields.Float(string='Negative Balance', readonly=True)
     negative_by = fields.Date(String="Negative by", readonly=True)
@@ -104,6 +105,10 @@ class FlspMrppurchaseLine(models.Model):
     consumption_month12 = fields.Float(string='Consumption December')
 
     six_month_forecast = fields.Float(string='6 Months Forecast')
+    twelve_month_forecast = fields.Float(string='12 Months Forecast')
+
+    six_month_actual = fields.Float(string='6 Months Actual')
+    twelve_month_actual = fields.Float(string='12 Months Actual')
 
     def name_get(self):
         return [(
@@ -615,10 +620,19 @@ class FlspMrppurchaseLine(models.Model):
                     else:
                         suggested_qty = 0
 
+                # Calculates 12 months forecast
+                twelve_month_forecast = 0
+                for key in range(1,12):
+                    field_name = 'qty_month' + str(key)
+                    twelve_month_forecast += getattr(planning, field_name)
+
+
                 required_qty = suggested_qty
                 planning.suggested_qty = required_qty
                 planning.adjusted_qty = suggested_qty
                 planning.six_month_forecast = six_month_forecast
+                planning.twelve_month_forecast = twelve_month_forecast
+                planning.total_price = required_qty * planning.vendor_price
 
                 # Checking supplier quantity:
                 if suggested_qty > 0 and planning.vendor_qty > 0:
@@ -642,6 +656,7 @@ class FlspMrppurchaseLine(models.Model):
                                                                                               planning.product_id.uom_po_id)
                     planning.purchase_suggested = planning.product_id.uom_id._compute_quantity(suggested_qty,
                                                                                                planning.product_id.uom_po_id)
+                    planning.total_price = planning.vendor_price * planning.suggested_qty
                 planning.rationale += rationale
             # if not purchase_planning:
             #    print(forecast.product_id.name)
@@ -772,6 +787,8 @@ class FlspMrppurchaseLine(models.Model):
             total_forecast += item
 
         ret = False
+        production_location = self.env['stock.location'].search([('usage', '=', 'production')], limit=1).id
+        customer_location = self.env['stock.location'].search([('usage', '=', 'customer')], limit=1).id
         stock_location = self.env['stock.location'].search([('complete_name', '=', 'WH/Stock')]).parent_path
         if not stock_location:
             raise UserError('Stock Location is missing')
@@ -844,7 +861,19 @@ class FlspMrppurchaseLine(models.Model):
                     required_by = datetime.now()
                 required_by = required_by - timedelta(days=tmp_delay)
 
-        # if suggested_qty+total_forecast > 0:
+        # check consumption of the component
+        six_month_actual = 0
+        twelve_month_actual = 0
+        six_months_ago = datetime.now() - timedelta(days=180)
+        one_year_ago = datetime.now() - timedelta(days=365)
+
+        movements = self.env['stock.move.line'].search(['&', ('state', '=', 'done'), ('product_id', '=', product.id)])
+        for move in movements:
+            if move.location_dest_id.id in [production_location, customer_location]:
+                if move.date > six_months_ago:
+                    six_month_actual += move.qty_done
+                if move.date > one_year_ago:
+                    twelve_month_actual += move.qty_done
 
         ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
                            'product_id': product.id,
@@ -865,6 +894,7 @@ class FlspMrppurchaseLine(models.Model):
                            'vendor_qty': prod_vendor.min_qty,
                            'delay': tmp_delay,
                            'vendor_price': prod_vendor.price,
+                           'total_price': prod_vendor.price * suggested_qty,
                            'stock_qty': product.qty_available - pa_wip_qty,
                            'wip_qty': pa_wip_qty,
                            'po_qty': po_qty,
@@ -900,6 +930,8 @@ class FlspMrppurchaseLine(models.Model):
                            'negative_by': negative_by,
                            'avg_per_sbs': avg_per_sbs,
                            'avg_per_ssa': avg_per_ssa,
+                           'six_month_actual': six_month_actual,
+                           'twelve_month_actual': twelve_month_actual,
                            'source': 'source', })
 
         return ret

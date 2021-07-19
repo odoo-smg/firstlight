@@ -25,7 +25,7 @@
               </xpath>
             </field>
         </record>
-        
+
         <record id="flsp_production_tree_search" model='ir.ui.view'>
             <field name="name">flsp.mrp.production.search.inherit</field>
             <field name="model">mrp.production</field>
@@ -37,7 +37,10 @@
                     <filter string="Alma" name="filter_alma" domain="[('user_id.name', 'ilike', 'Alma'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
                     <filter string="Bryan" name="filter_bryan" domain="[('user_id.name', 'ilike', 'Bryan'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
                     <filter string="Jenny" name="filter_jenny" domain="[('user_id.name', 'ilike', 'Jenny'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Jojo" name="filter_jojo" domain="[('user_id.name', 'ilike', 'jojo'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
                     <filter string="Jovita" name="filter_jovi" domain="[('user_id.name', 'ilike', 'Jovita'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Rosemarie" name="filter_rose" domain="[('user_id.name', 'ilike', 'rose'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Vern" name="filter_vern" domain="[('user_id.name', 'ilike', 'vern'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
                     <filter string="No Responsible" name="filter_resp" domain="[('user_id.name', '=', False), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
                 </field>
             </field>
