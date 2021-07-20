@@ -197,7 +197,9 @@ class flsppurchaseproductprd(models.Model):
         ]
         open_receipts = self.env['stock.picking'].search(domain)
         po_ids = []
+        product_ids = []
         for product in self:
+            product_ids.append(product.id)
             if not product.id:
                 product.flsp_open_po_qty = 0.0
                 continue
@@ -207,7 +209,7 @@ class flsppurchaseproductprd(models.Model):
                 for move in stock_move_product:
                     po_ids.append(move.purchase_line_id.order_id.id)
         action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
-        action['domain'] = [('id', 'in', po_ids)]
+        action['domain'] = ['&', ('order_id', 'in', po_ids), ('product_id', 'in', product_ids)]
         return action
 
 
