@@ -146,6 +146,7 @@ class ReportMyBomStructure(models.AbstractModel):
             sub_total = self.env.company.currency_id.round(sub_total)
             components.append({
                 'prod_id': line.product_id.id,
+                'prod': line.product_id,
                 'prod_name': line.product_id.display_name,
                 'code': line.child_bom_id and line.child_bom_id.display_name or '',
                 'prod_qty': line_quantity,
@@ -228,7 +229,8 @@ class ReportMyBomStructure(models.AbstractModel):
                     'code': bom_line['code'],
                     'child_bom': bom_line['child_bom'],
                     'legacy': bom_line['legacy'],
-                    'prod_id': bom_line['prod_id']
+                    'prod_id': bom_line['prod_id'],
+                    'prod': bom_line['prod']
                 })
                 if bom_line['child_bom'] and (unfolded or bom_line['child_bom'] in child_bom_ids):
                     line = self.env['mrp.bom.line'].browse(bom_line['line_id'])
