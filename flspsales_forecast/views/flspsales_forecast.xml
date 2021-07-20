@@ -93,4 +93,37 @@
     <menuitem id="flsp_sales_forecast_menu" name="Sales Forecast"
               parent="sale.sale_order_menu"
               action="flsp_sales_forecast_action"/>
+
+
+    <record model="ir.ui.view" id="flsp_sales_forecast_line_tree">
+        <field name="name">flsp.sales.forecast.line.tree</field>
+        <field name="model">flsp.sales.forecast.line</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Sales Forecast Line tree">
+                <field name="order_id"/>
+                <field name="source"/>
+                <field name="customer"/>
+                <field name="forecast_qty"/>
+                <field name="forecast_date"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record model="ir.actions.act_window" id="flsp_sales_forecast_line_action">
+        <field name="name">Sales Forecast Line</field>
+        <field name="res_model">flsp.sales.forecast.line</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the forecast line
+            </p>
+        </field>
+    </record>
+
+    <!--Menu items-->
+    <menuitem id="flsp_sales_forecast_line_menu" name="Sales Forecast Line"
+              parent="sale.sale_order_menu"
+              action="flsp_sales_forecast_line_action"/>
+
 </odoo>

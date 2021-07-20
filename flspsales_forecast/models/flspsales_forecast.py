@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import datetime
 from odoo.exceptions import ValidationError
 from lxml import etree
@@ -73,6 +73,11 @@ class FlspSalesForecast(models.Model):
                 # this_year = datetime.today().year #2020
                 # nxt_year = datetime.today().year + 1 #2021
                 if forecast:
+                    if ((forecast.year > datetime.today().year + 1) or (forecast.year == datetime.today().year + 1 and forecast.month >= datetime.today().month)):
+                        continue
+                    if (forecast.year < datetime.today().year or (forecast.year == datetime.today().year and forecast.month < datetime.today().month)):
+                        continue
+
                     if forecast.month == 1:
                         # if forecast.year < this_year:
                         #     qty1 =0
@@ -694,6 +699,18 @@ class FlspSalesForecast(models.Model):
                 result['arch'] = etree.tostring(doc, encoding='unicode')
 
         return result
+        
+    def button_sale_forecast_lines(self):
+        view_id = self.env.ref('flspsales_forecast.flsp_sales_forecast_line_tree').id
+        return {
+            'name': 'Sales Forecast Lines',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree',
+            'res_model': 'flsp.sales.forecast.line',
+            'view_id': view_id,
+            'views': [(view_id, 'tree')],
+            'target': 'new',
+        }
 
 
 class FlspSalesForecast(models.Model):
@@ -738,7 +755,7 @@ class FlspSalesForecast(models.Model):
             Purpose: To ensure that the forecast date is greater than the current date
             Addon:   feb/01/2021 added ability to add forecast for only 12 months
         """
-        next_year = datetime.now() + relativedelta(months=12)
+        end_date = datetime.now() + relativedelta(months=13)
         # print(next_year)
         now = datetime.now()
         current_hour = now.strftime("%H")
@@ -750,10 +767,16 @@ class FlspSalesForecast(models.Model):
                 line.forecast_date += relativedelta(hour=int(current_hour), minute=int(current_min), second=int(current_sec))
                 if line.forecast_date < datetime.today():
                     raise ValidationError("Please enter a future forecast date")
-                elif line.forecast_date > next_year:
-                    raise ValidationError("Please enter Forecast within the next 12 months only")
+                elif line.forecast_date > end_date:
+                    raise ValidationError("Please enter Forecast within the next 13 months only")
                 print(line.forecast_date)
 
+    @api.model
+    def get_import_templates(self):
+        return [{
+                    'label': _('Import Template for Sale Forecast'),
+                    'template': '/flspsales_forecast/static/xls/Sales_forecast_template.xlsx'
+                }]
 
 ##ADD TO SCHEDULED ACTION SO AS TO ARCHIEVE LAST MONTHS RECORDS
 # for line in env['flsp.sales.forecast.line'].search([]):
