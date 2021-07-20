@@ -52,8 +52,6 @@
                                             <th name="th_mrp_bom_h">BoM</th>
                                             <th class="text-right">Quantity</th>
                                             <th class="text-left" groups="uom.group_uom">Unit of Measure</th>
-                                            <th class="text-right">Forecasted Qty</th>
-                                            <th class="text-right">Available Qty</th>
                                             <th class="text-right">Legacy Part#</th>
                                         </tr>
                                     </thead>
@@ -67,8 +65,6 @@
                                             </td>
                                             <td class="text-right"><span><t t-esc="data['bom_qty']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
                                             <td groups="uom.group_uom"><span><t t-esc="data['bom'].product_uom_id.name"/></span></td>
-                                            <td class="text-right"><span><t t-esc="data['product'].virtual_available" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
-                                            <td class="text-right"><span><t t-esc="data['product'].flsp_available_qty" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
                                             <td class="text-right"><span><t t-esc="data['legacy']" /></span></td>
                                         </tr>
                                         <t t-if="data['report_type'] == 'html'" t-call="flspmfg.report_mrp_mybom_line"/>
@@ -110,8 +106,6 @@
                     </td>
                     <td class="text-right"><span><t t-esc="l['prod_qty']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
                     <td groups="uom.group_uom"><span><t t-esc="l['prod_uom']"/></span></td>
-                    <td class="text-right"><span><t t-esc="l['product'].virtual_available" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
-                    <td class="text-right"><span><t t-esc="l['product'].flsp_available_qty" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
                     <td class="text-right"><span><t t-esc="l['legacy']" /></span></td>
                 </tr>
             </t>
@@ -178,18 +172,6 @@
                       </span>
                   </td>
                   <td groups="uom.group_uom"><span><t t-esc="l['uom']"/></span></td>
-                  <td class="text-right">
-                      <span>
-                          <t t-if="l['type'] == 'operation'" t-esc="l['prod'].virtual_available" t-options='{"widget": "float_time"}'/>
-                          <t t-if="l['type'] == 'bom'" t-esc="l['prod'].virtual_available" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
-                      </span>
-                  </td>
-                  <td class="text-right">
-                      <span>
-                          <t t-if="l['type'] == 'operation'" t-esc="l['prod'].flsp_available_qty" t-options='{"widget": "float_time"}'/>
-                          <t t-if="l['type'] == 'bom'" t-esc="l['prod'].flsp_available_qty" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
-                      </span>
-                  </td>
                   <td class="text-right" ><span><t t-esc="l['legacy']"/></span></td>
               </tr>
           </t>
