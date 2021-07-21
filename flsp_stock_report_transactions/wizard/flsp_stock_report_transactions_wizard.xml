@@ -13,7 +13,8 @@
                         <field name="lot_id" attrs="{'invisible': [('tracking', '=', 'none')]}" />
                     </group>
                     <footer>
-                        <button name="flsp_report" type="object" string="Confirm" class="btn-primary" />
+                        <button name="flsp_report" type="object" string="PDF Report" class="btn-primary" />
+                        <button name="flsp_report_excel" type="object" string="Excel Report" class="btn-primary" />
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
                     </footer>
                 </form>

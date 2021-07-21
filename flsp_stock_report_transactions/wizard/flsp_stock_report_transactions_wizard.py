@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class FlspStockReportTransactionsWiz(models.TransientModel):
@@ -24,9 +26,12 @@ class FlspStockReportTransactionsWiz(models.TransientModel):
         return self.env.ref('flsp_stock_report_transactions.transrep').report_action(self, data=data)
 
 
-        self.ensure_one()
+        # self.ensure_one()
 
-        action = self.env.ref('flsp_stock_report_transactions.flsp_stock_report_transaction_action').read()[0]
-        action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
-        return action
+        # action = self.env.ref('flsp_stock_report_transactions.flsp_stock_report_transaction_action').read()[0]
+        # action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
+        # return action
 
+    def flsp_report_excel(self):
+        [data] = self.read()
+        return self.env.ref('flsp_stock_report_transactions.action_flsp_stock_transactions_xlsx').report_action(self, data=data)

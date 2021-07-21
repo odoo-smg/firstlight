@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <report
+            id="action_flsp_stock_transactions_xlsx"
+            string="FLSP - Stock Transactions (Excel)"
+            model="report.flsp_stock_report_transactions.transrep_xlsx"
+            name="flsp_stock_report_transactions.transrep_xlsx"   
+            file="FLSP - Stock Transactions"
+            report_type="xlsx"
+            attachment_use="False"
+    />
 
     <report
             string="FLSP - Stock Transactions"
