@@ -43,13 +43,12 @@ class FlspMrpProduct(models.Model):
     @api.depends('qty_available', 'virtual_available')
     def get_available_qty(self):
         # according to rules in Ticket 413
-        if self.virtual_available < 0:
-            self.flsp_available_qty = 0
-        elif 0 == self.virtual_available:
-            self.flsp_available_qty = 0
-        elif self.virtual_available > 0 and self.virtual_available <= self.qty_available:
-            self.flsp_available_qty = self.virtual_available
-        else:
-            self.flsp_available_qty = self.qty_available
-
-        return self.flsp_available_qty
+        for record in self:
+            if record.virtual_available < 0:
+                record.flsp_available_qty = 0
+            elif 0 == record.virtual_available:
+                record.flsp_available_qty = 0
+            elif record.virtual_available > 0 and record.virtual_available <= record.qty_available:
+                record.flsp_available_qty = record.virtual_available
+            else:
+                record.flsp_available_qty = record.qty_available
