@@ -28,6 +28,8 @@
                                         <th class="text-left" groups="uom.group_uom">UofM</th>
                                         <th t-if="data['report_structure'] != 'bom_structure'" class="o_mrp_prod_cost text-right" title="This is the cost defined on the product.">On Hand</th>
                                         <th t-if="data['report_structure'] != 'bom_structure'" class="o_mrp_bom_cost text-right" title="This is the cost based on the BoM of the product. It is computed by summing the costs of the components and operations needed to build the product.">Diff</th>
+                                        <th class="text-right">Forecasted Qty</th>
+                                        <th class="text-right">Available Qty</th>
                                         <th t-if="data['report_type'] == 'html' and data['has_attachments']" class="o_mrp_has_attachments" title="Files attached to the product">Attachments</th>
                                     </tr>
                                 </thead>
@@ -49,6 +51,8 @@
                                         <td t-if="data['report_structure'] != 'bom_structure'" class="o_mrp_bom_cost text-right">
                                             <span><t t-esc="data['total']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span>
                                         </td>
+                                        <td class="text-right"><span><t t-esc="data['product'].virtual_available" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
+                                        <td class="text-right"><span><t t-esc="data['product'].flsp_available_qty" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
                                         <td t-if="data['report_type'] == 'html'">
                                             <span>
                                                 <t t-if="data['attachments']">
@@ -123,6 +127,8 @@
                 <!--td class="o_mrp_bom_cost text-right">
                     <span t-esc="l['total']" t-options='{"widget": "monetary", "display_currency": currency}'/>
                 </td-->
+                <td class="text-right" t-att-style="att_tr"><span><t t-esc="l['prod'].virtual_available" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
+                <td class="text-right" t-att-style="att_tr"><span><t t-esc="l['prod'].flsp_available_qty" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></span></td>
                 <td>
                     <span>
                         <t t-if="l['attachments']">

@@ -154,6 +154,7 @@ class ReportFlspStructure(models.AbstractModel):
             sub_total = self.env.company.currency_id.round(sub_total)
             prod_on_hand = line.product_id.qty_available
             components.append({
+                'prod': line.product_id,
                 'prod_id': line.product_id.id,
                 'prod_name': line.product_id.display_name[:70],
                 'code': line.child_bom_id and line.child_bom_id.code or '',
