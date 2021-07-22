@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class flspsalesorder(models.Model):
@@ -111,6 +114,14 @@ class flspsalesorder(models.Model):
 
         self.update(values)
         return {}
+
+    def action_confirm(self):
+        if not self.partner_id.vat:
+            ca_id = self.env['res.country'].search([('name', '=', 'Canada')])
+            if self.partner_shipping_id.country_id != ca_id:
+                raise UserError(_("'Tax ID' of the customer '%s' is required") % (self.partner_id.name))
+        return super(flspsalesorder, self).action_confirm()
+
 
 class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
