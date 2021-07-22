@@ -116,10 +116,21 @@ class flspsalesorder(models.Model):
         return {}
 
     def action_confirm(self):
+        # verify Tax ID when to confirm Sales Order
         if not self.partner_id.vat:
             ca_id = self.env['res.country'].search([('name', '=', 'Canada')])
             if self.partner_shipping_id.country_id != ca_id:
                 raise UserError(_("'Tax ID' of the customer '%s' is required") % (self.partner_id.name))
+        
+        # verify Contact Information when to confirm Sales Order
+        if not self.partner_shipping_id.flsp_contacts_ids:
+            raise UserError(_("At least one of 'Contacts' is required for the Delivery Address '%s'") % (self.partner_shipping_id.name))
+        primary_contact = self.partner_shipping_id.flsp_contacts_ids[0]
+        if not primary_contact.name:
+            raise UserError(_("'Name' of the contact for the customer '%s' is required") % (self.partner_shipping_id.name))
+        if not primary_contact.phone:
+            raise UserError(_("'Phone' of the contact '%s' for the customer '%s' is required") % (primary_contact.name, self.partner_shipping_id.name))
+                
         return super(flspsalesorder, self).action_confirm()
 
 
