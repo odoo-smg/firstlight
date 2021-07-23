@@ -28,7 +28,7 @@
                         <page string="Serial Numbers created">
                             <field name="serial_num_line"
                             widget="section_and_note_one2many"
-                            mode="tree,kanban">
+                            mode="tree,kanban" readonly="1">
                                 <tree  editable="bottom">
                                     <field name="serial_num"/>
                                 </tree>

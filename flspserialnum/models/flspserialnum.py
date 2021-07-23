@@ -99,7 +99,6 @@ class FlspSerialNum(models.Model):
             Purpose: to create the serial numbers we want including the first serial number
             Method   Method logic is created based off stock move method (_generate_serial_numbers)
         """
-        print("testing the assign")
         caught_initial_number = regex_findall("\d+", self.first_serial)
         initial_number = caught_initial_number[-1]
         padding = len(initial_number)
@@ -114,29 +113,62 @@ class FlspSerialNum(models.Model):
                 str(initial_number + i).zfill(padding),
                 suffix
             ))
-        print(lot_names)
-        move_lines_commands = self._write_list_on_serialnumlin(lot_names)
-        self.write({'serial_num_line': move_lines_commands})
 
-        ##Writing the serial numbers in stock.production.lot
-        for line in lot_names:
-            self.env['stock.production.lot'].create({'name':line,
+        # Writing the serial numbers in stock.production.lot
+        existing_lots = self.env['stock.production.lot'].search([('name', 'in', lot_names), ('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id)]).mapped('name')
+
+        if len(existing_lots) > 0:
+            self._write_serialnum_lines(existing_lots)
+
+            absent_lot_names = []
+            for line in lot_names:
+                if not line in existing_lots:
+                    absent_lot_names.append(line)
+
+            # open wizard to let user choose what to do next
+            return {
+                'name': 'FLSP Serial Number Wizard',
+                'view_mode': 'form',
+                'view_id': self.env.ref('flspserialnum.flsp_serial_num_wizard_form_view').id,
+                'res_model': 'flsp.serial.num.wizard',
+                'type': 'ir.actions.act_window',
+                'target': 'new',
+                'context': {
+                    'default_order_id': self.id,
+                    'default_existing_lots': existing_lots,
+                    'default_absent_lot_names': absent_lot_names,
+                }
+            }
+        else:
+            self._write_serialnum_lines(lot_names)
+            self.create_absent_serial_num(lot_names)
+
+        return True
+
+    def create_absent_serial_num(self, absent_lot_names):
+        for line in absent_lot_names:
+            self.env['stock.production.lot'].create({'name':line.serial_num,
                                                      'product_id':self.product_id.id,
                                                      'company_id':self.company_id.id,
                                                      # 'product_qty':1
                                                      })
-        return True
 
-    def _write_list_on_serialnumlin(self, lot_names):
+    def _write_serialnum_lines(self, lot_names):
         """
             Purpose: To write the serial numbers created here on the serial num line
             Method:  Method logic is borrowed from stock move logic method - _generate_serial_move_line_commands
         """
-        serial_nums = []
         for lot_name in lot_names:
-            move_line_cmd = dict(serial_num=lot_name)
-            serial_nums.append((0, 0, move_line_cmd))
-        return serial_nums
+            lot = self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', '=', lot_name)])
+            if lot:
+                continue
+            else:
+                self.env['flsp.serialnumline'].create({
+                    'order_id': self.id,
+                    'serial_num': lot_name,
+                })
+
+        return self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', 'in', lot_names)])
 
 
 class FlspSerialNumLine(models.Model):
