@@ -10,7 +10,8 @@ class FlspSerialNumWizard(models.TransientModel):
 
     order_id = fields.Many2one('flsp.serialnum', string='Reference')
     existing_lots = fields.Many2many('flsp.serialnumline', 'existing_lines', string='Existing Serial Num Lines')
-    absent_lot_names = fields.Many2many('flsp.serialnumline', 'absent_lines', string='Absent Serial Num Lines')
+    absent_lots = fields.Many2many('flsp.serialnumline', 'absent_lines', string='Absent Serial Num Lines')
+    extra_lots = fields.Many2many('flsp.serialnumline', 'extra_lines', string='Extra Serial Num Lines')
 
     @api.model
     def default_get(self, fields):
@@ -22,25 +23,32 @@ class FlspSerialNumWizard(models.TransientModel):
             if order.exists():
                 vals['order_id'] = order
                 
-                default_existing_lots = self.env.context.get('default_existing_lots')
-                if default_existing_lots:
-                    vals['existing_lots'] = self.env['flsp.serialnumline'].search([('order_id', '=', default_order_id), ('serial_num', 'in', default_existing_lots)])
+                default_existing_lot_names = self.env.context.get('default_existing_lot_names')
+                if default_existing_lot_names:
+                    vals['existing_lots'] = self.env['flsp.serialnumline'].search([('order_id', '=', default_order_id), ('serial_num', 'in', default_existing_lot_names)])
                 
                 default_absent_lot_names = self.env.context.get('default_absent_lot_names')
                 if default_absent_lot_names:
-                    vals['absent_lot_names'] = order._write_absent_serialnum_lines(default_absent_lot_names)
+                    vals['absent_lots'] = order._write_absent_serialnum_lines(default_absent_lot_names)
+                    
+                default_extra_lot_names = self.env.context.get('default_extra_lot_names')
+                vals['extra_lots'] = self.env['flsp.serialnumline'].search([('order_id', '=', default_order_id), ('serial_num', 'in', default_extra_lot_names)])
 
         vals = self._convert_to_write(vals)
         return vals
 
     def action_button_continue_creation(self):
-        if len(self.absent_lot_names) > 0:
-            self.order_id.create_absent_serial_num(self.absent_lot_names.mapped('serial_num'))
+        if len(self.absent_lots) > 0:
+            self.order_id.create_absent_serial_num(self.absent_lots.mapped('serial_num'))
+            
+        if len(self.extra_lots) > 0:
+            self.order_id.unlink_serial_num(self.extra_lots.mapped('serial_num'))
+            self.extra_lots.unlink()
 
         return {'type': 'ir.actions.act_window_close'} 
     
     def action_button_cancel(self):
-        if self.absent_lot_names:
-            self.absent_lot_names.unlink()
+        if self.absent_lots:
+            self.absent_lots.unlink()
                 
         return {'type': 'ir.actions.act_window_close'} 

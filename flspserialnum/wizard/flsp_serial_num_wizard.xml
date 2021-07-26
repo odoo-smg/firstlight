@@ -5,16 +5,26 @@
             <field name="model">flsp.serial.num.wizard</field>
             <field name="arch" type="xml">
                 <form string="FLSP Serial Number Wizard">
-                    <h4>Would you like to continue to create the target Serial Numbers?</h4>
-                    <p>Some of the serial numbers to be created have already been there: </p>
-                    <field name="existing_lots" readonly="1">
-                        <tree create="false" edit="false" delete="false" >
-                            <field name="serial_num" readonly="1"/>
-                        </tree>
-                    </field>
-                    <div>
-                        <p>New serial numbers to be created: </p>
-                        <field name="absent_lot_names" readonly="1">
+                    <h4>Would you like to continue to create or remove the Serial Numbers?</h4>
+                    <div attrs="{'invisible': [ ('existing_lots', '=', []) ]}">
+                        <p>Existing serial numbers to keep:</p>
+                        <field name="existing_lots" readonly="1">
+                            <tree create="false" edit="false" delete="false" >
+                                <field name="serial_num" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div attrs="{'invisible': [ ('absent_lots', '=', []) ]}">
+                        <p>New serial numbers to create: </p>
+                        <field name="absent_lots" readonly="1">
+                            <tree create="false" edit="false" delete="false" >
+                                <field name="serial_num" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div attrs="{'invisible': [ ('extra_lots', '=', []) ]}">
+                        <p>Existing serial numbers to remove: </p>
+                        <field name="extra_lots" readonly="1">
                             <tree create="false" edit="false" delete="false" >
                                 <field name="serial_num" readonly="1"/>
                             </tree>

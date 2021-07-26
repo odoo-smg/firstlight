@@ -114,16 +114,24 @@ class FlspSerialNum(models.Model):
                 suffix
             ))
 
-        # Writing the serial numbers in stock.production.lot
+        # existing serial numbers in the range in stock.production.lot
         existing_lots = self.env['stock.production.lot'].search([('name', 'in', lot_names), ('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id)])
+        
+        # all created serial numbers in stock.production.lot associated with the order_id
+        created_lot_names = self.env['flsp.serialnumline'].search([('order_id', '=', self.id)]).mapped('serial_num')
 
-        if len(existing_lots) > 0:
+        if len(existing_lots) > 0 or (len(created_lot_names) > len(lot_names)):
             self._write_existing_serialnum_lines(existing_lots)
 
             absent_lot_names = []
             for line in lot_names:
                 if not line in existing_lots.mapped('name'):
                     absent_lot_names.append(line)
+            
+            extra_lot_names = []
+            for line in created_lot_names:
+                if not line in lot_names:
+                    extra_lot_names.append(line)
 
             # open wizard to let user choose what to do next
             return {
@@ -135,8 +143,9 @@ class FlspSerialNum(models.Model):
                 'target': 'new',
                 'context': {
                     'default_order_id': self.id,
-                    'default_existing_lots': existing_lots.mapped('name'),
+                    'default_existing_lot_names': existing_lots.mapped('name'),
                     'default_absent_lot_names': absent_lot_names,
+                    'default_extra_lot_names': extra_lot_names,
                 }
             }
         else:
@@ -177,7 +186,9 @@ class FlspSerialNum(models.Model):
                     'order_id': self.id,
                     'serial_num': lot.name,
                 })
-
+                                      
+    def unlink_serial_num(self, lot_names):
+        self.env['stock.production.lot'].search([('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id), ('name', 'in', lot_names)]).unlink()
 
 class FlspSerialNumLine(models.Model):
     """
@@ -187,9 +198,3 @@ class FlspSerialNumLine(models.Model):
     _description = "FLSP Serial Numbers for Orders"
     order_id = fields.Many2one('flsp.serialnum', string='Reference', required=True, ondelete='cascade', index=True, copy=False)
     serial_num = fields.Char("Serial Numbers") #On
-
-
-
-
-
-
