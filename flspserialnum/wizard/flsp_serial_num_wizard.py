@@ -28,13 +28,13 @@ class FlspSerialNumWizard(models.TransientModel):
                 
                 default_absent_lot_names = self.env.context.get('default_absent_lot_names')
                 if default_absent_lot_names:
-                    vals['absent_lot_names'] = order._write_serialnum_lines(default_absent_lot_names)
+                    vals['absent_lot_names'] = order._write_absent_serialnum_lines(default_absent_lot_names)
 
         vals = self._convert_to_write(vals)
         return vals
 
     def action_continue_creation(self):
         if len(self.absent_lot_names) > 0:
-            self.order_id.create_absent_serial_num(self.absent_lot_names)
+            self.order_id.create_absent_serial_num(self.absent_lot_names.mapped('serial_num'))
 
         return {'type': 'ir.actions.act_window_close'} 

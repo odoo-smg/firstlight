@@ -115,14 +115,14 @@ class FlspSerialNum(models.Model):
             ))
 
         # Writing the serial numbers in stock.production.lot
-        existing_lots = self.env['stock.production.lot'].search([('name', 'in', lot_names), ('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id)]).mapped('name')
+        existing_lots = self.env['stock.production.lot'].search([('name', 'in', lot_names), ('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id)])
 
         if len(existing_lots) > 0:
-            self._write_serialnum_lines(existing_lots)
+            self._write_existing_serialnum_lines(existing_lots)
 
             absent_lot_names = []
             for line in lot_names:
-                if not line in existing_lots:
+                if not line in existing_lots.mapped('name'):
                     absent_lot_names.append(line)
 
             # open wizard to let user choose what to do next
@@ -135,29 +135,26 @@ class FlspSerialNum(models.Model):
                 'target': 'new',
                 'context': {
                     'default_order_id': self.id,
-                    'default_existing_lots': existing_lots,
+                    'default_existing_lots': existing_lots.mapped('name'),
                     'default_absent_lot_names': absent_lot_names,
                 }
             }
         else:
-            self._write_serialnum_lines(lot_names)
-            self.create_absent_serial_num(lot_names)
+            lots = self.create_absent_serial_num(lot_names)
+            self._write_existing_serialnum_lines(lots)
 
         return True
 
     def create_absent_serial_num(self, absent_lot_names):
         for line in absent_lot_names:
-            self.env['stock.production.lot'].create({'name':line.serial_num,
+            self.env['stock.production.lot'].create({'name':line,
                                                      'product_id':self.product_id.id,
                                                      'company_id':self.company_id.id,
                                                      # 'product_qty':1
                                                      })
+        return self.env['stock.production.lot'].search([('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id), ('serial_num', 'in', absent_lot_names)])
 
-    def _write_serialnum_lines(self, lot_names):
-        """
-            Purpose: To write the serial numbers created here on the serial num line
-            Method:  Method logic is borrowed from stock move logic method - _generate_serial_move_line_commands
-        """
+    def _write_absent_serialnum_lines(self, lot_names):
         for lot_name in lot_names:
             lot = self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', '=', lot_name)])
             if lot:
@@ -169,6 +166,17 @@ class FlspSerialNum(models.Model):
                 })
 
         return self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', 'in', lot_names)])
+
+    def _write_existing_serialnum_lines(self, lots):
+        for lot in lots:
+            lot_in_line = self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', '=', lot.name)])
+            if lot_in_line:
+                continue
+            else:
+                self.env['flsp.serialnumline'].create({
+                    'order_id': self.id,
+                    'serial_num': lot.name,
+                })
 
 
 class FlspSerialNumLine(models.Model):
