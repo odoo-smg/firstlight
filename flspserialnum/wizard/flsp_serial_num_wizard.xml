@@ -21,8 +21,8 @@
                         </field>
                     </div>
                     <footer>
-                        <button name="action_continue_creation" type="object" string="Continue" class="btn-primary" />
-                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                        <button name="action_button_continue_creation" type="object" string="Continue" class="btn-primary" />
+                        <button name="action_button_cancel" type="object" string="Discard" class="btn-default btn-secondary" />
                     </footer>
                 </form>
             </field>

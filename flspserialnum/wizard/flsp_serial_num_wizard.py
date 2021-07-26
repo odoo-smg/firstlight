@@ -33,8 +33,14 @@ class FlspSerialNumWizard(models.TransientModel):
         vals = self._convert_to_write(vals)
         return vals
 
-    def action_continue_creation(self):
+    def action_button_continue_creation(self):
         if len(self.absent_lot_names) > 0:
             self.order_id.create_absent_serial_num(self.absent_lot_names.mapped('serial_num'))
 
+        return {'type': 'ir.actions.act_window_close'} 
+    
+    def action_button_cancel(self):
+        if self.absent_lot_names:
+            self.absent_lot_names.unlink()
+                
         return {'type': 'ir.actions.act_window_close'} 
