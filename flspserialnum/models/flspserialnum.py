@@ -152,7 +152,7 @@ class FlspSerialNum(models.Model):
                                                      'company_id':self.company_id.id,
                                                      # 'product_qty':1
                                                      })
-        return self.env['stock.production.lot'].search([('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id), ('serial_num', 'in', absent_lot_names)])
+        return self.env['stock.production.lot'].search([('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id), ('name', 'in', absent_lot_names)])
 
     def _write_absent_serialnum_lines(self, lot_names):
         for lot_name in lot_names:
