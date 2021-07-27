@@ -18,7 +18,7 @@ class FlspSalesForecast(models.Model):
     _name = 'flsp.sales.forecast'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Flsp Sales Forecast'
-    _rec_name = "product_id"
+    _rec_name = "product_default_code"
 
     _sql_constraints = [
         ('default_product_unique',
@@ -30,6 +30,7 @@ class FlspSalesForecast(models.Model):
     product_id = fields.Many2one('product.product', string='Product',
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
         change_default=True, tracking=True)
+    product_default_code = fields.Char(related='product_id.default_code', string='Part #', store=True)
 
     # User table to fill
     forecast_line = fields.One2many('flsp.sales.forecast.line', 'order_id', string='Order Lines', copy=True, nauto_join=True)
@@ -713,12 +714,12 @@ class FlspSalesForecast(models.Model):
         }
 
 
-class FlspSalesForecast(models.Model):
+class FlspSalesForecastLine(models.Model):
     """
-            Class_Name: FlspSalesForecast
-            Model_Name: flsp_sales_forecast
+            Class_Name: FlspSalesForecastLine
+            Model_Name: flsp_sales_forecast_line
             Purpose:    To help create the flsp_sales_forecast
-            Date:       Dec/15th/2020/W
+            Date:       Dec/15th/2020
             Updated:
             Author:     Sami Byaruhanga
     """
@@ -743,7 +744,7 @@ class FlspSalesForecast(models.Model):
     # @api.model
     # def write(self, vals):
     #     print("=======write function=====")
-    #     res = super(FlspSalesForecast, self).write(vals)
+    #     res = super(FlspSalesForecastLine, self).write(vals)
     #     # for line in self.forecast_date:
     #     self.forecast_date += relativedelta(hours=7)
     #     print(self.forecast_date)
