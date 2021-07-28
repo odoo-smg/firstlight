@@ -49,51 +49,18 @@ class flspmrpwipproduction(models.Model):
             },
         }
 
-    def _write_list_on_serialnumlin(self, lot_names):
-        """
-            Purpose: To write the serial numbers created here on the serial num line
-            Method:  Method logic is borrowed from stock move logic method - _generate_serial_move_line_commands
-        """
-        serial_nums = []
-        for lot_name in lot_names:
-            move_line_cmd = dict(serial_num=lot_name[1], lot_id=lot_name[0])
-            serial_nums.append((0, 0, move_line_cmd))
-        return serial_nums
-
-    def create_serial_num(self):
-        """
-            Purpose: to create the serial numbers we want including the first serial number
-            Method   Method logic is created based off stock move method (_generate_serial_numbers)
-        """
-        caught_initial_number = regex_findall("\d+", self.first_serial)
-        initial_number = caught_initial_number[-1]
-        padding = len(initial_number)
-        splitted = regex_split(initial_number, self.first_serial)# We split the serial number to get the prefix and suffix.
-        prefix = initial_number.join(splitted[:-1]) #initial_number could appear several times in the SN, e.g. BAV023B00001S00001
-        suffix = splitted[-1]
-        initial_number = int(initial_number)
-        lot_names = []
-        for i in range(0, self.serial_count):
-            lot_names.append([False, '%s%s%s' % (
-                prefix,
-                str(initial_number + i).zfill(padding),
-                suffix
-            )])
-
-        for line in lot_names:
-            lot = self.env['stock.production.lot'].create({'name':line[1],
-                                                     'product_id':self.product_id.id,
-                                                     'company_id':self.company_id.id,
-                                                     # 'product_qty':1
-                                                     })
-            if lot:
-                line[0] = lot.id
-
-        move_lines_commands = self._write_list_on_serialnumlin(lot_names)
-        self.write({'serial_num_line': move_lines_commands})
-
-        ##Writing the serial numbers in stock.production.lot
-        return True
+    def _write_existing_serialnum_lines(self, lots):
+        # overwrite the method defined in firstlight\flspserialnum\models\flspserialnum.py
+        for lot in lots:
+            lot_in_line = self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', '=', lot.name)])
+            if lot_in_line:
+                continue
+            else:
+                self.env['flsp.serialnumline'].create({
+                    'order_id': self.id,
+                    'serial_num': lot.name,
+                    'lot_id': lot.id,
+                })
 
 class flspMrpBatchSerialLine(models.Model):
     _inherit = 'flsp.serialnumline'

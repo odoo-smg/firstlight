@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record id="flsp_serial_num_wizard_form_view" model="ir.ui.view">
+            <field name="name">FLSP Serial Number Wizard</field>
+            <field name="model">flsp.serial.num.wizard</field>
+            <field name="arch" type="xml">
+                <form string="FLSP Serial Number Wizard">
+                    <h4>Would you like to continue to create or remove the Serial Numbers?</h4>
+                    <div attrs="{'invisible': [ ('existing_lots', '=', []) ]}">
+                        <p>Existing serial numbers to keep:</p>
+                        <field name="existing_lots" readonly="1">
+                            <tree create="false" edit="false" delete="false" >
+                                <field name="serial_num" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div attrs="{'invisible': [ ('absent_lots', '=', []) ]}">
+                        <p>New serial numbers to create: </p>
+                        <field name="absent_lots" readonly="1">
+                            <tree create="false" edit="false" delete="false" >
+                                <field name="serial_num" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div attrs="{'invisible': [ ('extra_lots', '=', []) ]}">
+                        <p>Existing serial numbers to remove: </p>
+                        <field name="extra_lots" readonly="1">
+                            <tree create="false" edit="false" delete="false" >
+                                <field name="serial_num" readonly="1"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <footer>
+                        <button name="action_button_continue_creation" type="object" string="Continue" class="btn-primary" />
+                        <button name="action_button_cancel" type="object" string="Discard" class="btn-default btn-secondary" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+</odoo>

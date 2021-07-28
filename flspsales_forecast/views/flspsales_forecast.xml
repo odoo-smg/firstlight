@@ -110,6 +110,17 @@
         </field>
     </record>
 
+    <record id="flsp_sales_forecast_line_search" model="ir.ui.view">
+        <field name="name">flsp.sales.forecast.line.search</field>
+        <field name="model">flsp.sales.forecast.line</field>
+        <field name="arch" type="xml">
+            <search string="search fields">
+                <field name="order_id"/>
+                <field name="customer"/>
+            </search>
+        </field>
+    </record>
+
     <!--Action-->
     <record model="ir.actions.act_window" id="flsp_sales_forecast_line_action">
         <field name="name">Sales Forecast Line</field>
