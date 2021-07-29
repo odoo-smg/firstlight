@@ -79,24 +79,24 @@ class Flsp_PO_Status(models.Model):
         order.write({'flsp_po_status': 'to_approve'})
         return True
 
-            # Deal with double validation process
-            if order.company_id.po_double_validation == 'one_step' \
-                    or (order.company_id.po_double_validation == 'two_step' \
-                        and order.amount_total < self.env.company.currency_id._convert(
-                        order.company_id.po_double_validation_amount, order.currency_id, order.company_id,
-                        order.date_order or fields.Date.today())) \
-                    or order.user_has_groups('purchase.group_purchase_manager'):
-                order.button_approve()
-            else:
-                order.write({'state': 'to approve'})
-        if self.flsp_vendor_confirmation_date:
-            if order.is_shipped:
-                order.write({'flsp_po_status': 'received', })
-            else:
-                order.write({'flsp_po_status': 'confirmed'})
-        else:
-            order.write({'flsp_po_status': 'non_confirmed'})
-        return True
+        # Deal with double validation process
+        #if order.company_id.po_double_validation == 'one_step' \
+        #            or (order.company_id.po_double_validation == 'two_step' \
+        #                and order.amount_total < self.env.company.currency_id._convert(
+        #                order.company_id.po_double_validation_amount, order.currency_id, order.company_id,
+        #                order.date_order or fields.Date.today())) \
+        #            or order.user_has_groups('purchase.group_purchase_manager'):
+        #    order.button_approve()
+        #else:
+        #    order.write({'state': 'to approve'})
+        #if self.flsp_vendor_confirmation_date:
+        #    if order.is_shipped:
+        #        order.write({'flsp_po_status': 'received', })
+        #    else:
+        #        order.write({'flsp_po_status': 'confirmed'})
+        #else:
+        #    order.write({'flsp_po_status': 'non_confirmed'})
+        #return True
 
     # Getting the purchase button method to add status
     def button_cancel(self):
