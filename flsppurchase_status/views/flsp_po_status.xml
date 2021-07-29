@@ -39,11 +39,28 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
+            <header>
+                <button name="button_flsp_reject" type="object" string="Reject" states="to approve"/>
+                <button name="button_flsp_draft" type="object" string="Set to Draft" states="purchase"/>
+                <button name="button_flsp_approve" type="object" groups="flsppurchase_status.group_purchase_approve" string="Approve Order" class="btn-primary" states="to approve"/>
+            </header>
             <xpath expr="//group/field[@name='date_approve']" position="after">
                 <field name="flsp_scheduled_date" attrs="{'invisible': 1, 'readonly': [('flsp_po_status','in','received')]}"/> <!--[('state','!=','purchase')]-->
                 <field name="flsp_vendor_confirmation_date" attrs="{'invisible': [('state','!=','purchase')], 'readonly': [('flsp_po_status','in','received')]}"/>
                 <field name="flsp_po_status" widget="selection" invisible="1"/> <!--DOING THIS SO IT REFELECTS MY STATUS CHANGE IN THE TREE VIEW-->
 <!--                <field name="flsp_button" invisible="0"/> &lt;!&ndash;DOING THIS SO IT REFELECTS MY STATUS CHANGE IN THE TREE VIEW&ndash;&gt;-->
+            </xpath>
+            <xpath expr="//button[@name='button_confirm'][1]" position="replace">
+                <button name="button_confirm" type="object" states="sent" string="Submit For Approval" class="oe_highlight" id="bid_confirm"/>
+            </xpath>
+            <xpath expr="//button[@name='button_confirm'][2]" position="replace">
+                <button name="button_confirm" type="object" states="draft" string="Submit For Approval" id="draft_confirm"/>
+            </xpath>
+            <xpath expr="//button[@name='button_approve']" position="replace">
+                <button name="button_approve" type="object" states="to approve" string="Approve Order" class="oe_highlight" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
             </xpath>
         </field>
     </record>
