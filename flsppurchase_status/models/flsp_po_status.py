@@ -34,6 +34,7 @@ class Flsp_PO_Status(models.Model):
         ('non_confirmed', 'PO Not confirmed'),
         ('confirmed', 'PO confirmed'),
         ('received', 'Received'),
+        ('to_approve', 'To Approve'),
         ('late', 'Late')],
         string='FLSP Status', eval=True, store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
 
@@ -73,24 +74,29 @@ class Flsp_PO_Status(models.Model):
             if order.state not in ['draft', 'sent']:
                 continue
             order._add_supplier_to_product()
-            # Deal with double validation process
-            if order.company_id.po_double_validation == 'one_step' \
-                    or (order.company_id.po_double_validation == 'two_step' \
-                        and order.amount_total < self.env.company.currency_id._convert(
-                        order.company_id.po_double_validation_amount, order.currency_id, order.company_id,
-                        order.date_order or fields.Date.today())) \
-                    or order.user_has_groups('purchase.group_purchase_manager'):
-                order.button_approve()
-            else:
-                order.write({'state': 'to approve'})
-        if self.flsp_vendor_confirmation_date:
-            if order.is_shipped:
-                order.write({'flsp_po_status': 'received', })
-            else:
-                order.write({'flsp_po_status': 'confirmed'})
-        else:
-            order.write({'flsp_po_status': 'non_confirmed'})
+        self.env['flspautoemails.bpmemails'].send_email(self, 'P00005')
+        order.write({'state': 'to approve'})
+        order.write({'flsp_po_status': 'to_approve'})
         return True
+
+        # Deal with double validation process
+        #if order.company_id.po_double_validation == 'one_step' \
+        #            or (order.company_id.po_double_validation == 'two_step' \
+        #                and order.amount_total < self.env.company.currency_id._convert(
+        #                order.company_id.po_double_validation_amount, order.currency_id, order.company_id,
+        #                order.date_order or fields.Date.today())) \
+        #            or order.user_has_groups('purchase.group_purchase_manager'):
+        #    order.button_approve()
+        #else:
+        #    order.write({'state': 'to approve'})
+        #if self.flsp_vendor_confirmation_date:
+        #    if order.is_shipped:
+        #        order.write({'flsp_po_status': 'received', })
+        #    else:
+        #        order.write({'flsp_po_status': 'confirmed'})
+        #else:
+        #    order.write({'flsp_po_status': 'non_confirmed'})
+        #return True
 
     # Getting the purchase button method to add status
     def button_cancel(self):
@@ -241,3 +247,26 @@ class Flsp_PO_Status(models.Model):
                     order.write({'flsp_po_status': 'received', })
             else:
                 order.is_shipped = False
+
+    def button_flsp_approve(self):
+        action = self.env.ref('flsppurchase_status.launch_flsp_approve_po_view').read()[0]
+        return action
+
+    def button_flsp_reject(self):
+        action = self.env.ref('flsppurchase_status.launch_flsp_reject_po_wiz').read()[0]
+        return action
+
+    def button_flsp_draft(self):
+        order = self
+        #check if it is possible to cancel all the receipts:
+        all_cancelled = True
+        for picking in order.picking_ids:
+            if picking.state != 'cancel':
+                all_cancelled = picking.action_cancel()
+
+        if all_cancelled:
+            if order.state in ['purchase']:
+                order.write({'flsp_po_status': 'request', })
+                order.write({'state': 'draft', })
+        else:
+            raise exceptions.ValidationError("You could not cancel all the receipts.")
