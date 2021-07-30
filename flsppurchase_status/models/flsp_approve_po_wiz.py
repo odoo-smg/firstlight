@@ -27,8 +27,8 @@ class FlspApprovepowiz(models.TransientModel):
                 'sequence': po_line.sequence,
                 'product_template_id': po_line.product_id.product_tmpl_id.id,
                 'product_id': po_line.product_id.id,
-                'product_uom_qty': po_line.product_uom_qty,
-                'product_uom': po_line.product_id.uom_id.id,
+                'product_uom_qty': po_line.product_qty,
+                'product_uom': po_line.product_uom.id,
                 'price_unit': po_line.price_unit,
                 'discount': 0,
                 'po_order_line_id': po_line.id,
@@ -50,7 +50,6 @@ class FlspApprovepowiz(models.TransientModel):
         self.ensure_one()
         for approval_line in self.flsp_order_line_ids:
             approval_line.po_order_line_id.write({
-                'product_uom_qty': approval_line.product_uom_qty,
                 'product_qty': approval_line.product_uom_qty,
                 'price_unit': approval_line.price_unit,
             })
@@ -109,3 +108,4 @@ class FlspPOline(models.TransientModel):
             line.update({
                 'price_subtotal': taxes['total_excluded'],
             })
+
