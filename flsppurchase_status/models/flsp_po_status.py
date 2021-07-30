@@ -47,6 +47,8 @@ class Flsp_PO_Status(models.Model):
     flsp_vendor_confirmation_date = fields.Datetime(string="Vendor Confirmation Date",
         help='This date should be entered when the Vendor has confirmed that they have shipped the order')
 
+    flsp_internal_note = fields.Char(string="Internal Note")
+
 # STATUS
     @api.onchange('partner_id', 'date_order')  # 'date_order' is defined in addons\purchase\models\purchase.py
     def _change_status_to_request(self):
