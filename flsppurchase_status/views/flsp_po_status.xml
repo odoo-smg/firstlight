@@ -10,6 +10,7 @@
                 <field name="flsp_po_status" optional="show"/>
                 <field name="flsp_scheduled_date" optional="hide"/>
                 <field name="is_shipped" optional="hide"/>
+                <field name="flsp_internal_note" optional="hide"/>
             </xpath>
             <!--Hiding the original states-->
             <xpath expr="//field[@name='state']" position="attributes">
@@ -61,6 +62,13 @@
             </xpath>
             <xpath expr="//field[@name='order_line']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
+            </xpath>
+            <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
+                <page string="Notes" name="purchase_notes">
+                    <group>
+                        <field name="flsp_internal_note"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>
