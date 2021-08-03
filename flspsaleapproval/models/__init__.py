@@ -17,3 +17,6 @@ from . import flsp_product_category
 from . import flsp_product_template
 from . import flsp_contact
 from . import flsp_cancel_wizard
+from . import flsp_sale_delivery_message
+
+

@@ -51,5 +51,6 @@
         'views/flsp_product_category_form.xml',
         'views/flsp_product_template_view_sales.xml',
         'views/flsp_cancel_wizard_view.xml',
+        'views/flsp_sale_delivery_message_view.xml',
     ],
 }
