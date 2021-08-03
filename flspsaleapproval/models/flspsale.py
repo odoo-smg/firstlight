@@ -277,6 +277,24 @@ class SalesOrder(models.Model):
 
         return action
 
+    def action_confirm(self):
+        # verify Tax ID when to confirm Sales Order
+        if not self.partner_id.vat:
+            ca_id = self.env['res.country'].search([('name', '=', 'Canada')])
+            if self.partner_shipping_id.country_id != ca_id:
+                return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        
+        # verify Contact Information when to confirm Sales Order
+        if not self.partner_shipping_id.flsp_contacts_ids or not self.flsp_delivery_contact:
+            return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        primary_contact = self.partner_shipping_id.flsp_contacts_ids[0]
+        if not primary_contact.name:
+            return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        if not primary_contact.phone:
+            return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+                
+        return super(SalesOrder, self).action_confirm()
+
     def flsp_email_order_confirmed(self):
         template = self.env.ref('flspsaleapproval.flsp_confirmed_order_email', raise_if_not_found=False)
 

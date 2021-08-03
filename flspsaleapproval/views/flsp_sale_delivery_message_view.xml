@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_sale_delivery_message_form_view" model="ir.ui.view">
+            <field name="name">flsp.sale.delivery.message.form</field>
+            <field name="model">flsp.sale.delivery.message</field>
+            <field name="arch" type="xml">
+                <form>
+                    <div attrs="{'invisible': [ ('delivery_tax', '!=', False) ]}">
+                        <h4>'Tax ID' required</h4>
+                        <spam>In order to confirm the Quotation into a Sales Order, the Tax ID of the Delivery Address is required.</spam>
+                        <group>
+                            <field name="delivery_tax" readonly="1"/>
+                        </group>
+                    </div>
+                    <div attrs="{'invisible': [('delivery_contact', '!=', False), ('delivery_contact.name', '!=', False), ('delivery_contact.phone', '!=', False) ]}">
+                        <h4>'Delivery Contact' required</h4>
+                        <spam>In order to confirm the Quotation into a Sales Order, the Delivery Contact of the Delivery Address is required, including its 'Name' and 'Phone'.</spam>
+                        <group>
+                            <field name="delivery_contact" readonly="1"/>
+                        </group>
+                    </div>
+                    <group>
+                        <field name="partner_shipping_id"/>
+                    </group>
+                    <footer>
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_sale_delivery_message" model="ir.actions.act_window">
+            <field name="name">FLSP - Confirm Sale Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp.sale.delivery.message</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>
