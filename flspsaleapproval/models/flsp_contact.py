@@ -11,7 +11,7 @@ class Contacts(models.Model):
         return current_id
 
     sequence = fields.Integer('Sequence', default=1, help="The first in the sequence is the default one.")
-    partner_id = fields.Many2one('res.partner', string='Customer', required=True, default=_get_default, readonly=True)
+    partner_id = fields.Many2one('res.partner', string='Customer', required=True, default=_get_default)
     name = fields.Char(string="Name", required=True)
     job_position = fields.Char(string="Job Position")
     email = fields.Char(string="Email")

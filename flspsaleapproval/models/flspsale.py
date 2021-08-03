@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import date, datetime, time
 from dateutil.relativedelta import relativedelta
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SalesOrder(models.Model):
@@ -53,7 +56,20 @@ class SalesOrder(models.Model):
 
     flsp_att_to = fields.Many2one("flsp.contact", string='Attention to', domain="[('partner_id', '=', partner_id)]")
     flsp_internal_notes = fields.Text('Internal Notes')
+    flsp_delivery_contact = fields.Many2one("flsp.contact", string='Delivery Contact', domain="[('partner_id', '=', partner_shipping_id)]", help='The contact for the "Delivery Adress"')
+    flsp_delivery_tax = fields.Char(string='Tax ID', help='The Tax ID for the "Delivery Adress"')
 
+    @api.onchange('partner_id')
+    def onchange_taxt_id(self):
+        if self.partner_id and self.partner_id.vat:
+            self.flsp_delivery_tax = self.partner_id.vat
+        else:
+            self.flsp_delivery_tax = False
+
+    @api.onchange('flsp_delivery_tax')
+    def onchange_flsp_delivery_tax(self):
+        if self.partner_id:
+            self.partner_id.vat = self.flsp_delivery_tax
 
     @api.onchange('flsp_SPPEPP_so')
     def flsp_SPPEPP_so_onchange(self):
