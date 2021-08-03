@@ -12,7 +12,7 @@
     'website': "http://www.smartrendmfg.com",
     "category": "Sales",
     'version': '0.1',
-    'depends': ['base', "mrp", "stock", "sale"],
+    'depends': ['base', "mrp", "stock", "sale", "flsp_mrp_mto"],
 
     # always loaded
     'data': [
