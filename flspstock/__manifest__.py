@@ -28,6 +28,7 @@
     'depends': ['stock'],
     'depends': ['delivery'],
     'depends': ['deltatech_stock_negative'],
+    'depends': ['flsppurchase'],
 
     # always loaded
     'data': [
