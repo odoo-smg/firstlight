@@ -286,22 +286,22 @@ class SalesOrder(models.Model):
         if not self.partner_id.flsp_acc_valid:
             return self.env.ref('flspsaleapproval.launch_flsp_sale_message').read()[0]
         
-        # Validate Tax ID when to confirm Sales Order
-        if not self.partner_id.vat:
-            ca_id = self.env['res.country'].search([('name', '=', 'Canada')])
-            if self.partner_shipping_id.country_id != ca_id:
-                return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        # # Validate Tax ID when to confirm Sales Order
+        # if not self.partner_id.vat:
+        #     ca_id = self.env['res.country'].search([('name', '=', 'Canada')])
+        #     if self.partner_shipping_id.country_id != ca_id:
+        #         return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
         
-        # Validate Contact Information when to confirm Sales Order
-        if not self.partner_shipping_id.flsp_contacts_ids or not self.flsp_delivery_contact:
-            return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
-        primary_contact = self.partner_shipping_id.flsp_contacts_ids[0]
-        if not primary_contact.name:
-            return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
-        if not primary_contact.phone:
-            return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        # # Validate Contact Information when to confirm Sales Order
+        # if not self.partner_shipping_id.flsp_contacts_ids or not self.flsp_delivery_contact:
+        #     return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        # primary_contact = self.partner_shipping_id.flsp_contacts_ids[0]
+        # if not primary_contact.name:
+        #     return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        # if not primary_contact.phone:
+        #     return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
         
-        ## Validate deposit payment for School PPE Purchase Program
+        # Validate deposit payment for School PPE Purchase Program
         flsp_sppepp = self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
         flspsppepp_category_id = self.env.company.flspsppepp_category_id
         flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
