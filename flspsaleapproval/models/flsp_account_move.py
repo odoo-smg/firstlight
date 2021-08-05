@@ -19,9 +19,13 @@ class flspaccountmove(models.Model):
         self.flsp_delivery_id = self._get_default_delivery()
     
     def _get_default_delivery(self):
-        deliveries = self.env['stock.picking'].search([('sale_id', 'in', self.flsp_sale_orders.ids)], order="scheduled_date")
+        if self.flsp_delivery_id:
+            return self.flsp_delivery_id
+        
+        # initialize flsp_delivery_id
         latest_delivery = False
         now_date = datetime.now()
+        deliveries = self.env['stock.picking'].search([('sale_id', 'in', self.flsp_sale_orders.ids)], order="scheduled_date")
         for d in deliveries:
             if not latest_delivery:
                 latest_delivery = d
