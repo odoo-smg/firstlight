@@ -151,7 +151,7 @@
                                 <t t-set="sale_orders" t-value="o._get_so_for_ci_info_JSON_values()"/>
                                 <t t-foreach="sale_orders" t-as="sale_order">
                                     <spam style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">Ship Date:</spam>
-                                    <spam t-esc="sale_order['date_order']" t-options='{"widget": "date"}' style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"></spam><br/>
+                                    <spam t-esc="sale_order['ship_date']" t-options='{"widget": "date"}' style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"></spam><br/>
                                     <span style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">Ship Via: <spam t-esc="sale_order['flsp_ship_via']" style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"/></span><br/>
                                     <span style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">Sales Order #: <spam t-esc="sale_order['name']" style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"/></span><br/>
                                     <span style="font-size:14px; font-weight: bold; color:#fcb030; font-family:Franklin, sans-serif;">PO #: <spam t-esc="sale_order['po']" style="font-size:14px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin, sans-serif;"/></span>
