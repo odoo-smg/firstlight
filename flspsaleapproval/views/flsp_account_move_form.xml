@@ -7,6 +7,12 @@
             <field name="priority">96</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="flsp_sale_orders" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='flsp_sale_orders']" position="after">
+                    <field name="flsp_delivery_id" string="Delivery" options="{'no_create': True}"/>
+                </xpath>
                 <xpath expr="//field[@name='currency_id']" position="after">
                     <field name="flsp_broker_id" string="Broker" readonly="0"/>
                 </xpath>

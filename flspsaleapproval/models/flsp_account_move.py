@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from datetime import datetime
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class flspaccountmove(models.Model):
@@ -9,6 +12,28 @@ class flspaccountmove(models.Model):
 
     flsp_broker_id = fields.Many2one('res.partner', string='Broker')
     flsp_ci_notes = fields.Text(string='Notes for Commercial Invoice')
+    
+    @api.depends('invoice_origin')
+    def _get_so(self):
+        self.flsp_sale_orders = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        self.flsp_delivery_id = self._get_default_delivery()
+    
+    def _get_default_delivery(self):
+        deliveries = self.env['stock.picking'].search([('sale_id', 'in', self.flsp_sale_orders.ids)], order="scheduled_date")
+        latest_delivery = False
+        now_date = datetime.now()
+        for d in deliveries:
+            if not latest_delivery:
+                latest_delivery = d
+            else:
+                if d.scheduled_date and d.scheduled_date > latest_delivery.scheduled_date and d.scheduled_date < now_date:
+                    latest_delivery = d
+                else:
+                    break
+        return latest_delivery
+    
+    flsp_sale_orders = fields.Many2many('sale.order', string='Sales Order', compute=_get_so)
+    flsp_delivery_id = fields.Many2one('stock.picking', string='Delivery', domain="[('sale_id', 'in', flsp_sale_orders)]")
 
     #def _get_reconciled_info_JSON_values(self):
     def _get_sale_order_info_JSON_values(self):
@@ -53,5 +78,7 @@ class flspaccountmove(models.Model):
                 'flsp_ship_via': rec.flsp_ship_via,
                 'payment_term': rec.payment_term_id.note,
                 'contact': contact,
+                'delivery': self.flsp_delivery_id.name if self.flsp_delivery_id else "",
+                'ship_date': self.flsp_delivery_id.scheduled_date if self.flsp_delivery_id else "",
             })
         return sale_order
