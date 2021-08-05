@@ -58,6 +58,39 @@ class SalesOrder(models.Model):
     flsp_internal_notes = fields.Text('Internal Notes')
     flsp_delivery_contact = fields.Many2one("flsp.contact", string='Delivery Contact', domain="[('partner_id', '=', partner_shipping_id)]", help='The contact for the "Delivery Adress"')
     flsp_delivery_tax = fields.Char(string='Tax ID', help='The Tax ID for the "Delivery Adress"')
+    
+    @api.onchange('partner_shipping_id')
+    def onchange_partner_shipping_id_for_delivery_contact(self):
+        if self.partner_shipping_id and self.partner_shipping_id.flsp_contacts_ids:
+            contacts = self.partner_shipping_id.flsp_contacts_ids
+            primary_contact = contacts[0]
+            for contact in contacts:
+                if contact.sequence < primary_contact.sequence:
+                    primary_contact = contact
+            self.flsp_delivery_contact = primary_contact
+        else:
+            self.flsp_delivery_contact = False
+
+    @api.onchange('flsp_delivery_contact')
+    def onchange_flsp_delivery_contact(self):
+        if self.partner_shipping_id and self.partner_shipping_id.flsp_contacts_ids:
+            contacts = self.partner_shipping_id.flsp_contacts_ids
+            # match the contact and reorganize the flsp_contacts_ids with flsp_delivery_contact as the first/primary one
+            index = 0
+            for contact in contacts:
+                if contact.id == self.flsp_delivery_contact.id:
+                    index = contact.sequence
+                    break
+            if index == 0:
+                # it has been the first one
+                return
+            # set it as the first one and update others as well because a contact is ahead of the other if its sequence is smaller than the latter
+            for contact in contacts:
+                if contact.sequence < index:
+                    contact.sequence += 1
+                if contact.sequence == index and contact.id != self.flsp_delivery_contact.id:
+                    contact.sequence += 1
+            self.flsp_delivery_contact.sequence = 0
 
     @api.onchange('partner_id')
     def onchange_taxt_id(self):
