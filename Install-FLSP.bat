@@ -54,11 +54,11 @@ set FLSP_MODULE_LIST=dhx_gantt ks_binary_file_preview smg flspmfg report_xlsx in
  flspacc flspgst^
  flsp-salesorder flsp_sale_target flsp_sales_report flspsales_forecast flspsaleapproval flsp_sales_item_report^
  flsppurchase flsppurchase_status flsp_pq flsp_backorder flsppurchase_warranty flsp_backflush^
- flspstock deltatech_stock_negative flspcustom_inventory flsp_inventory_count flspstockrequest flsp_stock_report_transactions flsp_wip_transfer^
+ flspstock deltatech_stock_negative flspcustom_inventory flsp_inventory_count flspstockrequest flsp_wip_transfer^
  flsp-mrp mrp_flattened_bom_xlsx flsp_bom_availability flspcomparebom flsp_mrp_summarized_bom mrp_bom_component_menu flsp_mrp_structure flsp_serial_mrp flsp_mrp_simulation^
  flsp_gantt_mrp flsp_mrp_filter_sn flsp_mrp_purchase flsp_mrp_batch_produce flsp_mrp_planning flsp_mrp_mto flsp_sale_delivery_check flsp_mrp_sales_report flsp_mrp_negative_inv_report flsp_mrp_wip^
  flsp-eco flsp_eco_reject flspmailecoapproval^
- flspquality flsp_maintenance flspautoemails flsp_dynamic_label
+ flspquality flsp_maintenance flspautoemails flsp_dynamic_label flsp_stock_report_transactions 
 for %%a in (%FLSP_MODULE_LIST%) do ( 
     call :installModuleFunc %DB_NAME% %%a
 )
