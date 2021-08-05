@@ -281,43 +281,18 @@ class SalesOrder(models.Model):
         action = self.action_cancel()
         return action
 
-
     def button_flsp_confirm(self):
+        # Validate customer's acc status
         if not self.partner_id.flsp_acc_valid:
-            action = self.env.ref('flspsaleapproval.launch_flsp_sale_message').read()[0]
-        else:
-            ## Validate deposit payment for School PPE Purchase Program
-            flsp_sppepp = self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
-            flspsppepp_category_id = self.env.company.flspsppepp_category_id
-            flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
-            if flsp_sppepp:
-                amount_categ_total = 0
-                for line in self.order_line:
-                    if line.product_id.categ_id == flspsppepp_category_id:
-                        amount_categ_total += line.price_subtotal
-                if self.flsp_amount_deposit < (amount_categ_total*flsp_percent_sppepp/100):
-                    action = self.env.ref('flspsaleapproval.launch_flsp_sppepp_message').read()[0]
-                else:
-                    # sends an email to FLorders@firstlightsafety.com
-                    self.env['flspautoemails.bpmemails'].send_email(self, 'SO0006')
-                    #self.flsp_email_order_confirmed()
-                    action = self.action_confirm()
-            else:
-                # sends an email to FLorders@firstlightsafety.com
-                self.env['flspautoemails.bpmemails'].send_email(self, 'SO0006')
-                #self.flsp_email_order_confirmed()
-                action = self.action_confirm()
-
-        return action
-
-    def action_confirm(self):
-        # verify Tax ID when to confirm Sales Order
+            return self.env.ref('flspsaleapproval.launch_flsp_sale_message').read()[0]
+        
+        # Validate Tax ID when to confirm Sales Order
         if not self.partner_id.vat:
             ca_id = self.env['res.country'].search([('name', '=', 'Canada')])
             if self.partner_shipping_id.country_id != ca_id:
                 return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
         
-        # verify Contact Information when to confirm Sales Order
+        # Validate Contact Information when to confirm Sales Order
         if not self.partner_shipping_id.flsp_contacts_ids or not self.flsp_delivery_contact:
             return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
         primary_contact = self.partner_shipping_id.flsp_contacts_ids[0]
@@ -325,8 +300,24 @@ class SalesOrder(models.Model):
             return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
         if not primary_contact.phone:
             return self.env.ref('flspsaleapproval.launch_flsp_sale_delivery_message').read()[0]
+        
+        ## Validate deposit payment for School PPE Purchase Program
+        flsp_sppepp = self.env['ir.config_parameter'].sudo().get_param('flsp_sppepp')
+        flspsppepp_category_id = self.env.company.flspsppepp_category_id
+        flsp_percent_sppepp = self.env.company.flsp_percent_sppepp
+        if flsp_sppepp:
+            amount_categ_total = 0
+            for line in self.order_line:
+                if line.product_id.categ_id == flspsppepp_category_id:
+                    amount_categ_total += line.price_subtotal
+            if self.flsp_amount_deposit < (amount_categ_total*flsp_percent_sppepp/100):
+                return self.env.ref('flspsaleapproval.launch_flsp_sppepp_message').read()[0]
                 
-        return super(SalesOrder, self).action_confirm()
+        # all the prechecks pass
+        # sends an email to FLorders@firstlightsafety.com
+        self.env['flspautoemails.bpmemails'].send_email(self, 'SO0006')
+        #self.flsp_email_order_confirmed()
+        return self.action_confirm()
 
     def flsp_email_order_confirmed(self):
         template = self.env.ref('flspsaleapproval.flsp_confirmed_order_email', raise_if_not_found=False)
