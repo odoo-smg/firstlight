@@ -14,10 +14,15 @@ class StockQuant(models.Model):
     def _update_available_quantity(
         self, product_id, location_id, quantity, lot_id=None, package_id=None, owner_id=None, in_date=None
     ):
+        if location_id.flsp_locked:
+            raise UserError(
+                _("The location %s is locked for movements. \
+                   Please select another location.") % location_id.name)
+
         allow_negaive = False
         #if 'flsp_backflush' in self.env['product.template']._fields:
             #allow_negaive = product_id.flsp_backflush and product_id.bom_count > 0
-        
+
         precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
 
         # product_id.qty_available is not a correct qty for product because there may be moves in other locations
@@ -32,8 +37,8 @@ class StockQuant(models.Model):
         ):
             if location_id.company_id.no_negative_stock:
                 raise UserError(
-                    _( """You have chosen to avoid negative stock. 
-%s pieces of %s are remaining in location %s, but you want to transfer %s pieces. 
+                    _( """You have chosen to avoid negative stock.
+%s pieces of %s are remaining in location %s, but you want to transfer %s pieces.
 Please adjust your quantities or correct your stock with an inventory adjustment."""
                     )
                     % (product_quantity, "["+product_id.default_code+"] "+product_id.name, location_id.name, 0 - quantity)
@@ -42,7 +47,7 @@ Please adjust your quantities or correct your stock with an inventory adjustment
         return super(StockQuant, self)._update_available_quantity(
             product_id, location_id, quantity, lot_id, package_id, owner_id, in_date
         )
-        
+
     def get_flsp_stock_quantity(self, product_id, location_id, lot_id=None, package_id=None):
         stock_quants = False
         if lot_id and package_id:
@@ -64,4 +69,3 @@ Please adjust your quantities or correct your stock with an inventory adjustment
             product_quantity = 0
 
         return product_quantity
-

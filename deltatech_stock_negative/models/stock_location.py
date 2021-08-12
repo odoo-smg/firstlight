@@ -9,3 +9,4 @@ class StockLocation(models.Model):
     _inherit = "stock.location"
 
     allow_negative_stock = fields.Boolean(string="Allow Negative Stock")
+    flsp_locked = fields.Boolean(string="Lock Movements")
