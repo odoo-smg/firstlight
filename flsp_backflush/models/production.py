@@ -2,6 +2,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class MrpProduction(models.Model):
@@ -220,6 +222,10 @@ class MrpProduction(models.Model):
             bom.product_qty, bom.product_tmpl_id.uom_id, round=False
         )
         for line in bom.bom_line_ids:
+            # check if the product is consumable and backflushed, skip breaking it down in backflush if it is
+            if line.product_id and line.product_id.type == 'consu' and line.product_id.flsp_backflush:
+                continue
+
             sub_bom = bom._bom_find(product=line.product_id)
             if sub_bom:
                 if not line.product_tmpl_id.flsp_backflush:
