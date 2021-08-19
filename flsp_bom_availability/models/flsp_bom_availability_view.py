@@ -28,40 +28,50 @@ class FlspBomAvailabilityLine(models.Model):
         CREATE or REPLACE VIEW flsp_bom_availability_line AS (
         with recursive explode_bom1 as(
             select 	        product_id, product_qty, mbl_bom_id, name, bom_id, 1 as level, product_uom_id
-                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code, 
+                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
                                             pt.id, pt.name ,mb.id as bom_id, mbl.product_uom_id
                                 from		mrp_bom_line mbl
                                 inner join 	product_product as pp
                                 on			mbl.product_id = pp.id
                                 inner join 	product_template as pt
                                 on 			pp.product_tmpl_id = pt.id
-                                full join	mrp_bom as mb
+                                left join	(
+												select lin, id, sequence, product_tmpl_id from (
+												select row_number() OVER(PARTITION BY product_tmpl_id order by sequence) AS lin, id, sequence, product_tmpl_id  from mrp_bom where active = true  order by product_tmpl_id
+												) B1 where lin = 1
+
+								) as mb
                                 on 			pt.id = mb.product_tmpl_id) as table1
                 where mbl_bom_id = (select bom from flsp_bom_availability order by id desc limit 1)
-                         
-            union -- recursive part now 
-                select 		r.product_id, r.product_qty, r.mbl_bom_id, r.name, r.bom_id, eb.level+1 as level, 
+
+            union -- recursive part now
+                select 		r.product_id, r.product_qty, r.mbl_bom_id, r.name, r.bom_id, eb.level+1 as level,
                             r.product_uom_id
-                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code, 
+                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
                         pt.id, pt.name ,mb.id as bom_id, mbl.product_uom_id
                         from		mrp_bom_line mbl
                         inner join 	product_product as pp
                         on			mbl.product_id = pp.id
                         inner join 	product_template as pt
                         on 			pp.product_tmpl_id = pt.id
-                        full join	mrp_bom as mb
+						left join	(
+										select lin, id, sequence, product_tmpl_id from (
+										select row_number() OVER(PARTITION BY product_tmpl_id order by sequence) AS lin, id, sequence, product_tmpl_id  from mrp_bom where active = true  order by product_tmpl_id
+										) B1 where lin = 1
+
+						) as mb
                         on 			pt.id = mb.product_tmpl_id) as r
                 inner join	explode_bom1 eb on eb.bom_id = r.mbl_bom_id
-        ) 
-        
-        -- Getting the top level main component 
+        )
+
+        -- Getting the top level main component
         select      1000000 AS id,
                     mb.id as id1,
-                    pp.id as product_line_id, 
-                    mb.product_qty as product_line_qty, 
-                    mb.id as bom_line_id, 
-                    mb.id as bom_comp_id, 
-                    0 as bom_level, 
+                    pp.id as product_line_id,
+                    mb.product_qty as product_line_qty,
+                    mb.id as bom_line_id,
+                    mb.id as bom_comp_id,
+                    0 as bom_level,
                     mb.product_uom_id as uom_id
         from        mrp_bom as mb
         inner join  product_template as pt
@@ -69,9 +79,9 @@ class FlspBomAvailabilityLine(models.Model):
         inner join  product_product as pp
         on          pt.id = pp.product_tmpl_id
         where       mb.id = (select bom from flsp_bom_availability order by id desc limit 1)
-        union 
-        
-        --this is where we use the recursive table in the database 
+        union
+
+        --this is where we use the recursive table in the database
         select    row_number() OVER() AS id,
                     bom_id as id1 ,
                     product_id as product_line_id, product_qty as product_line_qty,
@@ -109,7 +119,7 @@ class FlspBomAvailabilityLine(models.Model):
     --***************RECURSIVE Explode for boms with subqueries******************************
         with recursive explode_bom1 as(
             select 			product_id, product_qty, mbl_bom_id, name, bom_id, 1 as level
-                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code, 
+                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
                         pt.id, pt.name ,mb.id as bom_id
             from		mrp_bom_line mbl
             inner join 	product_product as pp
@@ -119,10 +129,10 @@ class FlspBomAvailabilityLine(models.Model):
             full join	mrp_bom as mb
             on 			pt.id = mb.product_tmpl_id) as table1
                 where 		mbl_bom_id=2
-            
-            union -- recursive part now 
+
+            union -- recursive part now
                 select 		r.product_id, r.product_qty, r.mbl_bom_id, r.name, r.bom_id, eb.level + 1 AS level
-                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code, 
+                from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
                         pt.id, pt.name ,mb.id as bom_id
             from		mrp_bom_line mbl
             inner join 	product_product as pp
@@ -138,18 +148,18 @@ class FlspBomAvailabilityLine(models.Model):
             select 			product_id, product_qty, mbl_bom_id, name, bom_id, 1 as level
                 from 		refined_table
                 where 		mbl_bom_id=2
-            
-            union -- recursive part now 
+
+            union -- recursive part now
                 select 		r.product_id, r.product_qty, r.mbl_bom_id, r.name, r.bom_id, eb.level + 1 AS level
                 from 		refined_table as r
                 inner join	explode_bom eb on eb.bom_id = r.mbl_bom_id
         ) select *	from explode_bom;
-        
+
         select * from temp
         select * from refined_table
-        
+
         create table refined_table as
-            select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code, 
+            select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
                         pt.id, pt.name ,mb.id as bom_id
             from		mrp_bom_line mbl
             inner join 	product_product as pp
@@ -159,15 +169,15 @@ class FlspBomAvailabilityLine(models.Model):
             full join	mrp_bom as mb
             on 			pt.id = mb.product_tmpl_id
         --where 		mbl.bom_id = 2
-        
-        select		mb.id, mb.code, mb.product_tmpl_id, mb.product_qty,mbl.product_id as comp	
+
+        select		mb.id, mb.code, mb.product_tmpl_id, mb.product_qty,mbl.product_id as comp
             from 		mrp_bom as mb
             inner join	mrp_bom_line as mbl
             on			mbl.bom_id = mb.id
             where 		mb.id = 2
-        
+
         create table temp as --will replace with subquery
-            select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code, 
+            select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
                         pt.id, pt.name ,mb.id as bom_id
             from		mrp_bom_line mbl
             inner join 	product_product as pp
@@ -179,38 +189,3 @@ class FlspBomAvailabilityLine(models.Model):
             where 		mbl.bom_id = 2
     --***************************************************************************************
 """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
