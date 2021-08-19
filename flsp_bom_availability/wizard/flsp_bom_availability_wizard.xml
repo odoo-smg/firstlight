@@ -6,7 +6,9 @@
         <field name="arch" type="xml">
             <form string="FLSP BOM Availability">
                 <group string="Select BOM">
-                    <field name="bom" options="{'no_open':True,'no_create': True}" domain="['|',('active','=',True),('active','=',False)]"/>
+                  <field name="active_filter"/>
+                  <field name="bom_active" options="{'no_open':True,'no_create': True}" domain="[('active','=',True)]" attrs="{'invisible': [('active_filter','=',False)], 'required':[('active_filter','=',True)]}"/>
+                  <field name="bom_inactive" options="{'no_open':True,'no_create': True}" domain="[('active','=',False)]" attrs="{'invisible': [('active_filter','=',True)], 'required':[('active_filter','=',False)]}"/>
                 </group>
                 <footer>
                     <button name="display_availability" string="Display Availability" type="object" class="btn-primary"/>

@@ -13,6 +13,9 @@ class FlspBomAvailabilityWizard(models.TransientModel):
     _description = "FLSP BoM Availability Wizard"
 
     bom = fields.Many2one('mrp.bom', string='BOM', required=True, ondelete='cascade')
+    bom_active = fields.Many2one('mrp.bom', string='BOM', ondelete='cascade')
+    bom_inactive = fields.Many2one('mrp.bom', string='BOM', ondelete='cascade')
+    active_filter = fields.Boolean('Active only', default=True)
 
     def display_availability(self):
         """
@@ -21,8 +24,10 @@ class FlspBomAvailabilityWizard(models.TransientModel):
                         Returns the tree view action
         """
         self.ensure_one()
-        self.env['flsp.bom.availability'].create({'bom': self.bom.id})
+        if self.active_filter:
+            self.env['flsp.bom.availability'].create({'bom': self.bom_active.id})
+        else:
+            self.env['flsp.bom.availability'].create({'bom': self.bom_inactive.id})
         action = self.env.ref('flsp_bom_availability.flsp_bom_availability_line_action').read()[0]
         action.update({'target': 'main', 'ignore_session': 'read', 'clear_breadcrumb': True})
         return action
-
