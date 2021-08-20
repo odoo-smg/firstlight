@@ -110,6 +110,8 @@ class FlspMrppurchaseLine(models.Model):
     six_month_actual = fields.Float(string='6 Months Actual')
     twelve_month_actual = fields.Float(string='12 Months Actual')
 
+    open_demand = fields.Float(string='Open Demand')
+
     def name_get(self):
         return [(
             record.id,
@@ -288,6 +290,7 @@ class FlspMrppurchaseLine(models.Model):
         avg_per_sbs = 0
         avg_per_ssa = 0
         late_delivery = 0
+        open_demand = 0
 
         # First Item
         for item in open_moves:
@@ -336,7 +339,7 @@ class FlspMrppurchaseLine(models.Model):
             if new_prod:
                 rationale += "</pre>"
                 purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa,
-                                                   consumption, False, po_qty)
+                                                   consumption, False, po_qty, open_demand)
                 #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
 
 
@@ -346,6 +349,7 @@ class FlspMrppurchaseLine(models.Model):
                 consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 po_qty = 0
                 late_delivery = 0
+                open_demand = 0
 
                 if not item:
                     break
@@ -379,6 +383,7 @@ class FlspMrppurchaseLine(models.Model):
                         consumption[item[7].month] += item[5]
                     else:
                         late_delivery += item[5]
+                    open_demand += item[5]
                 else:
                     current_balance += item[5]
                 if not required_by:
@@ -622,10 +627,9 @@ class FlspMrppurchaseLine(models.Model):
 
                 # Calculates 12 months forecast
                 twelve_month_forecast = 0
-                for key in range(1,12):
+                for key in range(1,13):
                     field_name = 'qty_month' + str(key)
                     twelve_month_forecast += getattr(planning, field_name)
-
 
                 required_qty = suggested_qty
                 planning.suggested_qty = required_qty
@@ -777,7 +781,7 @@ class FlspMrppurchaseLine(models.Model):
                     ), 'level': level, 'bom': ''}
         return totals
 
-    def _include_prod(self, supplier_lead_time, product, rationale, balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+    def _include_prod(self, supplier_lead_time, product, rationale, balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0):
         if not consumption:
             consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if not forecast:
@@ -932,6 +936,7 @@ class FlspMrppurchaseLine(models.Model):
                            'avg_per_ssa': avg_per_ssa,
                            'six_month_actual': six_month_actual,
                            'twelve_month_actual': twelve_month_actual,
+                           'open_demand': open_demand,
                            'source': 'source', })
 
         return ret
