@@ -46,8 +46,8 @@
                             <field name="six_month_forecast" readonly="1"/>
                             <field name="twelve_month_forecast" readonly="1"/>
                             <field name="open_demand" readonly="1"/>
-                            <field name="six_month_actual" readonly="1"/>
-                            <field name="twelve_month_actual" readonly="1" />
+                            <field name="six_month_actual" string="Past 6 months Actual"  readonly="1"/>
+                            <field name="twelve_month_actual"  string="Past 12 months Actual" readonly="1" />
                         </group>
                         <group name="material_purchase_2nd" string="Purchase UofM" >
                             <field name="purchase_suggested" string="Required 2nd" invisible="False" readonly="1" />
