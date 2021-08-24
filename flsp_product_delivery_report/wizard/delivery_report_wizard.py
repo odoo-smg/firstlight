@@ -2,7 +2,7 @@
 
 from odoo import tools
 from odoo import models, fields
-
+from datetime import date, datetime, timedelta
 
 class Wizard(models.TransientModel):
     """
@@ -16,8 +16,8 @@ class Wizard(models.TransientModel):
     _name = "flsp.product.delivery.report.wizard"
     _description = "Report of delivered products"
 
-    startSearch = fields.Datetime(default=fields.Date.today(), required=True)
-    endSearch = fields.Datetime(default=fields.Date.today(), required=True)
+    startSearch = fields.Datetime(default=fields.datetime.now() - timedelta(days=1), required=True)
+    endSearch = fields.Datetime(default=fields.datetime.now(), required=True)
 
     def search_deliveries(self):
         """

@@ -35,7 +35,7 @@ class FlspProductDeliveryReport(models.Model):
         query = """
         CREATE or REPLACE VIEW flsp_product_delivery_report AS (
         SELECT
-            sml.id as id,
+            MAX(sml.id) as id,
             so.id as order_id,
             rp.id as partner_id,
             sm.product_id as product_id,
@@ -58,6 +58,7 @@ class FlspProductDeliveryReport(models.Model):
             where          sm.state in ('done') 
 			AND sm.date >= '%s'
 			AND sm.date <= '%s'
+		GROUP BY so.id, rp.id, sm.product_id, pt.default_code, sm.product_qty, sm.date
 		);
 		""" % (start,end)
 
