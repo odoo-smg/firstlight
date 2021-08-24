@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="delivery_report_wizard_form_view">
+        <field name="name">delivery_report_wizard_form</field>
+        <field name="model">flsp.product.delivery.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Delivered Products By Date">
+                <group>
+                    <field name="startSearch"/>
+                    <field name="endSearch"/>
+                </group>
+                <footer>
+                    <button name="search_deliveries" type="object" string="Search" class="btn-primary"/>
+					<button special="cancel" string="Cancel" class="btn-default btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="launch_delivery_report_wizard" model="ir.actions.act_window">
+        <field name="name">Flsp Delivered Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.product.delivery.report.wizard</field>
+        <field name="view_mode">form,tree</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="flsp_product_delivery_report_menu"
+                  name="Flsp Delivered Products"
+                  parent="mrp.menu_mrp_reporting"
+                  action="launch_delivery_report_wizard"/>
+</odoo>
