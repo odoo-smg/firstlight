@@ -20,6 +20,34 @@
                     <span t-elif="ml.lot_name" t-field="ml.lot_name"/>
                 </td>
             </xpath>
+            <xpath expr="//table[@class='table table-sm']" position="after">
+                <table class="table table-sm-missing" t-if="o.move_ids_without_package and o.picking_type_id.code != 'incoming' and o.picking_type_id.code != 'outgoing'">
+                    <h1>In Demand</h1>
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Product</strong>
+                            </th>
+                            <th>
+                                <strong>Missing</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.move_ids_without_package.sorted(key=lambda m: m.product_id.id)" t-as="move">
+                            <tr t-if="(move.product_uom_qty - move.reserved_availability) > 0 and move.product_uom_qty > move.quantity_done">
+                                <td>
+                                    <span t-field="move.product_id"/>
+                                </td>
+                                <td>
+                                    <span t-esc="move.product_uom_qty - move.reserved_availability"/>
+                                    <span t-field="move.product_uom"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </xpath>
         </template>
     </data>
 </odoo>
