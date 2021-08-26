@@ -11,7 +11,7 @@ class flspmrpbatchproduction(models.Model):
     _inherit = 'mrp.production'
     _check_company_auto = True
 
-    flsp_batch_serial_id = fields.Many2one('flsp.serialnum', string="Serial Batch")
+    flsp_batch_serial_id = fields.Many2one('flsp.serialnum', string="Serial Batch", domain="[('product_id', '=', product_id), ('serial_count', '>=', product_qty)]")
     flsp_is_serial = fields.Boolean(string="Is Serial", compute="_flsp_compute_serial")
 
     @api.depends('product_id')
@@ -20,3 +20,12 @@ class flspmrpbatchproduction(models.Model):
             self.flsp_is_serial = True
         else:
             self.flsp_is_serial = False
+
+    def copy(self, default=None):
+        copied_mrp = super(flspmrpbatchproduction, self).copy(default=default)
+
+        # Ticket 550: When a MO is duplicated, the batch serial number should be cleared
+        copied_mrp.flsp_batch_serial_id = False
+        
+        return copied_mrp
+        

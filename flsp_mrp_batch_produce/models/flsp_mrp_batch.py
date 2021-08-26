@@ -12,7 +12,7 @@ class flspmrpwipproduction(models.Model):
     _inherit = 'flsp.serialnum'
     _check_company_auto = True
 
-    name = fields.Char(string='name')
+    name = fields.Char(string='Name')
 
     def name_get(self):
         return [(
@@ -62,9 +62,29 @@ class flspmrpwipproduction(models.Model):
                     'lot_id': lot.id,
                 })
 
+    def _update_absent_serialnum_lines_with_lot_id(self, lots):
+        for lot in lots:
+            lot_in_line = self.env['flsp.serialnumline'].search([('order_id', '=', self.id), ('serial_num', '=', lot.name)])
+            if lot_in_line:
+                lot_in_line.write({ 'lot_id': lot.id })
+
 class flspMrpBatchSerialLine(models.Model):
     _inherit = 'flsp.serialnumline'
     _check_company_auto = True
 
     lot_id = fields.Many2one('stock.production.lot', string='Lot/Serial Number')
+    
+class flspMrpBatchSerialWizard(models.TransientModel):
+    _inherit = 'flsp.serial.num.wizard'
+
+    def action_button_continue_creation(self):
+        if len(self.absent_lots) > 0:
+            created_absent_lots = self.order_id.create_absent_serial_num(self.absent_lots.mapped('serial_num'))
+            self.order_id._update_absent_serialnum_lines_with_lot_id(created_absent_lots)
+            
+        if len(self.extra_lots) > 0:
+            self.order_id.unlink_serial_num(self.extra_lots.mapped('serial_num'))
+            self.extra_lots.unlink()
+
+        return {'type': 'ir.actions.act_window_close'} 
 
