@@ -20,3 +20,12 @@ class flspmrpbatchproduction(models.Model):
             self.flsp_is_serial = True
         else:
             self.flsp_is_serial = False
+
+    def copy(self, default=None):
+        copied_mrp = super(flspmrpbatchproduction, self).copy(default=default)
+
+        # Ticket 550: When a MO is duplicated, the batch serial number should be cleared
+        copied_mrp.flsp_batch_serial_id = False
+        
+        return copied_mrp
+        
