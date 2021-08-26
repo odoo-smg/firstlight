@@ -12,7 +12,7 @@ class flspmrpwipproduction(models.Model):
     _inherit = 'flsp.serialnum'
     _check_company_auto = True
 
-    name = fields.Char(string='name')
+    name = fields.Char(string='Name')
 
     def name_get(self):
         return [(

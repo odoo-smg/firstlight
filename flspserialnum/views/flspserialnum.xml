@@ -59,6 +59,19 @@
         </field>
     </record>
 
+    <!--search view-->
+    <record id="flsp_serialnum_search" model="ir.ui.view">
+        <field name="name">flsp.serialnum.search</field>
+        <field name="model">flsp.serialnum</field>
+        <field name="arch" type="xml">
+            <search string="search fields">
+                <field name="product_id"/>
+                <field name="first_serial"/>
+                <field name="serial_count"/>
+            </search>
+        </field>
+    </record>
+
     <!--Action-->
     <record model="ir.actions.act_window" id="flsp_serialnum_action">
         <field name="name">FLSP Serial Num</field>

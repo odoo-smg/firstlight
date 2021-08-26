@@ -25,4 +25,15 @@
               </xpath>
             </field>
         </record>
+        <record model="ir.ui.view" id="flsp_mrp_batch_produce_search_view">
+            <field name="name">flsp.mrp.batch.produce.search.inherit</field>
+            <field name="model">flsp.serialnum</field>
+            <field name="priority">100</field>
+            <field name="inherit_id" ref="flspserialnum.flsp_serialnum_search"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='product_id']" position="before">
+                <field name="name"/>
+              </xpath>
+            </field>
+        </record>
 </odoo>
