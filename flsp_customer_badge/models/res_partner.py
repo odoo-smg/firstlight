@@ -34,7 +34,16 @@ class flspcustomerbadgepartner(models.Model):
 
     @api.onchange('participate_in_cb')
     def _onchange_participate_in_cb(self):
-        self.flsp_cb_id = False
+        if self.flsp_cb_id:
+            # update current badge in record/history if it exists
+            current_record = self.env['flsp.customer.badge.record'].search(
+                [('customer_id', '=', self.id), ('flsp_cb_id', '=', self.flsp_cb_id.id), ('end_date', '=', False)],
+                order='start_date desc', limit=1)
+            if current_record:
+                current_record.end_date = self.write_date
+
+            # remove current badge for customer
+            self.flsp_cb_id = False
 
     def flsp_get_next_level(self, current_cb):
         if (not current_cb) or (not current_cb.reward_level):
