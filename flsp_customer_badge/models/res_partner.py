@@ -64,7 +64,7 @@ class flspcustomerbadgepartner(models.Model):
         """
             Purpose: To call customer badge wizard with the context for the customer
         """
-        view_id = self.env.ref('flsp-customerbadge.manage_customer_badge_form_view').id
+        view_id = self.env.ref('flsp_customer_badge.manage_customer_badge_form_view').id
         name = 'Manage Customer Badge'
         customer_id = self.id
         return {
