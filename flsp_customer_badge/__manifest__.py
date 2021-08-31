@@ -41,5 +41,6 @@
         'report/flsp_customer_badge_invoice_with_payments.xml',
         'views/flsp_customer_badge_stock_picking_form.xml',
         'report/flsp_customer_badge_purchase_report.xml',
+        'report/flsp_customer_badge_packing_slip.xml',
     ],
 }
