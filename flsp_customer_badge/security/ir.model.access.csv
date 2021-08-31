@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+customer_badge_manager,customer.badge.manager,model_flsp_customer_badge,account.group_account_manager,1,1,1,1
+customer_badge_request_user,customer.badge.request.user,model_flsp_customer_badge_request,base.group_user,1,1,1,1
+customer_badge_record_user,customer.badge.record.user,model_flsp_customer_badge_record,base.group_user,1,1,1,1

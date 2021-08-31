@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="manage_customer_badge_form_view">
+        <field name="name">manage.customer.badge.form</field>
+        <field name="model">flsp.manage.customer.badge</field>
+        <field name="arch" type="xml">
+            <form string="Customer badge">
+                <group string="Select customer badge">
+                    <field name="customer" invisible="True" />
+                    <field name="flsp_cb_id"/>
+                    <field name="note"/>
+                </group>
+                <footer>
+                    <button name="button_submit_for_approval" string="Submit For Approval" type="object" class="btn-primary" help="Submit the request of changing the customer badge for approval"/>
+                    <button name="button_customer_badge_records" string="Badge History" type="object" class="btn-secondary" help="View the change records of customer badge for the customer"/>
+                    <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_manage_customer_badge_wizard">
+        <field name="name">Manage Customer Badge</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.manage.customer.badge</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="manage_customer_badge_form_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
+

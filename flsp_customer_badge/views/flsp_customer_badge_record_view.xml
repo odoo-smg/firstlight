@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="customer_badge_record_form_view">
+        <field name="name">customer.badge.record.form</field>
+        <field name="model">flsp.customer.badge.record</field>
+        <field name="arch" type="xml">
+            <form string="Customer badge record">
+                <group>
+                    <field name="customer_id" />
+                    <field name="flsp_cb_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-default btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="customer_badge_record_tree_view" model="ir.ui.view">
+            <field name="name">customer.badge.record.tree</field>
+            <field name="model">flsp.customer.badge.record</field>
+            <field name="arch" type="xml">
+                <tree string="CB Records" default_order='start_date' create="false" edit="false" delete="false">
+                    <field name="flsp_cb_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_customer_badge_record">
+        <field name="name">Customer Badge Records</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.customer.badge.record</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="customer_badge_record_tree_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+    
+    <record id="customers_for_customer_badge_tree_view" model="ir.ui.view">
+            <field name="name">customer.badge.record.tree</field>
+            <field name="model">flsp.customer.badge.record</field>
+            <field name="arch" type="xml">
+                <tree string="Customers" default_order='customer_id' create="false" edit="false" delete="false">
+                    <field name="customer_id"/>
+                    <field name="start_date"/>
+                </tree>
+            </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_customers_for_customer_badge">
+        <field name="name">Customers with the badge</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.customer.badge.record</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="customers_for_customer_badge_tree_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
+

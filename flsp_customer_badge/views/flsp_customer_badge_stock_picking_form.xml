@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_customer_badge_picking_form">
+            <field name="name">flsp_customer_badge.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">95</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[1]" position="after">
+                    <field name="flsp_cb_id" invisible="1"/>
+                    <group attrs="{'invisible':[('flsp_cb_id', '=', False)]}">
+                        <div>
+                            <field name="flsp_cb_image" widget='image' class="oe_left oe_image_custom" style="width: 300px; height: 60px;"/>
+                        </div>
+                      <br/>
+                        <div style="width: 400px;">
+                              <b>Rewards Pricing Disc.%: </b>
+                              <field name="flsp_cb_sale_discount"/><br/>
+                              <b>Freight Disc.% with from 5 to 10 units: </b>
+                              <field name="flsp_cb_freight_units_5_to_10_discount"/><br/>
+                              <b>Freight Disc.% with more than 10 units: </b>
+                              <field name="flsp_cb_freight_units_over_10_discount"/>
+                       </div>
+                  </group>
+                </xpath>
+            </field>
+        </record>
+ </odoo>

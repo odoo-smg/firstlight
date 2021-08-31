@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_customer_badge_account_move_view">
+            <field name="name">flsp_customer_badge.account.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="priority">97</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[1]" position="after">
+                  <field name="flsp_cb_id" invisible="1"/>
+                  <group  attrs="{'invisible':[('flsp_cb_id', '=', False)]}">
+                        <div>
+                            <field name="flsp_cb_image" widget='image' class="oe_left oe_image_custom" style="width: 300px; height: 40px;"/>
+                        </div>
+                        <br/>
+                        <div style="width: 300px; margin-top: 20px;">
+                              <b>Rewards Pricing Disc.%: </b>
+                              <field name="flsp_cb_sale_discount"/><br/>
+                              <b>Freight Disc.% with from 5 to 10 units: </b>
+                              <field name="flsp_cb_freight_units_5_to_10_discount"/><br/>
+                              <b>Freight Disc.% with more than 10 units: </b>
+                              <field name="flsp_cb_freight_units_over_10_discount"/>
+                       </div>
+                       <field name="flsp_sale_discount"/>
+                       <field name="flsp_freight_discount"/>
+                  </group>
+              </xpath>
+            </field>
+        </record>
+
+         <record id="flsp_account_move_summary_tree_view" model="ir.ui.view">
+            <field name="name">customer.account.move.summary.tree</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="Invoices" default_order='flsp_invoice_date, flsp_annual_cumulative_amount' create="false" edit="false" delete="false">
+                    <field name="flsp_invoice_date" string="Invoice Date"/>
+                    <field name="name"/>
+                    <field name="amount_untaxed_signed" string='Tax Excluded'/>
+                    <field name="flsp_discount"/>
+                    <field name="amount_total_signed" string='Total'/>
+                    <field name="flsp_annual_cumulative_amount"/>
+                    <field name="flsp_realtime_cb_discount" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+     <record id="flsp_action_customer_account_move_summary" model="ir.actions.act_window">
+        <field name="name">Account Summary</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_account_move_summary_tree_view"></field>
+    </record>
+
+</odoo>
