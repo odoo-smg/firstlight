@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Template id is inheriting original purchase.report now will replace it with my own custom report temp-->
+    <template id="flsp_customer_badge_purchase_report_purchaseorder" inherit_id="purchase.report_purchaseorder">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+        <t t-set="data_report_margin_top" t-value="43"/>
+        <t t-set="data_report_header_spacing" t-value="40"/>
+        <t t-set="data_report_dpi" t-value="90"/>
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="flsp_customer_badge.flsp_customer_badge_purchase_report" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="flsp_customer_badge_purchase_report_purchasequotation" inherit_id="purchase.report_purchasequotation">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+        <t t-set="data_report_margin_top" t-value="43"/>
+        <t t-set="data_report_header_spacing" t-value="40"/>
+        <t t-set="data_report_dpi" t-value="90"/>
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="flsp_customer_badge.flsp_customer_badge_rfq_report" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <!--Now create a custom report-->
+    <template id="flsp_customer_badge_purchase_report">
+        <t t-call="web.basic_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <t t-esc="company.update_scss()"/>
+
+
+            <div class="header" style="background-image: url('flsp_customer_badge/static/src/img/topbar.png'); background-repeat: no-repeat; background-size: 100%; background-position: center; border: none; position: absolute; top: 30px; right: 30px; left: 30px; height:120px; ">
+                <div style="border: none; border-collapse: collapse; font-family:Franklin Gothic Medium; font-size:14px; font-weight:normal; color:white; word-spacing:2px; text-align: right; vertical-align: middle; padding:20px 10px 0px 0px; " >
+                    <span>First Light Safety Products - A Division of Smartrend Manufacturing Group</span><br/>
+					<span>6-1249 Clarence Ave, Winnipeg MB R3T 1T4 Canada</span><br/>
+					<span style="color:#ffad00;">p: </span><span>866.216.2605</span>
+                    <span style="color:#ffad00;">| f: </span><span>833.866.1547</span>
+                    <span style="color:#ffad00;">| w: </span><a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a><br/>
+                    <img src="/flsp_customer_badge/static/src/img/socialicons.png" style=" width:20%; height:20%; margin-top: 5px;"/>
+                </div>
+            </div>
+
+
+            <div class="body" style="margin:30px; border: none;">
+                <table style="border: none; height:45px; width: 100%;  border-collapse: collapse;">
+                    <tr>
+						<t t-if="doc.state  == 'draft'">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">RFQ</span>
+                                </div>
+                            </td>
+                        </t>
+                        <t t-if="doc.state in ['sent', 'to approve']">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">PURCHASE ORDER</span>
+                                </div>
+                            </td>
+                        </t>
+                        <t t-if="doc.state in ['purchase', 'done']">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">PURCHASE ORDER</span>
+                                </div>
+                            </td>
+                        </t>
+                        <t t-if="doc.state  == 'cancel'">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">CANCELLED PO</span>
+                                </div>
+                            </td>
+                        </t>
+                        <td style="width:210px; vertical-align: middle; text-align: right;">
+                            <span style="font-size:18px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">DATE: </span>
+                            <span style="font-size:18px; font-weight: lighter; color:#000000; font-family:Franklin Gothic Medium;" t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/>
+                        </td>
+					</tr>
+                </table>
+
+                <div style="padding: 10px 0px 0px 0px; width:100%; ">
+                    <!--SHIPPING ADDRESS ACCOUNTS FOR THE DROP SHIP LOCATION-->
+                    <div style=" float:left; width:50%; " >
+                        <spam style="font-size:18px; font-weight: bold; color:#ffad00; font-family:Franklin Gothic Medium;">Shipping Address:</spam>
+                        <p t-if="doc.picking_type_id.id == 9" style="font-size:18px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Gothic Medium;">
+                            <span t-field="doc.dest_address_id.name"/><br/>
+                            <span t-field="doc.dest_address_id.street"/><br/>
+                            <span t-field="doc.dest_address_id.city"/><span t-if="doc.dest_address_id.state_id.code">, </span><span t-field="doc.dest_address_id.state_id.code"/> <span t-field="doc.dest_address_id.zip"/><br/>
+                            <span t-field="doc.dest_address_id.country_id.code"/><br/>
+                            <span t-field="doc.dest_address_id.phone"/>
+                        </p>
+                        <p t-else="else"  style="font-size:18px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Gothic Medium;">
+                            <span t-field="doc.company_id.name"/><br/>
+                            <span t-field="doc.company_id.flsp_street"/><br/>
+                            <span t-field="doc.company_id.flsp_city"/><span t-if="doc.company_id.flsp_state_id.code">, </span><span t-field="doc.company_id.flsp_state_id.code"/> <span t-field="doc.company_id.flsp_zip"/><br/>
+                                <span t-field="doc.company_id.flsp_country_id"/><br/>
+                                <span t-field="doc.company_id.phone"/>
+                        </p>
+                    </div>
+                    <div style="float:right; width:50%; " >
+                        <spam style="font-size:18px; font-weight: bold; color:#ffad00; font-family:Franklin Gothic Medium;">Vendor:</spam>
+                        <p style="font-size:18px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Gothic Medium;">
+                            <span t-field="doc.partner_id.name"/><br/>
+                            <span t-field="doc.partner_id.street"/><br/>
+                            <span t-field="doc.partner_id.city"/><span t-if="doc.partner_id.state_id.code">, </span><span t-field="doc.partner_id.state_id.code"/> <span t-field="doc.partner_id.zip"/><br/>
+                            <span t-field="doc.partner_id.country_id"/><br/>
+                            <span t-field="doc.partner_id.phone"/>
+                        </p>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+
+                <h2 t-if="doc.state == 'draft'" style="font-size:28px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Request for Quotation #
+                    <span t-if="doc.flsp_pq_check == True" t-field="doc.flsp_pq_name"/>
+                    <span t-if="doc.flsp_pq_check == False" t-field="doc.name"/>
+                </h2>
+                <h2 t-if="doc.state in ['sent', 'to approve']" style="font-size:28px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Purchase Order #
+                    <span t-if="doc.flsp_pq_check == True" t-field="doc.flsp_pq_name"/>
+                    <span t-if="doc.flsp_pq_check == False" t-field="doc.name"/>
+                </h2>
+                <h2 t-if="doc.state in ['purchase', 'done']" style="font-size:28px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Purchase Order #
+                    <span t-if="doc.flsp_pq_check == True" t-field="doc.flsp_pq_name"/>
+                    <span t-if="doc.flsp_pq_check == False" t-field="doc.name"/>
+                </h2>
+                <h2 t-if="doc.state == 'cancel'" style="font-size:28px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Cancelled Purchase Order #
+                    <span t-if="doc.flsp_pq_check == True" t-field="doc.flsp_pq_name"/>
+                    <span t-if="doc.flsp_pq_check == False" t-field="doc.name"/>
+                </h2>
+
+                <div style="padding: 30px 0px 0px 0px; width:100%; ">
+                    <table style= "border: 2px solid #001f54; border-collapse: collapse;  width:100%; border-spacing: 2px;">
+                      <tbody>
+                        <tr>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:25%; ">Purchase Representative</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:25%;">Order Date</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:25%;">Terms</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #001f54 #001f54 #ffffff; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:25%;">Currency</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                                <spam t-field="doc.user_id"/>
+                            </td>
+                            <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;"><spam t-field="doc.date_order" t-options='{"widget": "date"}'/></td>
+                            <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                                <span t-field="doc.payment_term_id"/>
+                            </td>
+                            <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                                <span t-field="doc.currency_id"/>
+                            </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+
+                <table style= "margin: 30px 0px 0px; padding: 30px 0px 0px 0px; border-collapse: collapse;  width:100%; border-spacing: 2px; border: 2px solid #001f54;">
+                    <thead>
+                        <tr>
+                            <t t-set="colspan" t-value="7"/>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">Part #</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: left; ">Description</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: center;">Scheduled Date</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:70px; ">Qty</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: center;  ">Unit of Measure</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: center;  ">Unit Price</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #001f54 #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: center;  ">Extended</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="current_subtotal" t-value="0"/>
+
+                        <t t-foreach="doc.order_line" t-as="line">
+                            <t t-set="product_code" t-value="line.product_id.default_code"/>
+                            <t t-set="product_desc" t-value="line.product_id.name"/>
+                            <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
+                                <t t-if="customercode_id.partner_id == doc.partner_id">
+                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                    <t t-set="product_desc" t-value="customercode_id.description"/>
+                                </t>
+                            </t>
+
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                            <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; word-wrap: normal; white-space:nowrap; ">
+                                        <spam t-esc="product_code"/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                        <spam t-field="line.name"/><br/>
+                                        <spam t-if="line.flsp_pq_check == True" t-field="line.flsp_pq_comment"/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: center; ">
+                                        <spam t-field="line.date_planned" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
+                                        <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
+                                        <spam t-field="line.product_id.uom_po_id" />
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
+                                      <spam t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
+                                      <spam t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </t>
+                                <t t-if="line.display_type == 'line_section'">
+                                    <td name="td_section_line" t-att-colspan="colspan" style="background-color: #c3c3c3; border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: bold; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-if="line.display_type == 'line_note'">
+                                    <td name="td_note_line" t-att-colspan="colspan" style="background-color: #c3c3c3; border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: bolder; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: left; ">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
+                                <tr>
+                                    <td name="td_section_subtotal" t-att-colspan="colspan" style="font-size: 16px; background-color: #001f54; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: white; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
+                                        <strong>Subtotal</strong>
+                                        <spam t-field="doc.currency_id.name"/><spam t-field="doc.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                        <span t-esc="current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+
+                <div class="clearfix" name="so_total_summary">
+                    <div id="total" class="row" name="total">
+                        <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                            <table class="table table-sm" style= "border: none; border-collapse: collapse;  width:100%; margin:0px 0px 0px 0px;">
+                                <tr style="">
+                                    <td name="td_amount_untaxed_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; border-top-width:2px;">
+                                        <strong>Subtotal</strong>
+                                    </td>
+                                    <td name="td_amount_untaxed" style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; border-top-width:2px;" >
+                                        <spam t-field="doc.currency_id.name"/><spam t-field="doc.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                        <span t-field="doc.amount_untaxed" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td name="td_taxes_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; border-top:0;">
+                                        <strong>Taxes</strong>
+                                    </td>
+                                    <td name="td_amount_tax" style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; border-top:0;" >
+                                        <spam t-field="doc.currency_id.name"/><spam t-field="doc.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                        <span t-field="doc.amount_tax" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black o_total">
+                                    <td name="td_amount_total_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td name="td_amount_total" style="background-color: white; border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
+                                        <spam t-field="doc.currency_id.name"/><spam t-field="doc.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
+                                        <span t-field="doc.amount_total" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <t t-if="doc.partner_id.flsp_terms_and_conditions">
+                    <div style="margin:0px 0px 0px 0px; padding: 00px 0px 0px 0px; width:100%; ">
+                            <span style="font-size:20px; font-style: bold; color:#001f54; font-family: Franklin Gothic Medium, sans-serif;">Terms &amp; Conditions:</span>
+                            <p style="font-size:15px; font-weight: lighter; font-style: normal; color:#001f54; font-family: Franklin Gothic Medium, sans-serif;">
+                                <span t-field="doc.partner_id.flsp_terms_and_conditions"/>
+                                <span t-field="doc.partner_id.flsp_terms_and_conditions.flsp_terms_and_conditions"/>
+                            </p>
+                    </div>
+                </t>
+                <div class="oe_structure"/>
+            </div>
+
+            <div class="footer" style="border: none; font-family:Franklin Gothic Demi,sans-serif; vertical-align: middle; padding-right:40px; padding-top:3px; text-align: right;">
+                <div t-if="company.report_header" style="width:100%; margin:8px; text-align: center;" >
+                    <span style="position: absolute; bottom: -30px; width:100%; text-align: center; color:#ffad00; font-family: Franklin Gothic Demi, sans-serif; font-size: 24px; font-style: italic; font-weight: bolder;">
+                        <span t-field="company.report_header"/>
+                    </span>
+                </div>
+                <div style="background-image: url('flsp_customer_badge/static/src/img/footer.png'); background-repeat: no-repeat;background-size: contain; border: none; position: absolute; bottom: -65px; right: 30px; left: 30px; height:30px;">
+                    <div style="border: none; font-family:Franklin Gothic Demi,sans-serif; font-size:12px; color:white; vertical-align: middle; padding-right:40px; padding-top:3px; text-align: right; font-weight:bold; ">
+                        <span t-if="report_type == 'pdf'" >
+                            Page <span class="page"/> of <span class="topage"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="flsp_customer_badge_rfq_report">
+        <t t-call="web.basic_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <t t-esc="company.update_scss()"/>
+
+            <div class="header" style="background-image: url('flsp_customer_badge/static/src/img/topbar.png'); background-repeat: no-repeat; background-size: 100%; background-position: center; border: none; position: absolute; top: 30px; right: 30px; left: 30px; height:120px; ">
+                <div style="border: none; border-collapse: collapse; font-family:Franklin Gothic Medium; font-size:14px; font-weight:normal; color:white; word-spacing:2px; text-align: right; vertical-align: middle; padding:20px 10px 0px 0px; " >
+                    <span>First Light Safety Products - A Division of Smartrend Manufacturing Group</span><br/>
+					<span>6-1249 Clarence Ave, Winnipeg MB R3T 1T4 Canada</span><br/>
+					<span style="color:#ffad00;">p: </span><span>866.216.2605</span>
+                    <span style="color:#ffad00;">| f: </span><span>833.866.1547</span>
+                    <span style="color:#ffad00;">| w: </span><a style="color:white;" t-attf-href="company.website">www.firstlightsafety.com</a><br/>
+                    <img src="/flsp_customer_badge/static/src/img/socialicons.png" style=" width:20%; height:20%; margin-top: 5px;"/>
+                </div>
+            </div>
+
+            <div class="body" style="margin:30px; border: none;">
+                <table style="border: none; height:45px; width: 100%;  border-collapse: collapse;">
+                    <tr>
+						<t t-if="doc.state  == 'draft'">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">RFQ</span>
+                                </div>
+                            </td>
+                        </t>
+                        <t t-if="doc.state in ['sent', 'to approve']">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">PURCHASE ORDER</span>
+                                </div>
+                            </td>
+                        </t>
+                        <t t-if="doc.state in ['purchase', 'done']">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">PURCHASE ORDER</span>
+                                </div>
+                            </td>
+                        </t>
+                        <t t-if="doc.state  == 'cancel'">
+                            <td style="width:210px; vertical-align: middle; text-align: left;">
+                                <div>
+                                    <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">CANCELLED PO</span>
+                                </div>
+                            </td>
+                        </t>
+                        <td style="width:210px; vertical-align: middle; text-align: right;">
+                            <span style="font-size:18px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">DATE: </span>
+                            <span style="font-size:18px; font-weight: lighter; color:#000000; font-family:Franklin Gothic Medium;" t-field="doc.date_order" t-options='{"widget": "date", "format": "MMMM dd, Y"}'/>
+                        </td>
+					</tr>
+                </table>
+
+                <div style="padding: 10px 0px 0px 0px; width:100%; ">
+                    <!--SHIPPING ADDRESS ACCOUNTS FOR THE DROP SHIP LOCATION-->
+                    <div style=" float:left; width:50%; " >
+                        <spam style="font-size:18px; font-weight: bold; color:#ffad00; font-family:Franklin Gothic Medium;">Shipping Address:</spam>
+                        <p t-if="doc.picking_type_id.id == 9" style="font-size:18px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Gothic Medium;">
+                            <span t-field="doc.dest_address_id.name"/><br/>
+                            <span t-field="doc.dest_address_id.street"/><br/>
+                            <span t-field="doc.dest_address_id.city"/><span t-if="doc.dest_address_id.state_id.code">, </span><span t-field="doc.dest_address_id.state_id.code"/> <span t-field="doc.dest_address_id.zip"/><br/>
+                            <span t-field="doc.dest_address_id.country_id.code"/><br/>
+                            <span t-field="doc.dest_address_id.phone"/>
+                        </p>
+                        <p t-else="else"  style="font-size:18px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Gothic Medium;">
+                            <span t-field="doc.company_id.name"/><br/>
+                            <span t-field="doc.company_id.flsp_street"/><br/>
+                            <span t-field="doc.company_id.flsp_city"/><span t-if="doc.company_id.flsp_state_id.code">, </span><span t-field="doc.company_id.flsp_state_id.code"/> <span t-field="doc.company_id.flsp_zip"/><br/>
+                                <span t-field="doc.company_id.flsp_country_id"/><br/>
+                                <span t-field="doc.company_id.phone"/>
+                        </p>
+                    </div>
+                    <div style="float:right; width:50%; " >
+                        <spam style="font-size:18px; font-weight: bold; color:#ffad00; font-family:Franklin Gothic Medium;">Vendor:</spam>
+                        <p style="font-size:18px; font-weight: lighter; font-style: normal; color:#000000; font-family: Franklin Gothic Medium;">
+                            <span t-field="doc.partner_id.name"/><br/>
+                            <span t-field="doc.partner_id.street"/><br/>
+                            <span t-field="doc.partner_id.city"/><span t-if="doc.partner_id.state_id.code">, </span><span t-field="doc.partner_id.state_id.code"/> <span t-field="doc.partner_id.zip"/><br/>
+                            <span t-field="doc.partner_id.country_id"/><br/>
+                            <span t-field="doc.partner_id.phone"/>
+                        </p>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+
+                <h2 style="font-size:28px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Request for Quotation #
+                    <span t-if="doc.flsp_pq_check == True" t-field="doc.flsp_pq_name"/>
+                    <span t-if="doc.flsp_pq_check == False" t-field="doc.name"/>
+                </h2>
+
+
+                <table style= "margin: 30px 0px 0px; padding: 30px 0px 0px 0px; border-collapse: collapse;  width:100%; border-spacing: 2px; border: 2px solid #001f54;">
+                    <thead>
+                        <tr>
+                            <t t-set="colspan" t-value="4"/>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; ">Description</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap;">Expected Date</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:70px; ">Qty</td>
+                            <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #001f54 #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder;">Unit of Measure</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="current_subtotal" t-value="0"/>
+
+                        <t t-foreach="doc.order_line" t-as="line">
+                            <t t-set="product_code" t-value="line.product_id.default_code"/>
+                            <t t-set="product_desc" t-value="line.product_id.name"/>
+                            <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
+                                <t t-if="customercode_id.partner_id == doc.partner_id">
+                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                    <t t-set="product_desc" t-value="customercode_id.description"/>
+                                </t>
+                            </t>
+
+                            <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; word-wrap: normal; white-space:nowrap; ">
+                                        <spam t-field="line.name"/><br/>
+                                        <spam t-if="line.flsp_pq_check == True" t-field="line.flsp_pq_comment"/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
+                                        <spam t-field="line.date_planned" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
+                                        <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/>
+                                    </td>
+                                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
+                                      <spam t-field="line.product_id.uom_po_id" />
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <t t-if="doc.partner_id.flsp_terms_and_conditions">
+                    <div style="margin:0px 0px 0px 0px; padding: 00px 0px 0px 0px; width:100%; ">
+                            <span style="font-size:20px; font-style: bold; color:#001f54; font-family: Franklin Gothic Medium, sans-serif;">Terms &amp; Conditions:</span>
+                            <p style="font-size:15px; font-weight: lighter; font-style: normal; color:#001f54; font-family: Franklin Gothic Medium, sans-serif;">
+                                <span t-field="doc.partner_id.flsp_terms_and_conditions"/>
+                                <span t-field="doc.partner_id.flsp_terms_and_conditions.flsp_terms_and_conditions"/>
+                            </p>
+                    </div>
+                </t>
+                <div class="oe_structure"/>
+            </div>
+
+            <div class="footer" style="border: none; font-family:Franklin Gothic Demi,sans-serif; vertical-align: middle; padding-right:40px; padding-top:3px; text-align: right;">
+                <div t-if="company.report_header" style="width:100%; margin:8px; text-align: center;" >
+                    <span style="position: absolute; bottom: -30px; width:100%; text-align: center; color:#ffad00; font-family: Franklin Gothic Demi, sans-serif; font-size: 24px; font-style: italic; font-weight: bolder;">
+                        <span t-field="company.report_header"/>
+                    </span>
+                </div>
+                <div style="background-image: url('flsp_customer_badge/static/src/img/footer.png'); background-repeat: no-repeat;background-size: contain; border: none; position: absolute; bottom: -65px; right: 30px; left: 30px; height:30px;">
+                    <div style="border: none; font-family:Franklin Gothic Demi,sans-serif; font-size:12px; color:white; vertical-align: middle; padding-right:40px; padding-top:3px; text-align: right; font-weight:bold; ">
+                        <span t-if="report_type == 'pdf'" >
+                            Page <span class="page"/> of <span class="topage"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_customer_badge_partner_form_view">
+            <field name="name">flsp_customer_badge.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+              <div name="button_box" position="inside">
+                    <button type="object" class="btn oe_stat_button" icon="fa-pencil-square-o" id="account_summary_button" name="action_view_account_summary" string="Account Summary"
+                        context="{'default_partner_id': active_id}">
+                    </button>
+                </div>
+                <xpath expr="//sheet[1]" position="before">
+                    <header/>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <field name="flsp_sale_group" invisible="1"/>
+                    <button name="button_customer_badge" groups="base.group_user" string="Customer Badge" type="object" class="oe_highlight"  attrs="{'invisible':['|', '|', ('participate_in_cb', '=', False), ('parent_id', '!=', False), ('flsp_sale_group', '==', '1')]}"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/div[1]" position="after">
+                    <field name="flsp_cb_id" invisible="1"/>
+                    <field name="flsp_cb_image" widget='image' class="oe_right oe_image_custom" style="width: 300px; height: 40px;" attrs="{'invisible':[('flsp_cb_id', '=', False)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="participate_in_cb" string="Participate in Customer Badge"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>

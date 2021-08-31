@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="flsp_customer_badge_report_invoice_with_pay" inherit_id="account.report_invoice_with_payments">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-set="data_report_margin_top" t-value="43"/>
+            <t t-set="data_report_header_spacing" t-value="40"/>
+            <t t-set="data_report_dpi" t-value="90"/> <!-- this value is used on sandbox -->
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                    <t t-call="flsp_customer_badge.flsp_customer_badge_invoice_with_pay" t-lang="lang"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="flsp_customer_badge_invoice_with_pay" inherit_id="flsp_customer_badge.flsp_customer_badge_invoice_report" primary="True">
+        <xpath expr="//div[@id='total']/div/table" position="inside">
+            <t t-set="payments_vals" t-value="o._get_reconciled_info_JSON_values()"/>
+            <t t-foreach="payments_vals" t-as="payment_vals">
+                <tr>
+                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                        <i class="oe_form_field text-right oe_payment_label">Paid on <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/></i>
+                    </td>
+                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                        <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-esc="payment_vals['amount']" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                    </td>
+                </tr>
+            </t>
+            <t t-if="len(payments_vals) > 0">
+                <tr class="border-black">
+                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                        <strong>Amount Due</strong>
+                    </td>
+                    <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; width:25%;">
+                        <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/> <span t-field="o.amount_residual" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                    </td>
+                </tr>
+            </t>
+        </xpath>
+    </template>
+</odoo>

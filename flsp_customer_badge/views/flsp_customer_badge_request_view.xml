@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="manage_customer_badge_request_form_view">
+        <field name="name">manage.customer.badge.request.form</field>
+        <field name="model">flsp.customer.badge.request</field>
+        <field name="arch" type="xml">
+            <form string="Customer badge request">
+                <group string="Change customer badge">
+                    <field name="customer_id" />
+                    <field name="flsp_current_cb_id"/>
+                    <field name="flsp_new_cb_id"/>
+                    <field name="requester"/>
+                    <field name="responder"/>
+                    <field name="note"/>
+                    <field name="write_date"/>
+                </group>
+                <field name="message" style="color: red;" attrs="{'invisible':['|', ('message', '=', False), ('message', '=', '')]}"/>
+                <footer>
+                    <button name="button_approve" string="Approve" type="object" groups="account.group_account_manager" class="btn-primary" help="Approve the request of changing the customer badge"/>
+                    <button name="button_reject" string="Reject" type="object" groups="account.group_account_manager" class="btn-secondary" help="Reject the request of changing the customer badge"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="launch_manage_customer_badge_wizard">
+        <field name="name">Manage Customer Badge Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">flsp.customer.badge.request</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="manage_customer_badge_request_form_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
+
