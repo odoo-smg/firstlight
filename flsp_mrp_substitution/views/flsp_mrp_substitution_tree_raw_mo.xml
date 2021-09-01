@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record model="ir.ui.view" id="flsp_substitution_production_form_view">
+            <field name="name">flspsubstitution.production.form.inherit</field>
+            <field name="model">stock.move</field>
+            <field name="priority">00</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_raw_tree"/>
+            <field name="arch" type="xml">
+<!--
+              <xpath expr="//field[@name='quantity_done']" position="after">
+                  <field name="flsp_substitute" attrs="{'column_invisible': [('parent.state', 'in', ['progress','to_close','done','cancel'])]}"/>
+                  <button name="%(launch_flsp_mrp_substitute_wiz)d" title="Substitute" icon="fa-edit" type="action" attrs="{'invisible': ['|',('flsp_substitute', '=', False),('parent.state', 'in', ['progress','to_close','done','cancel'])]}" />
+              </xpath>
+
+-->
+
+              <xpath expr="//tree" position="replace">
+                <tree editable="bottom" create="0" delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
+                    <field name="product_id" readonly="1" force_save="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="product_uom_category_id" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <field name="unit_factor" invisible="1"/>
+                    <field name="product_uom" groups="uom.group_uom" readonly="1" force_save="1"/>
+                    <field name="date" invisible="1"/>
+                    <field name="date_expected" invisible="1"/>
+                    <field name="picking_type_id" invisible="1"/>
+                    <field name="has_tracking" invisible="1"/>
+                    <field name="operation_id" invisible="1"/>
+                    <field name="needs_lots" readonly="1" groups="stock.group_production_lot"/>
+                    <field name="is_done" invisible="1"/>
+                    <field name="bom_line_id" invisible="1"/>
+                    <field name="sequence" invisible="1"/>
+                    <field name="location_id" invisible="1"/>
+                    <field name="warehouse_id" invisible="1"/>
+                    <field name="location_dest_id" domain="[('id', 'child_of', parent.location_dest_id)]" invisible="1"/>
+                    <field name="state" invisible="1" force_save="1"/>
+                    <field name="product_uom_qty" string="To Consume" readonly="1" force_save="1"/>
+                    <field name="reserved_availability" attrs="{'invisible': [('is_done', '=', True)], 'column_invisible': [('parent.state', 'in', ('draft', 'done'))]}" string="Reserved"/>
+                    <field name="quantity_done" string="Consumed" attrs="{'column_invisible': [('parent.state', '=', 'draft')]}" readonly="1"/>
+                    <field name="flsp_substitute" attrs="{'column_invisible': [('parent.state', 'in', ['progress','to_close','done','cancel'])]}"/>
+                    <button name="%(launch_flsp_mrp_substitute_wiz)d" title="Substitute" icon="fa-edit" type="action" attrs="{'invisible': ['|',('flsp_substitute', '=', False),('parent.state', 'in', ['progress','to_close','done','cancel'])]}" />
+                </tree>
+              </xpath>
+
+            </field>
+        </record>
+
+</odoo>
