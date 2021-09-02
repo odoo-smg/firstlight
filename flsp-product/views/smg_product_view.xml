@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
+
+        <record model="ir.ui.view" id="product_smg_tree_view">
+            <field name="name">product.template.smg.tree.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree[1]/field[@name='name']" position="after">
+                    <field name="legacy_code" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='uom_id']" position="after">
+                    <field name="flsp_plm_valid"/>
+                    <field name="flsp_acc_valid"/>
+                </xpath>
+            </field>
+        </record>
+
         <!-- Add instructor field to existing view -->
         <record model="ir.ui.view" id="product_smg_form_view">
             <field name="name">product.template.smg.form.inherit</field>
