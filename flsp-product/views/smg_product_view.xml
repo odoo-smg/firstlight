@@ -11,8 +11,8 @@
                     <field name="legacy_code" optional="show"/>
                 </xpath>
                 <xpath expr="//field[@name='uom_id']" position="after">
-                    <field name="flsp_plm_valid"/>
-                    <field name="flsp_acc_valid"/>
+                    <field name="flsp_plm_valid" optional="show"/>
+                    <field name="flsp_acc_valid" optional="show"/>
                 </xpath>
             </field>
         </record>
