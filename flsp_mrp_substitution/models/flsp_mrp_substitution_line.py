@@ -18,6 +18,13 @@ class FlspMrpSubstitutionLine(models.Model):
     product_substitute_uom_id = fields.Many2one('uom.uom', 'Substitute Unit of Measure')
     product_substitute_qty = fields.Float('Substitute Qty', default=1.0, digits='Product Unit of Measure', required=True)
 
+    @api.model
+    def default_get(self, fields):
+        res = super(FlspMrpSubstitutionLine, self).default_get(fields)
+        if 'product_id' in fields:
+            res['product_id'] = False
+        return res
+
     @api.onchange('product_substitute_id')
     def onchange_product_sub_id(self):
         if self.product_substitute_id:
