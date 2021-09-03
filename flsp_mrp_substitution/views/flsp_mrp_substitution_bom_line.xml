@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_mrp_bom_substitution_inherit_form">
+        <field name="name">mrp.bom.substitution.inherit.form</field>
+        <field name="model">mrp.bom</field>
+        <field name="priority">100</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_qty']" position="after">
+                <field name="flsp_substitute" />
+            </xpath>
+            <notebook position="inside">
+                <page string="Substitute">
+                    <field name="flsp_bom_products_ids" widget="many2many_tags" invisible="1" />
+                    <field name="flsp_substitution_line_ids" attrs="{'readonly': [('flsp_bom_plm_valid', '=', True)]}" nolabel="1" >
+                        <tree editable="bottom">
+                            <field name="company_id" invisible="1"/>
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id" domain="[('id','in',parent.flsp_bom_products_ids)]" context="{'bom_line_ids':parent.bom_line_ids, 'product_ids':parent.flsp_bom_products_ids}" attrs="{'readonly': [(False)]}" options="{'no_open':True,'no_create': True}"/>
+                            <field name="product_qty" attrs="{'readonly': [(True)]}" context="{'bom_line_ids':parent.bom_line_ids, 'bom':parent}"/>
+                            <field name="product_uom_id" attrs="{'readonly': [(True)]}" context="{'bom_line_ids':parent.bom_line_ids}"/>
+                            <field name="product_substitute_id" />
+                            <field name="product_substitute_qty" />
+                            <field name="product_substitute_uom_id" />
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
+

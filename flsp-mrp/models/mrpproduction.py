@@ -26,13 +26,21 @@ class flspproduction(models.Model):
                 if record.product_id.product_tmpl_id.flsp_backflush:
                     raise exceptions.ValidationError("You cannot use products marked as Backflush.")
 
-    def button_flsp_confirm(self):
+    def action_confirm(self, by_pass=False):
+        if by_pass:
+            return super(flspproduction, self).action_confirm()
         if not self.bom_id.flsp_bom_plm_valid:
-            action = self.env.ref('flsp-mrp.launch_flsp_wizprd_message').read()[0]
+            return self.env.ref('flsp-mrp.launch_flsp_wizprd_message').read()[0]
         else:
-            action = self.action_confirm()
-        return action
-
+            comps_valid = True
+            for comp in self.move_raw_ids:
+                if not comp.product_id.flsp_plm_valid:
+                    comps_valid = False
+            if not comps_valid:
+                return self.env.ref('flsp-mrp.launch_flsp_mrp_comp_warning_wiz').read()[0]
+            else:
+                return super(flspproduction, self).action_confirm()
+                
     def button_flsp_explode_subs(self):
         """
             Purpose: To show products with BOMS and backflush = False in a wizard
@@ -50,7 +58,7 @@ class flspproduction(models.Model):
                 'default_mo_id': self.id,
             }
         }
-    
+
     def copy(self, default=None):
         """
             Date:    2021-06-04
@@ -84,5 +92,5 @@ class flspproduction(models.Model):
     def _onchange_date_planned_start(self):
         if not self.date_planned_start:
             raise UserError("'Planned Start Date' is required")
-        
+
         super(flspproduction, self)._onchange_date_planned_start()
