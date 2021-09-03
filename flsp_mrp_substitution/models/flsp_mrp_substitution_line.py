@@ -11,7 +11,7 @@ class FlspMrpSubstitutionLine(models.Model):
     company_id = fields.Many2one(related='flsp_bom_id.company_id', store=True, index=True, readonly=True)
     sequence = fields.Integer(string='Sequence')
     product_id = fields.Many2one('product.product', 'Component')
-    product_tmpl_id = fields.Many2one('product.template', 'Product Template', related='product_id.product_tmpl_id', readonly=False)
+    #product_tmpl_id = fields.Many2one('product.template', 'Product Template', related='product_id.product_tmpl_id', readonly=False)
     product_qty = fields.Float('Quantity', digits='Quantity', compute='_compute_product_qty')
     product_uom_id = fields.Many2one('uom.uom', 'UofM', compute='_compute_product_uom_id')
     product_substitute_id = fields.Many2one('product.product', 'Substitute Component', required=True, check_company=True)
