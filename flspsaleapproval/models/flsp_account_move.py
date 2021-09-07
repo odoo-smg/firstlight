@@ -12,16 +12,19 @@ class flspaccountmove(models.Model):
 
     flsp_broker_id = fields.Many2one('res.partner', string='Broker')
     flsp_ci_notes = fields.Text(string='Notes for Commercial Invoice')
-    
+
     @api.depends('invoice_origin')
     def _get_so(self):
-        self.flsp_sale_orders = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        if self.invoice_origin:
+            self.flsp_sale_orders = self.env['sale.order'].search([('name', '=', self.invoice_origin.strip())])
+        else:
+            self.flsp_sale_orders = False
         self.flsp_delivery_id = self._get_default_delivery()
-    
+
     def _get_default_delivery(self):
         if self.flsp_delivery_id:
             return self.flsp_delivery_id
-        
+
         # initialize flsp_delivery_id
         latest_delivery = False
         now_date = datetime.now()
@@ -35,7 +38,7 @@ class flspaccountmove(models.Model):
                 else:
                     break
         return latest_delivery
-    
+
     flsp_sale_orders = fields.Many2many('sale.order', string='Sales Order', compute=_get_so)
     flsp_delivery_id = fields.Many2one('stock.picking', string='Delivery', domain="[('sale_id', 'in', flsp_sale_orders)]")
 
