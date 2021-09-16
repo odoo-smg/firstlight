@@ -97,6 +97,7 @@ class FlspMrpSubstitutionWiz(models.TransientModel):
                 'state': stock_move.state,
             })
             new_move.reference = stock_move.reference
+            self.mo_id.flsp_substituted = True
             self.mo_id.message_post(body='-->> Product Substitution: <br/>'
                                     + ' The product ['+stock_move.product_id.default_code+'] '+ stock_move.product_id.name + '<br/>'
                                     + ' was substituted by ['+self.substitute_id.default_code+'] '+ self.substitute_id.name

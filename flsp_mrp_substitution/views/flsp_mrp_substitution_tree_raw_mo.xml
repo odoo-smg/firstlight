@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
 
+        <record model="ir.ui.view" id="flsp_substitution_stock_move_lots_view">
+            <field name="name">flspsubstitution.stock.move.lots.inherit</field>
+            <field name="model">stock.move</field>
+            <field name="priority">00</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='product_id']" position="attributes">
+                  <attribute name="attrs">{"readonly": [True]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_uom_qty']" position="attributes">
+                  <attribute name="attrs">{"readonly": [True]}</attribute>
+              </xpath>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="flsp_substitution_production_form_view">
             <field name="name">flspsubstitution.production.form.inherit</field>
             <field name="model">stock.move</field>
@@ -16,7 +31,7 @@
 -->
 
               <xpath expr="//tree" position="replace">
-                <tree editable="bottom" create="0" delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
+                <tree create="0" delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
                     <field name="product_id" readonly="1" force_save="1"/>
                     <field name="company_id" invisible="1"/>
                     <field name="product_uom_category_id" invisible="1"/>
