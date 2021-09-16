@@ -6,8 +6,8 @@
             <field name="priority">00</field>
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
-              <xpath expr="//field[@name='move_raw_ids']" position="attributes">
-                  <!--attribute name="attrs">{'readonly': [True], 'force_save': [True]}</attribute-->
+              <xpath expr="//field[@name='bom_id']" position="after">
+                  <field name="flsp_substituted" invisible="1" />
               </xpath>
               <xpath expr="//field[@name='product_qty']" position="attributes">
                   <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
@@ -15,9 +15,6 @@
               <xpath expr="//field[@name='product_uom_id']" position="attributes">
                   <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
               </xpath>
-              <!--xpath expr="//button[@name='update']" position="attributes">
-                  <attribute name="attrs">{'readonly': [True]}</attribute>
-              </xpath-->
             </field>
         </record>
 

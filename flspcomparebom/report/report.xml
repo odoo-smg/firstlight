@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        id="report_compare_bom_xlx"
+        string="BOM Compare Excel"
+        model="flsp.comparebom.view"
+        report_type="xlsx"
+        name="flspcomparebom.bom_compare_xls"
+        file="flspcomparebom.bom_compare_xls"/>
+</odoo>
