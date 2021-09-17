@@ -167,17 +167,16 @@ class flsppurchaseproductprd(models.Model):
 
     def _compute_flsp_open_po_qty(self):
         receipt_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Receipts')]).ids
-        if not self.purchase_ok:
-            for product in self:
+        for product in self:
+            if not product.purchase_ok:
                 product.flsp_open_po_qty = 0.0
-        else:
-            domain = [
-                '&', ('state', 'not in', ['done', 'cancel', 'draft']),
-                '&', ('picking_type_id', 'in', receipt_stock_type),
-                ('product_id', 'in', self.ids)
-            ]
-            open_receipts = self.env['stock.picking'].search(domain)
-            for product in self:
+            else:
+                domain = [
+                    '&', ('state', 'not in', ['done', 'cancel', 'draft']),
+                    '&', ('picking_type_id', 'in', receipt_stock_type),
+                    ('product_id', '=', product.id)
+                ]
+                open_receipts = self.env['stock.picking'].search(domain)
                 if not product.id:
                     product.flsp_open_po_qty = 0.0
                     continue
@@ -185,8 +184,8 @@ class flsppurchaseproductprd(models.Model):
                     stock_move_product = self.env['stock.move'].search(['&', ('picking_id', '=', receipt.id), ('product_id', '=', product.id)])
                     for move in stock_move_product:
                         product.flsp_open_po_qty += move.product_uom_qty
-        if not self.flsp_open_po_qty:
-            self.flsp_open_po_qty = 0
+            if not product.flsp_open_po_qty:
+                product.flsp_open_po_qty = 0
 
     def action_view_open_po(self):
         receipt_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Receipts')]).ids
@@ -231,7 +230,24 @@ class flsppurchaseproducttmp(models.Model):
                 template.flsp_open_po_qty = amount
 
     def action_view_open_po(self):
-        product_prd = self.env['product.product'].search([('product_tmpl_id', 'in', self.ids)])
+        receipt_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Receipts')]).ids
+        product_ids = self.env['product.product'].search([('product_tmpl_id', 'in', self.ids)]).ids
+        domain = [
+            '&', ('state', 'not in', ['done', 'cancel', 'draft']),
+            '&', ('picking_type_id', 'in', receipt_stock_type),
+            ('product_id', 'in', product_ids)
+        ]
+        open_receipts = self.env['stock.picking'].search(domain)
+        po_ids = []
+        product_ids = []
+        for product in self:
+            product_ids = self.env['product.product'].search([('product_tmpl_id', '=', product.id)]).ids
+            for receipt in open_receipts:
+                stock_move_product = self.env['stock.move'].search(
+                    ['&', ('picking_id', '=', receipt.id), ('product_id', 'in', product_ids)])
+                for move in stock_move_product:
+                    if move.purchase_line_id.product_uom_qty - move.purchase_line_id.qty_received > 0:
+                        po_ids.append(move.purchase_line_id.id)
         action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
-        action['domain'] = ['&', ('product_id', '=', product_prd.ids), ('flsp_open_qty', '>', 0)]
+        action['domain'] = ['&', ('id', 'in', po_ids), ('product_id', 'in', product_ids)]
         return action

@@ -18,13 +18,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mrp'],
+    'depends': ['base', 'mrp', 'report_xlsx'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_comparebom_view.xml',
         'wizard/flsp_comparebom_wizard.xml',
+        'report/report.xml',
 
     ],
 }

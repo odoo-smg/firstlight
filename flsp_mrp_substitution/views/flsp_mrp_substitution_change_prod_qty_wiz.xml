@@ -6,11 +6,14 @@
             <field name="priority">00</field>
             <field name="inherit_id" ref="mrp.view_change_production_qty_wizard"/>
             <field name="arch" type="xml">
+              <xpath expr="//field[@name='product_qty']" position="after">
+                  <field name="flsp_substituted" invisible="1" />
+              </xpath>
               <xpath expr="//field[@name='product_qty']" position="attributes">
-                  <attribute name="attrs">{'readonly': [True], 'force_save': [True]}</attribute>
+                  <attribute name="attrs">{'readonly':[('flsp_substituted', '=', True)], 'force_save': [True]}</attribute>
               </xpath>
               <xpath expr="//button[@name='change_prod_qty']" position="attributes">
-                  <attribute name="attrs">{'invisible': [True]}</attribute>
+                  <attribute name="attrs">{'invisible': [('flsp_substituted', '=', True)]}</attribute>
               </xpath>
             </field>
         </record>
