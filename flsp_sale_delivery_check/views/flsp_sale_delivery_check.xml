@@ -56,7 +56,7 @@
         <!--field name="form_view_id" ref="flsp_mrp_mto_form_view"/-->
         <field name="search_view_id" ref="flsp_sale_delivery_check_search_view"/>
         <!--field name="context">{'search_default_product':1}</field--> <!--Making to do default-->
-        <field name="domain">['&amp;',('state', 'in', ('confirmed', 'assigned', 'waiting')), ('picking_type_id.name', '=', 'Delivery Orders')]</field>
+        <field name="domain">['&amp;',('state', 'in', ('confirmed', 'assigned', 'waiting', 'partially_available')), ('picking_type_id.name', '=', 'Delivery Orders')]</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">You have nothing to be produced.</p>
         </field>
