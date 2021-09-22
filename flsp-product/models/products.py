@@ -47,6 +47,28 @@ class Smgproduct(models.Model):
     #    if (self.env.uid != 8):
     flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True, copy=False)
 
+    standard_price = fields.Float(
+        'CAD$ Cost', compute='_compute_standard_price',
+        inverse='_set_standard_price', search='_search_standard_price',
+        digits='Product Price', groups="base.group_user",
+        help="""In Standard Price & AVCO: value of the product (automatically computed in AVCO).
+        In FIFO: value of the last unit that left the stock (automatically computed).
+        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).
+        Used to compute margins on sale orders.""")
+
+    flsp_usd_cost = fields.Float(
+        'USD$ Cost', compute='_compute_flsp_usd_cost',
+        digits='Product Price', groups="base.group_user",
+        help="""Converted cost to USD$""")
+
+    @api.depends('standard_price')
+    def _compute_flsp_usd_cost(self):
+        us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
+        usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)],limit=1)
+        for each in self:
+            each.flsp_usd_cost = each.standard_price * usd_rate.rate
+
+
     # constraints to validate code and description to be unique
     _sql_constraints = [
         ('default_code_name_check_flsp6',
@@ -202,4 +224,3 @@ class Smgproduct(models.Model):
                                       '\nTo use this name you must use the matching Part # Prefix: ' + line[2] +
                                       ' and increment the Part # Suffix'
                                       )
-
