@@ -6,6 +6,18 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
+              <xpath expr="//label[@for='standard_price']" position="replace">
+                  <label for="standard_price" string="CAD$ Cost" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+              </xpath>
+              <!--xpath expr="//div[@name='standard_price_uom']" position="after">
+                    <label for="flsp_usd_cost" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                    <div name="flsp_usd_cost_uom" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}" class="o_row">
+                        <field name="flsp_usd_cost" widget="monetary" options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
+                        <span groups="uom.group_uom" class="oe_read_only">per
+                            <field name="uom_name"/>
+                        </span>
+                    </div>
+              </xpath-->
               <xpath expr="//sheet[1]/notebook[1]" position="after">
                 <group name="studio_group_jVxHq">
                   <group name="studio_group_3aEOj_left">

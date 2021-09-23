@@ -12,8 +12,11 @@ class FlspCompareBomView(models.Model):
         Author:     Sami Byaruhanga
     """
     _name = 'flsp.comparebom.view'
+    _rec_name = 'page_name'
     _auto = False
     _description = 'FLSP Compare BoM View'
+
+    page_name= fields.Char()
 
     # BoM header information
     bom1 = fields.Many2one('mrp.bom', string='BOM 1', required=True, ondelete='cascade')
@@ -68,7 +71,8 @@ class FlspCompareBomView(models.Model):
             mb1.id as bom1, mb1.code as code1, mb1.product_tmpl_id as product_templ_id1, 
             mb1.product_qty as product_qty1, mb1.product_uom_id as product_uom_id1, mb1.version as version1, mb1.active as active1, 
             mb2.id as bom2, mb2.code as code2, mb2.product_tmpl_id as product_tmpl_id2, 
-            mb2.product_qty as product_qty2, mb2.product_uom_id as product_uom_id2, mb2.version as version2, mb2.active as active2
+            mb2.product_qty as product_qty2, mb2.product_uom_id as product_uom_id2, mb2.version as version2, mb2.active as active2,
+            'Compare BOMS' as page_name
         FROM mrp_bom as mb1
             inner join mrp_bom as mb2
             on 			mb2.id = (select bom2 from flsp_comparebom order by id desc limit 1)
@@ -87,6 +91,7 @@ class FlspCompareBomView(models.Model):
         # """
         # print("executing query #2")
         # self.env.cr.execute(query)
+
 
     class FlspCompareBom(models.Model):
         """

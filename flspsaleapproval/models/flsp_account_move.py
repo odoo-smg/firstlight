@@ -11,7 +11,7 @@ class flspaccountmove(models.Model):
     _check_company_auto = True
 
     flsp_broker_id = fields.Many2one('res.partner', string='Broker')
-    flsp_ci_notes = fields.Text(string='Notes for Commercial Invoice')
+    flsp_ci_notes = fields.Text(string='Notes for Commercial Invoice', default="Commercial Invoice for customs only. Not to be paid.\nCountry of Origin - Canada")
 
     @api.depends('invoice_origin')
     def _get_so(self):

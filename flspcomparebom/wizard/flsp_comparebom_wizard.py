@@ -21,8 +21,43 @@ class FlspCompareBomWizard(models.TransientModel):
     _name = 'flsp.comparebom.wizard'
     _description = "FLSP Compare BoM Wizard"
 
+    curActive = fields.Boolean(default=False)
     bom1 = fields.Many2one('mrp.bom', string='BOM 1', required=True, ondelete='cascade')
     bom2 = fields.Many2one('mrp.bom', string='BOM 2', required=True, ondelete='cascade')
+
+    @api.onchange('curActive')
+    def onchange_curActive(self):
+        for rec in self:
+            if rec.curActive:
+                return {'domain': {'bom1': [('active','=',True)], 'bom2': [('active','=',True)]}}
+            else:
+                return {'domain': {'bom1': ['|',('active','=',True),('active','=',False)], 'bom2': ['|',('active','=',True),('active','=',False)]}}
+
+    def select(self):
+        """
+                    Purpose:    Refactored version of compare called by a server action.
+                                Will read the first 2 (or the first one twice) selected boms
+                                Then open a compare bom form of the selected BOMS
+                """
+        active_ids = self.env.context.get('active_ids', [])
+        if len(active_ids) >= 2:
+            self.env['flsp.comparebom'].create({'bom1': active_ids[0], 'bom2': active_ids[1], })
+            res = self.env['flsp.comparebom.view'].search([], limit=1).id
+            view = self.env.ref('flspcomparebom.flsp_comparebom_view_form').id
+        elif len(active_ids) == 1:
+            self.env['flsp.comparebom'].create({'bom1': active_ids[0], 'bom2': active_ids[0], })
+            res = self.env['flsp.comparebom.view'].search([], limit=1).id
+            view = self.env.ref('flspcomparebom.flsp_comparebom_view_form').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Compare BOMS',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view,
+            'res_model': 'flsp.comparebom.view',
+            'domain': [],
+            'res_id': res,
+        }
 
     def compare(self):
         """
@@ -49,6 +84,7 @@ class FlspCompareBomWizard(models.TransientModel):
             'target': 'main',  # to clear the breadcrumbs
             'res_id': res,      #very useful since it helps show which form to open, it can be any form i want
         }
+
 
 class mrp_bom_inherit(models.Model):
     """

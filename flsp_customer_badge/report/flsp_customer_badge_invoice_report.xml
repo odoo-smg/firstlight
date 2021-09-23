@@ -211,7 +211,7 @@
 
                                 <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
                                     <t t-set="product_code" t-value="line.product_id.default_code"/>
-                                    <t t-set="product_desc" t-value="line.product_id.name"/>
+                                    <t t-set="product_desc" t-value="line.name"/>
                                     <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
                                         <t t-if="customercode_id.partner_id == o.partner_id">
                                             <t t-set="product_code" t-value="customercode_id.part_number"/>
@@ -286,7 +286,7 @@
                                                 <span t-field="o.amount_untaxed" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </td>
                                         </tr>
-                                        <t t-if="o.flsp_cb_image" >
+                                        <t t-if="o.flsp_cb_image and o.type != 'out_refund'" >
                                             <tr class="border-black o_reward_discount">
                                                 <td name="td_reward_discount_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
                                                     <strong>Reward Disc.</strong>
