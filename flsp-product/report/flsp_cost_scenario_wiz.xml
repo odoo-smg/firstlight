@@ -37,6 +37,6 @@
                   parent="purchase.purchase_report"
                   sequence="110"
                   action="launch_flsp_cost_scenario_wizard"
-                  groups="group_purchase_manager"/>
+                  groups="purchase.group_purchase_manager"/>
 
 </odoo>
