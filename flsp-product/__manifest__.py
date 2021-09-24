@@ -44,5 +44,7 @@
         'views/flsp_product_product.xml',
         'views/flsp_finished_product_acc.xml',
         'data/flsp_product_feature_config.xml',
+        'report/flsp_cost_scenario_wiz.xml',
+        'report/flsp_cost_scenario.xml',
     ],
 }

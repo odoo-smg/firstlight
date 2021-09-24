@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_cost_scenario_wizard_form_view" model="ir.ui.view">
+            <field name="name">Recompute Cost Scenarios</field>
+            <field name="model">flsp.cost.scenario.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Recompute Cost Scenarios">
+                    <h4>Would you like to recalculate the Cost Scenarios?</h4>
+                    <p>The Cost Scenarios are automatically calculated every night.This routine could take several minutes to run.</p>
+                    <group>
+                        <group>
+                            <field name="currency_id" options="{'no_open': True, 'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button name="flsp_report" type="object" string="No" class="btn-primary" />
+                        <button name="flsp_recalc" type="object" string="Yes" class="btn-default btn-secondary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_cost_scenario_wizard" model="ir.actions.act_window">
+            <field name="name">FLSP - Recompute Cost Scenarios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp.cost.scenario.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="flsp_cost_scenario_menu"
+                  name="FLSP Cost Scenarios"
+                  parent="purchase.purchase_report"
+                  sequence="110"
+                  action="launch_flsp_cost_scenario_wizard"
+                  groups="group_purchase_manager"/>
+
+</odoo>
