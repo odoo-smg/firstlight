@@ -403,7 +403,10 @@ class Smgproduct(models.Model):
                 # if price.product_uom.id != product.uom_id.id:
                 #    print('Product '+product.display_name+'    price: '+str(price.price) + '    converted: '+str(uom_price))
                 if exchange_rate:
-                    curr_value = uom_price * exchange_rate.rate
+                    if exchange_rate.rate > 0:
+                        curr_value = uom_price / exchange_rate.rate
+                    else:
+                        curr_value = uom_price
                 else:
                     curr_value = 0
                 if price.date_start and price.date_end:
