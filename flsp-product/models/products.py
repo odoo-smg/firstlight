@@ -2,6 +2,9 @@
 
 from odoo import fields, models, api, exceptions
 from odoo.exceptions import ValidationError
+from datetime import date, datetime
+import logging
+_logger = logging.getLogger(__name__)
 
 class Smgproduct(models.Model):
     _inherit = 'product.template'
@@ -61,12 +64,24 @@ class Smgproduct(models.Model):
         digits='Product Price', groups="base.group_user",
         help="""Converted cost to USD$""")
 
-    @api.depends('standard_price')
+    flsp_pref_cost = fields.Float('Preferred Cost', digits='Product Price')
+    flsp_best_cost = fields.Float('Optimistic Cost', digits='Product Price')
+    flsp_worst_cost = fields.Float('Pessimistic Cost', digits='Product Price')
+
+    flsp_usd_pref_cost = fields.Float('Preferred USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
+    flsp_usd_best_cost = fields.Float('Optimistic USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
+    flsp_usd_worst_cost = fields.Float('Pessimistic USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
+
+    @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost')
     def _compute_flsp_usd_cost(self):
         us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
         usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)],limit=1)
         for each in self:
             each.flsp_usd_cost = each.standard_price * usd_rate.rate
+            each.flsp_usd_pref_cost = each.flsp_pref_cost * usd_rate.rate
+            each.flsp_usd_best_cost = each.flsp_best_cost * usd_rate.rate
+            each.flsp_usd_worst_cost = each.flsp_worst_cost * usd_rate.rate
+
 
 
     # constraints to validate code and description to be unique
@@ -224,3 +239,199 @@ class Smgproduct(models.Model):
                                       '\nTo use this name you must use the matching Part # Prefix: ' + line[2] +
                                       ' and increment the Part # Suffix'
                                       )
+
+    @api.model
+    def flspCostUpdate(self):
+        """
+         Date:    Sep/23th/2021
+         Purpose: create a routine to recalculate the cost of finished products based on BOM.
+            - Preferred vendor cost.
+            - Best Case scenario - best price on product vendor price list
+            - Worst Case scenario - worst price on product vendor price list
+         Author:  Alexandre Sousa
+        """
+        _logger.info("Starting 'flsp_scenario_update' for all products with price list.")
+        self.flsp_scenario_update()
+
+        _logger.info("Starting 'recalculateCost()' for finished products.")
+
+        finished_products = self.env['product.product'].search([]).filtered(lambda p: p.bom_count > 0)
+        #_logger.info("The products to calculate: " + str(finished_products.mapped('display_name')))
+
+        try:
+            # finished_products.calculate_bom_cost()
+            self.update_scenario_bom_cost(finished_products)
+            _logger.info("'recalculateCost()' done.")
+            # finished_products.notify_recalculateCost()
+        except BomLoop2Exception as e:
+            _logger.info("'recalculateCost()' stopped due to the exception!")
+            # prods_in_loop = self.browse(e.prods)
+            # prods_in_loop.notify_recalculateCost(e)
+
+    # Simialr to method action_bom_cost() in \mrp_account\models\product.py
+    # the products exclude ones with "valuation == 'real_time'" in method action_bom_cost(), but no need to filter them out in our schedule
+    def update_scenario_bom_cost(self, products):
+        # get all boms for the products
+        boms_to_recompute = self.env['mrp.bom'].search(
+            ['|', ('product_id', 'in', products.ids), '&', ('product_id', '=', False),
+             ('product_tmpl_id', 'in', products.mapped('product_tmpl_id').ids)])
+
+        # In Dynamic Programming, costMap is used to map products which have been calculated this time to its cost
+        # key: product.id
+        # value: product.standard_price
+        costMap = {}
+
+        for product in products:
+            print('Calculating product: ' + product.display_name)
+            prod_price = costMap.get(product.id)
+            if not prod_price:
+                a_ret = self.update_scenario_price_from_bom(product, costMap, boms_to_recompute)
+                print('   calculated returned: 0...: ' + str(a_ret[0])+'  1...:'+ str(a_ret[1])+'  2...:'+ str(a_ret[2])+'  3...:'+ str(a_ret[3]))
+                costMap[product.id] = a_ret
+                prod_price = a_ret
+            else:
+                print('   saved else where - returned: 0...: ' + str(prod_price[0])+'  1...:'+ str(prod_price[1])+'  2...:'+ str(prod_price[2])+'  3...:'+ str(prod_price[3]))
+
+
+
+            # set standard_price with the cost
+            if prod_price:
+                product.standard_price = prod_price[0]
+                product.flsp_pref_cost = prod_price[1]
+                product.flsp_best_cost = prod_price[2]
+                product.flsp_worst_cost = prod_price[3]
+            else:
+                _logger.info(
+                    "Skip to reset the price because the BoM cost is 0 for product " + str(product.display_name))
+
+    def update_scenario_price_from_bom(self, product, costMap, boms_to_recompute=False):
+        product.ensure_one()
+        bom = self.env['mrp.bom']._bom_find(product=product)
+
+        # for given product, use prod_depended_list with product ids to detect loop based on bom dependency
+        prod_depended_list = []
+
+        return self.update_scenario_bom_price(product, bom, costMap, prod_depended_list, boms_to_recompute=boms_to_recompute)
+
+    def update_scenario_bom_price(self, product, bom, costMap, prod_depended_list, boms_to_recompute=False):
+
+        prod_price = costMap.get(product.id)
+        if prod_price:
+            return prod_price
+
+        product.ensure_one()
+        if not bom:
+            prod_price = [0, 0, 0, 0]
+            costMap[product.id] = prod_price
+            return prod_price
+        if not boms_to_recompute:
+            boms_to_recompute = []
+
+        if product.id in prod_depended_list:
+            # if bom exists in the list, there is a loop
+            # 1) stop the calculation; 2) send notification out with the loop
+            posOfLoop = prod_depended_list.index(product.id)
+            exp_msg = "A loop of products with BoMs exists, please check the products with ids for details: " + str(
+                prod_depended_list[posOfLoop:])
+            _logger.warning(exp_msg)
+            raise BomLoop2Exception(exp_msg, prod_depended_list[posOfLoop:])
+        else:
+            # add the bom in the tail of the list
+            prod_depended_list.append(product.id)
+
+        # calculate the cost based on the bom
+        totals = [0, 0, 0, 0]
+        for opt in bom.routing_id.operation_ids:
+            duration_expected = (
+                    opt.workcenter_id.time_start +
+                    opt.workcenter_id.time_stop +
+                    opt.time_cycle)
+            totals[0] += (duration_expected / 60) * opt.workcenter_id.costs_hour
+        for line in bom.bom_line_ids:
+            print(' ->child: '+line.product_id.display_name + ' -  qty: '+str(line.product_qty) + ' std: '+str(line.product_id.standard_price)+ ' pref: '+str(line.product_id.flsp_pref_cost)+' best: '+str(line.product_id.flsp_best_cost)+'  worst: '+str(line.product_id.flsp_worst_cost))
+            if line._skip_bom_line(product):
+                print('************** skiping....')
+                continue
+
+            # Compute recursive if line has `child_line_ids`
+            if line.child_bom_id and line.child_bom_id in boms_to_recompute:
+                child_total = self.update_scenario_bom_price(line.product_id, line.child_bom_id, costMap, prod_depended_list,
+                                                                  boms_to_recompute=boms_to_recompute)
+                print('   child bom returned : 0...: ' + str(child_total[0])+'  1...:'+ str(child_total[1])+'  2...:'+ str(child_total[2])+'  3...:'+ str(child_total[3]))
+
+                totals[0] += line.product_id.uom_id._compute_price(child_total[0], line.product_uom_id) * line.product_qty
+                totals[1] += line.product_id.uom_id._compute_price(child_total[1], line.product_uom_id) * line.product_qty
+                totals[2] += line.product_id.uom_id._compute_price(child_total[2], line.product_uom_id) * line.product_qty
+                totals[3] += line.product_id.uom_id._compute_price(child_total[3], line.product_uom_id) * line.product_qty
+            else:
+                totals[0] += line.product_id.uom_id._compute_price(line.product_id.standard_price,
+                                                               line.product_uom_id) * line.product_qty
+                totals[1] += line.product_id.uom_id._compute_price(line.product_id.flsp_pref_cost,
+                                                                   line.product_uom_id) * line.product_qty
+                totals[2] += line.product_id.uom_id._compute_price(line.product_id.flsp_best_cost,
+                                                                   line.product_uom_id) * line.product_qty
+                totals[3] += line.product_id.uom_id._compute_price(line.product_id.flsp_worst_cost,
+                                                                   line.product_uom_id) * line.product_qty
+                print('   no bom using : 0...: ' + str(totals[0]) + '  1...:' + str(totals[1]) + '  2...:' + str(totals[2]) + '  3...:' + str(totals[3]))
+        bom_price = [0, 0, 0, 0]
+        bom_price[0] = bom.product_uom_id._compute_price(totals[0] / bom.product_qty, product.uom_id)
+        bom_price[1] = bom.product_uom_id._compute_price(totals[1] / bom.product_qty, product.uom_id)
+        bom_price[2] = bom.product_uom_id._compute_price(totals[2] / bom.product_qty, product.uom_id)
+        bom_price[3] = bom.product_uom_id._compute_price(totals[3] / bom.product_qty, product.uom_id)
+        costMap[product.id] = bom_price
+
+        # no loop found, remove the bom from the tail of the list
+        prod_depended_list.pop()
+
+        return bom_price
+
+
+
+    def flsp_scenario_update(self):
+        current_date = date.today()
+        # current_date_str = str(current_date)[0:10]
+
+        products = self.env['product.template'].search([]) #.filtered(lambda p: p.type == "product")
+        for product in products:
+            flsp_pref_cost = False
+            flsp_best_cost = product.standard_price
+            flsp_worst_cost = product.standard_price
+            price_list = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', product.id)])
+            for price in price_list:
+                exchange_rate = self.env['res.currency.rate'].search([('currency_id', '=', price.currency_id.id)], limit=1)
+                uom_price = price.product_uom._compute_price(price.price, product.uom_id)
+                # if price.product_uom.id != product.uom_id.id:
+                #    print('Product '+product.display_name+'    price: '+str(price.price) + '    converted: '+str(uom_price))
+                if exchange_rate:
+                    curr_value = uom_price * exchange_rate.rate
+                else:
+                    curr_value = 0
+                if price.date_start and price.date_end:
+                    if price.date_start <= current_date and current_date <= price.date_end:
+                        if not flsp_pref_cost:
+                            flsp_pref_cost = curr_value
+                        if curr_value < flsp_best_cost:
+                            flsp_best_cost = curr_value
+                        if curr_value > flsp_worst_cost:
+                            flsp_worst_cost = curr_value
+                else:
+                    if not flsp_pref_cost:
+                        flsp_pref_cost = curr_value
+                    if curr_value < flsp_best_cost or flsp_best_cost <= 0:
+                        flsp_best_cost = curr_value
+                    if curr_value > flsp_worst_cost:
+                        flsp_worst_cost = curr_value
+
+            if flsp_pref_cost:
+                product.flsp_pref_cost = flsp_pref_cost
+                product.flsp_best_cost = flsp_best_cost
+                product.flsp_worst_cost = flsp_worst_cost
+            else:
+                product.flsp_pref_cost = product.standard_price
+                product.flsp_best_cost = product.standard_price
+                product.flsp_worst_cost = product.standard_price
+
+class BomLoop2Exception(Exception):
+    def __init__(self, msg, prods):
+        self.msg = msg
+        self.prods = prods
