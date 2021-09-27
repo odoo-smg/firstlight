@@ -301,7 +301,8 @@ class FlspMrppurchaseLine(models.Model):
             rationale += "<br/>                                        | Movement                                               |  AVG"
             rationale += "<br/>DATE        | QTY         |Balance      |Type |Source  |BOM Level|Mfg Lead time| Doc             | SBS  | SA   |"
             rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------------|------|------|"
-            product = open_moves[1][4]
+            if item:
+                product = item[4]
             order_point = self.env['stock.warehouse.orderpoint'].search(
                 ['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
             if order_point:
