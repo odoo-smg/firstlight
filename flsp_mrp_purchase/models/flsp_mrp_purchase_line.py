@@ -301,7 +301,8 @@ class FlspMrppurchaseLine(models.Model):
             rationale += "<br/>                                        | Movement                                               |  AVG"
             rationale += "<br/>DATE        | QTY         |Balance      |Type |Source  |BOM Level|Mfg Lead time| Doc             | SBS  | SA   |"
             rationale += "<br/>------------|-------------|-------------|-----|--------|---------|-------------|-----------------|------|------|"
-            product = open_moves[1][4]
+            if item:
+                product = item[4]
             order_point = self.env['stock.warehouse.orderpoint'].search(
                 ['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
             if order_point:
@@ -326,8 +327,6 @@ class FlspMrppurchaseLine(models.Model):
                 current_balance = product.qty_available - pa_wip_qty
             rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                 current_balance) + '     |        |         |             |Initial Balance  |      |      |'
-
-
             bom_level = item[8]
             required_by = False
             break
@@ -338,47 +337,12 @@ class FlspMrppurchaseLine(models.Model):
                 if route_buy not in item[4].route_ids.ids:
                     continue
                 new_prod = (item[4] != product)
-            if item:
-                if item[1] == 'Out  ':
-                    current_balance -= item[5]
-                    # Do not account the past
-                    if current_date < item[7]:
-                        consumption[item[7].month] += item[5]
-                    else:
-                        late_delivery += item[5]
-                    open_demand += item[5]
-                else:
-                    current_balance += item[5]
-                if not required_by:
-                    if current_balance < 0:
-                        balance_neg = current_balance
-                        negative_by = item[7]
-                        required_by = item[7]
-                if not item[3]:
-                    item[3] = ''
-
-                rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
-                    item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[
-                                 2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]+'|'+'{0:<6.2f}|'.format(item[10]) +'{0:<6.2f}|'.format(item[11])
-                if item[10] > 0:
-                    avg_per_sbs = (avg_per_sbs+item[10])/2
-                if item[11] > 0:
-                    avg_per_ssa = (avg_per_ssa+item[11])/2
-
-                if item[2] == "Purchase":
-                    po_qty = po_qty + item[5]
-
-                product = item[4]
-                if bom_level < item[8]:
-                    bom_level = item[8]
-
             if new_prod:
                 rationale += "</pre>"
-                purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by,
-                                                   late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs,
-                                                   avg_per_ssa,
+                purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa,
                                                    consumption, False, po_qty, open_demand)
                 #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+
 
                 if purchase_line:
                     purchase_line.level_bom = bom_level
@@ -412,6 +376,39 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance = product.qty_available - pa_wip_qty
                 rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                     current_balance) + '     |        |         |             |Initial Balance  |      |      |'
+            if item:
+                if item[1] == 'Out  ':
+                    current_balance -= item[5]
+                    # Do not account the past
+                    if current_date < item[7]:
+                        consumption[item[7].month] += item[5]
+                    else:
+                        late_delivery += item[5]
+                    open_demand += item[5]
+                else:
+                    current_balance += item[5]
+                if not required_by:
+                    if current_balance < 0:
+                        balance_neg = current_balance
+                        negative_by = item[7]
+                        required_by = item[7]
+                if not item[3]:
+                    item[3] = ''
+                rationale += '<br/>' + item[7].strftime("%Y-%m-%d") + '  | ' + '{:<12.4f}|'.format(
+                    item[5]) + ' ' + '{0: <12.2f}|'.format(current_balance) + item[1] + '|' + item[
+                                 2] + '|' + '{0: <9}|'.format(item[8]) + '{0: <13}|'.format(item[9]) + item[3]+'|'+'{0:<6.2f}|'.format(item[10]) +'{0:<6.2f}|'.format(item[11])
+                if item[10] > 0:
+                    avg_per_sbs = (avg_per_sbs+item[10])/2
+                if item[11] > 0:
+                    avg_per_ssa = (avg_per_ssa+item[11])/2
+
+                if item[2] == "Purchase":
+                    po_qty = po_qty + item[5]
+
+                product = item[4]
+                if bom_level < item[8]:
+                    bom_level = item[8]
+
         # ########################################
         # ### Other products without movements ###
         # ########################################
