@@ -26,6 +26,8 @@ class FlspMrppurchaseReport(models.Model):
         digits='Product Price', groups="base.group_user",
         help="""Converted cost to USD$""")
 
+    uom_id = fields.Many2one('uom.uom', 'UofM')
+
     flsp_pref_cost = fields.Float('Preferred CAD$ Cost', digits='Product Price')
     flsp_best_cost = fields.Float('Optimistic CAD$ Cost', digits='Product Price')
     flsp_worst_cost = fields.Float('Pessimistic CAD$ Cost', digits='Product Price')
@@ -33,6 +35,17 @@ class FlspMrppurchaseReport(models.Model):
     flsp_usd_pref_cost = fields.Float('Preferred USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
     flsp_usd_best_cost = fields.Float('Optimistic USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
     flsp_usd_worst_cost = fields.Float('Pessimistic USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
+
+    flsp_latest_cost = fields.Float('Latest Cost', digits='Product Price')
+    flsp_usd_latest_cost = fields.Float('Latest USD Cost', digits='Product Price')
+
+    flsp_highest_price = fields.Float('Highest Price', digits='Product Price')
+    flsp_usd_highest_price = fields.Float('Highest USD Price', digits='Product Price')
+    flsp_highest_price_qty = fields.Float('Qty for Highest price', digits='Product Price')
+
+    flsp_lowest_price = fields.Float('Lowest Price', digits='Product Price')
+    flsp_usd_lowest_price = fields.Float('Lowest USD Price', digits='Product Price')
+    flsp_lowest_price_qty = fields.Float('Qty for Highest price', digits='Product Price')
 
     @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost')
     def _compute_flsp_usd_cost(self):
@@ -52,7 +65,7 @@ class FlspMrppurchaseReport(models.Model):
 
 
     def _compute_standard_price(self):
-        print('calculating cost')
+        #print('calculating cost')
         for each in self:
             each.standard_price = each.product_id.standard_price
 
@@ -71,12 +84,21 @@ class FlspMrppurchaseReport(models.Model):
 
         query = """
         CREATE or REPLACE VIEW flsp_cost_scenario AS (
-        select id, 
-               id as product_id, default_code, 
-               name as description, 
-               flsp_pref_cost, 
-               flsp_best_cost, 
-               flsp_worst_cost 
+        select id,
+               id as product_id, default_code,
+               name as description,
+               uom_id,
+               flsp_pref_cost,
+               flsp_best_cost,
+               flsp_worst_cost,
+               flsp_latest_cost,
+               flsp_usd_latest_cost,
+               flsp_highest_price,
+               flsp_usd_highest_price,
+               flsp_highest_price_qty,
+               flsp_lowest_price,
+               flsp_usd_lowest_price,
+               flsp_lowest_price_qty
         from product_template where active = True
 );
         """
