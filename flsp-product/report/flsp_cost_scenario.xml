@@ -6,26 +6,19 @@
         <field name="model">flsp.cost.scenario</field>
         <field name="arch" type="xml">
             <tree string="Cost Scenario View" editable="bottom" create="0" delete="0" >
-                <field name="product_id" optional="show"/>
-                <field name="default_code" optional="hide"/>
-                <field name="description" optional="hide"/>
-                <field name="uom_id" optional="show"/>
-                <field name="standard_price" string="Actual Cost" optional="show" widget="monetary"/>
-                <field name="flsp_pref_cost" optional="hide"/>
-                <field name="flsp_best_cost" optional="hide"/>
-                <field name="flsp_worst_cost" optional="hide"/>
-                <field name="flsp_usd_cost" optional="hide"/>
-                <field name="flsp_usd_pref_cost" string="Actual USD Cost" optional="hide"/>
-                <field name="flsp_usd_best_cost" optional="hide"/>
-                <field name="flsp_usd_worst_cost" optional="hide"/>
-                <field name="flsp_latest_cost" optional="show" widget="monetary"/>
-                <field name="flsp_highest_price" optional="show" widget="monetary"/>
-                <field name="flsp_highest_price_qty" optional="show"/>
-                <field name="flsp_lowest_price" optional="show" widget="monetary" />
-                <field name="flsp_lowest_price_qty" optional="show"/>
-                <field name="flsp_usd_latest_cost" optional="hide" widget="monetary"/>
-                <field name="flsp_usd_highest_price" optional="hide" widget="monetary"/>
-                <field name="flsp_usd_lowest_price" optional="hide" widget="monetary"/>
+                <field name="product_id" optional="show" readonly="1"/>
+                <field name="default_code" optional="hide" readonly="1"/>
+                <field name="description" optional="hide" readonly="1"/>
+                <field name="uom_id" optional="show" readonly="1"/>
+                <field name="standard_price" string="Actual Cost" optional="show" readonly="1" widget="monetary"/>
+                <field name="flsp_latest_cost" optional="show"  readonly="1" widget="monetary"/>
+                <field name="flsp_highest_price" optional="show"  readonly="1" widget="monetary"/>
+                <field name="flsp_highest_price_qty"  readonly="1" optional="show"/>
+                <field name="flsp_lowest_price" optional="show"  readonly="1" widget="monetary" />
+                <field name="flsp_lowest_price_qty"  readonly="1" optional="show"/>
+                <field name="flsp_usd_latest_cost" optional="hide" readonly="1" widget="monetary"/>
+                <field name="flsp_usd_highest_price" optional="hide" readonly="1" widget="monetary"/>
+                <field name="flsp_usd_lowest_price" optional="hide" readonly="1" widget="monetary"/>
             </tree>
         </field>
     </record>
@@ -35,26 +28,16 @@
         <field name="model">flsp.cost.scenario</field>
         <field name="arch" type="xml">
             <tree string="Cost Scenario View"  editable="bottom" create="0" delete="0" >
-                <field name="product_id" optional="show"/>
-                <field name="default_code"  optional="hide"/>
-                <field name="description" optional="hide"/>
-                <field name="uom_id" optional="show"/>
-                <field name="standard_price" string="Actual Cost" optional="hide"/>
-                <field name="flsp_pref_cost" optional="hide"/>
-                <field name="flsp_best_cost" optional="hide"/>
-                <field name="flsp_worst_cost" optional="hide"/>
-                <field name="flsp_usd_cost" string="Actual Cost" optional="show" widget="monetary"/>
-                <field name="flsp_usd_pref_cost" optional="hide"/>
-                <field name="flsp_usd_best_cost" optional="hide"/>
-                <field name="flsp_usd_worst_cost" optional="hide"/>
-                <field name="flsp_usd_latest_cost" string="Latest Cost" optional="show" widget="monetary"/>
-                <field name="flsp_usd_highest_price" string="Highest Price" optional="show" widget="monetary"/>
-                <field name="flsp_highest_price_qty" string="Qty Highest Price" optional="show"/>
-                <field name="flsp_usd_lowest_price" string="Lowest Price" optional="show" widget="monetary"/>
-                <field name="flsp_lowest_price_qty" string="Qty Lowest Price" optional="show"/>
-                <field name="flsp_latest_cost" optional="hide" widget="monetary"/>
-                <field name="flsp_highest_price" optional="hide" widget="monetary"/>
-                <field name="flsp_lowest_price" optional="hide" widget="monetary" />
+                <field name="product_id" optional="show"  readonly="1"/>
+                <field name="default_code"  optional="hide"  readonly="1"/>
+                <field name="description" optional="hide" readonly="1"/>
+                <field name="uom_id" optional="show" readonly="1"/>
+                <field name="flsp_usd_cost" string="Actual Cost" optional="show" widget="monetary" readonly="1"/>
+                <field name="flsp_usd_latest_cost" string="Latest Cost" optional="show" widget="monetary" readonly="1"/>
+                <field name="flsp_usd_highest_price" string="Highest Price" optional="show" widget="monetary" readonly="1"/>
+                <field name="flsp_highest_price_qty" string="Qty Highest Price" optional="show" readonly="1"/>
+                <field name="flsp_usd_lowest_price" string="Lowest Price" optional="show" widget="monetary" readonly="1"/>
+                <field name="flsp_lowest_price_qty" string="Qty Lowest Price" optional="show" readonly="1"/>
             </tree>
         </field>
     </record>
