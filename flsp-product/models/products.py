@@ -81,7 +81,7 @@ class Smgproduct(models.Model):
 
     flsp_lowest_price = fields.Float('Lowest Price', digits='Product Price')
     flsp_usd_lowest_price = fields.Float('Lowest USD Price', digits='Product Price')
-    flsp_lowest_price_qty = fields.Float('Qty for Highest price', digits='Product Price')
+    flsp_lowest_price_qty = fields.Float('Qty for Lowest price', digits='Product Price')
 
     @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost', 'flsp_latest_cost', 'flsp_highest_price', 'flsp_lowest_price')
     def _compute_flsp_usd_cost(self):
