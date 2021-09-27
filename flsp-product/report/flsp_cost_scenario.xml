@@ -9,14 +9,23 @@
                 <field name="product_id" optional="show"/>
                 <field name="default_code" optional="hide"/>
                 <field name="description" optional="hide"/>
-                <field name="standard_price" optional="show"/>
-                <field name="flsp_pref_cost" optional="show"/>
-                <field name="flsp_best_cost" optional="show"/>
-                <field name="flsp_worst_cost" optional="show"/>
+                <field name="uom_id" optional="show"/>
+                <field name="standard_price" string="Actual Cost" optional="show" widget="monetary"/>
+                <field name="flsp_pref_cost" optional="hide"/>
+                <field name="flsp_best_cost" optional="hide"/>
+                <field name="flsp_worst_cost" optional="hide"/>
                 <field name="flsp_usd_cost" optional="hide"/>
-                <field name="flsp_usd_pref_cost" optional="hide"/>
+                <field name="flsp_usd_pref_cost" string="Actual USD Cost" optional="hide"/>
                 <field name="flsp_usd_best_cost" optional="hide"/>
                 <field name="flsp_usd_worst_cost" optional="hide"/>
+                <field name="flsp_latest_cost" optional="show" widget="monetary"/>
+                <field name="flsp_highest_price" optional="show" widget="monetary"/>
+                <field name="flsp_highest_price_qty" optional="show"/>
+                <field name="flsp_lowest_price" optional="show" widget="monetary" />
+                <field name="flsp_lowest_price_qty" optional="show"/>
+                <field name="flsp_usd_latest_cost" optional="hide" widget="monetary"/>
+                <field name="flsp_usd_highest_price" optional="hide" widget="monetary"/>
+                <field name="flsp_usd_lowest_price" optional="hide" widget="monetary"/>
             </tree>
         </field>
     </record>
@@ -29,14 +38,23 @@
                 <field name="product_id" optional="show"/>
                 <field name="default_code"  optional="hide"/>
                 <field name="description" optional="hide"/>
-                <field name="standard_price" optional="hide"/>
+                <field name="uom_id" optional="show"/>
+                <field name="standard_price" string="Actual Cost" optional="hide"/>
                 <field name="flsp_pref_cost" optional="hide"/>
                 <field name="flsp_best_cost" optional="hide"/>
                 <field name="flsp_worst_cost" optional="hide"/>
-                <field name="flsp_usd_cost" optional="show"/>
-                <field name="flsp_usd_pref_cost" optional="show"/>
-                <field name="flsp_usd_best_cost" optional="show"/>
-                <field name="flsp_usd_worst_cost" optional="show"/>
+                <field name="flsp_usd_cost" string="Actual Cost" optional="show" widget="monetary"/>
+                <field name="flsp_usd_pref_cost" optional="hide"/>
+                <field name="flsp_usd_best_cost" optional="hide"/>
+                <field name="flsp_usd_worst_cost" optional="hide"/>
+                <field name="flsp_usd_latest_cost" string="Latest Cost" optional="show" widget="monetary"/>
+                <field name="flsp_usd_highest_price" string="Highest Price" optional="show" widget="monetary"/>
+                <field name="flsp_highest_price_qty" string="Qty Highest Price" optional="show"/>
+                <field name="flsp_usd_lowest_price" string="Lowest Price" optional="show" widget="monetary"/>
+                <field name="flsp_lowest_price_qty" string="Qty Lowest Price" optional="show"/>
+                <field name="flsp_latest_cost" optional="hide" widget="monetary"/>
+                <field name="flsp_highest_price" optional="hide" widget="monetary"/>
+                <field name="flsp_lowest_price" optional="hide" widget="monetary" />
             </tree>
         </field>
     </record>
@@ -56,7 +74,7 @@
 
 
     <record id="flsp_cost_scenario_action" model="ir.actions.act_window">
-        <field name="name">FLSP Cost Scenario</field>
+        <field name="name">FLSP CAD Cost Scenario</field>
         <field name="res_model">flsp.cost.scenario</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="flsp_cost_scenario_view_tree"/>
@@ -68,7 +86,7 @@
     </record>
 
     <record id="flsp_cost_scenario_usd_action" model="ir.actions.act_window">
-        <field name="name">FLSP Cost Scenario</field>
+        <field name="name">FLSP USD Cost Scenario</field>
         <field name="res_model">flsp.cost.scenario</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="flsp_cost_scenario_usd_view_tree"/>
