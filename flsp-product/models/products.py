@@ -72,7 +72,18 @@ class Smgproduct(models.Model):
     flsp_usd_best_cost = fields.Float('Optimistic USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
     flsp_usd_worst_cost = fields.Float('Pessimistic USD Cost', digits='Product Price', compute='_compute_flsp_usd_cost')
 
-    @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost')
+    flsp_latest_cost = fields.Float('Latest Cost', digits='Product Price')
+    flsp_usd_latest_cost = fields.Float('Latest USD Cost', digits='Product Price')
+
+    flsp_highest_price = fields.Float('Highest Price', digits='Product Price')
+    flsp_usd_highest_price = fields.Float('Highest USD Price', digits='Product Price')
+    flsp_highest_price_qty = fields.Float('Qty for Highest price', digits='Product Price')
+
+    flsp_lowest_price = fields.Float('Lowest Price', digits='Product Price')
+    flsp_usd_lowest_price = fields.Float('Lowest USD Price', digits='Product Price')
+    flsp_lowest_price_qty = fields.Float('Qty for Highest price', digits='Product Price')
+
+    @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost', 'flsp_latest_cost', 'flsp_highest_price', 'flsp_lowest_price')
     def _compute_flsp_usd_cost(self):
         us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
         usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)],limit=1)
@@ -81,6 +92,9 @@ class Smgproduct(models.Model):
             each.flsp_usd_pref_cost = each.flsp_pref_cost * usd_rate.rate
             each.flsp_usd_best_cost = each.flsp_best_cost * usd_rate.rate
             each.flsp_usd_worst_cost = each.flsp_worst_cost * usd_rate.rate
+            each.flsp_usd_latest_cost = each.flsp_latest_cost * usd_rate.rate
+            each.flsp_usd_highest_price = each.flsp_highest_price * usd_rate.rate
+            each.flsp_usd_lowest_price = each.flsp_lowest_price * usd_rate.rate
 
 
 
@@ -276,23 +290,22 @@ class Smgproduct(models.Model):
             ['|', ('product_id', 'in', products.ids), '&', ('product_id', '=', False),
              ('product_tmpl_id', 'in', products.mapped('product_tmpl_id').ids)])
 
+        us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
+        usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
+
         # In Dynamic Programming, costMap is used to map products which have been calculated this time to its cost
         # key: product.id
         # value: product.standard_price
         costMap = {}
 
         for product in products:
-            print('Calculating product: ' + product.display_name)
+            # print('Calculating product: ' + product.display_name)
             prod_price = costMap.get(product.id)
             if not prod_price:
                 a_ret = self.update_scenario_price_from_bom(product, costMap, boms_to_recompute)
-                print('   calculated returned: 0...: ' + str(a_ret[0])+'  1...:'+ str(a_ret[1])+'  2...:'+ str(a_ret[2])+'  3...:'+ str(a_ret[3]))
+                # print('   calculated returned: 0...: ' + str(a_ret[0])+'  1...:'+ str(a_ret[1])+'  2...:'+ str(a_ret[2])+'  3...:'+ str(a_ret[3]))
                 costMap[product.id] = a_ret
                 prod_price = a_ret
-            else:
-                print('   saved else where - returned: 0...: ' + str(prod_price[0])+'  1...:'+ str(prod_price[1])+'  2...:'+ str(prod_price[2])+'  3...:'+ str(prod_price[3]))
-
-
 
             # set standard_price with the cost
             if prod_price:
@@ -300,6 +313,22 @@ class Smgproduct(models.Model):
                 product.flsp_pref_cost = prod_price[1]
                 product.flsp_best_cost = prod_price[2]
                 product.flsp_worst_cost = prod_price[3]
+                product.flsp_latest_cost = prod_price[4]
+                product.flsp_highest_price = prod_price[5]
+                product.flsp_lowest_price = prod_price[6]
+                product.flsp_usd_latest_cost = prod_price[4] * usd_rate.rate
+                product.flsp_usd_highest_price = prod_price[5] * usd_rate.rate
+                product.flsp_usd_lowest_price = prod_price[6] * usd_rate.rate
+                if product.flsp_latest_cost == 0:
+                    product.flsp_latest_cost = product.standard_price
+                    product.flsp_usd_latest_cost = product.standard_price * usd_rate.rate
+                if product.flsp_lowest_price == 0:
+                    product.flsp_lowest_price = product.standard_price
+                    product.flsp_usd_lowest_price = product.standard_price * usd_rate.rate
+                if product.flsp_highest_price == 0:
+                    product.flsp_highest_price = product.standard_price
+                    product.flsp_usd_highest_price = product.standard_price * usd_rate.rate
+
             else:
                 _logger.info(
                     "Skip to reset the price because the BoM cost is 0 for product " + str(product.display_name))
@@ -321,7 +350,7 @@ class Smgproduct(models.Model):
 
         product.ensure_one()
         if not bom:
-            prod_price = [0, 0, 0, 0]
+            prod_price = [0, 0, 0, 0, 0, 0, 0]
             costMap[product.id] = prod_price
             return prod_price
         if not boms_to_recompute:
@@ -340,7 +369,7 @@ class Smgproduct(models.Model):
             prod_depended_list.append(product.id)
 
         # calculate the cost based on the bom
-        totals = [0, 0, 0, 0]
+        totals = [0, 0, 0, 0, 0, 0, 0]
         for opt in bom.routing_id.operation_ids:
             duration_expected = (
                     opt.workcenter_id.time_start +
@@ -348,21 +377,24 @@ class Smgproduct(models.Model):
                     opt.time_cycle)
             totals[0] += (duration_expected / 60) * opt.workcenter_id.costs_hour
         for line in bom.bom_line_ids:
-            print(' ->child: '+line.product_id.display_name + ' -  qty: '+str(line.product_qty) + ' std: '+str(line.product_id.standard_price)+ ' pref: '+str(line.product_id.flsp_pref_cost)+' best: '+str(line.product_id.flsp_best_cost)+'  worst: '+str(line.product_id.flsp_worst_cost))
+            # print(' ->child: '+line.product_id.display_name + ' -  qty: '+str(line.product_qty) + ' std: '+str(line.product_id.standard_price)+ ' pref: '+str(line.product_id.flsp_pref_cost)+' best: '+str(line.product_id.flsp_best_cost)+'  worst: '+str(line.product_id.flsp_worst_cost))
             if line._skip_bom_line(product):
-                print('************** skiping....')
+                # print('************** skiping....')
                 continue
 
             # Compute recursive if line has `child_line_ids`
             if line.child_bom_id and line.child_bom_id in boms_to_recompute:
                 child_total = self.update_scenario_bom_price(line.product_id, line.child_bom_id, costMap, prod_depended_list,
                                                                   boms_to_recompute=boms_to_recompute)
-                print('   child bom returned : 0...: ' + str(child_total[0])+'  1...:'+ str(child_total[1])+'  2...:'+ str(child_total[2])+'  3...:'+ str(child_total[3]))
+                # print('   child bom returned : 0...: ' + str(child_total[0])+'  1...:'+ str(child_total[1])+'  2...:'+ str(child_total[2])+'  3...:'+ str(child_total[3]))
 
                 totals[0] += line.product_id.uom_id._compute_price(child_total[0], line.product_uom_id) * line.product_qty
                 totals[1] += line.product_id.uom_id._compute_price(child_total[1], line.product_uom_id) * line.product_qty
                 totals[2] += line.product_id.uom_id._compute_price(child_total[2], line.product_uom_id) * line.product_qty
                 totals[3] += line.product_id.uom_id._compute_price(child_total[3], line.product_uom_id) * line.product_qty
+                totals[4] += line.product_id.uom_id._compute_price(child_total[4], line.product_uom_id) * line.product_qty
+                totals[5] += line.product_id.uom_id._compute_price(child_total[5], line.product_uom_id) * line.product_qty
+                totals[6] += line.product_id.uom_id._compute_price(child_total[6], line.product_uom_id) * line.product_qty
             else:
                 totals[0] += line.product_id.uom_id._compute_price(line.product_id.standard_price,
                                                                line.product_uom_id) * line.product_qty
@@ -372,12 +404,22 @@ class Smgproduct(models.Model):
                                                                    line.product_uom_id) * line.product_qty
                 totals[3] += line.product_id.uom_id._compute_price(line.product_id.flsp_worst_cost,
                                                                    line.product_uom_id) * line.product_qty
-                print('   no bom using : 0...: ' + str(totals[0]) + '  1...:' + str(totals[1]) + '  2...:' + str(totals[2]) + '  3...:' + str(totals[3]))
-        bom_price = [0, 0, 0, 0]
+                totals[4] += line.product_id.uom_id._compute_price(line.product_id.flsp_latest_cost,
+                                                                   line.product_uom_id) * line.product_qty
+                totals[5] += line.product_id.uom_id._compute_price(line.product_id.flsp_highest_price,
+                                                                   line.product_uom_id) * line.product_qty
+                totals[6] += line.product_id.uom_id._compute_price(line.product_id.flsp_lowest_price,
+                                                                   line.product_uom_id) * line.product_qty
+
+                # print('   no bom using : 0...: ' + str(totals[0]) + '  1...:' + str(totals[1]) + '  2...:' + str(totals[2]) + '  3...:' + str(totals[3]))
+        bom_price = [0, 0, 0, 0, 0, 0, 0]
         bom_price[0] = bom.product_uom_id._compute_price(totals[0] / bom.product_qty, product.uom_id)
         bom_price[1] = bom.product_uom_id._compute_price(totals[1] / bom.product_qty, product.uom_id)
         bom_price[2] = bom.product_uom_id._compute_price(totals[2] / bom.product_qty, product.uom_id)
         bom_price[3] = bom.product_uom_id._compute_price(totals[3] / bom.product_qty, product.uom_id)
+        bom_price[4] = bom.product_uom_id._compute_price(totals[4] / bom.product_qty, product.uom_id)
+        bom_price[5] = bom.product_uom_id._compute_price(totals[5] / bom.product_qty, product.uom_id)
+        bom_price[6] = bom.product_uom_id._compute_price(totals[6] / bom.product_qty, product.uom_id)
         costMap[product.id] = bom_price
 
         # no loop found, remove the bom from the tail of the list
@@ -390,18 +432,24 @@ class Smgproduct(models.Model):
     def flsp_scenario_update(self):
         current_date = date.today()
         # current_date_str = str(current_date)[0:10]
+        us_currency_id = self.env['res.currency'].search([('name', '=', 'USD')], limit=1).id
+        usd_rate = self.env['res.currency.rate'].search([('currency_id', '=', us_currency_id)], limit=1)
 
         products = self.env['product.template'].search([]) #.filtered(lambda p: p.type == "product")
         for product in products:
             flsp_pref_cost = False
             flsp_best_cost = product.standard_price
             flsp_worst_cost = product.standard_price
+            flsp_lowest_cost = 0
+            flsp_lowest_cost_qty = 0
+            flsp_highest_cost = 0
+            flsp_highest_cost_qty = 0
             price_list = self.env['product.supplierinfo'].search([('product_tmpl_id', '=', product.id)])
             for price in price_list:
                 exchange_rate = self.env['res.currency.rate'].search([('currency_id', '=', price.currency_id.id)], limit=1)
                 uom_price = price.product_uom._compute_price(price.price, product.uom_id)
                 # if price.product_uom.id != product.uom_id.id:
-                #    print('Product '+product.display_name+'    price: '+str(price.price) + '    converted: '+str(uom_price))
+                #    # print('Product '+product.display_name+'    price: '+str(price.price) + '    converted: '+str(uom_price))
                 if exchange_rate:
                     if exchange_rate.rate > 0:
                         curr_value = uom_price / exchange_rate.rate
@@ -410,20 +458,20 @@ class Smgproduct(models.Model):
                 else:
                     curr_value = 0
                 if price.date_start and price.date_end:
-                    if price.date_start <= current_date and current_date <= price.date_end:
-                        if not flsp_pref_cost:
-                            flsp_pref_cost = curr_value
-                        if curr_value < flsp_best_cost:
-                            flsp_best_cost = curr_value
-                        if curr_value > flsp_worst_cost:
-                            flsp_worst_cost = curr_value
-                else:
-                    if not flsp_pref_cost:
-                        flsp_pref_cost = curr_value
-                    if curr_value < flsp_best_cost or flsp_best_cost <= 0:
-                        flsp_best_cost = curr_value
-                    if curr_value > flsp_worst_cost:
-                        flsp_worst_cost = curr_value
+                    if not (price.date_start <= current_date and current_date <= price.date_end):
+                        continue
+                if not flsp_pref_cost:
+                    flsp_pref_cost = curr_value
+                if curr_value < flsp_best_cost or flsp_best_cost <= 0:
+                    flsp_best_cost = curr_value
+                if curr_value > flsp_worst_cost:
+                    flsp_worst_cost = curr_value
+                if curr_value <= flsp_lowest_cost or flsp_lowest_cost <= 0:
+                    flsp_lowest_cost = curr_value
+                    flsp_lowest_cost_qty = price.min_qty
+                if curr_value >= flsp_highest_cost:
+                    flsp_highest_cost = curr_value
+                    flsp_highest_cost_qty = price.min_qty
 
             if flsp_pref_cost:
                 product.flsp_pref_cost = flsp_pref_cost
@@ -433,6 +481,42 @@ class Smgproduct(models.Model):
                 product.flsp_pref_cost = product.standard_price
                 product.flsp_best_cost = product.standard_price
                 product.flsp_worst_cost = product.standard_price
+            product.flsp_lowest_price = flsp_lowest_cost
+            product.flsp_lowest_price_qty = flsp_lowest_cost_qty
+            product.flsp_highest_price = flsp_highest_cost
+            product.flsp_highest_price_qty = flsp_highest_cost_qty
+            product.flsp_latest_cost = self.calc_lates_cost(product)
+            product.flsp_usd_latest_cost = product.flsp_latest_cost * usd_rate.rate
+            product.flsp_usd_highest_price = flsp_highest_cost * usd_rate.rate
+            product.flsp_usd_lowest_price = flsp_lowest_cost * usd_rate.rate
+            if product.flsp_latest_cost == 0:
+                product.flsp_latest_cost = product.standard_price
+                product.flsp_usd_latest_cost = product.standard_price * usd_rate.rate
+            if product.flsp_lowest_price == 0:
+                product.flsp_lowest_price = product.standard_price
+                product.flsp_usd_lowest_price = product.standard_price * usd_rate.rate
+            if product.flsp_highest_price == 0:
+                product.flsp_highest_price = product.standard_price
+                product.flsp_usd_highest_price = product.standard_price * usd_rate.rate
+
+
+    def calc_lates_cost(self, product):
+        product.ensure_one()
+        ret = 0
+        cad = self.env['res.currency'].search([('name', '=', 'CAD')], limit=1)
+        product_id = self.env['product.product'].search([('product_tmpl_id', '=', product.id)], limit=1).id
+        purchase_lines = self.env['purchase.order.line'].search(['&', ('state', '=', 'purchase'), ('product_id', '=', product_id)], limit=1).sorted(lambda r: r.create_date)
+        for line in purchase_lines:
+            price_unit = line.product_uom._compute_price(line.price_unit, line.product_id.uom_id)
+            if line.currency_id.id == cad.id:
+                ret = price_unit
+            else:
+                exchange_rate = self.env['res.currency.rate'].search([('currency_id', '=', line.currency_id.id)], limit=1)
+                if exchange_rate:
+                    ret = price_unit / exchange_rate.rate
+                else:
+                    ret = price_unit
+        return ret
 
 class BomLoop2Exception(Exception):
     def __init__(self, msg, prods):
