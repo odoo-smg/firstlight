@@ -313,12 +313,15 @@ class Smgproduct(models.Model):
                 product.flsp_pref_cost = prod_price[1]
                 product.flsp_best_cost = prod_price[2]
                 product.flsp_worst_cost = prod_price[3]
-                product.flsp_latest_cost = prod_price[4]
-                product.flsp_highest_price = prod_price[5]
-                product.flsp_lowest_price = prod_price[6]
-                product.flsp_usd_latest_cost = prod_price[4] * usd_rate.rate
-                product.flsp_usd_highest_price = prod_price[5] * usd_rate.rate
-                product.flsp_usd_lowest_price = prod_price[6] * usd_rate.rate
+                if prod_price[4] > 0:
+                    product.flsp_latest_cost = prod_price[4]
+                    product.flsp_usd_latest_cost = prod_price[4] * usd_rate.rate
+                if prod_price[5] > 0:
+                    product.flsp_highest_price = prod_price[5]
+                    product.flsp_usd_highest_price = prod_price[5] * usd_rate.rate
+                if prod_price[6] > 0:
+                    product.flsp_lowest_price = prod_price[6]
+                    product.flsp_usd_lowest_price = prod_price[6] * usd_rate.rate
                 if product.flsp_latest_cost == 0:
                     product.flsp_latest_cost = product.standard_price
                     product.flsp_usd_latest_cost = product.standard_price * usd_rate.rate
