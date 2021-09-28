@@ -309,10 +309,11 @@ class Smgproduct(models.Model):
 
             # set standard_price with the cost
             if prod_price:
-                product.standard_price = prod_price[0]
                 product.flsp_pref_cost = prod_price[1]
                 product.flsp_best_cost = prod_price[2]
                 product.flsp_worst_cost = prod_price[3]
+                if prod_price[0] > 0:
+                    product.standard_price = prod_price[0]
                 if prod_price[4] > 0:
                     product.flsp_latest_cost = prod_price[4]
                     product.flsp_usd_latest_cost = prod_price[4] * usd_rate.rate
