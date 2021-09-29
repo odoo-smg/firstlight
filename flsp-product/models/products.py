@@ -392,13 +392,25 @@ class Smgproduct(models.Model):
                                                                   boms_to_recompute=boms_to_recompute)
                 # print('   child bom returned : 0...: ' + str(child_total[0])+'  1...:'+ str(child_total[1])+'  2...:'+ str(child_total[2])+'  3...:'+ str(child_total[3]))
 
-                totals[0] += line.product_id.uom_id._compute_price(child_total[0], line.product_uom_id) * line.product_qty
+                if child_total[0] == 0:
+                    totals[0] += line.product_id.standard_price * line.product_qty
+                else:
+                    totals[0] += line.product_id.uom_id._compute_price(child_total[0], line.product_uom_id) * line.product_qty
                 totals[1] += line.product_id.uom_id._compute_price(child_total[1], line.product_uom_id) * line.product_qty
                 totals[2] += line.product_id.uom_id._compute_price(child_total[2], line.product_uom_id) * line.product_qty
                 totals[3] += line.product_id.uom_id._compute_price(child_total[3], line.product_uom_id) * line.product_qty
-                totals[4] += line.product_id.uom_id._compute_price(child_total[4], line.product_uom_id) * line.product_qty
-                totals[5] += line.product_id.uom_id._compute_price(child_total[5], line.product_uom_id) * line.product_qty
-                totals[6] += line.product_id.uom_id._compute_price(child_total[6], line.product_uom_id) * line.product_qty
+                if child_total[4] == 0:
+                    totals[4] += line.product_id.flsp_latest_cost * line.product_qty
+                else:
+                    totals[4] += line.product_id.uom_id._compute_price(child_total[4], line.product_uom_id) * line.product_qty
+                if child_total[5] == 0:
+                    totals[5] += line.product_id.flsp_highest_price * line.product_qty
+                else:
+                    totals[5] += line.product_id.uom_id._compute_price(child_total[5], line.product_uom_id) * line.product_qty
+                if child_total[6] == 0:
+                    totals[6] += line.product_id.flsp_lowest_price * line.product_qty
+                else:
+                    totals[6] += line.product_id.uom_id._compute_price(child_total[6], line.product_uom_id) * line.product_qty
             else:
                 totals[0] += line.product_id.uom_id._compute_price(line.product_id.standard_price,
                                                                line.product_uom_id) * line.product_qty
