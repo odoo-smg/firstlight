@@ -632,6 +632,18 @@ class FlspMrppurchaseLine(models.Model):
                     field_name = 'qty_month' + str(key)
                     twelve_month_forecast += getattr(planning, field_name)
 
+                # Checking negative quantities x lead time
+                if suggested_qty == 0 and planning.balance_neg < 0:
+                    date_date_neg = fields.Date.from_string(planning.negative_by)
+                    date_date_cur = fields.Date.from_string(datetime.now())
+                    days_diff = (date_date_neg - date_date_cur).days
+                    if days_diff > planning.delay:
+                        if planning.balance < 0:
+                            suggested_qty = planning.balance * (-1)
+                        else:
+                            suggested_qty = planning.balance_neg * (-1)
+
+
                 required_qty = suggested_qty
                 planning.suggested_qty = required_qty
                 planning.adjusted_qty = suggested_qty
