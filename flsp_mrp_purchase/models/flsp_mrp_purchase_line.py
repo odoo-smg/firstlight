@@ -112,6 +112,11 @@ class FlspMrppurchaseLine(models.Model):
 
     open_demand = fields.Float(string='Open Demand')
 
+    active = fields.Boolean(default=True)
+
+    new_update = fields.Boolean(default=False)
+
+
     def name_get(self):
         return [(
             record.id,
@@ -150,9 +155,13 @@ class FlspMrppurchaseLine(models.Model):
         if not wh_stock_locations:
             raise UserError('Stock Location is missing')
 
-        mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search([])
-        for purchase in mrp_purchase_product:  ##delete not used
-            purchase.unlink()
+        mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search(['|',('active', '=', True),('active', '=', False)])
+
+        for planning in mrp_purchase_product:  ##delete not used
+            if planning.active:
+                planning.active = False
+            else:
+                planning.unlink()
 
         # components within BOM
         # bom_components = self._get_flattened_totals(self.bom_id, self.product_qty)
@@ -679,6 +688,16 @@ class FlspMrppurchaseLine(models.Model):
             #    print(forecast.product_id.name)
             # else:
             #    print('product already in there.......')
+
+        # Checking changes from previous report:
+        mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search(['|',('active', '=', True),('active', '=', False)], order='product_id, active')
+        previous_plan = False
+        for planning in mrp_purchase_product:  ##delete not used
+            if previous_plan:
+                if previous_plan.product_id == planning.product_id:
+                    if previous_plan.suggested_qty != planning.suggested_qty or previous_plan.required_by != planning.required_by:
+                        planning.new_update = True
+            previous_plan = planning
 
         return
 
