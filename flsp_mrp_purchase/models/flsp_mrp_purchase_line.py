@@ -695,7 +695,7 @@ class FlspMrppurchaseLine(models.Model):
         for planning in mrp_purchase_product:  ##delete not used
             if previous_plan:
                 if previous_plan.product_id == planning.product_id:
-                    if previous_plan.suggested_qty != planning.suggested_qty or previous_plan.required_by != planning.required_by:
+                    if abs(previous_plan.suggested_qty - planning.suggested_qty) > 0.01 or previous_plan.required_by != planning.required_by:
                         planning.new_update = True
             previous_plan = planning
 
