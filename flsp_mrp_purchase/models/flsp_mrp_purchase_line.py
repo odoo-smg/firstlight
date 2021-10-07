@@ -112,6 +112,11 @@ class FlspMrppurchaseLine(models.Model):
 
     open_demand = fields.Float(string='Open Demand')
 
+    active = fields.Boolean(default=True)
+
+    new_update = fields.Boolean(default=False)
+
+
     def name_get(self):
         return [(
             record.id,
@@ -150,9 +155,13 @@ class FlspMrppurchaseLine(models.Model):
         if not wh_stock_locations:
             raise UserError('Stock Location is missing')
 
-        mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search([])
-        for purchase in mrp_purchase_product:  ##delete not used
-            purchase.unlink()
+        mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search(['|',('active', '=', True),('active', '=', False)])
+
+        for planning in mrp_purchase_product:  ##delete not used
+            if planning.active:
+                planning.active = False
+            else:
+                planning.unlink()
 
         # components within BOM
         # bom_components = self._get_flattened_totals(self.bom_id, self.product_qty)
@@ -632,6 +641,18 @@ class FlspMrppurchaseLine(models.Model):
                     field_name = 'qty_month' + str(key)
                     twelve_month_forecast += getattr(planning, field_name)
 
+                # Checking negative quantities x lead time
+                if suggested_qty == 0 and planning.balance_neg < 0:
+                    date_date_neg = fields.Date.from_string(planning.negative_by)
+                    date_date_cur = fields.Date.from_string(datetime.now())
+                    days_diff = (date_date_neg - date_date_cur).days
+                    if days_diff > planning.delay:
+                        if planning.balance < 0:
+                            suggested_qty = planning.balance * (-1)
+                        else:
+                            suggested_qty = planning.balance_neg * (-1)
+
+
                 required_qty = suggested_qty
                 planning.suggested_qty = required_qty
                 planning.adjusted_qty = suggested_qty
@@ -667,6 +688,16 @@ class FlspMrppurchaseLine(models.Model):
             #    print(forecast.product_id.name)
             # else:
             #    print('product already in there.......')
+
+        # Checking changes from previous report:
+        mrp_purchase_product = self.env['flsp.mrp.purchase.line'].search(['|',('active', '=', True),('active', '=', False)], order='product_id, active')
+        previous_plan = False
+        for planning in mrp_purchase_product:  ##delete not used
+            if previous_plan:
+                if previous_plan.product_id == planning.product_id:
+                    if abs(previous_plan.suggested_qty - planning.suggested_qty) > 0.01 or previous_plan.required_by != planning.required_by:
+                        planning.new_update = True
+            previous_plan = planning
 
         return
 
