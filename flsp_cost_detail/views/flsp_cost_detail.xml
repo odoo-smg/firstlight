@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Tree view-->
+	<record id="flsp_cost_detail_tree" model="ir.ui.view">
+        <field name="name">flsp.cost.detail.tree</field>
+        <field name="model">flsp.cost.detail</field>
+        <field name="arch" type="xml">
+            <tree default_order='date' string="Flsp Cost Detail" create="false" limit="999999">
+                <!--Fields to display on report-->
+                <field name="id"/>
+                <field name="date"/>
+                <field name="product_id" optional="hide"/>
+                <field name="picking_type_id"/>
+                <field name="reference"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <field name="balance"/>
+                <field name="cost" />
+            </tree>
+        </field>
+    </record>
+
+    <!--Search
+    <record id="flsp_mrp_negative_inv_report_search" model="ir.ui.view">
+        <field name="name">flsp.mrp.negative.inv.report.search</field>
+        <field name="model">flsp.mrp.negative.inv.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Sale Report">
+                <field name="product_id"/>
+                <field name="default_code"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product" context="{'produt_id':'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+-->
+    <!--Action-->
+    <record id="flsp_cost_detail_action" model="ir.actions.act_window">
+        <field name="name">Flsp Cost Detail Report</field>
+        <field name="res_model">flsp.cost.detail</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_cost_detail_tree"/>
+        <field name="context">{'order': 'date'}</field>
+    </record>
+
+</odoo>
+
