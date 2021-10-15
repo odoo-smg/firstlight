@@ -5,17 +5,24 @@
         <field name="name">flsp.cost.detail.tree</field>
         <field name="model">flsp.cost.detail</field>
         <field name="arch" type="xml">
-            <tree default_order='date' string="Flsp Cost Detail" create="false" limit="999999">
+            <tree default_order='date' string="Flsp Cost Detail" create="false">
                 <!--Fields to display on report-->
-                <field name="id"/>
-                <field name="date"/>
+                <field name="seq"  optional="hide"/>
+                <field name="id" optional="hide"/>
+                <field name="date" optional="show"/>
                 <field name="product_id" optional="hide"/>
-                <field name="picking_type_id"/>
-                <field name="reference"/>
-                <field name="location_id"/>
-                <field name="location_dest_id"/>
-                <field name="balance"/>
-                <field name="cost" />
+                <field name="picking_type_id" optional="show"/>
+                <field name="origin" optional="show"/>
+                <field name="reference" optional="show"/>
+                <field name="location_id" optional="show"/>
+                <field name="location_dest_id" optional="show"/>
+                <field name="qty_done" optional="show"/>
+                <field name="price_unit" optional="hide"/>
+                <field name="product_qty" optional="hide"/>
+                <field name="value" optional="hide"/>
+                <field name="unit_cost" optional="hide"/>
+                <field name="balance" optional="show"/>
+                <field name="cost"  optional="show"/>
             </tree>
         </field>
     </record>
