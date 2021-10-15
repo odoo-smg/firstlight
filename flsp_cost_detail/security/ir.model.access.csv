@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsp_cost_detail,flsp_cost_detail,model_flsp_cost_detail,base.group_user,1,1,1,1
+access_flsp_cost_detail_view,flsp_cost_detail_view,model_flsp_cost_detail_view,base.group_user,1,1,1,1
