@@ -37,5 +37,6 @@
         'report/flsp_production_component_finished.xml',
         'report/flsp_production_components.xml',
         'views/flsp_mrp_comp_warning_wiz.xml',
+        'data/flsp_automation.xml',
     ],
 }
