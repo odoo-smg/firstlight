@@ -23,10 +23,10 @@ class flspproduction(models.Model):
     def button_unreserve(self):
         self.flsp_material_reserved = False
         self.flsp_required_mat_plan = False
-        super(Flspproduction, self).button_unreserve()
+        super(flspproduction, self).button_unreserve()
 
     def action_assign(self):
-        super(Flspproduction, self).action_assign()
+        super(flspproduction, self).action_assign()
         if self.reservation_state == 'assigned':
             self.flsp_required_mat_plan = False
             self.flsp_material_reserved = True
