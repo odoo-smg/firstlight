@@ -13,12 +13,44 @@
             </field>
         </record> -->
 
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_production_tree_view">
+            <field name="name">flsp.mrp.production.tree.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">150</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="flsp_required_mat_plan" string="Requested" optional="hide" />
+                    <field name="flsp_material_reserved" string="Reserved" optional="hide" />
+              </xpath>
+            </field>
+        </record>
+
+
         <record model="ir.ui.view" id="flsp_production_form_view">
             <field name="name">flsp.mrp.production.form.inherit</field>
             <field name="model">mrp.production</field>
             <field name="priority">100</field>
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
+              <xpath expr="//button[@name='open_produce_product'][1]" position="replace">
+                   <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', 'not in', ('waiting', 'assigned')), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
+              </xpath>
+              <xpath expr="//button[@name='open_produce_product'][2]" position="replace">
+                   <button name="open_produce_product" attrs="{'invisible': [True]}" string="Produce" type="object" class="oe_highlight"/>
+              </xpath>
+              <xpath expr="//button[@name='action_assign']" position="attributes">
+                    <attribute name="groups">flsp-mrp.group_mrp_flsp_planner</attribute>
+                    <attribute name="attrs">{'invisible': ['|', '|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', False)]}</attribute>
+              </xpath>
+              <xpath expr="//button[@name='action_assign']" position="after">
+                    <button name="flsp_require_material" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', True), ('flsp_material_reserved', '=', True)]}" string="Request Material" type="object" class="oe_highlight" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
+              </xpath>
+              <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="flsp_required_mat_plan" invisible="1" string="Material Requested" readonly="1" />
+                    <field name="flsp_material_reserved" invisible="1"  readonly="1" />
+              </xpath>
               <xpath expr="//form" position="attributes">
                    <attribute name="duplicate">0</attribute>
               </xpath>

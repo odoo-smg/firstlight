@@ -17,6 +17,35 @@ class flspproduction(models.Model):
         readonly=True, required=True, check_company=True,
         states={'draft': [('readonly', False)]})
 
+    flsp_required_mat_plan = fields.Boolean("Required Material", default=False)
+    flsp_material_reserved = fields.Boolean("Material Reserved", default=False)
+
+    def button_unreserve(self):
+        self.flsp_material_reserved = False
+        self.flsp_required_mat_plan = False
+        super(flspproduction, self).button_unreserve()
+
+    def action_assign(self):
+        super(flspproduction, self).action_assign()
+        if self.reservation_state == 'assigned':
+            self.flsp_required_mat_plan = False
+            self.flsp_material_reserved = True
+        else:
+            # check backflush reservation
+            reserved_pass = True
+            for each in self.move_raw_ids:
+                if not each.flsp_backflush:
+                    if each.product_uom_qty > each.reserved_availability:
+                        reserved_pass = False
+            if reserved_pass:
+                self.flsp_required_mat_plan = False
+                self.flsp_material_reserved = True
+        return
+
+    def flsp_require_material(self):
+        self.flsp_required_mat_plan = True
+
+
     @api.constrains('product_id')
     def _check_done_eco(self):
         for record in self:
@@ -40,7 +69,7 @@ class flspproduction(models.Model):
                 return self.env.ref('flsp-mrp.launch_flsp_mrp_comp_warning_wiz').read()[0]
             else:
                 return super(flspproduction, self).action_confirm()
-                
+
     def button_flsp_explode_subs(self):
         """
             Purpose: To show products with BOMS and backflush = False in a wizard
@@ -94,3 +123,16 @@ class flspproduction(models.Model):
             raise UserError("'Planned Start Date' is required")
 
         super(flspproduction, self)._onchange_date_planned_start()
+
+    def _flsp_compute_material_reservation(self):
+        """ Compute the material reservation state.
+        """
+        for production in self:
+            reserved_pass = True
+            production.flsp_material_reserved = False
+            for each in production.move_raw_ids:
+                if not each.flsp_backflush:
+                    if each.product_uom_qty > each.reserved_availability:
+                        reserved_pass = False
+            if reserved_pass:
+                production.flsp_material_reserved = True
