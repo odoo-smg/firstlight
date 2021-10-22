@@ -45,7 +45,7 @@
                     <attribute name="attrs">{'invisible': ['|', '|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', False)]}</attribute>
               </xpath>
               <xpath expr="//button[@name='action_assign']" position="after">
-                    <button name="flsp_require_material" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', True), ('flsp_material_reserved', '=', True)]}" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner" string="Request Material" type="object" class="oe_highlight" group/>
+                    <button name="flsp_require_material" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', True), ('flsp_material_reserved', '=', True)]}" string="Request Material" type="object" class="oe_highlight" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
               </xpath>
               <xpath expr="//field[@name='product_id']" position="after">
                     <field name="flsp_required_mat_plan" invisible="1" string="Material Requested" readonly="1" />
