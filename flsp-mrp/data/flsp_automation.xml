@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="flsp_compute_material_reservation" model="base.automation">
+            <field name="name">FLSP MO Compute_material_reservation</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="state">code</field>
+            <field name="code" eval="'record.raw_material_production_id._flsp_compute_material_reservation()'"/>
+            <field name="trigger">on_write</field>
+            <field name="trigger_field_ids" eval="[(4,ref('stock.field_stock_move__state'))]"/>
+            <field name="active" eval="True"/>
+        </record>
+</odoo>
