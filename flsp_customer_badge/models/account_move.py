@@ -12,23 +12,16 @@ class flspCustomerBadgeaccountmove(models.Model):
     _inherit = 'account.move'
     _check_company_auto = True
 
-    @api.depends(
-        'line_ids.debit',
-        'line_ids.credit',
-        'line_ids.currency_id',
-        'line_ids.amount_currency',
-        'line_ids.amount_residual',
-        'line_ids.amount_residual_currency',
-        'line_ids.payment_id.state',
-        'flsp_sale_discount',
-        'flsp_freight_discount')
-    def _compute_amount(self):
+    #@api.depends('line_ids.debit','line_ids.credit','line_ids.currency_id','line_ids.amount_currency',
+    #    'line_ids.amount_residual','line_ids.amount_residual_currency','line_ids.payment_id.state',
+    #    'flsp_sale_discount','flsp_freight_discount')
+    #def _compute_amount(self):
         # call orginal _compute_amount() to calculate
-        super(flspCustomerBadgeaccountmove, self)._compute_amount()
+        #super(flspCustomerBadgeaccountmove, self)._compute_amount()
 
         # update total amount for each invoice
-        for move in self:
-            move.amount_total = move.amount_total - move.flsp_sale_discount - move.flsp_freight_discount
+        #for move in self:
+            #move.amount_total = move.amount_total - move.flsp_sale_discount - move.flsp_freight_discount
 
     @api.depends('invoice_line_ids')
     def _compute_discount(self):
