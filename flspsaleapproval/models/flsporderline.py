@@ -14,7 +14,7 @@ class SaleOrderLine(models.Model):
     def flsp_price_subtotal_change(self):
         discount = self.discount
         if self.price_unit > 0:
-            discount = abs(self.price_subtotal - self.price_unit)/self.price_unit * 100
+            discount = abs(self.price_subtotal - (self.price_unit*self.product_uom_qty))/(self.price_unit*self.product_uom_qty) * 100
         self.discount = discount
 
     @api.onchange('product_template_id')
