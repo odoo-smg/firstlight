@@ -10,6 +10,13 @@ class SaleOrderLine(models.Model):
     flsp_products_line_pricelist = fields.One2many('product.product', 'id', 'Pricelist Products', compute='_calc_line_price_list_products')
     flsp_lead_time_weeks = fields.Float(string="Lead Time (Weeks)", compute="_compute_flsp_lead_time_weeks")
 
+    @api.onchange('price_subtotal')
+    def flsp_price_subtotal_change(self):
+        discount = self.discount
+        if self.price_unit > 0:
+            discount = abs(self.price_subtotal - self.price_unit)/self.price_unit * 100
+        self.discount = discount
+
     @api.onchange('product_template_id')
     def sppepp_product_template_id_onchange(self):
         ret_val = {}

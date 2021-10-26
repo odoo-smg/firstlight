@@ -82,6 +82,9 @@
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                   <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
                 </xpath>
+                <xpath expr="//tree/field[@name='price_subtotal']" position="attributes">
+                  <attribute name="attrs">{'readonly': [('state', 'not in', ('draft'))]}</attribute>
+                </xpath>
                 <xpath expr="//tree/field[@name='customer_lead']" position="after">
                     <field name="flsp_lead_time_weeks" />
                 </xpath>
