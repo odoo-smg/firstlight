@@ -220,7 +220,7 @@
                                         <spam t-field="line.product_id.uom_po_id" />
                                     </td>
                                     <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
-                                      <spam t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                      <spam t-field="line.price_unit" t-options='{"widget": "float", "precision": 5}'/>
                                     </td>
                                     <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
                                       <spam t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
