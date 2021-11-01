@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <record id="flsp_sale_delivery_check_view_tree" model="ir.ui.view">
         <field name="name">Sales Delivery Monitor</field>
         <field name="model">stock.move</field>
@@ -24,6 +23,8 @@
                 <field name="product_uom_category_id" invisible="1"/>
                 <field name="is_today" invisible="1" />
                 <field name="is_week" invisible="1"/>
+                <field name="flsp_ship_with" />
+                <field name="picking_policy" />
             </tree>
         </field>
     </record>
@@ -73,6 +74,4 @@
               parent="mrp.menu_mrp_reporting"
               sequence="100"
               action="flsp_sale_delivery_check_action"/>
-
-
 </odoo>
