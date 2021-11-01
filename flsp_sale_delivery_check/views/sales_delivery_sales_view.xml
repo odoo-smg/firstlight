@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_sale_delivery_monitor_form_view">
+            <field name="name">flsp.sale.delivery.monitor.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='commitment_date']" position="before">
+                  <field name="flsp_ship_with" />
+                </xpath>
+            </field>
+        </record>
+</odoo>
