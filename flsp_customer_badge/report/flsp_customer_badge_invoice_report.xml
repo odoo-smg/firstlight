@@ -190,7 +190,7 @@
                                     <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">QTY</td>
                                     <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; width:70px; ">UofM</td>
                                     <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; word-wrap: normal; white-space:nowrap; text-align: right;  ">UNIT PRICE</td>
-                                    <t t-if="display_discount">
+                                    <t t-if="display_discount and (o.flsp_discount != o.flsp_sale_discount+o.flsp_freight_discount)">
                                         <td style="font-size: 16px; background-color: #001f54; border: 2px solid; border-color: #001f54 #ffffff #001f54 #ffffff;  padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #ffffff; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right;  ">
                                             <span>DISC.%</span>
                                             <t t-set="colspan" t-value="colspan+1"/>
@@ -208,8 +208,8 @@
                             </thead>
                             <tbody class="invoice_tbody">
                                 <t t-set="current_subtotal" t-value="0"/>
-
-                                <t t-foreach="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" t-as="line">
+                                <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+                                <t t-foreach="lines" t-as="line">
                                     <t t-set="product_code" t-value="line.product_id.default_code"/>
                                     <t t-set="product_desc" t-value="line.name"/>
                                     <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
@@ -218,8 +218,14 @@
                                             <t t-set="product_desc" t-value="customercode_id.description"/>
                                         </t>
                                     </t>
-                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    <t t-if="o.flsp_sale_discount+o.flsp_freight_discount>0">
+                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal+(line.quantity*line.price_unit*line.discount/100)" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total+(line.quantity*line.price_unit*line.discount/100)" groups="account.group_show_line_subtotals_tax_included"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    </t>
 
                                     <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                                         <t t-if="not line.display_type" name="account_invoice_line_accountable">
@@ -230,7 +236,7 @@
                                             </td>
                                             <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; "><spam t-field="line.product_uom_id.name"/></td>
                                             <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; "><spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam><![CDATA[&nbsp;]]><spam t-field="line.price_unit" t-options='{"widget": "float", "decimal_precision": "2"}' /></td>
-                                            <t t-if="display_discount">
+                                            <t t-if="display_discount  and (o.flsp_discount != o.flsp_sale_discount+o.flsp_freight_discount)">
                                                 <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; word-wrap: normal; white-space:nowrap; ">
                                                     <spam t-field="line.discount"/>
                                                 </td>
@@ -241,8 +247,14 @@
                                                 </td>
                                             </t>
                                             <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
-                                                <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam> <span t-field="line.price_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_excluded"></span>
-                                                <span t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
+                                              <t t-if="o.flsp_sale_discount+o.flsp_freight_discount>0">
+                                                    <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam> <span t-esc="line.price_subtotal+(line.quantity*line.price_unit*line.discount/100)" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_excluded"></span>
+                                                    <span t-esc="line.price_total+(line.quantity*line.price_unit*line.discount/100)" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <spam t-field="line.currency_id.name"/><spam t-field="line.currency_id.symbol"> </spam> <span t-esc="line.price_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_excluded"></span>
+                                                    <span t-esc="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
+                                                </t>
                                             </td>
                                         </t>
                                         <t t-if="line.display_type == 'line_section'">
@@ -259,15 +271,17 @@
                                         </t>
                                     </tr>
 
-                                    <t t-if="current_section and (line_last or o.invoice_line_ids[line_index+1].display_type == 'line_section')">
-                                        <tr>
-                                            <td name="td_section_subtotal" t-att-colspan="colspan" style="font-size: 16px; background-color: #001f54; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: white; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
-                                                <strong>Subtotal</strong>
-                                                <spam t-field="o.currency_id.name"/>
-                                                <spam t-field="o.currency_id.symbol"/><![CDATA[&nbsp;]]>
-                                                <span t-esc="current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
-                                            </td>
-                                        </tr>
+                                    <t t-if="(not line_last)">
+                                        <t t-if="lines[line_index+1].display_type == 'line_section'">
+                                          <tr>
+                                              <td name="td_section_subtotal" t-att-colspan="colspan" style="font-size: 16px; background-color: #001f54; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: white; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
+                                                  <strong>Subtotal</strong>
+                                                  <spam t-field="o.currency_id.name"/>
+                                                  <spam t-field="o.currency_id.symbol"/><![CDATA[&nbsp;]]>
+                                                  <span t-esc="current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                              </td>
+                                          </tr>
+                                      </t>
                                     </t>
                                 </t>
                             </tbody>
@@ -283,7 +297,7 @@
                                             </td>
                                             <td name="td_amount_untaxed" style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; border-top-width:2px;" >
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
-                                                <span t-field="o.amount_untaxed" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                <span t-esc="o.amount_untaxed+o.flsp_sale_discount+o.flsp_freight_discount" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </td>
                                         </tr>
                                         <t t-if="o.flsp_cb_image and o.type != 'out_refund'" >
