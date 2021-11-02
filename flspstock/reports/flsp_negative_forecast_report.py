@@ -9,6 +9,8 @@ class FlspNegativeForecastStock(models.Model):
 
     product_id = fields.Many2one('product.product', string='Product')
     product_name = fields.Char(related='product_id.display_name', string='Product')
+    description = fields.Char(string='Description', readonly=True)
+    default_code = fields.Char(string='Part #', readonly=True)
     purcahseable = fields.Selection(related='product_id.flsp_route_buy', string='Purcahseable')
     manufacturable = fields.Selection(related='product_id.flsp_route_mfg', string='Manufacturable')
     negative_forecast_qty = fields.Float(string='Negative Qty')
@@ -32,7 +34,7 @@ class FlspNegativeForecastStock(models.Model):
         # scan all products and make sure their fields 'flsp_route_buy' and 'flsp_route_mfg' are up-to-date
         if not calculateFlspRoutes:
             return
-        
+
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         products = self.env['product.product'].search([])
@@ -51,31 +53,40 @@ class FlspNegativeForecastStock(models.Model):
     def _update_report_data(self):
         query_unlink = """ DELETE FROM flsp_negative_forecast_stock"""
 
-        query_create = """WITH
+        query_create = """
+                    WITH
                         neg AS (
-                            SELECT product_id, min(date) as date
+                            SELECT product_id, pt.name as description, pt.default_code,  min(date) as date
                             FROM report_stock_quantity
-                            WHERE date >= current_date and company_id = %s and product_qty < 0 and state = 'forecast'
-                            GROUP BY product_id
+							inner join product_product as pp on pp.id = product_id
+							inner join product_template as pt on pt.id = pp.product_tmpl_id
+                            WHERE date >= current_date and report_stock_quantity.company_id = %s and product_qty < 0 and report_stock_quantity.state = 'forecast'
+                            GROUP BY product_id, pt.name, pt.default_code
                         ),
                         negreport AS (
-                            SELECT r.product_id, r.date, r.product_qty
+                            SELECT r.product_id, pt.name as description, pt.default_code, r.date, r.product_qty
                             FROM report_stock_quantity as r,neg
+							inner join product_product as pp on pp.id = product_id
+							inner join product_template as pt on pt.id = pp.product_tmpl_id
                             WHERE r.product_id = neg.product_id and r.date = neg.date and r.company_id = %s and r.state = 'forecast'
                         ),
                         nonneg AS (
-                            SELECT r.product_id, min(r.date) as date
+                            SELECT r.product_id, pt.name as description, pt.default_code, min(r.date) as date
                             FROM report_stock_quantity as r,neg
+							inner join product_product as pp on pp.id = product_id
+							inner join product_template as pt on pt.id = pp.product_tmpl_id
                             WHERE r.product_id = neg.product_id and r.date > neg.date and r.company_id = %s and r.product_qty >= 0 and r.state = 'forecast'
-                            GROUP BY r.product_id
+                            GROUP BY r.product_id, pt.name, pt.default_code
                         ),
                         nonnegreport AS (
-                            SELECT r.product_id, r.date, r.product_qty
+                            SELECT r.product_id, pt.name as description, pt.default_code, r.date, r.product_qty
                             FROM report_stock_quantity as r,nonneg
+							inner join product_product as pp on pp.id = product_id
+							inner join product_template as pt on pt.id = pp.product_tmpl_id
                             WHERE r.product_id = nonneg.product_id and r.date = nonneg.date and r.company_id = %s  and r.state = 'forecast'
                         )
-                    INSERT INTO flsp_negative_forecast_stock (product_id, negative_forecast_date, negative_forecast_qty, non_negative_forecast_date, non_negative_forecast_qty)
-                    SELECT negreport.product_id, CAST(negreport.date AS DATE), negreport.product_qty, CAST(nonnegreport.date AS DATE), nonnegreport.product_qty
+                    INSERT INTO flsp_negative_forecast_stock (product_id, description, default_code, negative_forecast_date, negative_forecast_qty, non_negative_forecast_date, non_negative_forecast_qty)
+                    SELECT negreport.product_id, negreport.description, negreport.default_code, CAST(negreport.date AS DATE), negreport.product_qty, CAST(nonnegreport.date AS DATE), nonnegreport.product_qty
                     FROM negreport
 				    LEFT JOIN nonnegreport
                     ON negreport.product_id = nonnegreport.product_id
@@ -88,7 +99,7 @@ class FlspNegativeForecastStock(models.Model):
                 self.env.cr.execute(query_create, query_create_params)
         except Error as e:
             _logger.info("an error occured while updating database 'flsp_negative_forecast_stock': %s", e.pgerror)
-        
+
     @api.model
     def action_calculate_negative_forecast(self, calculateFlspRoutes=True):
         # update product data
@@ -102,7 +113,7 @@ class FlspNegativeForecastStock(models.Model):
         action = {
             'name': _('Negative Forecasted Inventory'),
             'res_model': 'flsp.negative.forecast.stock',
-            'view_mode': 'tree', 
+            'view_mode': 'tree',
             'type': 'ir.actions.act_window',
             'context': {},
             'help': """
@@ -110,7 +121,7 @@ class FlspNegativeForecastStock(models.Model):
                 """
         }
         return action
-        
+
     @api.model
     def action_view_negative_forecast(self, calculateFlspRoutes=True):
         # update data
