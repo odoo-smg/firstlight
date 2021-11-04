@@ -152,7 +152,7 @@ class FlspCostDetailView(models.Model):
                         sm.picking_type_id,
                         sml.date, sml.location_id, sml.location_dest_id, sml.reference, sml.qty_done,
                         sm.price_unit, sm.product_qty,
-                        svl.value, svl.unit_cost,
+                        min(svl.value) as value, min(svl.unit_cost) as unit_cost,
                         sml.product_id, pp.product_tmpl_id
             from		stock_move_line sml
             inner join product_product pp
@@ -167,6 +167,12 @@ class FlspCostDetailView(models.Model):
             left join  stock_picking_type spt
             on         sm.picking_type_id = spt.id
             where      sml.state = 'done'
+			group by    sml.id,
+                        sm.origin,
+                        sm.picking_type_id,
+                        sml.date, sml.location_id, sml.location_dest_id, sml.reference, sml.qty_done,
+                        sm.price_unit, sm.product_qty,
+                        sml.product_id, pp.product_tmpl_id
             union all
 
             select      null as stock_move_line_id,
