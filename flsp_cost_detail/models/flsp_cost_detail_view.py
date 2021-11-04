@@ -150,27 +150,28 @@ class FlspCostDetailView(models.Model):
                         null as stock_valuation_layer_id,
                         sm.origin,
                         sm.picking_type_id,
-                        sml.date, sml.location_id, sml.location_dest_id, sml.reference, sml.qty_done, 
+                        sml.date, sml.location_id, sml.location_dest_id, sml.reference, sml.qty_done,
                         sm.price_unit, sm.product_qty,
-                        svl.value, svl.unit_cost, 
+                        svl.value, svl.unit_cost,
                         sml.product_id, pp.product_tmpl_id
             from		stock_move_line sml
-            inner join product_product pp 
+            inner join product_product pp
             on         pp.id = sml.product_id
             and        pp.active = True
             inner join stock_move sm
             on         sml.move_id = sm.id
             left join  stock_valuation_layer svl
-            on         svl.stock_move_id = sm.id 
+            on         svl.stock_move_id = sm.id
             and        svl.stock_valuation_layer_id is null
+            and        sm.product_qty = abs(svl.quantity)
             left join  stock_picking_type spt
             on         sm.picking_type_id = spt.id
             where      sml.state = 'done'
-            union all  
+            union all
 
             select      null as stock_move_line_id,
                         svl.id as stock_valuation_layer_id,
-                        'Cost Adjustment' as origin, 0 as picking_type_id, svl.create_date as date, null as location_id, null as location_dest_id, description as reference, quantity as qty_done, unit_cost as price_unit, 0, value, unit_cost, product_id, product_tmpl_id 
+                        'Cost Adjustment' as origin, 0 as picking_type_id, svl.create_date as date, null as location_id, null as location_dest_id, description as reference, quantity as qty_done, unit_cost as price_unit, 0, value, unit_cost, product_id, product_tmpl_id
             from stock_valuation_layer svl
             inner join product_product pp
             on         pp.id = svl.product_id
