@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
-        <record model="ir.ui.view" id="product_smg_supplierinfo_tree_view">
+        <!--record model="ir.ui.view" id="product_smg_supplierinfo_tree_view">
             <field name="name">product.supplierinfo.smg.tree.inherit</field>
             <field name="model">product.supplierinfo</field>
             <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
@@ -9,8 +9,8 @@
                     <field name="delay"/>
                 </xpath>
             </field>
-        </record>
-  
+        </record-->
+
         <record model="ir.ui.view" id="product_smg_tree_view">
             <field name="name">product.template.smg.tree.inherit</field>
             <field name="model">product.template</field>
@@ -72,6 +72,22 @@
                     <group string="Quantity to Sell" name="flsp_min_qty_sale">
                         <field name="flsp_min_qty" string="Min. Qty"/>
                     </group>
+                </xpath>
+                <xpath expr="//field[@name='seller_ids']" position="inside">
+                  <tree string="Vendor Information" multi_edit="1">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name" readonly="1"/>
+                    <field name="product_id" readonly="1" optional="hide" invisible="context.get('product_template_invisible_variant', False)" groups="product.group_product_variant"/>
+                    <field name="product_tmpl_id" string="Product" readonly="1" invisible="context.get('visible_product_tmpl_id', True)"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                    <field name="date_start" optional="hide"/>
+                    <field name="date_end" optional="hide"/>
+                    <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                    <field name="min_qty"/>
+                    <field name="delay"/>
+                    <field name="product_uom" groups="uom.group_uom"/>
+                    <field name="price" string="Price"/>
+                  </tree>
                 </xpath>
             </field>
         </record>
