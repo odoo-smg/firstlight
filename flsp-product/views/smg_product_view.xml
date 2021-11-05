@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
-
+        <record model="ir.ui.view" id="product_smg_supplierinfo_tree_view">
+            <field name="name">product.supplierinfo.smg.tree.inherit</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="delay"/>
+                </xpath>
+            </field>
+        </record>
+  
         <record model="ir.ui.view" id="product_smg_tree_view">
             <field name="name">product.template.smg.tree.inherit</field>
             <field name="model">product.template</field>
