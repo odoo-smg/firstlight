@@ -195,6 +195,7 @@ class flsppurchaseproductprd(models.Model):
             ('product_id', 'in', self.ids)
         ]
         open_receipts = self.env['stock.picking'].search(domain)
+        orders_to_approve = self.env['purchase.order'].search([('flsp_po_status', '=', 'to_approve')]).ids
         po_ids = []
         product_ids = []
         for product in self:
@@ -208,6 +209,10 @@ class flsppurchaseproductprd(models.Model):
                 for move in stock_move_product:
                     if move.purchase_line_id.product_uom_qty - move.purchase_line_id.qty_received > 0:
                         po_ids.append(move.purchase_line_id.id)
+            lines_to_approve = self.env['purchase.order.line'].search(['&', ('order_id', 'in', orders_to_approve), ('product_id', '=', product.id)])
+            for line in lines_to_approve:
+                po_ids.append(line.id)
+
         action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
         action['domain'] = ['&', ('id', 'in', po_ids), ('product_id', 'in', product_ids)]
         return action
