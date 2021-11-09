@@ -35,7 +35,7 @@
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
               <xpath expr="//button[@name='open_produce_product'][1]" position="replace">
-                   <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', 'not in', ('waiting', 'assigned')), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
+                   <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
               </xpath>
               <xpath expr="//button[@name='open_produce_product'][2]" position="replace">
                    <button name="open_produce_product" attrs="{'invisible': [True]}" string="Produce" type="object" class="oe_highlight"/>
