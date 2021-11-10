@@ -33,10 +33,12 @@
                                       decoration-warning="not product_line_id2 or not product_line_id1"
                                       decoration-bf="product_line_id1==product_line_id2 and product_line_qty1!=product_line_qty2">
                                     <field name="id1" invisible="1"/>
+                                    <field name="bom_level1"/>
                                     <field name="product_line_id1"/>
                                     <field name="product_line_qty1"/>
                                     <field name="uom_id1"/>
                                     <field name="id2" invisible="1"/>
+                                    <field name="bom_level2"/>
                                     <field name="product_line_id2"/>
                                     <field name="product_line_qty2"/>
                                     <field name="uom_id2"/>

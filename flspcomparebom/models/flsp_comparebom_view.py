@@ -90,7 +90,7 @@ class FlspSalesForecast(models.Model):
     bom_level1 = fields.Integer(string='Bom level 1')
     bom_line_id2 = fields.Many2one('mrp.bom', string='Parent Bom_id 2')
     bom_comp_id2 = fields.Many2one('mrp.bom', string='Component bom_id 2')
-    bom_level3 = fields.Integer(string='Bom level 2')
+    bom_level2 = fields.Integer(string='Bom level 2')
 
     uom_id1 = fields.Many2one('uom.uom', 'BOM 1 UoM', readonly=True)
     uom_id2 = fields.Many2one('uom.uom', 'BOM 2 UoM', readonly=True)
@@ -217,7 +217,8 @@ BEGIN
                             from explode_bom2
             
             ) B
-            on A.product_line_id1 = B.product_line_id2;
+            on A.product_line_id1 = B.product_line_id2
+            and A.bom_level1 = B.bom_level2;
 
 
     END IF;
