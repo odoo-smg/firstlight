@@ -29,7 +29,9 @@
                     <notebook>
                         <page string="BOM Comparison Information">
                             <field name="bom_line" widget="section_and_note_one2many" mode="tree">
-                                <tree>
+                                <tree decoration-muted="product_line_id1==product_line_id2 and product_line_qty1==product_line_qty2"
+                                      decoration-warning="not product_line_id2 or not product_line_id1"
+                                      decoration-bf="product_line_id1==product_line_id2 and product_line_qty1!=product_line_qty2">
                                     <field name="id1" invisible="1"/>
                                     <field name="product_line_id1"/>
                                     <field name="product_line_qty1"/>
