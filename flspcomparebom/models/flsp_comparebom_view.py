@@ -118,7 +118,10 @@ BEGIN
         RETURN QUERY
             -- ALL SUB LEVELS
 
-            select row_number() OVER() AS id, 1 as order_id, * from (
+            select row_number() OVER() AS id, 1 as order_id,  
+			    A.id1, A.product_line_id1, A.product_line_qty1, A.bom_line_id1, A.bom_comp_id1, A.bom_level1, A.uom_id1, 
+                B.id2, B.product_line_id2, B.product_line_qty2, B.bom_line_id2, B.bom_comp_id2, B.bom_level2, B.uom_id2
+            from (
             with recursive explode_bom1 as(
                         select 	        product_id, product_qty, mbl_bom_id, name, bom_id, 1 as level, product_uom_id
                             from 		(select 		mbl.product_id, mbl.product_qty, mbl.bom_id as mbl_bom_id, --pp.default_code,
@@ -158,7 +161,7 @@ BEGIN
                     )
             
                     --this is where we use the recursive table in the database
-                    select    --row_number() OVER() AS id,
+                    select    row_number() OVER(PARTITION BY product_id order by product_id, product_qty) AS prod_id1,
                                 (select bom1 from flsp_comparebom order by flsp_comparebom.id desc limit 1) as id1 ,
                                 product_id as product_line_id1, product_qty as product_line_qty1,
                                 mbl_bom_id as bom_line_id1,
@@ -207,7 +210,7 @@ BEGIN
                     )
             
                     --this is where we use the recursive table in the database
-                    select    --row_number() OVER() AS id,
+                    select    row_number() OVER(PARTITION BY product_id order by product_id, product_qty) AS prod_id2,
                                 (select bom2 from flsp_comparebom order by flsp_comparebom.id desc limit 1) as id2 ,
                                 product_id as product_line_id2, product_qty as product_line_qty2,
                                 mbl_bom_id as bom_line_id2,
@@ -218,8 +221,7 @@ BEGIN
             
             ) B
             on A.product_line_id1 = B.product_line_id2
-            and A.bom_level1 = B.bom_level2;
-
+            and A.prod_id1 = B.prod_id2;
 
     END IF;
 END;
