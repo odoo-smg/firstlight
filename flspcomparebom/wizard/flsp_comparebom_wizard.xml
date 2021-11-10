@@ -11,6 +11,9 @@
                 </group>
                 <field name ="curActive"/>
                 <label for="curActive" string="Show only active"/>
+                <br/>
+                <field name ="sub_levels"/>
+                <label for="sub_levels" string="Show sub levels"/>
                 <footer>
                     <button name="compare" string="Compare BOMs" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default btn-secondary" special="cancel"/>
