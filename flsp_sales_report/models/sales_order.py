@@ -259,10 +259,10 @@ class SalesOrderReport(models.Model):
                         qty = 0
                         if 'DEMO' in sol.product_id.name:
                             if so.state == 'sale':
-                                qty = sol.product_uom_qty / 2
+                                qty = sol.product_uom_qty
                             else:
                                 # case the SO is marked as done without delivering some products
-                                qty = sol.qty_delivered / 2
+                                qty = sol.qty_delivered
                             a_ret[so.team_id.id][so.date_order.month][sol.product_id.categ_id.id][2] += qty
                             a_ret[so.team_id.id][0][sol.product_id.categ_id.id][2] += qty
                             a_ret[0][so.date_order.month][sol.product_id.categ_id.id][2] += qty
