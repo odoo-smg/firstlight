@@ -25,7 +25,7 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.write(i, 4, bom.product_qty)
         sheet.write(i, 5, bom.product_uom_id.name or "")
 
-        sheet.write(i, 6, str(bom.product_tmpl_id.standard_price)+"CAD" or "")
+        sheet.write(i, 6, bom.product_tmpl_id.standard_price or "")
 
         sheet.write(i, 7, bom.code or "")
         sheet.write(i, 8, bom.flsp_bom_plm_valid or "")
@@ -46,7 +46,7 @@ class FlattenedBomXlsx(models.AbstractModel):
             sheet.write(i, 4, total_qty['total'] or 0.0)
             sheet.write(i, 5, total_qty['prod'].uom_id.name or "")
 
-            sheet.write(i, 6, str(total_qty['prod'].standard_price)+"CAD" or "")
+            sheet.write(i, 6, total_qty['prod'].standard_price or "")
 
             sheet.write(i, 7, total_qty['bom'] or "")
             sheet.write(i, 8, total_qty['bom_plm'] or "")
@@ -101,7 +101,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Quantity"),
                 _("UoM"),
 
-                _("cost"),
+                _("Cost CAD$"),
 
                 _("BOM Reference"),
                 _("BOM PLM"),
@@ -121,7 +121,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Quantity"),
                 _("Unit of Measure"),
 
-                _("Cost"),
+                _("Cost CAD$"),
 
                 _("BOM Reference"),
                 _("BOM PLM"),
