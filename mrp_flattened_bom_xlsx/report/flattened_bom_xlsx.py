@@ -101,7 +101,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Quantity"),
                 _("UoM"),
 
-                _("cost"),
+                _("Cost CAD$"),
 
                 _("BOM Reference"),
                 _("BOM PLM"),
@@ -121,7 +121,7 @@ class FlattenedBomXlsx(models.AbstractModel):
                 _("Quantity"),
                 _("Unit of Measure"),
 
-                _("Cost"),
+                _("Cost CAD$"),
 
                 _("BOM Reference"),
                 _("BOM PLM"),

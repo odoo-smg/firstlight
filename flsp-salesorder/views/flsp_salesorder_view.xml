@@ -30,6 +30,9 @@
                   <attribute name="domain">[('sale_team_id', '!=', False)]</attribute>
                   <attribute name="attrs">{'required': True}</attribute>
               </xpath>
+              <xpath expr="//form/sheet/group/group/field[@name='partner_shipping_id']" position="attributes">
+                  <attribute name="context">{'default_type':'delivery', 'show_address': 1}</attribute>
+              </xpath>
             </field>
         </record>
 

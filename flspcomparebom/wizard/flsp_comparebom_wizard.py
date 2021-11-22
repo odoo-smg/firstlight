@@ -24,6 +24,7 @@ class FlspCompareBomWizard(models.TransientModel):
     curActive = fields.Boolean(default=False)
     bom1 = fields.Many2one('mrp.bom', string='BOM 1', required=True, ondelete='cascade')
     bom2 = fields.Many2one('mrp.bom', string='BOM 2', required=True, ondelete='cascade')
+    sub_levels = fields.Boolean(string="Show Sub levels?", default=False)
 
     @api.onchange('curActive')
     def onchange_curActive(self):
@@ -66,7 +67,7 @@ class FlspCompareBomWizard(models.TransientModel):
                         Returns the view
         """
         self.ensure_one()
-        self.env['flsp.comparebom'].create({'bom1': self.bom1.id, 'bom2': self.bom2.id, })
+        self.env['flsp.comparebom'].create({'bom1': self.bom1.id, 'bom2': self.bom2.id, 'sub_levels': self.sub_levels, })
         res = self.env['flsp.comparebom.view'].search([], limit=1).id #returns number 1
         print(res)
         view = self.env.ref('flspcomparebom.flsp_comparebom_view_form').id
