@@ -29,6 +29,10 @@ class FlspMrpSubstitutionLine(models.Model):
     def onchange_product_sub_id(self):
         if self.product_substitute_id:
             self.product_substitute_uom_id = self.product_substitute_id.uom_id.id
+            
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        self.product_substitute_qty=self.product_qty
 
     @api.depends('product_id')
     def _compute_product_uom_id(self):
