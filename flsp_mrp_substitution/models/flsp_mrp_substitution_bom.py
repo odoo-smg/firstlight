@@ -6,7 +6,7 @@ from odoo import models, fields, api, exceptions
 class FlspMrpSubstitutionBom(models.Model):
     _inherit = 'mrp.bom'
 
-    flsp_substitution_line_ids = fields.One2many('flsp.mrp.substitution.line', 'flsp_bom_id', string='Components')
+    flsp_substitution_line_ids = fields.One2many('flsp.mrp.substitution.line', 'flsp_bom_id', string='Components', copy=True)
     flsp_bom_products_ids = fields.One2many('product.product', string='Bom Products', compute='_compute_bom_products_ids')
 
     @api.depends('bom_line_ids')
