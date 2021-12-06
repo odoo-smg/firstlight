@@ -13,7 +13,7 @@ class FlspMrpSubBomLine(models.Model):
     """
     _inherit = 'mrp.bom.line'
 
-    flsp_substitute = fields.Boolean(string="Substitute", copy=False)
+    flsp_substitute = fields.Boolean(string="Substitute", copy=True)
 
     @api.onchange('flsp_substitute')
     def onchange_flsp_substitute(self):
