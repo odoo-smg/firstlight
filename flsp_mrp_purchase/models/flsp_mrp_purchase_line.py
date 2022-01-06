@@ -564,10 +564,13 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += "<br/>"
                 key = current_date.month
                 rationale += 'Forecast|'
+                count_to_six=0
                 for month in next_6_months:
                     field_name = 'qty_month' + str(key)
                     rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
-                    six_month_forecast += getattr(planning, field_name)
+                    if count_to_six < 6:
+                        six_month_forecast += getattr(planning, field_name)
+                    count_to_six += 1
                     key += 1
                     if key > 12:
                         key = 1
