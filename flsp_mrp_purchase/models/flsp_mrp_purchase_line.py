@@ -548,7 +548,7 @@ class FlspMrppurchaseLine(models.Model):
             key = current_date.month
             count = 1
             for month in months:
-                if count >= 7:
+                if count > 12:
                     break
                 if key > 12:
                     key = 1
@@ -599,7 +599,7 @@ class FlspMrppurchaseLine(models.Model):
                     months_to_consider = 1
                 rationale += '-------'
                 key = current_date.month
-                for current_month in range(7):
+                for current_month in range(13):
                     if current_month < months_to_consider:
                         field_name = 'qty_month' + str(key)
                         diff = getattr(planning, field_name)
