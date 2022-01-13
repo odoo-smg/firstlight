@@ -29,9 +29,6 @@ class flsppurchase(models.Model):
             uom_id=self.product_uom,
             params=params)
 
-        if seller or not self.date_planned:
-            self.date_planned = self._get_date_planned(seller).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-
         if not seller:
             if self.product_id.seller_ids.filtered(lambda s: s.name.id == self.partner_id.id):
                 self.price_unit = 0.0
