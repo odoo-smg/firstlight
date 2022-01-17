@@ -30,8 +30,6 @@ class flsppurchase(models.Model):
             params=params)
         if seller:
             self.date_planned = self._get_date_planned(seller).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        else:
-            self.date_planned = datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         self.price_unit = self.product_qty = 0.0
 
         self._product_id_change()
