@@ -21,6 +21,13 @@ class flsppurchase(models.Model):
             return
 
         # Reset date, price and quantity since _onchange_quantity will provide default values
+        params = {'order_id': self.order_id}
+        seller = self.product_id._select_seller(
+            partner_id=self.partner_id,
+            quantity=self.product_qty,
+            date=self.order_id.date_order and self.order_id.date_order.date(),
+            uom_id=self.product_uom,
+            params=params)
         if seller:
             self.date_planned = self._get_date_planned(seller).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         else:
