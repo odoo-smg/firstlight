@@ -15,6 +15,28 @@ class flsppurchase(models.Model):
     flsp_product_desc = fields.Char('Part Description', compute='_product_desc_purchase_line', store=True)
 
 
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if not self.product_id:
+            return
+
+        # Reset date, price and quantity since _onchange_quantity will provide default values
+        self.price_unit = self.product_qty = 0.0
+
+        self._product_id_change()
+
+        self._suggest_quantity()
+        self._onchange_quantity()
+        params = {'order_id': self.order_id}
+        seller = self.product_id._select_seller(
+            partner_id=self.partner_id,
+            quantity=self.product_qty,
+            date=self.order_id.date_order and self.order_id.date_order.date(),
+            uom_id=self.product_uom,
+            params=params)
+        if seller:
+            self.date_planned = self._get_date_planned(seller).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+    
     # Standard function  - Copied from addon to not round the currency convertion
     # Alexandre on November 8, 2021
     @api.onchange('product_qty', 'product_uom')
