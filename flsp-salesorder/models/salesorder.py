@@ -118,6 +118,8 @@ class flspsalesorder(models.Model):
 
 class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
+    
+    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number',)
 
     @api.onchange('product_uom_qty')
     def flsp_product_uom_qty_onchange(self):
