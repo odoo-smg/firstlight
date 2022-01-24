@@ -124,7 +124,7 @@ class flspsalesorderline(models.Model):
     @api.onchange('product_id')
     def flsp_product_id_onchange(self):
         for rec in self:
-            return {'domain': {'customerscode_ids': [('partner_id', '=', rec.order_id.partner_id)]}}
+            return {'domain': {'customerscode_ids': [('product_id', '=', rec.product_id)]}}
     
     @api.onchange('product_uom_qty')
     def flsp_product_uom_qty_onchange(self):
