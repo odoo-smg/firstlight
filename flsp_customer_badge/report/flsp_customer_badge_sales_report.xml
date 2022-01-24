@@ -198,7 +198,7 @@
                         <t t-foreach="doc.order_line" t-as="line">
                             <t t-set="product_code" t-value="line.product_id.default_code"/>
                             <t t-set="product_desc" t-value="line.product_id.name"/>
-                            <t t-if="line.customerscode_ids is not False">
+                            <t t-if="line.customerscode_ids">
                                 <t t-set="product_code" t-value="line.customerscode_ids.part_number"/>
                                 <t t-set="product_desc" t-value="line.customerscode_ids.description"/>
                             </t>
