@@ -121,7 +121,10 @@ class flspsalesorderline(models.Model):
     
     customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
 
-
+    @api.onchange('product_id')
+    def flsp_product_id_onchange(self):
+        for rec in self:
+            return {'domain': {'customerscode_ids': [('partner_id', '=', rec.order_id.partner_id)]}}
     
     @api.onchange('product_uom_qty')
     def flsp_product_uom_qty_onchange(self):
