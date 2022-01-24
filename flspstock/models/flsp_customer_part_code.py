@@ -5,6 +5,7 @@ class Customerscode(models.Model):
     _name = 'flspstock.customerscode'
     _description = "Customer Part Number"
     _check_company_auto = True
+    _rec_name = "part_number"
 
     sequence = fields.Integer('Sequence', default=1, help="The first in the sequence is the default one.")
     product_id = fields.Many2one('product.template', string='Product', check_company=True)
