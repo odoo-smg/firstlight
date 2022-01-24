@@ -198,11 +198,9 @@
                         <t t-foreach="doc.order_line" t-as="line">
                             <t t-set="product_code" t-value="line.product_id.default_code"/>
                             <t t-set="product_desc" t-value="line.product_id.name"/>
-                            <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
-                                <t t-if="customercode_id.partner_id == doc.partner_id">
-                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
-                                    <t t-set="product_desc" t-value="customercode_id.description"/>
-                                </t>
+                            <t t-if="line.customerscode_ids is not False">
+                                <t t-set="product_code" t-value="line.customerscode_ids.part_number"/>
+                                <t t-set="product_desc" t-value="line.customerscode_ids.description"/>
                             </t>
 
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
