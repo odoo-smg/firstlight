@@ -145,3 +145,40 @@ class flspsalesorderline(models.Model):
             self.product_uom_qty = value_ret
             ret_val = {'value': {'product_uom_qty': value_ret}}
         return ret_val
+    
+        def _prepare_invoice_line(self):
+        """
+        Prepare the dict of values to create the new invoice line for a sales order line.
+
+        :param qty: float quantity to invoice
+        """
+        self.ensure_one()
+        res = {
+            'display_type': self.display_type,
+            'sequence': self.sequence,
+            'name': self.name,
+            'customerscode_ids': self.customerscode_ids,
+            'product_id': self.product_id.id,
+            'product_uom_id': self.product_uom.id,
+            'quantity': self.qty_to_invoice,
+            'discount': self.discount,
+            'price_unit': self.price_unit,
+            'tax_ids': [(6, 0, self.tax_id.ids)],
+            'analytic_account_id': self.order_id.analytic_account_id.id,
+            'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
+            'sale_line_ids': [(4, self.id)],
+        }
+        if self.display_type:
+            res['account_id'] = False
+        return res
+
+class flspaccountmoveline(models.Model):
+    _inherit = 'account.move.line'
+    
+    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
+    
+    def _copy_data_extend_business_fields(self, values):
+        # OVERRIDE to copy the 'sale_line_ids' field as well.
+        super(AccountMoveLine, self)._copy_data_extend_business_fields(values)
+        values['sale_line_ids'] = [(6, None, self.sale_line_ids.ids)]
+        values['customerscode_ids'] = self.customerscode_ids
