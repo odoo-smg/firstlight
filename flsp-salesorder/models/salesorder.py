@@ -146,10 +146,9 @@ class flspsalesorderline(models.Model):
             ret_val = {'value': {'product_uom_qty': value_ret}}
         return ret_val
     
-        def _prepare_invoice_line(self):
+    def _prepare_invoice_line(self):
         """
         Prepare the dict of values to create the new invoice line for a sales order line.
-
         :param qty: float quantity to invoice
         """
         self.ensure_one()
