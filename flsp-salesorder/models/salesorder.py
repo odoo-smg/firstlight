@@ -193,5 +193,15 @@ class flspstockmove(models.Model):
         for each in self:
             if each.sale_line_id:
                 each.customerscode_ids=each.sale_line_id.customerscode_ids
+                
+                
+class flspstockmoveline(models.Model):
+    _inherit = 'stock.move.line'
+
+    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number', compute="_compute_customerscode_ids")
+    
+    def _compute_customerscode_ids(self):
+        for each in self:
+            each.customerscode_ids=each.move_id.customerscode_ids
     
     
