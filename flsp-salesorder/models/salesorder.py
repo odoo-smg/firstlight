@@ -171,6 +171,7 @@ class flspsalesorderline(models.Model):
             res['account_id'] = False
         return res
 
+
 class flspaccountmoveline(models.Model):
     _inherit = 'account.move.line'
     
@@ -181,3 +182,16 @@ class flspaccountmoveline(models.Model):
         super(AccountMoveLine, self)._copy_data_extend_business_fields(values)
         values['sale_line_ids'] = [(6, None, self.sale_line_ids.ids)]
         values['customerscode_ids'] = self.customerscode_ids
+
+
+class flspstockmove(models.Model):
+    _inherit = 'stock.move'
+
+    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number', compute="_compute_customerscode_ids")
+    
+    def _compute_customerscode_ids(self):
+        for each in self:
+            if each.sale_line_id:
+                each.customerscode_ids=each.sale_line_id.customerscode_ids
+    
+    
