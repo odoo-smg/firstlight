@@ -3,6 +3,7 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 import logging
+
 _logger = logging.getLogger(__name__)
 
 
@@ -36,14 +37,25 @@ class flspsalesorder(models.Model):
         ('ii-tracking', 'Tracking Assigned'),
         ('jj-delivered', 'Delivered'),
         ('kk-cancel', 'Cancelled'),
-        ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
+    ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
 
     flsp_shipping_method = fields.Selection([
         ('1', 'FL account and Invoice the Customer'),
         ('2', 'FL account and do not Invoice Customer'),
         ('3', 'Customer carrier choice and account'),
-        ], string='Shipping Method', copy=False, store=True)
+    ], string='Shipping Method', copy=False, store=True)
     flsp_carrier_account = fields.Char(String="Carrier Account")
+    flsp_show_customercode = fields.Boolean(String="Show Customer Code", compute="_compute_flsp_show_customercode")
+
+    @api.depends('partner_id')
+    def _compute_flsp_show_customercode(self):
+        customer_codes = self.env['flspstock.customerscode'].search([('partner_id', '=', self.partner_id.id)])
+        show_field = False
+        for part in customer_codes:
+            show_field = True
+        self.flsp_show_customercode = show_field
+        return show_field
+
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -97,7 +109,8 @@ class flspsalesorder(models.Model):
             'flsp_carrier_account': default_shipping_account,
             'user_id': partner_user.id
         }
-        if self.env['ir.config_parameter'].sudo().get_param('account.use_invoice_terms') and self.env.company.invoice_terms:
+        if self.env['ir.config_parameter'].sudo().get_param(
+                'account.use_invoice_terms') and self.env.company.invoice_terms:
             values['note'] = self.with_context(lang=self.partner_id.lang).env.company.invoice_terms
 
         # Use team of salesman if any otherwise leave as-is
@@ -119,6 +132,25 @@ class flspsalesorder(models.Model):
 class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
 
+    flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
+#    flsp_show_customercode = fields.Boolean(String="Show Customer Code at line", compute="_show_flsp_customercode_line")
+
+#    @api.depends('order_partner_id')
+#    def _show_flsp_customercode_line(self):
+#        customer_codes = self.env['flspstock.customerscode'].search([('partner_id', '=', self.order_partner_id.id)])
+#        show_field = False
+#        for part in customer_codes:
+#            show_field = True
+#        for record in self:
+#            record.flsp_show_customercode = show_field
+#        return show_field
+
+    @api.onchange('product_id')
+    def flsp_product_id_onchange(self):
+        for rec in self:
+            return {'domain': {'flsp_customerscode': [('partner_id.id', '=', rec.order_id.partner_id.id),
+                                                     ('product_id.id', '=', rec.product_id.product_tmpl_id.id)]}}
+
     @api.onchange('product_uom_qty')
     def flsp_product_uom_qty_onchange(self):
         ret_val = {}
@@ -138,3 +170,28 @@ class flspsalesorderline(models.Model):
             self.product_uom_qty = value_ret
             ret_val = {'value': {'product_uom_qty': value_ret}}
         return ret_val
+
+    def _prepare_invoice_line(self):
+        """
+        Prepare the dict of values to create the new invoice line for a sales order line.
+        :param qty: float quantity to invoice
+        """
+        self.ensure_one()
+        res = {
+            'display_type': self.display_type,
+            'sequence': self.sequence,
+            'name': self.name,
+            'flsp_customerscode': self.flsp_customerscode,
+            'product_id': self.product_id.id,
+            'product_uom_id': self.product_uom.id,
+            'quantity': self.qty_to_invoice,
+            'discount': self.discount,
+            'price_unit': self.price_unit,
+            'tax_ids': [(6, 0, self.tax_id.ids)],
+            'analytic_account_id': self.order_id.analytic_account_id.id,
+            'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
+            'sale_line_ids': [(4, self.id)],
+        }
+        if self.display_type:
+            res['account_id'] = False
+        return res

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp-salesorder_stock_picking_form">
+            <field name="name">flspsalesorder.stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">94</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+              <xpath expr="//tree/field[@name='product_id']" position="after">
+                <field name="flsp_customerscode" attrs="{'invisible': [('flsp_show_customercode', '!=', True)]}" optional="hide"/>
+                <field name="flsp_show_customercode" invisible="1"/>
+              </xpath>
+              <xpath expr="//form[1]/sheet[1]/notebook[1]/page[3]/field[@name='move_ids_without_package']/tree[1]/field[@name='product_id']" position="after">
+                <field name="flsp_customerscode" attrs="{'invisible': [('flsp_show_customercode', '!=', True)]}" optional="hide"/>
+                <field name="flsp_show_customercode" invisible="1"/>
+              </xpath>
+            </field>
+        </record>
+ </odoo>

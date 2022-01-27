@@ -33,5 +33,7 @@
         'views/flsp_customer_view.xml',
         'views/flsp_salesorder_view.xml',
         'views/flsp_saleorder_listview.xml',
+        'views/flsp_account_move_form.xml',
+        'views/flsp_stock_picking_form.xml',
     ],
 }

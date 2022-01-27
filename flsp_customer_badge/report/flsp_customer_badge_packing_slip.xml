@@ -134,8 +134,8 @@
                                         <t t-if="move_line.product_id.id != current_product">
                                             <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                             <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                            <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
-                                                <t t-if="customercode_id.partner_id == o.partner_id">
+                                            <t t-foreach="move_line.flsp_customerscode" t-as="customercode_id">
+                                                <t t-if="customercode_id.partner_id == o.partner_id.parent_id">
                                                     <t t-set="product_code" t-value="customercode_id.part_number"/>
                                                     <t t-set="product_desc" t-value="customercode_id.description"/>
                                                 </t>
@@ -220,8 +220,8 @@
                                 <t t-foreach="o.move_line_ids.sorted(key=lambda r: r.flsp_lot_name)" t-as="move_line">
                                     <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                     <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                    <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
-                                        <t t-if="customercode_id.partner_id == o.partner_id">
+                                    <t t-foreach="move_line.flsp_customerscode" t-as="customercode_id">
+                                        <t t-if="customercode_id.partner_id == o.partner_id.parent_id">
                                             <t t-set="product_code" t-value="customercode_id.part_number"/>
                                             <t t-set="product_desc" t-value="customercode_id.description"/>
                                         </t>
