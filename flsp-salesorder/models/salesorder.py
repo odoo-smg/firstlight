@@ -133,17 +133,12 @@ class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
 
     flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
-#    flsp_show_customercode = fields.Boolean(String="Show Customer Code at line", compute="_show_flsp_customercode_line")
+    flsp_prd_tmpl_id = fields.Many2one('product.template', String='Product template', compute='_compute_flsp_prd_tmpl_id')
 
-#    @api.depends('order_partner_id')
-#    def _show_flsp_customercode_line(self):
-#        customer_codes = self.env['flspstock.customerscode'].search([('partner_id', '=', self.order_partner_id.id)])
-#        show_field = False
-#        for part in customer_codes:
-#            show_field = True
-#        for record in self:
-#            record.flsp_show_customercode = show_field
-#        return show_field
+    @api.depends('product_id')
+    def _compute_flsp_prd_tmpl_id(self):
+        for rec in self:
+            rec.flsp_prd_tmpl_id = rec.product_id.product_tmpl_id
 
     @api.onchange('product_id')
     def flsp_product_id_onchange(self):

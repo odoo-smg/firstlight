@@ -13,13 +13,24 @@ class flspsostockmove(models.Model):
     def _compute_flsp_show_customercode(self):
         for each in self:
             if each.sale_line_id:
-                each.flsp_show_customercode = each.sale_line_id.order_id.flsp_show_customercode
+                if each.sale_line_id.order_id.flsp_show_customercode:
+                    each.flsp_show_customercode = each.sale_line_id.order_id.flsp_show_customercode
+                else:
+                    each.flsp_show_customercode = False
+            else:
+                each.flsp_show_customercode = False
 
 
     def _compute_flsp_customerscode(self):
         for each in self:
             if each.sale_line_id:
-                each.flsp_customerscode=each.sale_line_id.flsp_customerscode
+                if each.sale_line_id.flsp_customerscode:
+                    each.flsp_customerscode=each.sale_line_id.flsp_customerscode
+                else:
+                    each.flsp_customerscode = False
+            else:
+                each.flsp_customerscode = False
+
 
 
 class flspstockmoveline(models.Model):
@@ -30,10 +41,21 @@ class flspstockmoveline(models.Model):
 
     def _compute_flsp_customerscode(self):
         for each in self:
-            each.flsp_customerscode = each.move_id.flsp_customerscode
+            if each.move_id:
+                if each.move_id.flsp_customerscode:
+                    each.flsp_customerscode = each.move_id.flsp_customerscode
+                else:
+                    each.flsp_customerscode = False
+            else:
+                each.flsp_customerscode = False
 
 
     def _compute_flsp_show_customercode(self):
         for each in self:
             if each.move_id.sale_line_id:
-                each.flsp_show_customercode = each.move_id.sale_line_id.order_id.flsp_show_customercode
+                if each.move_id.sale_line_id.order_id.flsp_show_customercode:
+                    each.flsp_show_customercode = each.move_id.sale_line_id.order_id.flsp_show_customercode
+                else:
+                    each.flsp_show_customercode = True
+            else:
+                each.flsp_show_customercode = True
