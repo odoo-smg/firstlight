@@ -22,7 +22,7 @@
                 <attribute name="attrs">{'readonly': True}</attribute>
               </xpath>
               <xpath expr="//tree/field[@name='name']" position="after">
-                <field name="flsp_customerscode" domain="[('partner_id', '=', parent.partner_id), ('product_id', '=', flsp_prd_tmpl_id)]" options="{'no_create': True, 'no_create_edit':True}" attrs="{'column_invisible': [('parent.flsp_show_customercode', '!=', True)], 'required': [('parent.flsp_show_customercode', '=', True)]}"/>
+                <field name="flsp_customerscode" domain="[('partner_id', '=', parent.partner_id), ('product_id', '=', flsp_prd_tmpl_id)]" options="{'no_create': True, 'no_create_edit':True}" attrs="{'column_invisible': [('parent.flsp_show_customercode', '!=', True)]}"/>
                 <field name="flsp_prd_tmpl_id" invisible="1"/>
               </xpath>
               <xpath expr="//field[@name='amount_total']" position="after">
