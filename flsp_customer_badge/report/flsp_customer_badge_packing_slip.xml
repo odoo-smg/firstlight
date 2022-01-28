@@ -134,12 +134,18 @@
                                         <t t-if="move_line.product_id.id != current_product">
                                             <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                             <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                            <t t-foreach="move_line.flsp_customerscode" t-as="customercode_id">
-                                                <t t-if="customercode_id.partner_id == o.partner_id.parent_id">
-                                                    <t t-set="product_code" t-value="customercode_id.part_number"/>
-                                                    <t t-set="product_desc" t-value="customercode_id.description"/>
-                                                </t>
+                                            <t t-if="move_line.flsp_customerscode">
+                                                <t t-set="product_code" t-value="move_line.flsp_customerscode.part_number"/>
+                                                <t t-set="product_desc" t-value="move_line.flsp_customerscode.description"/>
                                             </t>
+					    <t t-else="">
+				                <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
+					            <t t-if="customercode_id.partner_id == o.sale_id.partner_id">
+					                <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                    	                <t t-set="product_desc" t-value="customercode_id.description"/>
+					            </t>
+				                </t>
+				            </t>
 
                                             <t t-foreach="move_line.product_id.packaging_ids" t-as="packaging_id">
                                                 <t t-set="current_product" t-value="move_line.product_id.id"/>
@@ -220,12 +226,18 @@
                                 <t t-foreach="o.move_line_ids.sorted(key=lambda r: r.flsp_lot_name)" t-as="move_line">
                                     <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                     <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                    <t t-foreach="move_line.flsp_customerscode" t-as="customercode_id">
-                                        <t t-if="customercode_id.partner_id == o.partner_id.parent_id">
-                                            <t t-set="product_code" t-value="customercode_id.part_number"/>
-                                            <t t-set="product_desc" t-value="customercode_id.description"/>
-                                        </t>
+                                    <t t-if="move_line.flsp_customerscode">
+                                        <t t-set="product_code" t-value="move_line.flsp_customerscode.part_number"/>
+                                        <t t-set="product_desc" t-value="move_line.flsp_customerscode.description"/>
                                     </t>
+				    <t t-else="">
+				        <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
+					    <t t-if="customercode_id.partner_id == o.sale_id.partner_id">
+					        <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                    	        <t t-set="product_desc" t-value="customercode_id.description"/>
+					    </t>
+				        </t>
+				    </t>
 
                                     <tr>
                                         <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; word-wrap: normal; white-space:nowrap; ">

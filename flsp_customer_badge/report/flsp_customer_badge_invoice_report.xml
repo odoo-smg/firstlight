@@ -216,6 +216,14 @@
                                         <t t-set="product_code" t-value="line.flsp_customerscode.part_number"/>
                                         <t t-set="product_desc" t-value="line.flsp_customerscode.description"/>
                                     </t>
+				    <t t-else="">
+				        <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
+					    <t t-if="customercode_id.partner_id == o.partner_id">
+					        <t t-set="product_code" t-value="customercode_id.part_number"/>
+                                    	        <t t-set="product_desc" t-value="customercode_id.description"/>
+					    </t>
+				        </t>
+				    </t>
                                     <t t-if="o.flsp_sale_discount+o.flsp_freight_discount>0">
                                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal+(line.quantity*line.price_unit*line.discount/100)" groups="account.group_show_line_subtotals_tax_excluded"/>
                                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_total+(line.quantity*line.price_unit*line.discount/100)" groups="account.group_show_line_subtotals_tax_included"/>
