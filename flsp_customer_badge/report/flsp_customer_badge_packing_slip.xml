@@ -139,6 +139,14 @@
                                                     <t t-set="product_code" t-value="customercode_id.part_number"/>
                                                     <t t-set="product_desc" t-value="customercode_id.description"/>
                                                 </t>
+						<t t-else="">
+				                    <t t-foreach="move_line.product_id.customerscode_ids" t-as="all_customercode_ids">
+					                <t t-if="all_customercode_ids.partner_id == o.sale_id.partner_id">
+					                    <t t-set="product_code" t-value="all_customercode_ids.part_number"/>
+                                    	                    <t t-set="product_desc" t-value="all_customercode_ids.description"/>
+					                </t>
+				                    </t>
+				                </t>
                                             </t>
 
                                             <t t-foreach="move_line.product_id.packaging_ids" t-as="packaging_id">
