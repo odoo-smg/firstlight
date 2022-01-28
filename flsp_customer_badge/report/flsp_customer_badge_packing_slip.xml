@@ -134,7 +134,7 @@
                                         <t t-if="move_line.product_id.id != current_product">
                                             <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                             <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                            <t t-if="move_line.customerscode_ids.partner_id == o.partner_id.parent_id">
+                                            <t t-if="move_line.customerscode_ids">
                                                 <t t-set="product_code" t-value="move_line.customerscode_ids.part_number"/>
                                                 <t t-set="product_desc" t-value="move_line.customerscode_ids.description"/>
                                             </t>
@@ -226,7 +226,7 @@
                                 <t t-foreach="o.move_line_ids.sorted(key=lambda r: r.flsp_lot_name)" t-as="move_line">
                                     <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                     <t t-set="product_desc" t-value="move_line.product_id.name"/>
-                                    <t t-if="move_line.customerscode_ids.partner_id == o.partner_id.parent_id">
+                                    <t t-if="move_line.customerscode_ids">
                                         <t t-set="product_code" t-value="move_line.customerscode_ids.part_number"/>
                                         <t t-set="product_desc" t-value="move_line.customerscode_ids.description"/>
                                     </t>
