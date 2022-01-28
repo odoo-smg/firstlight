@@ -8,13 +8,21 @@ _logger = logging.getLogger(__name__)
 
 class FlspMrpProduct(models.Model):
     _inherit = 'product.product'
-    
+
     flsp_wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True, store=False, compute='get_wip_qty')
     flsp_stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True, store=False, compute='get_stock_qty')
     flsp_available_qty = fields.Float('Available Qty', default=0.0, digits='Product Unit of Measure', readonly=True, store=False, compute='get_available_qty')
 
+    flsp_mrp_delivery_location = fields.Many2one("stock.location", "Drop Location", domain="[ '|', ('active','=',True),  ('active','=',False)]")
+    flsp_mrp_delivery_method = fields.Selection([
+        ('kanban', 'Kanban'),
+        ('kitting', 'Kitting')], string='Method', copy=False,
+        store=True, tracking=True,
+        help=" * Kanban will be replenished using the report Kanban.\n"
+             " * Kitting will be transferred from Stock to WIP based on MOs.\n")
+
     def get_wip_qty(self):
-        """ 
+        """
             Purpose: get the WIP qty for the product
         """
         self.ensure_one()
@@ -34,12 +42,12 @@ class FlspMrpProduct(models.Model):
 
         self.flsp_wip_qty = pa_wip_qty
         return pa_wip_qty
-    
+
     @api.depends('qty_available', 'flsp_wip_qty')
     def get_stock_qty(self):
         self.flsp_stock_qty = self.qty_available - self.flsp_wip_qty
         return self.flsp_stock_qty
-    
+
     @api.depends('qty_available', 'virtual_available')
     def get_available_qty(self):
         # according to rules in Ticket 413
@@ -52,3 +60,15 @@ class FlspMrpProduct(models.Model):
                 record.flsp_available_qty = record.virtual_available
             else:
                 record.flsp_available_qty = record.qty_available
+
+
+class FlspMrpProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    flsp_mrp_delivery_location = fields.Many2one("stock.location", "Drop Location (informative)", domain="[ '|', ('active','=',True),  ('active','=',False)]")
+    flsp_mrp_delivery_method = fields.Selection([
+        ('kanban', 'Kanban'),
+        ('kitting', 'Kitting')], string='Method', copy=False,
+        store=True, tracking=True,
+        help=" * Kanban will be replenished using the report Kanban.\n"
+             " * Kitting will be transferred from Stock to WIP based on MOs.\n")

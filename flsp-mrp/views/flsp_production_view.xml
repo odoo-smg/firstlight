@@ -46,6 +46,7 @@
               </xpath>
               <xpath expr="//button[@name='action_assign']" position="after">
                     <button name="flsp_require_material" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', True), ('flsp_material_reserved', '=', True)]}" string="Request Material" type="object" class="oe_highlight" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
+                    <button name="flsp_pre_assembly" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel', 'preassemb')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', False), ('flsp_material_reserved', '=', True)]}" string="Pre Assemb." type="object" class="oe_highlight" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
               </xpath>
               <xpath expr="//field[@name='product_id']" position="after">
                     <field name="flsp_required_mat_plan" invisible="1" string="Material Requested" readonly="1" />
@@ -69,17 +70,21 @@
             <field name="model">mrp.production</field>
             <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
             <field name="arch" type="xml">
+                <filter name="todo" position="replace">
+                    <filter string="To Do" name="todo" domain="[('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"
+                        help="Manufacturing Orders which are in confirmed state."/>
+                </filter>
                 <field name="origin" position="after">
                     <field name="user_id"/>
                     <separator/>
-                    <filter string="Alma" name="filter_alma" domain="[('user_id.name', 'ilike', 'Alma'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="Bryan" name="filter_bryan" domain="[('user_id.name', 'ilike', 'Bryan'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="Jenny" name="filter_jenny" domain="[('user_id.name', 'ilike', 'Jenny'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="Jojo" name="filter_jojo" domain="[('user_id.name', 'ilike', 'jojo'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="Jovita" name="filter_jovi" domain="[('user_id.name', 'ilike', 'Jovita'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="Rosemarie" name="filter_rose" domain="[('user_id.name', 'ilike', 'rose'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="Vern" name="filter_vern" domain="[('user_id.name', 'ilike', 'vern'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
-                    <filter string="No Responsible" name="filter_resp" domain="[('user_id.name', '=', False), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close'))]"/>
+                    <filter string="Alma" name="filter_alma" domain="[('user_id.name', 'ilike', 'Alma'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="Bryan" name="filter_bryan" domain="[('user_id.name', 'ilike', 'Bryan'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="Jenny" name="filter_jenny" domain="[('user_id.name', 'ilike', 'Jenny'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="Jojo" name="filter_jojo" domain="[('user_id.name', 'ilike', 'jojo'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="Jovita" name="filter_jovi" domain="[('user_id.name', 'ilike', 'Jovita'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="Rosemarie" name="filter_rose" domain="[('user_id.name', 'ilike', 'rose'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="Vern" name="filter_vern" domain="[('user_id.name', 'ilike', 'vern'), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
+                    <filter string="No Responsible" name="filter_resp" domain="[('user_id.name', '=', False), ('state', 'in', ('draft', 'confirmed', 'planned','progress', 'to_close', 'preassemb'))]"/>
                 </field>
             </field>
         </record>

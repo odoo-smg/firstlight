@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_mrp_product_form_view">
+            <field name="name">flsp.mrp.product.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">150</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+              <!--xpath expr="//group[@name='inventory']" position="after"-->
+              <xpath expr="//group[@name='operations']" position="after">
+                    <group name="flspmrpmethod" string="WIP Replenishment"  >
+                        <field name="flsp_mrp_delivery_method"/>
+                        <field name="flsp_mrp_delivery_location"/>
+                    </group>
+              </xpath>
+            </field>
+        </record>
+</odoo>
