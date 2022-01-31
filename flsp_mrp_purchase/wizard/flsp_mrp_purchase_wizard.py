@@ -20,6 +20,7 @@ class FlspMrppurchaseWizard(models.TransientModel):
     consider_drafts = fields.Boolean(String="Consider Draft MOs", default=False)
     consider_wip = fields.Boolean(String="Consider WIP balance", default=False)
     consider_forecast = fields.Boolean(String="Consider Forecast", default=True)
+    consider_reserved = fields.Boolean(String="Consider Reserved", default=False)
     consider_mos = fields.Boolean(String="Consider Manufacturing Orders", default=False)
     consider_sales = fields.Boolean(String="Consider Sales Orders", default=True)
 
@@ -80,7 +81,7 @@ class FlspMrppurchaseWizard(models.TransientModel):
 
     def flsp_recalc(self):
         #self.env['flsp.mrp.purchase.line']._flsp_calc_purchase(self.calculate_sub_levels, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts)
-        self.env['flsp.mrp.purchase.line']._flsp_calc_purchase(self.supplier_lead_time, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts, self.consider_wip, self.consider_forecast, self.consider_mos, self.consider_sales)
+        self.env['flsp.mrp.purchase.line']._flsp_calc_purchase(self.supplier_lead_time, self.standard_lead_time, self.standard_queue_time, self.standard_i_lead_time, self.consider_drafts, self.consider_wip, self.consider_forecast, self.consider_mos, self.consider_sales, self.consider_reserved)
 
         #product = self.env['product.product'].search([], limit=1)
         #product._flsp_calc_suggested_qty()
