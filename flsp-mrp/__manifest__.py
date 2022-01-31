@@ -39,5 +39,6 @@
         'views/flsp_mrp_comp_warning_wiz.xml',
         'security/flsp_user_group.xml',
         'data/flsp_automation.xml',
+        'views/flsp_product_form.xml',
     ],
 }
