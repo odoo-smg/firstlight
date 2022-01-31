@@ -21,6 +21,8 @@ class FlspMrppurchaseLine(models.Model):
     product_max_qty = fields.Float('Max. Qty', readonly=True)
     qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
+    reserved = fields.Float(string='Qty Reserved', readonly=True)
+    reserved_wip = fields.Float(string='Qty Reserved WIP', readonly=True)
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
     curr_outs = fields.Float(String="Demand", readonly=True,
                              help="Includes all confirmed sales orders and manufacturing orders")
@@ -133,7 +135,7 @@ class FlspMrppurchaseLine(models.Model):
                                                                                       self.product_id.uom_po_id)
 
     def _flsp_calc_purchase(self, supplier_lead_time, standard_lead_time=14, standard_queue_time=1, indirect_lead_time=1,
-                            consider_drafts=True, consider_wip=True, consider_forecast=True, consider_mo=False, consider_so=True):
+                            consider_drafts=True, consider_wip=True, consider_forecast=True, consider_mo=False, consider_so=True, consider_reserved=False):
         current_date = datetime.now()
         required_by = current_date
         route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
@@ -330,10 +332,27 @@ class FlspMrppurchaseLine(models.Model):
             for stock_lin in stock_quant:
                 pa_wip_qty += stock_lin.quantity
 
+            stock_quant = self.env['stock.quant'].search(
+                ['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)])
+            stock_reserverd = 0
+            wip_reserverd = 0
+            for each in stock_quant:
+                wip_reserverd += each.reserved_quantity
+            stock_quant = self.env['stock.quant'].search(
+                ['&', ('product_id', '=', product.id), ('location_id', 'not in', pa_wip_locations)])
+            for each in stock_quant:
+                stock_reserverd += each.reserved_quantity
+
             if consider_wip:
-                current_balance = product.qty_available
+                if consider_reserved:
+                    current_balance = product.qty_available
+                else:
+                    current_balance = product.qty_available - stock_reserverd
             else:
-                current_balance = product.qty_available - pa_wip_qty
+                if consider_reserved:
+                    current_balance = product.qty_available - pa_wip_qty
+                else:
+                    current_balance = product.qty_available - pa_wip_qty - wip_reserverd
             rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                 current_balance) + '     |        |         |             |Initial Balance  |      |      |'
             bom_level = item[8]
@@ -349,8 +368,8 @@ class FlspMrppurchaseLine(models.Model):
             if new_prod:
                 rationale += "</pre>"
                 purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa,
-                                                   consumption, False, po_qty, open_demand)
-                #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+                                                   consumption, False, po_qty, open_demand, consider_reserved)
+                #    _include_prod(self, supplier_lead_time, product, rationale, balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0, consider_reserved=False):
 
 
                 if purchase_line:
@@ -379,10 +398,27 @@ class FlspMrppurchaseLine(models.Model):
                 for stock_lin in stock_quant:
                     pa_wip_qty += stock_lin.quantity
 
+                stock_quant = self.env['stock.quant'].search(
+                    ['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)])
+                stock_reserverd = 0
+                wip_reserverd = 0
+                for each in stock_quant:
+                    wip_reserverd += each.reserved_quantity
+                stock_quant = self.env['stock.quant'].search(
+                    ['&', ('product_id', '=', product.id), ('location_id', 'not in', pa_wip_locations)])
+                for each in stock_quant:
+                    stock_reserverd += each.reserved_quantity
+
                 if consider_wip:
-                    current_balance = product.qty_available
+                    if consider_reserved:
+                        current_balance = product.qty_available
+                    else:
+                        current_balance = product.qty_available - stock_reserverd
                 else:
-                    current_balance = product.qty_available - pa_wip_qty
+                    if consider_reserved:
+                        current_balance = product.qty_available - pa_wip_qty
+                    else:
+                        current_balance = product.qty_available - pa_wip_qty - wip_reserverd
                 rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                     current_balance) + '     |        |         |             |Initial Balance  |      |      |'
             if item:
@@ -431,9 +467,8 @@ class FlspMrppurchaseLine(models.Model):
                 current_balance = False
                 rationale = 'No open movements - Product Selected based on Min qty.'
                 late_delivery = 0
-                purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, 0, 0,
-                                                   consumption)
-                #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+                purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, 0, 0,  consumption, False, 0, 0, consider_reserved)
+                #              _include_prod(self, supplier_lead_time, product, rationale, balance,         required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0, consider_reserved=False):
 
 
         # ########################################
@@ -471,8 +506,8 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[12] = forecast.qty_month12 * forecast_components[component]['total']
                             late_delivery = 0
                             purchase_line = self._include_prod(supplier_lead_time, product, rationale, False, current_date, late_delivery, consider_wip, balance_neg, negative_by, 0, 0,
-                                                               False, forecasted)
-                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+                                                               False, forecasted, 0, 0, consider_reserved)
+                            #   include_prod(self, supplier_lead_time, product, rationale, balance,         required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0, consider_reserved=False):
 
                         else:
                             purchase_planning.qty_month1 += forecast.qty_month1 * forecast_components[component][
@@ -522,8 +557,8 @@ class FlspMrppurchaseLine(models.Model):
                             forecasted[12] = forecast.qty_month12
                             late_delivery = 0
                             purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, current_date, late_delivery,
-                                                               consider_wip, balance_neg, negative_by, 0, 0, False, forecasted)
-                            #    def _include_prod(self, product, rationale, balance, required_by, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0):
+                                                               consider_wip, balance_neg, negative_by, 0, 0, False, forecasted, 0, 0, consider_reserved)
+                            #    include_prod(self, supplier_lead_time, product, rationale, balance,         required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0, consider_reserved=False):
 
 
                         else:
@@ -625,9 +660,15 @@ class FlspMrppurchaseLine(models.Model):
                 rationale += '</pre>'
 
                 if consider_wip:
-                    current_balance = (planning.stock_qty+planning.wip_qty+planning.po_qty) - (planning.late_delivery + value_to_consider)
+                    if consider_reserved:
+                        current_balance = (planning.stock_qty+planning.wip_qty+planning.po_qty) - (planning.late_delivery + value_to_consider)
+                    else:
+                        current_balance = (planning.stock_qty+planning.wip_qty+planning.po_qty-planning.reserved) - (planning.late_delivery + value_to_consider)
                 else:
-                    current_balance = (planning.stock_qty+planning.po_qty) - (planning.late_delivery + value_to_consider)
+                    if consider_reserved:
+                        current_balance = (planning.stock_qty+planning.po_qty) - (planning.late_delivery + value_to_consider)
+                    else:
+                        current_balance = (planning.stock_qty+planning.po_qty-planning.reserved_wip) - (planning.late_delivery + value_to_consider)
 
                 # Checking Minimal Quantity
                 if current_balance < 0:
@@ -675,9 +716,16 @@ class FlspMrppurchaseLine(models.Model):
                         if (suggested_qty % planning.qty_multiple) > 0:
                             suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
                 if consider_wip:
-                    current_balance = planning.product_qty
+                    if consider_reserved:
+                        current_balance = planning.product_qty
+                    else:
+                        current_balance = planning.product_qty - planning.reserved
                 else:
-                    current_balance = planning.product_qty - planning.wip_qty
+                    if consider_reserved:
+                        current_balance = planning.product_qty - planning.wip_qty
+                    else:
+                        current_balance = planning.product_qty - planning.wip_qty - planning.reserved_wip
+
                 if suggested_qty > current_balance:
                     planning.suggested_qty = required_qty
                     planning.adjusted_qty = suggested_qty
@@ -816,7 +864,7 @@ class FlspMrppurchaseLine(models.Model):
                     ), 'level': level, 'bom': ''}
         return totals
 
-    def _include_prod(self, supplier_lead_time, product, rationale, balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0):
+    def _include_prod(self, supplier_lead_time, product, rationale, balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0, consider_reserved=False):
         if not consumption:
             consumption = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if not forecast:
@@ -847,11 +895,28 @@ class FlspMrppurchaseLine(models.Model):
         for stock_lin in stock_quant:
             pa_wip_qty += stock_lin.quantity
 
+        stock_quant = self.env['stock.quant'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)])
+        stock_reserverd = 0
+        wip_reserverd = 0
+        for each in stock_quant:
+            wip_reserverd += each.reserved_quantity
+        stock_quant = self.env['stock.quant'].search(['&', ('product_id', '=', product.id), ('location_id', 'not in', pa_wip_locations)])
+        for each in stock_quant:
+            stock_reserverd += each.reserved_quantity
+
+
+
         if not balance:
             if consider_wip:
-                current_balance = product.qty_available
+                if consider_reserved:
+                    current_balance = product.qty_available
+                else:
+                    current_balance = product.qty_available - stock_reserverd
             else:
-                current_balance = product.qty_available - pa_wip_qty
+                if consider_reserved:
+                    current_balance = product.qty_available - pa_wip_qty
+                else:
+                    current_balance = product.qty_available - pa_wip_qty - wip_reserverd
             balance = current_balance
         else:
             current_balance = balance
@@ -926,6 +991,8 @@ class FlspMrppurchaseLine(models.Model):
                            'purchase_uom': product.uom_po_id.id,
                            'calculated': True,
                            'product_qty': product.qty_available,
+                           'reserved' :  stock_reserverd,
+                           'reserved_wip' : wip_reserverd,
                            'product_min_qty': min_qty,
                            'product_max_qty': max_qty,
                            'qty_multiple': multiple,
