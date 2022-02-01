@@ -131,6 +131,9 @@ class flspsalesorder(models.Model):
 
 class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
+    
+    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
+
 
     flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
     flsp_prd_tmpl_id = fields.Many2one('product.template', String='Product template', compute='_compute_flsp_prd_tmpl_id')
@@ -145,6 +148,7 @@ class flspsalesorderline(models.Model):
         for rec in self:
             return {'domain': {'flsp_customerscode': [('partner_id.id', '=', rec.order_id.partner_id.id),
                                                      ('product_id.id', '=', rec.product_id.product_tmpl_id.id)]}}
+
 
     @api.onchange('product_uom_qty')
     def flsp_product_uom_qty_onchange(self):
@@ -166,6 +170,8 @@ class flspsalesorderline(models.Model):
             ret_val = {'value': {'product_uom_qty': value_ret}}
         return ret_val
 
+
+
     def _prepare_invoice_line(self):
         """
         Prepare the dict of values to create the new invoice line for a sales order line.
@@ -176,7 +182,9 @@ class flspsalesorderline(models.Model):
             'display_type': self.display_type,
             'sequence': self.sequence,
             'name': self.name,
+
             'flsp_customerscode': self.flsp_customerscode,
+
             'product_id': self.product_id.id,
             'product_uom_id': self.product_uom.id,
             'quantity': self.qty_to_invoice,

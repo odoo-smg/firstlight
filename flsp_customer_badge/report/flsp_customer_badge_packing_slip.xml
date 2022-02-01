@@ -108,7 +108,7 @@
                         </spam>
                     </div>
 
-                    <t t-if="o.partner_id.flsp_show_packing">
+                    <t t-if="o.partner_id.parent_id.flsp_show_packing">
                         <div style="padding: 30px 0px 0px 0px; width:100%; ">
                         <table t-if="o.move_line_ids and o.state=='done'" name="product_package_info" style= "margin: 30px 0px 0px; padding: 30px 0px 0px 0px; border-collapse: collapse;  width:100%; border-spacing: 2px; border: 2px solid #001f54;">
                             <thead>
@@ -137,6 +137,7 @@
                                             <t t-if="move_line.flsp_customerscode">
                                                 <t t-set="product_code" t-value="move_line.flsp_customerscode.part_number"/>
                                                 <t t-set="product_desc" t-value="move_line.flsp_customerscode.description"/>
+
                                             </t>
 					    <t t-else="">
 				                <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">
@@ -226,9 +227,11 @@
                                 <t t-foreach="o.move_line_ids.sorted(key=lambda r: r.flsp_lot_name)" t-as="move_line">
                                     <t t-set="product_code" t-value="move_line.product_id.default_code"/>
                                     <t t-set="product_desc" t-value="move_line.product_id.name"/>
+
                                     <t t-if="move_line.flsp_customerscode">
                                         <t t-set="product_code" t-value="move_line.flsp_customerscode.part_number"/>
                                         <t t-set="product_desc" t-value="move_line.flsp_customerscode.description"/>
+
                                     </t>
 				    <t t-else="">
 				        <t t-foreach="move_line.product_id.customerscode_ids" t-as="customercode_id">

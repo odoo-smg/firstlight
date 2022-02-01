@@ -204,9 +204,11 @@
                                 </t>
                                 <t t-set="product_code" t-value="line.product_id.default_code"/>
                                 <t t-set="product_desc" t-value="line.product_id.name"/>
+
                                 <t t-if="line.flsp_customerscode">
                                     <t t-set="product_code" t-value="line.flsp_customerscode.part_number"/>
                                     <t t-set="product_desc" t-value="line.flsp_customerscode.description"/>
+
                                 </t>
 				<t t-else="">
 				    <t t-foreach="line.product_id.customerscode_ids" t-as="customercode_id">
