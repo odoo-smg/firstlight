@@ -25,7 +25,9 @@
                             <field name="product_min_qty"/>
                             <field name="qty_multiple"/>
                             <field name="stock_qty"/>
+                            <field name="reserved"/>
                             <field name="wip_qty"/>
+                            <field name="reserved_wip"/>
                             <field name="product_qty"/>
                         </group>
                         <group name="purchase" string="Purchase" >
@@ -86,7 +88,9 @@
                 <field name="default_code" optional="hide"/>
                 <field name="description" optional="hide"/>
                 <field name="stock_qty"/>
+                <field name="reserved" optional="hide"/>
                 <field name="wip_qty"/>
+                <field name="reserved_wip" optional="hide"/>
                 <field name="vendor_id"/>
                 <field name="level_bom"  optional="hide"/>
                 <field name="qty_rfq"  optional="hide"/>

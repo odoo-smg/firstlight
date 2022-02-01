@@ -17,6 +17,25 @@ class flspproduction(models.Model):
         readonly=True, required=True, check_company=True,
         states={'draft': [('readonly', False)]})
 
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('planned', 'Planned'),
+        ('preassemb', 'Pre Assembled'),
+        ('progress', 'In Progress'),
+        ('to_close', 'To Close'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled')], string='State',
+        compute='_compute_state', copy=False, index=True, readonly=True,
+        store=True, tracking=True,
+        help=" * Draft: The MO is not confirmed yet.\n"
+             " * Confirmed: The MO is confirmed, the stock rules and the reordering of the components are trigerred.\n"
+             " * Planned: The WO are planned.\n"
+             " * In Progress: The production has started (on the MO or on the WO).\n"
+             " * To Close: The production is done, the MO has to be closed.\n"
+             " * Done: The MO is closed, the stock moves are posted. \n"
+             " * Cancelled: The MO has been cancelled, can't be confirmed anymore.")
+
     flsp_required_mat_plan = fields.Boolean("Required Material", default=False)
     flsp_material_reserved = fields.Boolean("Material Reserved", default=False)
 
@@ -44,6 +63,9 @@ class flspproduction(models.Model):
 
     def flsp_require_material(self):
         self.flsp_required_mat_plan = True
+
+    def flsp_pre_assembly(self):
+        self.state = 'preassemb'
 
 
     @api.constrains('product_id')

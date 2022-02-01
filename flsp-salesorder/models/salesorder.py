@@ -3,6 +3,7 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 import logging
+
 _logger = logging.getLogger(__name__)
 
 
@@ -36,14 +37,25 @@ class flspsalesorder(models.Model):
         ('ii-tracking', 'Tracking Assigned'),
         ('jj-delivered', 'Delivered'),
         ('kk-cancel', 'Cancelled'),
-        ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
+    ], string='FL Status', copy=False, index=True, store=True, default='aa-quote')
 
     flsp_shipping_method = fields.Selection([
         ('1', 'FL account and Invoice the Customer'),
         ('2', 'FL account and do not Invoice Customer'),
         ('3', 'Customer carrier choice and account'),
-        ], string='Shipping Method', copy=False, store=True)
+    ], string='Shipping Method', copy=False, store=True)
     flsp_carrier_account = fields.Char(String="Carrier Account")
+    flsp_show_customercode = fields.Boolean(String="Show Customer Code", compute="_compute_flsp_show_customercode")
+
+    @api.depends('partner_id')
+    def _compute_flsp_show_customercode(self):
+        customer_codes = self.env['flspstock.customerscode'].search([('partner_id', '=', self.partner_id.id)])
+        show_field = False
+        for part in customer_codes:
+            show_field = True
+        self.flsp_show_customercode = show_field
+        return show_field
+
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -97,7 +109,8 @@ class flspsalesorder(models.Model):
             'flsp_carrier_account': default_shipping_account,
             'user_id': partner_user.id
         }
-        if self.env['ir.config_parameter'].sudo().get_param('account.use_invoice_terms') and self.env.company.invoice_terms:
+        if self.env['ir.config_parameter'].sudo().get_param(
+                'account.use_invoice_terms') and self.env.company.invoice_terms:
             values['note'] = self.with_context(lang=self.partner_id.lang).env.company.invoice_terms
 
         # Use team of salesman if any otherwise leave as-is
@@ -121,11 +134,22 @@ class flspsalesorderline(models.Model):
     
     customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
 
+
+    flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
+    flsp_prd_tmpl_id = fields.Many2one('product.template', String='Product template', compute='_compute_flsp_prd_tmpl_id')
+
+    @api.depends('product_id')
+    def _compute_flsp_prd_tmpl_id(self):
+        for rec in self:
+            rec.flsp_prd_tmpl_id = rec.product_id.product_tmpl_id
+
     @api.onchange('product_id')
     def flsp_product_id_onchange(self):
         for rec in self:
-            return {'domain': {'customerscode_ids': [('partner_id.id', '=', rec.order_id.partner_id.id),('product_id.id','=',rec.product_id.product_tmpl_id.id)]}}
-    
+            return {'domain': {'flsp_customerscode': [('partner_id.id', '=', rec.order_id.partner_id.id),
+                                                     ('product_id.id', '=', rec.product_id.product_tmpl_id.id)]}}
+
+
     @api.onchange('product_uom_qty')
     def flsp_product_uom_qty_onchange(self):
         ret_val = {}
@@ -145,7 +169,9 @@ class flspsalesorderline(models.Model):
             self.product_uom_qty = value_ret
             ret_val = {'value': {'product_uom_qty': value_ret}}
         return ret_val
-    
+
+
+
     def _prepare_invoice_line(self):
         """
         Prepare the dict of values to create the new invoice line for a sales order line.
@@ -156,7 +182,9 @@ class flspsalesorderline(models.Model):
             'display_type': self.display_type,
             'sequence': self.sequence,
             'name': self.name,
-            'customerscode_ids': self.customerscode_ids,
+
+            'flsp_customerscode': self.flsp_customerscode,
+
             'product_id': self.product_id.id,
             'product_uom_id': self.product_uom.id,
             'quantity': self.qty_to_invoice,
@@ -170,38 +198,3 @@ class flspsalesorderline(models.Model):
         if self.display_type:
             res['account_id'] = False
         return res
-
-
-class flspaccountmoveline(models.Model):
-    _inherit = 'account.move.line'
-    
-    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
-    
-    def _copy_data_extend_business_fields(self, values):
-        # OVERRIDE to copy the 'sale_line_ids' field as well.
-        super(AccountMoveLine, self)._copy_data_extend_business_fields(values)
-        values['sale_line_ids'] = [(6, None, self.sale_line_ids.ids)]
-        values['customerscode_ids'] = self.customerscode_ids
-
-
-class flspstockmove(models.Model):
-    _inherit = 'stock.move'
-
-    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number', compute="_compute_customerscode_ids")
-    
-    def _compute_customerscode_ids(self):
-        for each in self:
-            if each.sale_line_id:
-                each.customerscode_ids=each.sale_line_id.customerscode_ids
-                
-                
-class flspstockmoveline(models.Model):
-    _inherit = 'stock.move.line'
-
-    customerscode_ids = fields.Many2one('flspstock.customerscode', 'Customer Part Number', compute="_compute_customerscode_ids")
-    
-    def _compute_customerscode_ids(self):
-        for each in self:
-            each.customerscode_ids=each.move_id.customerscode_ids
-    
-    
