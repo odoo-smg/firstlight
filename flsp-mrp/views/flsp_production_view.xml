@@ -56,6 +56,7 @@
                    <attribute name="duplicate">0</attribute>
               </xpath>
               <xpath expr="//button[@name='action_cancel']" position="attributes">
+                   <attribute name="groups">flsp-mrp.group_mrp_flsp_planner</attribute>
                    <attribute name='confirm'>"Are you sure you want to cancel this MO?"</attribute>
               </xpath>
               <xpath expr="//button[@name='action_cancel']" position="after">
