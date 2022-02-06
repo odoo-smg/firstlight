@@ -7,6 +7,6 @@
             <field name="code" eval="'record.raw_material_production_id._flsp_compute_material_reservation()'"/>
             <field name="trigger">on_write</field>
             <field name="trigger_field_ids" eval="[(4,ref('stock.field_stock_move__state'))]"/>
-            <field name="active" eval="True"/>
+            <field name="active" eval="False"/>
         </record>
 </odoo>

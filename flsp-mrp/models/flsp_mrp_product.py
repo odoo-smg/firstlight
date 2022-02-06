@@ -13,7 +13,7 @@ class FlspMrpProduct(models.Model):
     flsp_stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True, store=False, compute='get_stock_qty')
     flsp_available_qty = fields.Float('Available Qty', default=0.0, digits='Product Unit of Measure', readonly=True, store=False, compute='get_available_qty')
 
-    flsp_mrp_delivery_location = fields.Many2one("stock.location", "Drop Location", domain="[ '|', ('active','=',True),  ('active','=',False)]")
+    flsp_mrp_delivery_location = fields.Many2one("stock.location", "Drop off Location (informative)", domain="[ '|', ('active','=',True),  ('active','=',False)]")
     flsp_mrp_delivery_method = fields.Selection([
         ('kanban', 'Kanban'),
         ('kitting', 'Kitting')], string='Method', copy=False,
@@ -65,7 +65,7 @@ class FlspMrpProduct(models.Model):
 class FlspMrpProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    flsp_mrp_delivery_location = fields.Many2one("stock.location", "Drop Location (informative)", domain="[ '|', ('active','=',True),  ('active','=',False)]")
+    flsp_mrp_delivery_location = fields.Many2one("stock.location", "Drop off Location (informative)", domain="[ '|', ('active','=',True),  ('active','=',False)]")
     flsp_mrp_delivery_method = fields.Selection([
         ('kanban', 'Kanban'),
         ('kitting', 'Kitting')], string='Method', copy=False,

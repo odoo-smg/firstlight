@@ -2,6 +2,7 @@
 
 from odoo import api, fields, models, exceptions
 from odoo.exceptions import UserError
+from datetime import timedelta, datetime
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -38,31 +39,115 @@ class flspproduction(models.Model):
 
     flsp_required_mat_plan = fields.Boolean("Required Material", default=False)
     flsp_material_reserved = fields.Boolean("Material Reserved", default=False)
+    flsp_wip_transfer_ids = fields.One2many('stock.picking', inverse_name='flsp_mo_wip_id', string="Transfer Created: ")
+    flsp_wip_transfer_count = fields.Integer(string='WIP Count', compute="_compute_flsp_wip_transfer_count")
+
+
+    def _compute_flsp_wip_transfer_count(self):
+        for each in self:
+            count_transfers = 0
+            for wip_transfer in each.flsp_wip_transfer_ids:
+                count_transfers += 1
+            each.flsp_wip_transfer_count = count_transfers
 
     def button_unreserve(self):
-        self.flsp_material_reserved = False
-        self.flsp_required_mat_plan = False
+        # self.flsp_material_reserved = False
+        # self.flsp_required_mat_plan = False
         super(flspproduction, self).button_unreserve()
+
+    def button_flsp_confirm_transfer(self):
+        self.flsp_material_reserved = True
+
+    def button_flsp_cancel_transfer(self):
+        self.flsp_material_reserved = False
 
     def action_assign(self):
         super(flspproduction, self).action_assign()
-        if self.reservation_state == 'assigned':
-            self.flsp_required_mat_plan = False
-            self.flsp_material_reserved = True
-        else:
+        # if self.reservation_state == 'assigned':
+        #    self.flsp_required_mat_plan = False
+        #    self.flsp_material_reserved = True
+        # else:
             # check backflush reservation
-            reserved_pass = True
-            for each in self.move_raw_ids:
-                if not each.flsp_backflush:
-                    if each.product_uom_qty > each.reserved_availability:
-                        reserved_pass = False
-            if reserved_pass:
-                self.flsp_required_mat_plan = False
-                self.flsp_material_reserved = True
+        #    reserved_pass = True
+        #    for each in self.move_raw_ids:
+        #        if not each.flsp_backflush:
+        #            if each.product_uom_qty > each.reserved_availability:
+        #                reserved_pass = False
+        #    if reserved_pass:
+        #        self.flsp_required_mat_plan = False
+        #        self.flsp_material_reserved = True
         return
 
     def flsp_require_material(self):
-        self.flsp_required_mat_plan = True
+        if self.flsp_create_wip():
+            self.flsp_required_mat_plan = True
+        else:
+            self.flsp_required_mat_plan = True
+            self.flsp_material_reserved = True
+
+    def flsp_create_wip(self):
+        date_now = datetime.now()
+        date_start = date_now.today() + timedelta(days=1)
+        date_end = date_now.today() + timedelta(days=15)
+        stock_picking = False
+        picking_type_id = picking_id = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')], limit=1)
+
+        targetProd = self.env['flsp.mrp.wip.wiz.product'].search(
+            ['&', ('production_id', '=', self.id), ('selected', '=', True)])
+        if len(targetProd) == 0:
+            # targetProd = self.env['flsp.mrp.wip.wiz.comp'].search(['&', ('production_id', '=', self.id), ('selected', '=', True)])
+            # targetProd = self.env['product.product'].search(['&', ('id', 'in', self.move_raw_ids.), ('selected', '=', True)])
+            targetProd = self.move_raw_ids.filtered(lambda move: move.product_id.flsp_mrp_delivery_method != 'kanban' and move.product_id.type == 'product')
+
+        count_products = 0
+
+        for prod in targetProd:
+            count_products += 1
+
+        if count_products > 0:
+            create_val = {
+                'origin': self.name+'-WIP',
+                'picking_type_id': picking_type_id.id,
+                'location_id': picking_type_id.default_location_src_id.id,
+                'location_dest_id': picking_type_id.default_location_dest_id.id,
+                'flsp_mo_wip_id': self.id,
+            }
+            stock_picking = self.env['stock.picking'].create(create_val)
+
+            if stock_picking:
+                for prod in targetProd:
+                    stock_move = self.env['stock.move'].create({
+                        'name': prod.product_id.name,
+                        'product_id': prod.product_id.id,
+                        'product_uom': prod.product_id.uom_id.id,
+                        'product_uom_qty': prod.product_uom_qty,
+                        'picking_id': stock_picking.id,
+                        'location_id': picking_type_id.default_location_src_id.id,
+                        'location_dest_id': picking_type_id.default_location_dest_id.id,
+                    })
+
+        return stock_picking
+
+    def action_view_wip_transfer(self):
+        """ This function returns an action that display picking related to
+        manufacturing order orders. It can either be a in a list or in a form
+        view, if there is only one picking to show.
+        """
+        self.ensure_one()
+        action = self.env.ref('stock.action_picking_tree_all').read()[0]
+        pickings = self.mapped('flsp_wip_transfer_ids')
+        if len(pickings) > 1:
+            action['domain'] = [('id', 'in', pickings.ids)]
+        elif pickings:
+            form_view = [(self.env.ref('stock.view_picking_form').id, 'form')]
+            if 'views' in action:
+                action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+            else:
+                action['views'] = form_view
+            action['res_id'] = pickings.id
+        action['context'] = dict(self._context, default_origin=self.name, create=False)
+        return action
+
 
     def flsp_pre_assembly(self):
         self.state = 'preassemb'
@@ -146,15 +231,15 @@ class flspproduction(models.Model):
 
         super(flspproduction, self)._onchange_date_planned_start()
 
-    def _flsp_compute_material_reservation(self):
-        """ Compute the material reservation state.
-        """
-        for production in self:
-            reserved_pass = True
-            production.flsp_material_reserved = False
-            for each in production.move_raw_ids:
-                if not each.flsp_backflush:
-                    if each.product_uom_qty > each.reserved_availability:
-                        reserved_pass = False
-            if reserved_pass:
-                production.flsp_material_reserved = True
+    #def _flsp_compute_material_reservation(self):
+        #    """ Compute the material reservation state.
+        #    """
+        # for production in self:
+        #    reserved_pass = True
+        #    production.flsp_material_reserved = False
+        #    for each in production.move_raw_ids:
+        #        if not each.flsp_backflush:
+        #            if each.product_uom_qty > each.reserved_availability:
+        #                reserved_pass = False
+        #    if reserved_pass:
+        #        production.flsp_material_reserved = True

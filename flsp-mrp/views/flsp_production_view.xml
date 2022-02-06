@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
         <!-- Add instructor field to existing view -->
-        <!-- <record model="ir.ui.view" id="flsp_production_form_view">  #modified by Sami
-            <field name="name">flsp.mrp.production.form.inherit</field>
-            <field name="model">mrp.production</field>
-            <field name="priority">100</field>
-            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
-            <field name="arch" type="xml">
-              <xpath expr="//button[@name='action_confirm']" position="replace">
-                  <button name="button_flsp_confirm" id="action_confirm" string="Mark as Todo" class="oe_highlight" type="object" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('is_locked', '=', False)]}"/>
-              </xpath>
-            </field>
-        </record> -->
-
-        <!-- Add instructor field to existing view -->
         <record model="ir.ui.view" id="flsp_production_tree_view">
             <field name="name">flsp.mrp.production.tree.inherit</field>
             <field name="model">mrp.production</field>
@@ -21,8 +8,8 @@
             <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='company_id']" position="after">
-                    <field name="flsp_required_mat_plan" string="Requested" optional="hide" />
-                    <field name="flsp_material_reserved" string="Reserved" optional="hide" />
+                    <field name="flsp_required_mat_plan" string="Requested" readonly="1" optional="hide" />
+                    <field name="flsp_material_reserved" string="Transferred" readonly="1" optional="hide" />
               </xpath>
             </field>
         </record>
@@ -34,6 +21,18 @@
             <field name="priority">100</field>
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="action_view_wip_transfer"
+                        type="object" icon="fa-shopping-cart" attrs="{'invisible': [('flsp_required_mat_plan', '=', False)]}" help="See WIP Transfer for this Manufacturing Order">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="flsp_wip_transfer_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                <!--field name="productuom_name"/-->
+                            </span>
+                            <span class="o_stat_text">WIP Transfer</span>
+                        </div>
+                    </button>
+                </xpath>
               <xpath expr="//button[@name='open_produce_product'][1]" position="replace">
                    <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
               </xpath>
@@ -46,7 +45,8 @@
               </xpath>
               <xpath expr="//button[@name='action_assign']" position="after">
                     <button name="flsp_require_material" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', True), ('flsp_material_reserved', '=', True)]}" string="Request Material" type="object" class="oe_highlight" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
-                    <button name="flsp_pre_assembly" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel', 'preassemb')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', False), ('flsp_material_reserved', '=', True)]}" string="Pre Assemb." type="object" class="oe_highlight" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
+                    <button name="flsp_pre_assembly" attrs="{'invisible': ['|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel', 'preassemb')), '|', ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', False), ('flsp_material_reserved', '=', True)]}" string="Pre Assemb." type="object" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
+                    <button name="flsp_require_material" attrs="{'invisible': ['|', ('is_locked', '=', True), ('flsp_required_mat_plan', '=', False)]}" string="Force New Material Request" type="object" groups="mrp.group_mrp_manager, flsp-mrp.group_mrp_flsp_planner"/>
               </xpath>
               <xpath expr="//field[@name='product_id']" position="after">
                     <field name="flsp_required_mat_plan" invisible="1" string="Material Requested" readonly="1" />
@@ -56,11 +56,14 @@
                    <attribute name="duplicate">0</attribute>
               </xpath>
               <xpath expr="//button[@name='action_cancel']" position="attributes">
+                   <attribute name="groups">flsp-mrp.group_mrp_flsp_planner</attribute>
                    <attribute name='confirm'>"Are you sure you want to cancel this MO?"</attribute>
               </xpath>
               <xpath expr="//button[@name='action_cancel']" position="after">
                   <button name="button_flsp_explode_subs" id="action_explode_subs" string="EXPLODE SUBS" type="object" attrs="{'invisible': ['|', ('bom_id', '=', 'False'), ('state','in', ('draft', 'to_close', 'done', 'cancel'))]}"/>
-                  <button name="button_flsp_negative_forecast" id="action_negative_forecast" string="NEGATIVE FORECAST" type="object" attrs="{'invisible': ['|', ('bom_id', '=', 'False'), ('state','in', ('draft', 'to_close', 'done', 'cancel'))]}"/>
+                  <button name="button_flsp_confirm_transfer" id="action_confirm_transfer" class="oe_highlight" string="Confirm Transfer" type="object" attrs="{'invisible': ['|', ('unreserve_visible', '=', False), ('flsp_material_reserved', '=', True)]}" groups="flsp-mrp.group_mrp_flsp_planner"/>
+                  <button name="button_flsp_cancel_transfer" id="action_cancel_transfer"  string="Cancel Transfer" type="object" attrs="{'invisible': ['|', ('unreserve_visible', '=', False), ('flsp_material_reserved', '=', False)]}" groups="flsp-mrp.group_mrp_flsp_planner"/>
+                  <!--button name="button_flsp_negative_forecast" id="action_negative_forecast" string="NEGATIVE FORECAST" type="object" attrs="{'invisible': ['|', ('bom_id', '=', 'False'), ('state','in', ('draft', 'to_close', 'done', 'cancel'))]}"/-->
               </xpath>
             </field>
         </record>
