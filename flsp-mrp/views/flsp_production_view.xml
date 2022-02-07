@@ -34,7 +34,7 @@
                     </button>
                 </xpath>
               <xpath expr="//button[@name='open_produce_product'][1]" position="replace">
-                   <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
+                  <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', ('state', 'in', ('to_close','done')), ('is_locked', '=', False), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
               </xpath>
               <xpath expr="//button[@name='open_produce_product'][2]" position="replace">
                    <button name="open_produce_product" attrs="{'invisible': [True]}" string="Produce" type="object" class="oe_highlight"/>
