@@ -18,6 +18,7 @@
         <field name="name">Bill of Material Components</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">mrp.bom.line</field>
+        <field name="domain">[('bom_id.active', '=', True)]</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" eval="ref('mrp_bom_line_tree_view')" />
         <field name="help" type="html">
