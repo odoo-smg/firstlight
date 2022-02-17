@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsp_wip_transfer,access_flsp_wip_transfer,model_flsp_wip_transfer,base.group_user,1,1,1,1
 access_flsp_wip_view,access_flsp_wip_view,model_flsp_wip_view,base.group_user,1,1,1,1
+access_flsp_wip_kanban,access_flsp_wip_kanban,model_flsp_wip_kanban,base.group_user,1,1,1,1

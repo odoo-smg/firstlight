@@ -20,5 +20,7 @@
         'views/flsp_wip_transfer.xml',
         'wizard/flsp_wip_transfer_wizard.xml',
         'views/flsp_wip_view.xml',
+        'wizard/flsp_wip_kanban_wiz.xml',
+        'wizard/flsp_wip_kanban_transfer_wiz.xml',
     ],
 }

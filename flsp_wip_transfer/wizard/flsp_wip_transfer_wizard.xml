@@ -42,9 +42,9 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="flsp_wip_transfer_wizard_menu"
+        <!--menuitem id="flsp_wip_transfer_wizard_menu"
                   name="FLSP WIP Transfer"
                   parent="stock.menu_stock_warehouse_mgmt"
                   sequence="100"
-                  action="launch_flsp_wip_transfer_wizard"/>
+                  action="launch_flsp_wip_transfer_wizard"/-->
 </odoo>
