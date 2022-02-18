@@ -74,6 +74,38 @@
                     </group>
                     <label for="other_locations" string="Other Locations ever used:"/>
                     <field name="other_locations"  readonly="1" string="Other Locations ever used:"/>
+                    <h5>Latest Transfers to WIP:</h5>
+
+                            <div>
+                               &#x25CF;
+                               <field name="last_transfer_date1" readonly="1" class="text-center oe_inline" no_label="1" style="width: 120px !important;"/>
+                                quantity:
+                               <field name="last_transfer_qty1" readonly="1" class="text-center oe_inline" no_label="1" style="width: 100px !important;"/>
+                            </div>
+                            <div>
+                               &#x25CF;
+                               <field name="last_transfer_date2" readonly="1" class="text-center oe_inline" no_label="1" style="width: 120px !important;"/>
+                                quantity:
+                               <field name="last_transfer_qty2" readonly="1" class="text-center oe_inline" no_label="1" style="width: 100px !important;"/>
+                            </div>
+                            <div>
+                               &#x25CF;
+                               <field name="last_transfer_date3" readonly="1" class="text-center oe_inline" no_label="1" style="width: 120px !important;"/>
+                                quantity:
+                               <field name="last_transfer_qty3" readonly="1" class="text-center oe_inline" no_label="1" style="width: 100px !important;"/>
+                            </div>
+                            <div>
+                               &#x25CF;
+                               <field name="last_transfer_date4" readonly="1" class="text-center oe_inline" no_label="1" style="width: 120px !important;"/>
+                                quantity:
+                               <field name="last_transfer_qty4" readonly="1" class="text-center oe_inline" no_label="1" style="width: 100px !important;"/>
+                            </div>
+                            <div>
+                               &#x25CF;
+                               <field name="last_transfer_date5" readonly="1" class="text-center oe_inline" no_label="1" style="width: 120px !important;"/>
+                                quantity:
+                               <field name="last_transfer_qty5" readonly="1" class="text-center oe_inline" no_label="1" style="width: 100px !important;"/>
+                            </div>
                     <footer>
                         <button name="flsp_validate" type="object" string="Continue" class="btn-primary" />
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>

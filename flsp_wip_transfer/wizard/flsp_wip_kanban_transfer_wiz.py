@@ -44,6 +44,18 @@ class FlspwipTranferwiz(models.TransientModel):
 
     po_date = fields.Date('Coming up')
 
+    last_transfer_date1 = fields.Date('Last Transfer Date1')
+    last_transfer_date2 = fields.Date('Last Transfer Date2')
+    last_transfer_date3 = fields.Date('Last Transfer Date3')
+    last_transfer_date4 = fields.Date('Last Transfer Date4')
+    last_transfer_date5 = fields.Date('Last Transfer Date5')
+
+    last_transfer_qty1 = fields.Float("Last Transfer qty1")
+    last_transfer_qty2 = fields.Float("Last Transfer qty2")
+    last_transfer_qty3 = fields.Float("Last Transfer qty3")
+    last_transfer_qty4 = fields.Float("Last Transfer qty4")
+    last_transfer_qty5 = fields.Float("Last Transfer qty5")
+
     @api.model
     def default_get(self, fields):
         res = super(FlspwipTranferwiz, self).default_get(fields)
@@ -71,6 +83,8 @@ class FlspwipTranferwiz(models.TransientModel):
 
                 if 'other_locations' in fields:
                     res['other_locations'] = c_locations
+
+                res = self.latest_transfer(res, kaban.product_id)
 
                 for stock in stock_quant:
 
@@ -373,3 +387,21 @@ class FlspwipTranferwiz(models.TransientModel):
 
         c_ret = c_ret[:-2]
         return c_ret
+
+    def latest_transfer(self, res, prod):
+        wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')]).ids
+        stk_location = self.env['stock.location'].search([('complete_name', 'like', 'WH/Stock')]).ids
+        stock_moves = self.env['stock.move.line'].search(['&', '&', ('product_id', '=', prod.id),
+                                                          ('location_dest_id', 'in', wip_location),
+                                                          ('location_id', 'in', stk_location)]).sorted(lambda r: r.date, reverse=True)
+        line = 1
+
+        for move in stock_moves:
+            curr_field = 'last_transfer_date'+str(line)
+            res[curr_field] = move.date
+            curr_field = 'last_transfer_qty'+str(line)
+            res[curr_field] = move.qty_done
+            line += 1
+            if line > 5:
+                break
+        return res
