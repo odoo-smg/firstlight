@@ -69,8 +69,11 @@
                         </group>
                         <group>
                             <field name="quantity_wh"  readonly="1" string="Qty in Warehouse:"/>
+                            <field name="standard_location"  readonly="1" string="Standard Location:"/>
                         </group>
                     </group>
+                    <label for="other_locations" string="Other Locations ever used:"/>
+                    <field name="other_locations"  readonly="1" string="Other Locations ever used:"/>
                     <footer>
                         <button name="flsp_validate" type="object" string="Continue" class="btn-primary" />
                         <button string="Discard" class="btn-default btn-secondary" special="cancel"/>

@@ -12,6 +12,8 @@ class FlspwipTranferwiz(models.TransientModel):
 
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     kanban_id = fields.Many2one('flsp.wip.kanban', string='Kanban', readonly=True)
+    standard_location = fields.Many2one('stock.location', string='Standard. Location', readonly=True)
+    other_locations = fields.Char(string='Other Locations')
 
     location_a = fields.Many2one('stock.location', string='Location A', readonly=True)
     location_b = fields.Many2one('stock.location', string='Location B', readonly=True)
@@ -44,31 +46,32 @@ class FlspwipTranferwiz(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
-        print('Getting it right **********************')
         res = super(FlspwipTranferwiz, self).default_get(fields)
         kanban_id = self.env.context.get('kanban_id') ## or self.env.context.get('active_id')
         if kanban_id:
-            print('kanban id received.........')
-            print(kanban_id)
             kanban_to_transfer = self.env['flsp.wip.kanban'].search([('id', '=', kanban_id)])
         else:
-            print('no kanban id ----------------')
             kanban_to_transfer = self.env['flsp.wip.kanban'].search([('completed', '=', False)])
         if kanban_to_transfer:
-            print('kanban to transfer is okay')
             for kaban in kanban_to_transfer:
-                print('found product for kanban: '+kaban.product_id.name)
                 stock_quant = self.env['stock.quant'].search([('product_id', '=', kaban.product_id.id)])
                 cage_locations = self.env['stock.location'].search(['|', ('complete_name', 'like', 'WH/Stock/E'), ('complete_name', 'like', 'WH/Stock/D')])
                 qa_locations = self.env['stock.location'].search([('complete_name', 'like', 'WH/QA')])
                 wh_locations = self.env['stock.location'].search([('complete_name', 'like', 'WH/Stock')])
                 count_locations = 0
                 last_location = False
-                print(res)
                 if 'product_id' in fields:
                     res['product_id'] = kaban.product_id.id
                 if 'kanban_id' in fields:
                     res['kanban_id'] = kaban.id
+                if 'standard_location' in fields:
+                    res['standard_location'] = kaban.product_id.flsp_sd_location.id
+
+                c_locations = self.find_locations(kaban.product_id.id)
+
+                if 'other_locations' in fields:
+                    res['other_locations'] = c_locations
+
                 for stock in stock_quant:
 
                     if stock.location_id in qa_locations:
@@ -161,7 +164,6 @@ class FlspwipTranferwiz(models.TransientModel):
         kanban_to_transfer = self.env['flsp.wip.kanban'].search([('completed', '=', False)])
         next = False
         quit = False
-        print("Skipping!!! from id:")
         if kanban_to_transfer:
             for kaban in kanban_to_transfer:
                 next = kaban
@@ -170,7 +172,6 @@ class FlspwipTranferwiz(models.TransientModel):
                 if self.product_id == kaban.product_id:
                     quit = True
         if next:
-            print("Next should be: "+next.product_id.name)
             self.product_id = next.product_id
             action = self.env.ref('flsp_wip_transfer.launch_flsp_wip_kanban_transfer_wiz').read()[0]
             action['kanban_id'] = next.id
@@ -228,7 +229,6 @@ class FlspwipTranferwiz(models.TransientModel):
                 self.kanban_id.completed = True
 
         if next:
-            print("Next should be: "+next.product_id.name)
             self.product_id = next.product_id
             action = self.env.ref('flsp_wip_transfer.launch_flsp_wip_kanban_transfer_wiz').read()[0]
             action['kanban_id'] = next.id
@@ -236,13 +236,10 @@ class FlspwipTranferwiz(models.TransientModel):
             return action
 
     def wip_transfer(self, prod, location, qty):
-        print('Starting wip transfer')
         if not location or not prod or not qty:
             return False
         if qty <= 0:
             return False
-
-        print('first validation ok')
 
         stock_quant = self.env['stock.quant'].search([('product_id', '=', prod.id), ('location_id', '=', location.id)])
         total_qty = 0
@@ -257,10 +254,8 @@ class FlspwipTranferwiz(models.TransientModel):
         if qty > total_qty:
             return False
 
-        print('second validation ok')
 
         if not has_lot and not has_package:
-            print('we are good with no lot or package')
 
             stock_picking_type = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')])
             wip_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA/WIP')])
@@ -272,9 +267,6 @@ class FlspwipTranferwiz(models.TransientModel):
                 'state': 'assigned',
             }
             stock_picking = self.env['stock.picking'].create(create_val)
-
-            print('created stock picking:')
-            print(stock_picking)
 
             stock_move = self.env['stock.move'].create({
                 'name': prod.name,
@@ -298,9 +290,7 @@ class FlspwipTranferwiz(models.TransientModel):
                 'state': 'assigned',
                 'done_move': True,
             })
-            print('validating the stock picking')
             stock_picking.button_validate()
-            print('Thanks !!!')
         else:
             remaining_qty = qty
             while remaining_qty > 0:
@@ -323,9 +313,6 @@ class FlspwipTranferwiz(models.TransientModel):
                         'state': 'assigned',
                     }
                     stock_picking = self.env['stock.picking'].create(create_val)
-
-                    print('created stock picking:')
-                    print(stock_picking)
 
                     stock_move = self.env['stock.move'].create({
                         'name': prod.name,
@@ -351,10 +338,36 @@ class FlspwipTranferwiz(models.TransientModel):
                         'state': 'assigned',
                         'done_move': True,
                     })
-                    print('validating the stock picking')
                     stock_picking.button_validate()
 
-            print('Lot number to do')
             ###'lot_id': wip.negative_lot_id.id,
 
         return True
+
+    def find_locations(self, prod_id):
+        c_ret = ''
+
+        query = '''
+        select string_agg(name, ', ') as locations  from (
+        select distinct name, grp  from (
+        select '1' as grp, loc from (
+        select distinct location_id as loc from stock_move_line where product_id = '''+str(prod_id)+'''
+        union all
+        select distinct location_dest_id as loc from stock_move_line where product_id = '''+str(prod_id)+'''
+        ) A) B
+        inner join stock_location sl
+        on sl.id = B.loc
+        where usage = 'internal'
+        and   active = true) C
+		group by grp
+
+        '''
+
+        self._cr.execute(query)
+        retvalue = self._cr.fetchall()
+        returned_registre = retvalue[0]
+        for line in returned_registre:
+            c_ret += line + ', '
+
+        c_ret = c_ret[:-2]
+        return c_ret
