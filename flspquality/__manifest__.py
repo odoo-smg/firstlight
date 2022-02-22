@@ -26,5 +26,6 @@
         'views/flspquality.xml',
         'views/flspqualityreason.xml',
         'views/flspqualitystage.xml',
+        'views/flspquality_salesorder.xml',
     ],
 }

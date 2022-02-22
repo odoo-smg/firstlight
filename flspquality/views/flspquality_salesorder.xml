@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flspquaity_sale_form_view">
+            <field name="name">flspquality.sale.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='flsp_utm_other_source']" position="after">
+                  <field name="flsp_warranty"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
