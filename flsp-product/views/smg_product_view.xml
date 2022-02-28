@@ -91,13 +91,16 @@
                 </xpath>
             </field>
         </record>
-  
+
         <record model="ir.ui.view" id="product_smg_search_view">
             <field name="name">product.template.smg.search.inherit</field>
             <field name="model">product.template</field>
             <field name="priority">99</field>
             <field name="inherit_id" ref="product.product_template_search_view"/>
             <field name="arch" type="xml">
+                <xpath expr="/search/field[@name='name']" position="after">
+                    <field name="legacy_code"/>
+                </xpath>
                 <xpath expr="/search/filter[@name='consumable']" position="after">
                     <filter string="Legacy Part#" name="legacy_code" domain="[('legacy_code','!=',False)]"/>
                 </xpath>
