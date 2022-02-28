@@ -230,7 +230,7 @@ class flsppurchaseproducttmp(models.Model):
                 template.flsp_open_po_qty = 0
             else:
                 amount = float_round(sum([p.flsp_open_po_qty for p in template.product_variant_ids]), precision_rounding=template.uom_id.rounding)
-                amount = template.uom_po_id._compute_quantity(amount,template.uom_id)
+                amount = template.uom_id._compute_quantity(amount,template.uom_id)
                 template.flsp_open_po_qty = amount
 
     def action_view_open_po(self):
