@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <record id="flsp_stock_move_open_po_tree" model="ir.ui.view">
+        <field name="name">Receipts Lines</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <tree string="Open POs" create="false" editable="top">
+                <field name="company_id" invisible="True" />
+                <field name="state" readonly="True"/>
+                <field name="origin" readonly="True"/>
+                <field name="product_id" readonly="True"/>
+                <field name="product_qty" readonly="True"/>
+                <field name="date_expected" readonly="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_purchase_order_line_tmp" model="ir.actions.act_window">
+        <field name="name">Open POs</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_stock_move_open_po_tree" ></field>
+        <field name="help">No current open receipts for this product.</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="flsp_stock_move_open_po_action" model="ir.actions.act_window">
+        <field name="name">Open POs</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_stock_move_open_po_tree" ></field>
+    </record>
+
+</odoo>

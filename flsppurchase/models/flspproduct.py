@@ -213,8 +213,10 @@ class flsppurchaseproductprd(models.Model):
             for line in lines_to_approve:
                 po_ids.append(line.id)
 
-        action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
-        action['domain'] = ['&', ('id', 'in', po_ids), ('product_id', 'in', product_ids)]
+        #action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
+        #action['domain'] = ['&', ('id', 'in', po_ids), ('product_id', 'in', product_ids)]
+        action = self.env.ref('flsppurchase.flsp_stock_move_open_po_action').read()[0]
+        action['domain'] = ['&', '&', ('state', 'not in', ['cancel', 'done']), ('purchase_line_id', 'in', po_ids), ('product_id', 'in', product_ids)]
         return action
 
 
@@ -252,6 +254,8 @@ class flsppurchaseproducttmp(models.Model):
                 for move in stock_move_product:
                     if move.purchase_line_id.product_uom_qty - move.purchase_line_id.qty_received > 0:
                         po_ids.append(move.purchase_line_id.id)
-        action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
-        action['domain'] = ['&', ('id', 'in', po_ids), ('product_id', 'in', product_ids)]
+        #action = self.env.ref('flsppurchase.action_purchase_order_line_all').read()[0]
+        #action['domain'] = ['&', ('id', 'in', po_ids), ('product_id', 'in', product_ids)]
+        action = self.env.ref('flsppurchase.flsp_stock_move_open_po_action').read()[0]
+        action['domain'] = ['&', '&', ('state', 'not in', ['cancel', 'done']), ('purchase_line_id', 'in', po_ids), ('product_id', 'in', product_ids)]
         return action
