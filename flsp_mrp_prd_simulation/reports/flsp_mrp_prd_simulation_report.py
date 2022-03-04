@@ -16,12 +16,6 @@ class SummarizedBomReport(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     bom_id = fields.Many2one(comodel_name="mrp.bom", string="BOM")
-    qty_2 = fields.Float(string="Monday")
-    qty_3 = fields.Float(string="Tuesday")
-    qty_4 = fields.Float(string="Wednesday")
-    qty_5 = fields.Float(string="Thursday")
-    qty_6 = fields.Float(string="Friday")
-    qty_7 = fields.Float(string="Saturday")
     quanty_available = fields.Float(string='On Hand', readonly=True)
     weeks_available = fields.Float(string="Weeks Available")
     product_qty = fields.Float(string='Qty Req/Week', readonly=True)
@@ -47,8 +41,8 @@ class SummarizedBomReport(models.Model):
         SELECT
             max(id) as id,
             description,
-            default_code, 
-            product_tmpl_id, 
+            default_code,
+            product_tmpl_id,
             product_id,
             max(bom_id) as bom_id,
             max(quanty_available) as quanty_available,
