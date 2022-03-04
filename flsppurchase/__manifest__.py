@@ -26,7 +26,7 @@
     'depends': ['base'],
     'depends': ['purchase'],
     'depends': ['sale'],
-    'depends': ['sale_management'],    
+    'depends': ['sale_management'],
 
     # always loaded
     'data': [
@@ -38,5 +38,6 @@
         'report/flsp_purchase_suggestion.xml',
         'views/flspterms.xml',
         'views/flspterms_vendor.xml',
+        'views/flsp_stock_move.xml',
     ],
 }
