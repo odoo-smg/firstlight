@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="flsp_mrp_prd_simulation_tree" model="ir.ui.view">
+        <field name="name">Summarized BOM</field>
+        <field name="model">report.mrp.prd.simulation</field>
+        <field name="arch" type="xml">
+            <tree string="Summarized BOM View"  create="0" delete="0"  >
+                <field name="default_code" />
+                <field name="description" optional="show"/>
+                <field name="product_qty"/>
+                <field name="product_uom"/>
+                <field name="quanty_available"/>
+                <field name="weeks_available"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_prd_simulation_search" model="ir.ui.view">
+        <field name="name">flsp.mrp.prd.simulation.search</field>
+        <field name="model">report.mrp.prd.simulation</field>
+        <field name="arch" type="xml">
+            <search string="Product">
+                <field name="description" string="Product" filter_domain="['|', ('default_code', 'ilike', self),('description', 'ilike', self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_prd_simulation_action" model="ir.actions.act_window">
+        <field name="name">Summarized BOM</field>
+        <field name="res_model">report.mrp.prd.simulation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" ref="flsp_mrp_prd_simulation_tree"/>
+        <field name="search_view_id" ref="flsp_mrp_prd_simulation_search"/>
+        <field name="context">{'custom_search': True, 'search_default_can_be_none': 1}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Please select at least one BOM</p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="flsp_mrp_prd_simulation_call">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_mrp_prd_simulation_tree"/>
+        <field name="act_window_id" ref="flsp_mrp_prd_simulation_action"/>
+    </record>
+
+</odoo>
