@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flsp_mrp_prd_simulation,flsp_mrp_prd_simulation,model_flsp_mrp_prd_simulation,base.group_user,1,1,1,1
+access_report_mrp_prd_simulation,report_mrp_prd_simulation,model_report_mrp_prd_simulation,base.group_user,1,0,0,0
+access_flsp_mrp_prd_simulation_line,flsp_mrp_prd_simulation_line,model_flsp_mrp_prd_simulation_line,base.group_user,1,1,1,1
