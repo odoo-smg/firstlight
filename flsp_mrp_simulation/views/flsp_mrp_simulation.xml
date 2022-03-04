@@ -37,7 +37,7 @@
                             <field name="total_value_needed" readonly="1"/>
                         </group>
                     </group>
-                    
+
                     <separator/>
                     <div attrs="{'invisible': [('missed_only', '=', True)]}">
                         <h4>Sub Products:</h4>
@@ -93,8 +93,8 @@
     </record>
 
     <!-- menu design -->
-    <menuitem id="flsp_mrp_simulation_menu" name="MRP Simulation" 
-        parent="mrp.menu_mrp_config"
+    <menuitem id="flsp_mrp_simulation_menu" name="MRP Simulation"
+        parent="mrp.menu_mrp_reporting"
         action="flsp_mrp_simulation_action"/>
 
     <!-- flsp.mrp.simulated.product -->
