@@ -34,7 +34,7 @@ class GanttMO(models.Model):
     links_serialized_json = fields.Char('Serialized Links JSON', compute="compute_links_json")
     responsible_name = fields.Char(string='Responsible Name', related='user_id.partner_id.name')
     product_part_number = fields.Char(related='product_id.default_code')
-    product_name = fields.Char(string='Product', related='product_id.name')
+    product_name = fields.Char(string='Product Description', related='product_id.name')
 
     recursive_dependency_mo_ids = fields.Many2many(
         string='Recursive Dependencies',

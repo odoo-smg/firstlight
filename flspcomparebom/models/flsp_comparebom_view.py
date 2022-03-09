@@ -23,14 +23,14 @@ class FlspCompareBomView(models.Model):
     bom2 = fields.Many2one('mrp.bom', string='BOM 2', required=True, ondelete='cascade')
 
     code1 = fields.Char('Reference1', readonly=True)
-    product_tmpl_id1 = fields.Many2one('product.template', string='Product template', readonly=True)
+    product_tmpl_id1 = fields.Many2one('product.template', string='Product template1', readonly=True)
     product_qty1 = fields.Float(string='Quantity1', readonly=True)
     version1 = fields.Float(string='Version1', readonly=True)
     active1 = fields.Boolean(string='Active1')
     product_uom_id1 = fields.Many2one('uom.uom', 'Product UoM 1', readonly=True)
 
     code2 = fields.Char('Reference2', readonly=True)
-    product_tmpl_id2 = fields.Many2one('product.template', string='Product template', readonly=True)
+    product_tmpl_id2 = fields.Many2one('product.template', string='Product template2', readonly=True)
     product_qty2 = fields.Float(string='Quantity2', readonly=True)
     version2 = fields.Float(string='Version2', readonly=True)
     active2 = fields.Boolean(string='Active2')
