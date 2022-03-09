@@ -24,7 +24,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'purchase'],
+    'depends': ['base', 'sale', 'purchase', 'flsp-base'],
 
     # always loaded
     'data': [
