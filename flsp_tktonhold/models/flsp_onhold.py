@@ -15,8 +15,7 @@ class FlspTktOnhold(models.Model):
     tkt_eta = fields.Date(string='Ticket ETA')
     other_notes = fields.Text(string='Other Notes')
     # OnHold fields
-    status = fields.Selection([('open', 'Open'), ('inprogress', 'In Progress'), ('onhold', 'On Hold'), ('close', 'Closed')],
-                              default='open', eval=True, tracking=True)
+    status = fields.Selection(selection_add=[('onhold', 'On Hold')])
     reason = fields.Text(string='OnHold reason', tracking=True)
     onhold_date = fields.Date(string="OnHold Date")
     onhold_user = fields.Many2one('res.users', ondelete='cascade', string="OnHold by")
@@ -106,9 +105,3 @@ class OnHold(models.TransientModel):
 
         self.env['flspautoemails.bpmemails'].send_email(self, 'TKT0005')
         return {'type': 'ir.actions.act_window_close'}
-
-
-
-
-
-

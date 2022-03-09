@@ -6,7 +6,7 @@
     Module purpose is to show the BOM quantity on hand and forecast""",
 
     'description': """
-        * Mar.1st.2021 - Created the model 
+        * Mar.1st.2021 - Created the model
     """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
@@ -15,7 +15,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'mrp'],
 
     # always loaded
     'data': [

@@ -32,9 +32,9 @@ class GanttMO(models.Model):
     depending_mo_ids = fields.One2many('flsp.depending.mos', 'task_id')
     dependency_mo_ids = fields.One2many('flsp.depending.mos', 'depending_task_id')
     links_serialized_json = fields.Char('Serialized Links JSON', compute="compute_links_json")
-    responsible_name = fields.Char(related='user_id.partner_id.name')
+    responsible_name = fields.Char(string='Responsible Name', related='user_id.partner_id.name')
     product_part_number = fields.Char(related='product_id.default_code')
-    product_name = fields.Char(related='product_id.name')
+    product_name = fields.Char(string='Product', related='product_id.name')
 
     recursive_dependency_mo_ids = fields.Many2many(
         string='Recursive Dependencies',
@@ -49,7 +49,7 @@ class GanttMO(models.Model):
                 elapsed_seconds = (r.date_planned_finished - r.date_planned_start).total_seconds()
                 seconds_in_hour = 60 * 60
                 # keep it as integer for hours
-                r.planned_duration = round(elapsed_seconds / seconds_in_hour, 0) 
+                r.planned_duration = round(elapsed_seconds / seconds_in_hour, 0)
             else:
                 r.planned_duration = 0
 
@@ -83,4 +83,3 @@ class GanttMO(models.Model):
                 }
                 links.append(json_obj)
             r.links_serialized_json = json.dumps(links)
-            
