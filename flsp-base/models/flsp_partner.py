@@ -11,7 +11,7 @@ class FLSPBasePartner(models.Model):
     _check_company_auto = True
 
     # **********************************************
-    # Fields copies from flsp-salesorder module
+    # Fields copied from flsp-salesorder module
     # ***********************************************
     flsp_default_contact = fields.Boolean(String="Default")
     flsp_shipping_method = fields.Selection([
@@ -19,3 +19,11 @@ class FLSPBasePartner(models.Model):
         ('2', 'FL account and do not Invoice Customer'),
         ('3', 'Customer carrier choice and account'),
     ], string='Shipping Method', copy=False, store=True)
+    flsp_carrier_account = fields.Char(String="Carrier Account")
+    flsp_user_id = fields.Many2one('res.users', string="Inside Salesperson")
+    flsp_dss_user_id = fields.Many2one('res.users', string="Dealer Specialist")
+
+    # **********************************************
+    # Fields copied from flspacc module
+    # ***********************************************
+    flsp_acc_valid = fields.Boolean(string="Accounting Validated", readonly=True)
