@@ -24,5 +24,6 @@
 
     # always loaded
     'data': [
+        'views/flsp_partner.xml',
     ],
 }
