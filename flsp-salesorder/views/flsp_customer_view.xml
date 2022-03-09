@@ -10,7 +10,6 @@
                 <attribute name="string">Outside Salesperson</attribute>
               </xpath>
               <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="after">
-                <field name="customer_rank" invisible="1" />
                 <field name="flsp_user_id" attrs="{'invisible':[('customer_rank','=',0)]} "/>
                 <field name="flsp_dss_user_id" attrs="{'invisible':[('customer_rank','=',0)]} "/>
                 <field name="flsp_shipping_method" string="Shipping Method"/>
