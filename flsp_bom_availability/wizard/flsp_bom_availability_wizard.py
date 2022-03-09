@@ -12,9 +12,9 @@ class FlspBomAvailabilityWizard(models.TransientModel):
     _name = 'flsp.bom.availability.wizard'
     _description = "FLSP BoM Availability Wizard"
 
-    bom = fields.Many2one('mrp.bom', string='BOM', ondelete='cascade')
-    bom_active = fields.Many2one('mrp.bom', string='BOM', ondelete='cascade')
-    bom_inactive = fields.Many2one('mrp.bom', string='BOM', ondelete='cascade')
+    bom = fields.Many2one('mrp.bom', string='BOM')
+    bom_active = fields.Many2one('mrp.bom', string='BOM')
+    bom_inactive = fields.Many2one('mrp.bom', string='BOM')
     active_filter = fields.Boolean('Active only', default=True)
 
     def display_availability(self):
