@@ -98,16 +98,16 @@ class FlspBomSummarized(models.TransientModel):
         def _create_lines(bom, level=0, factor=1):
             level += 1
             for bom_line in bom.bom_line_ids:
+                proceed = True
+                if bom_line.product_id.flsp_start_buy:
+                    if bom_line.product_id.flsp_start_buy > date.today():
+                        proceed = False
                 bom_line_boms = bom_line.product_id.bom_ids
-                if bom_line_boms and route_buy not in bom_line.product_id.route_ids.ids:
+                if bom_line_boms and (not proceed or route_buy not in bom_line.product_id.route_ids.ids):
                     line_qty = bom_line.product_uom_id._compute_quantity(bom_line.product_qty, bom_line_boms[0].product_uom_id)
                     new_factor = factor * line_qty / bom_line_boms[0].product_qty
                     _create_lines(bom_line_boms[0], level, new_factor)
                 else:
-                    proceed = True
-                    if bom_line.product_id.flsp_start_buy:
-                        if bom_line.product_id.flsp_start_buy > date.today():
-                            proceed = False
                     if proceed and bom_line.product_id.type == 'product' and route_buy in bom_line.product_id.route_ids.ids:
                         pa_wip_qty = 0
                         if not bom_line.product_id.flsp_is_wip_stock:
