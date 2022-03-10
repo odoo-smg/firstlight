@@ -22,13 +22,7 @@
     'version': '1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
-    'depends': ['mrp'],
-    'depends': ['sale'],
-    'depends': ['stock'],
-    'depends': ['delivery'],
-    'depends': ['deltatech_stock_negative'],
-    'depends': ['flsppurchase'],
+    'depends': ['base', 'mrp', 'sale', 'stock', 'delivery', 'deltatech_stock_negative', 'flsppurchase'],
 
     # always loaded
     'data': [

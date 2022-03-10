@@ -7,7 +7,7 @@ class flspproductproducts(models.Model):
     _inherit = 'product.product'
     _check_company_auto = True
 
-    flsp_eco_count = flsp_open_po_qty = fields.Integer(compute='_compute_flsp_eco', string='Qty Open PO')
+    flsp_eco_count = fields.Integer(compute='_compute_flsp_eco', string='Qty ECOs')
 
     def _compute_flsp_eco(self):
         domain = [

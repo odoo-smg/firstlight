@@ -1,17 +1,13 @@
 {
-    'name': "FLSP - Accounting",
+    'name': "FLSP - Base",
 
     'summary': """
-        This module intend to customize the functions and list to
+        This module intend to fix the problem with dependencies
         First Light Safety Products""",
 
     'description': """
         Customizations performed:
-
-        Partner:
-            * Accounting Validated field to enforce validation.
-            * Sales Orders: Filter accounting validated partners.
-            * Purchase Orders: Filter accounting validated partners.
+        copied the fields from other modules in order to solve dependency issues
     """,
 
     'author': "Alexandre Sousa",
@@ -24,12 +20,10 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'purchase', 'flsp-base'],
+    'depends': ['base', 'delivery'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'views/flsp_partner_view.xml',
-        'views/flsp_credit_report.xml',
+        'views/flsp_partner.xml',
     ],
 }

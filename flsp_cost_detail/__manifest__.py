@@ -11,7 +11,7 @@
 
         Products:
             * Included a button to show the cost detail report
-            
+
         Cost Detail Report
 
     """,
@@ -26,12 +26,7 @@
     'version': '0.4',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
-    'depends': ['base_automation'],
-    'depends': ['stock'],
-    'depends': ['sale'],
-    'depends': ['purchase'],
-    'depends': ['mrp'],
+    'depends': ['base', 'base_automation', 'stock', 'sale', 'purchase', 'mrp', 'stock_account'],
 
     # always loaded
     'data': [

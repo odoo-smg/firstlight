@@ -13,10 +13,10 @@ class FlspDeliveryAddress(models.Model):
     """
     _inherit = 'res.company'
 
-    flsp_street = fields.Char()
-    flsp_street2 = fields.Char()
-    flsp_zip = fields.Char(change_default=True)
-    flsp_city = fields.Char()
-    flsp_state_id = fields.Many2one("res.country.state", string='State', ondelete='restrict',
+    flsp_street = fields.Char(string='FLSP Street')
+    flsp_street2 = fields.Char(string='FLSP Street 2')
+    flsp_zip = fields.Char(string='FLSP ZIP', change_default=True)
+    flsp_city = fields.Char(string='FLSP City')
+    flsp_state_id = fields.Many2one("res.country.state", string='FLSP State', ondelete='restrict',
                                domain="[('country_id', '=?', country_id)]")
-    flsp_country_id = fields.Many2one('res.country', string='Country', ondelete='restrict')
+    flsp_country_id = fields.Many2one('res.country', string='FLSP Country', ondelete='restrict')

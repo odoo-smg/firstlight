@@ -23,10 +23,7 @@
     'version': '1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
-    'depends': ['purchase'],
-    'depends': ['sale'],
-    'depends': ['sale_management'],
+    'depends': ['base', 'purchase', 'sale', 'sale_management', 'flsp-base'],
 
     # always loaded
     'data': [

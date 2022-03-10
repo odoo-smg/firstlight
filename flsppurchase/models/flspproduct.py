@@ -33,7 +33,7 @@ class flsppurchaseproductprd(models.Model):
     flsp_max_qty = fields.Float(string="Max Qty", readonly=True)
     flsp_mult_qty = fields.Float('Qty Multiple', readonly=True)
     flsp_qty     = fields.Float(string="On Hand", readonly=True)
-    flsp_desc = fields.Char(string='Description', readonly=True)
+    flsp_desc = fields.Char(string='Desc.', readonly=True)
     flsp_default_code = fields.Char(string='Part #', readonly=True)
     flsp_type = fields.Char(string='Type', readonly=True)
 
