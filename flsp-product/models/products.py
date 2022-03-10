@@ -96,12 +96,13 @@ class Smgproduct(models.Model):
         """
         for product in self:
             start = product.flsp_start_buy or False
-            today = date.today()
-            today_30 = date.today() + timedelta(days=30)
-            if start < today:
-                raise ValidationError('You can use dates in the past for "Postpone Pruchase".')
-            if start > today_30:
-                raise ValidationError('You can only postpone the purchase for 30 days from now.')
+            if start:
+                today = date.today()
+                today_30 = date.today() + timedelta(days=30)
+                if start < today:
+                    raise ValidationError('You can use dates in the past for "Postpone Pruchase".')
+                if start > today_30:
+                    raise ValidationError('You can only postpone the purchase for 30 days from now.')
 
     @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost', 'flsp_latest_cost', 'flsp_highest_price', 'flsp_lowest_price')
     def _compute_flsp_usd_cost(self):
