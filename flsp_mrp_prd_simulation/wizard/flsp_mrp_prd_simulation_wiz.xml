@@ -20,6 +20,7 @@
                             <field name="bom_id" context="{'custom_search': True}" class="oe_inline" domain="['&amp;', '|', ('product_id','=',product_id),
                            '&amp;', ('product_tmpl_id.product_variant_ids','=',product_id),
                            ('product_id','=',False), ('type', '=', 'normal')]"  invisible="1" />
+                            <field name="qty_1" />
                             <field name="qty_2" />
                             <field name="qty_3" />
                             <field name="qty_4" />
