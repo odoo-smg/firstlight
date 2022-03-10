@@ -2,8 +2,7 @@
 
 import datetime
 from odoo import models, fields, api
-from datetime import timedelta
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from odoo.exceptions import UserError
 
 
