@@ -2,7 +2,7 @@
 
 from odoo import fields, models, api, exceptions
 from odoo.exceptions import ValidationError
-from datetime import date, datetime
+from datetime import timedelta, date, datetime
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class Smgproduct(models.Model):
 
     # Account review enforcement
     #    if (self.env.uid != 8):
-    flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True, copy=False)
+    flsp_acc_valid = fields.Boolean(string="Accounting Validated", readonly=True, copy=False)
 
     standard_price = fields.Float(
         'CAD$ Cost', compute='_compute_standard_price',
@@ -82,6 +82,26 @@ class Smgproduct(models.Model):
     flsp_lowest_price = fields.Float('Lowest Price', digits='Product Price')
     flsp_usd_lowest_price = fields.Float('Lowest USD Price', digits='Product Price')
     flsp_lowest_price_qty = fields.Float('Qty for Lowest price', digits='Product Price')
+
+    flsp_is_wip_stock = fields.Boolean(string="WIP = Stock", default=False)
+    flsp_start_buy = fields.Date(string="Postpone Purchase", default=False)
+
+    @api.constrains("flsp_start_buy")
+    def _constraint_flsp_start_buy(self):
+        """
+            Date:    March/7th/2022/Monday
+            Purpose: To prevent the user to defer buying for more than 30 days.
+                     To raise exception if date is older than today or more than 30 days.
+            Author: Alexandre Sousa
+        """
+        for product in self:
+            start = product.flsp_start_buy or False
+            today = date.today()
+            today_30 = date.today() + timedelta(days=30)
+            if start < today:
+                raise ValidationError('You can use dates in the past for "Postpone Pruchase".')
+            if start > today_30:
+                raise ValidationError('You can only postpone the purchase for 30 days from now.')
 
     @api.depends('standard_price', 'flsp_pref_cost', 'flsp_best_cost', 'flsp_worst_cost', 'flsp_latest_cost', 'flsp_highest_price', 'flsp_lowest_price')
     def _compute_flsp_usd_cost(self):

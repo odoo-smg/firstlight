@@ -1,6 +1,6 @@
 
 from odoo import api, fields, models
-
+from datetime import date
 
 class FlspBomSummarized(models.TransientModel):
     _name = "flsp.mrp.prd.simulation.wiz"
@@ -15,6 +15,7 @@ class FlspBomSummarized(models.TransientModel):
             bom_list.append([0, 0, {
                 'product_id': line.product_id.id,
                 'bom_id': line.bom_id.id,
+                'qty_1': line.qty_1,
                 'qty_2': line.qty_2,
                 'qty_3': line.qty_3,
                 'qty_4': line.qty_4,
@@ -34,6 +35,7 @@ class FlspBomSummarized(models.TransientModel):
     product_qty = fields.Float(related="bom_id.product_qty", digits="Product Unit of Measure")
     product_uom_id = fields.Many2one(comodel_name="uom.uom", related="bom_id.product_uom_id")
     location_id = fields.Many2one(comodel_name="stock.location", string="Starting location")
+    qty_1 = fields.Float(string="Sunday")
     qty_2 = fields.Float(string="Monday")
     qty_3 = fields.Float(string="Tuesday")
     qty_4 = fields.Float(string="Wednesday")
@@ -51,6 +53,7 @@ class FlspBomSummarized(models.TransientModel):
             self.env["flsp.mrp.prd.simulation"].create({
                 'product_id': line.product_id.id,
                 'bom_id': line.bom_id.id,
+                'qty_1': line.qty_1,
                 'qty_2': line.qty_2,
                 'qty_3': line.qty_3,
                 'qty_4': line.qty_4,
@@ -96,18 +99,25 @@ class FlspBomSummarized(models.TransientModel):
             level += 1
             for bom_line in bom.bom_line_ids:
                 bom_line_boms = bom_line.product_id.bom_ids
-                if bom_line_boms:
+                if bom_line_boms and route_buy not in bom_line.product_id.route_ids.ids:
                     line_qty = bom_line.product_uom_id._compute_quantity(bom_line.product_qty, bom_line_boms[0].product_uom_id)
                     new_factor = factor * line_qty / bom_line_boms[0].product_qty
                     _create_lines(bom_line_boms[0], level, new_factor)
                 else:
-                    if bom_line.product_id.type == 'product' and route_buy in bom_line.product_id.route_ids.ids:
+                    proceed = True
+                    if bom_line.product_id.flsp_start_buy:
+                        if bom_line.product_id.flsp_start_buy > date.today():
+                            proceed = False
+                    if proceed and bom_line.product_id.type == 'product' and route_buy in bom_line.product_id.route_ids.ids:
                         pa_wip_qty = 0
-                        stock_quant = self.env['stock.quant'].search(
-                            ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', bom_line.product_id.id)])
-                        for stock_lin in stock_quant:
-                            pa_wip_qty += stock_lin.quantity
-                        qty_on_stock = bom_line.product_id.qty_available - pa_wip_qty
+                        if not bom_line.product_id.flsp_is_wip_stock:
+                            stock_quant = self.env['stock.quant'].search(
+                                ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', bom_line.product_id.id)])
+                            for stock_lin in stock_quant:
+                                pa_wip_qty += stock_lin.quantity
+                            qty_on_stock = bom_line.product_id.qty_available - pa_wip_qty
+                        else:
+                            qty_on_stock = bom_line.product_id.qty_available
                         summarized_list_lines.create({
                                 'description': bom_line.product_tmpl_id.name,
                                 'default_code': bom_line.product_tmpl_id.default_code,
@@ -129,6 +139,7 @@ class FlspBomSummarizedLine(models.TransientModel):
     summary_id = fields.Many2one(comodel_name="flsp.mrp.prd.simulation.wiz")
     product_id = fields.Many2one(comodel_name="product.product", string="Product")
     bom_id = fields.Many2one(comodel_name="mrp.bom", string="BOM")
+    qty_1 = fields.Float(string="Sunday")
     qty_2 = fields.Float(string="Monday")
     qty_3 = fields.Float(string="Tuesday")
     qty_4 = fields.Float(string="Wednesday")
@@ -142,10 +153,10 @@ class FlspBomSummarizedLine(models.TransientModel):
         related="product_id.product_tmpl_id",
     )
 
-    @api.depends('qty_2', 'qty_3', 'qty_4', 'qty_5', 'qty_6', 'qty_7')
+    @api.depends('qty_1', 'qty_2', 'qty_3', 'qty_4', 'qty_5', 'qty_6', 'qty_7')
     def _compute_total(self):
         for line in self:
-            line.product_qty = line.qty_2+line.qty_3+line.qty_4+line.qty_5+line.qty_6+line.qty_7
+            line.product_qty = line.qty_1+line.qty_2+line.qty_3+line.qty_4+line.qty_5+line.qty_6+line.qty_7
 
     @api.onchange("product_id")
     def _onchange_product_id(self):
@@ -162,6 +173,7 @@ class FlspMRPBomSummarized(models.Model):
     product_tmpl_id = fields.Many2one(comodel_name="product.template",string="Product Template",
         related="product_id.product_tmpl_id",
     )
+    qty_1 = fields.Float(string="Sunday")
     qty_2 = fields.Float(string="Monday")
     qty_3 = fields.Float(string="Tuesday")
     qty_4 = fields.Float(string="Wednesday")

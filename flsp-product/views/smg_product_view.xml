@@ -73,6 +73,10 @@
                         <field name="flsp_min_qty" string="Min. Qty"/>
                     </group>
                 </xpath>
+                <xpath expr="//label[@for='sale_delay']" position="before">
+                    <field name="flsp_is_wip_stock" class="oe_inline" style="vertical-align:baseline"/>
+                    <field name="flsp_start_buy" class="oe_inline" style="vertical-align:baseline"/>
+                </xpath>
                 <xpath expr="//field[@name='seller_ids']" position="inside">
                   <tree string="Vendor Information" multi_edit="1">
                     <field name="sequence" widget="handle"/>

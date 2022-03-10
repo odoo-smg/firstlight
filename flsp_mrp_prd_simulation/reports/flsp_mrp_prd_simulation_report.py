@@ -46,7 +46,7 @@ class SummarizedBomReport(models.Model):
             product_id,
             max(bom_id) as bom_id,
             max(quanty_available) as quanty_available,
-            (max(quanty_available)/sum(product_qty)) as weeks_available,
+            case when sum(product_qty) > 0 then (max(quanty_available)/sum(product_qty)) else 0 end as weeks_available,
             sum(product_qty) as product_qty,
             max(product_uom) as product_uom,
             max(level_bom) as level_bom

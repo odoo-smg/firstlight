@@ -306,7 +306,11 @@ class FlspMrppurchaseLine(models.Model):
         # First Item
         for item in open_moves:
             if item:
-                if route_buy not in item[4].route_ids.ids:
+                postpone = False
+                if item[4].flsp_start_buy:
+                    if item[4].flsp_start_buy > date.today():
+                        postpone = True
+                if postpone or route_buy not in item[4].route_ids.ids:
                     continue
             rationale = "<pre>-----------------------------------------------------------------------------------------------------------------"
             rationale += "<br/>                                        | Movement                                               |  AVG"
@@ -350,9 +354,15 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance = product.qty_available - stock_reserverd
             else:
                 if consider_reserved:
-                    current_balance = product.qty_available - pa_wip_qty
+                    if not product.flsp_is_wip_stock:
+                        current_balance = product.qty_available - pa_wip_qty
+                    else:
+                        current_balance = product.qty_available
                 else:
-                    current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                    if not product.flsp_is_wip_stock:
+                        current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                    else:
+                        current_balance = product.qty_available - wip_reserverd
             rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                 current_balance) + '     |        |         |             |Initial Balance  |      |      |'
             bom_level = item[8]
@@ -362,7 +372,11 @@ class FlspMrppurchaseLine(models.Model):
         for item in open_moves:
             new_prod = True
             if item:
-                if route_buy not in item[4].route_ids.ids:
+                postpone = False
+                if item[4].flsp_start_buy:
+                    if item[4].flsp_start_buy > date.today():
+                        postpone = True
+                if postpone or route_buy not in item[4].route_ids.ids:
                     continue
                 new_prod = (item[4] != product)
             if new_prod:
@@ -416,9 +430,15 @@ class FlspMrppurchaseLine(models.Model):
                         current_balance = product.qty_available - stock_reserverd
                 else:
                     if consider_reserved:
-                        current_balance = product.qty_available - pa_wip_qty
+                        if not product.flsp_is_wip_stock:
+                            current_balance = product.qty_available - pa_wip_qty
+                        else:
+                            current_balance = product.qty_available
                     else:
-                        current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                        if not product.flsp_is_wip_stock:
+                            current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                        else:
+                            current_balance = product.qty_available - wip_reserverd
                 rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                     current_balance) + '     |        |         |             |Initial Balance  |      |      |'
             if item:
@@ -462,6 +482,10 @@ class FlspMrppurchaseLine(models.Model):
         products = self.env['product.product'].search(['&', ('type', '=', 'product'), ('route_ids', 'in', [route_buy])])
         required_by = current_date
         for product in products:
+            if product.flsp_start_buy:
+                if product.flsp_start_buy > date.today():
+                    continue
+
             purchase_planning = self.env['flsp.mrp.purchase.line'].search([('product_id', '=', product.id)])
             if not purchase_planning:
                 current_balance = False
@@ -486,6 +510,10 @@ class FlspMrppurchaseLine(models.Model):
                     for component in forecast_components:
                         if route_buy not in component.route_ids.ids:
                             continue
+                        if product.flsp_start_buy:
+                            if product.flsp_start_buy > date.today():
+                                continue
+
                         purchase_planning = self.env['flsp.mrp.purchase.line'].search(
                             [('product_id', '=', component.id)], limit=1)
                         if not purchase_planning:
@@ -535,7 +563,12 @@ class FlspMrppurchaseLine(models.Model):
                             purchase_planning.qty_month12 += forecast.qty_month12 * forecast_components[component][
                                 'total']
                 else:
-                    if forecast.product_id.type == 'product' and route_buy in forecast.product_id.route_ids.ids:
+                    not_postpone = True
+                    if forecast.product_id.flsp_start_buy:
+                        if forecast.product_id.flsp_start_buy > date.today():
+                            not_postpone = False
+                    if not_postpone and forecast.product_id.type == 'product' and route_buy in forecast.product_id.route_ids.ids:
+
                         purchase_planning = self.env['flsp.mrp.purchase.line'].search(
                             [('product_id', '=', forecast.product_id.id)], limit=1)
                         if not purchase_planning:
@@ -914,9 +947,15 @@ class FlspMrppurchaseLine(models.Model):
                     current_balance = product.qty_available - stock_reserverd
             else:
                 if consider_reserved:
-                    current_balance = product.qty_available - pa_wip_qty
+                    if not product.flsp_is_wip_stock:
+                        current_balance = product.qty_available - pa_wip_qty
+                    else:
+                        current_balance = product.qty_available
                 else:
-                    current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                    if not product.flsp_is_wip_stock:
+                        current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                    else:
+                        current_balance = product.qty_available - wip_reserverd
             balance = current_balance
         else:
             current_balance = balance
@@ -979,6 +1018,12 @@ class FlspMrppurchaseLine(models.Model):
                 if move.date > one_year_ago:
                     twelve_month_actual += move.qty_done
 
+        if product.flsp_is_wip_stock:
+            qty_stock = product.qty_available
+        else:
+            qty_stock = product.qty_available - pa_wip_qty
+
+
         ret = self.create({'product_tmpl_id': product.product_tmpl_id.id,
                            'product_id': product.id,
                            'description': product.product_tmpl_id.name,
@@ -1001,7 +1046,7 @@ class FlspMrppurchaseLine(models.Model):
                            'delay': tmp_delay,
                            'vendor_price': prod_vendor.price,
                            'total_price': prod_vendor.price * suggested_qty,
-                           'stock_qty': product.qty_available - pa_wip_qty,
+                           'stock_qty': qty_stock,
                            'wip_qty': pa_wip_qty,
                            'po_qty': po_qty,
                            'rationale': rationale,
