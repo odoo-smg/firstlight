@@ -227,13 +227,27 @@ class flsppurchaseproducttmp(models.Model):
     flsp_open_po_qty = fields.Float(compute='_compute_flsp_open_po_qty', string='Qty Open PO')
 
     def _compute_flsp_open_po_qty(self):
+        receipt_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Receipts')]).ids
         for template in self:
-            if not template.purchase_ok:
-                template.flsp_open_po_qty = 0
+            product = self.env['product.product'].search([('product_tmpl_id', '=', template.id)])
+            if not product.purchase_ok:
+                template.flsp_open_po_qty = 0.0
             else:
-                amount = float_round(sum([p.flsp_open_po_qty for p in template.product_variant_ids]), precision_rounding=template.uom_id.rounding)
-                amount = template.uom_po_id._compute_quantity(amount,template.uom_id)
-                template.flsp_open_po_qty = amount
+                domain = [
+                    '&', ('state', 'not in', ['done', 'cancel', 'draft']),
+                    '&', ('picking_type_id', 'in', receipt_stock_type),
+                    ('product_id', '=', product.id)
+                ]
+                open_receipts = self.env['stock.picking'].search(domain)
+                if not product.id:
+                    template.flsp_open_po_qty = 0.0
+                    continue
+                for receipt in open_receipts:
+                    stock_move_product = self.env['stock.move'].search(['&', ('picking_id', '=', receipt.id), ('product_id', '=', product.id)])
+                    for move in stock_move_product:
+                        template.flsp_open_po_qty += move.product_uom_qty
+            if not template.flsp_open_po_qty:
+                template.flsp_open_po_qty = 0
 
     def action_view_open_po(self):
         receipt_stock_type = self.env['stock.picking.type'].search([('name', '=', 'Receipts')]).ids
