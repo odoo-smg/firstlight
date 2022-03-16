@@ -34,5 +34,6 @@
         'views/flsp_approve_po_wiz.xml',
         'views/flsp_reject_po_wiz.xml',
         'security/flsp_user_group.xml',
+        'views/flsppurchase_status_stock_picking.xml',
     ],
 }
