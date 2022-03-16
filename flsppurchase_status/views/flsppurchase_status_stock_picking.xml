@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsppurchase_status_stock_picking_view">
+            <field name="name">flsppurchase.status.stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">96</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='backorder_id']" position="after">
+                    <field name="flsp_purchase_id" readonly="0" attrs="{'invisible': [('picking_type_id', '!=', 1)], 'readonly': [('flsp_purchase_id', '!=', False)]}"/>
+                    <field name="flsp_show_purchaseline"/>
+                </xpath>
+                <xpath expr="//field[@name='reserved_availability']" position="after">
+                    <field name="purchase_line_id" readonly="0" options="{'no_create': True, 'no_create_edit':True}" domain="['&amp;', ('order_id', '=', parent.flsp_purchase_id), ('product_id', '=', product_id)]" attrs="{'required':[('parent.flsp_show_purchaseline', '=', True)], 'column_invisible': [('parent.flsp_show_purchaseline', '!=', True)]  }" />
+                    <field name="flsp_show_purchaseline" invisible="1" />
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

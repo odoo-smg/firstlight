@@ -60,7 +60,15 @@
             <xpath expr="//button[@name='button_approve']" position="replace">
                 <button name="button_approve" type="object" states="to approve" string="Approve Order" class="oe_highlight" invisible="1"/>
             </xpath>
+                <!--
             <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
+            </xpath>
+                -->
+            <xpath expr="//field[@name='price_unit']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_planned']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
             </xpath>
             <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
