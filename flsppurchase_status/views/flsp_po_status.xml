@@ -68,9 +68,6 @@
             <xpath expr="//field[@name='price_unit']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
             </xpath>
-            <xpath expr="//field[@name='date_planned']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ['done', 'purchase', 'cancel', 'to approve'])]}</attribute>
-            </xpath>
             <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
                 <page string="Notes" name="purchase_notes">
                     <group>

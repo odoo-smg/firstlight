@@ -164,9 +164,24 @@ class Flsp_PO_Status(models.Model):
     @api.depends('flsp_scheduled_date')
     def write(self, values):
         res = super().write(values)
-        if "flsp_scheduled_date" in values:
+        log_msg = False
+        if "flsp_vendor_confirmation_date" in values:
+            self.message_post(body='Vendor Confirmed on: ' + str(self.flsp_vendor_confirmation_date), subtype="mail.mt_note")
+        elif "order_line" in values:
             self.change_stock_scheduled_date()
+
+            msg_body = "The Scheduled Date has been changed:"
+            for line in self.order_line:
+                msg_body += "<li> Product: "+line.product_id.default_code + " changed scheduled date to: " + str(line.date_planned)+'</li>'
+
+            for line in values['order_line']:
+                if line[2]:
+                    if "date_planned" in line[2]:
+                        log_msg = True
+            if log_msg or "date_planned" in values['order_line']:
+                self.message_post(body=msg_body, subtype="mail.mt_note")
         return res
+
 
     def change_stock_scheduled_date(self):
         for order in self:
