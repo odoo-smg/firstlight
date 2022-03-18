@@ -172,7 +172,11 @@ class Flsp_PO_Status(models.Model):
 
             msg_body = "The Scheduled Date has been changed:"
             for line in self.order_line:
-                msg_body += "<li> Product: "+line.product_id.default_code + " changed scheduled date to: " + str(line.date_planned)+'</li>'
+                if line.product_id:
+                    if line.date_planned:
+                        msg_body += "<li> Product: "+line.product_id.default_code + " changed scheduled date to: " + str(line.date_planned)+'</li>'
+                    else:
+                        msg_body += "<li> Product: "+line.product_id.default_code + " changed scheduled date to: not defined</li>"
 
             for line in values['order_line']:
                 if line[2]:
