@@ -306,3 +306,13 @@ class Flsp_PO_Statusline(models.Model):
 
     date_planned = fields.Datetime(string='Scheduled Date', index=True, tracking=True)
     product_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True, tracking=True)
+
+    def name_get(self):
+        res = []
+        for line in self:
+            if line.product_id:
+                name = line.product_id.default_code + "(" + str(line.product_qty) +") - " + str(line.date_planned)
+            else:
+                name = line.name
+            res.append((line.id, name))
+        return res
