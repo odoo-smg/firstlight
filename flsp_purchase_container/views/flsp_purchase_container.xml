@@ -33,7 +33,7 @@
                                 <tree editable="bottom" create="true" edit="true" delete="true">
                                     <field name="container_id" invisible="1"/>
                                     <field name="purchase_id" />
-                                    <field name="picking_id" domain="[('flsp_purchase_id', '=', purchase_id)]"/>
+                                    <field name="picking_id" domain="['&amp;', ('flsp_purchase_id', '=', purchase_id), ('state', 'not in', ['draft','cancel','done'])]"/>
                                     <field name="create_date" />
                                 </tree>
                             </field>

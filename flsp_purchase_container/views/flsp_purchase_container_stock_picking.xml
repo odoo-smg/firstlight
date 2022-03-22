@@ -13,9 +13,6 @@
                 <xpath expr="//button[@name='action_show_details']" position="attributes">
                   <attribute name="attrs">{'invisible': [('parent.flsp_container_id', '!=', False)]}</attribute>
                 </xpath>
-                <!--xpath expr="//button[@name='action_assign_serial']" position="attributes">
-                  <attribute name="attrs">{'invisible': [('parent.flsp_container_id', '!=', False)]}</attribute>
-                </xpath-->
                 <xpath expr="//button[@name='action_cancel']" position="attributes">
                   <attribute name="attrs">{'invisible': [('flsp_container_id', '!=', False)]}</attribute>
                 </xpath>
@@ -26,7 +23,7 @@
                   <attribute name="attrs">{'readonly': [('flsp_container_id', '!=', False)]}</attribute>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="after">
-                    <button name="flsp_container_wizard" string="Container Wizard" groups="flsp_purchase_container.flsp_container_manager" type="object" attrs="{'invisible': ['|', '|', ('picking_type_code', '!=', 'incoming'), ('is_locked', '=', False), ('flsp_container_id', '!=', False)]}"/>
+                  <button name="flsp_container_wizard" string="Container Wizard" groups="flsp_purchase_container.flsp_container_manager" type="object" attrs="{'invisible': ['|', '|', '|',('picking_type_code', '!=', 'incoming'), ('is_locked', '=', False), ('flsp_container_id', '!=', False), ('state', 'in', ['draft','cancel','done'])]}"/>
                 </xpath>
                 <xpath expr="//field[@name='origin']" position="after">
                     <field name="flsp_container_id" readonly="1"/>
