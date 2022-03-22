@@ -8,8 +8,8 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='backorder_id']" position="after">
-                    <field name="flsp_purchase_id" readonly="0" attrs="{'invisible': [('picking_type_id', '!=', 1)], 'readonly': [('flsp_purchase_id', '!=', False)]}"/>
-                    <field name="flsp_show_purchaseline"/>
+                  <field name="flsp_purchase_id" force_save="1"  attrs="{'invisible': [('picking_type_id', '!=', 1)], 'readonly': [('flsp_purchase_id', '!=', False)]}"/>
+                  <field name="flsp_show_purchaseline" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='reserved_availability']" position="after">
                     <field name="purchase_line_id" readonly="0" options="{'no_create': True, 'no_create_edit':True}" domain="['&amp;', ('order_id', '=', parent.flsp_purchase_id), ('product_id', '=', product_id)]" attrs="{'required':[('parent.flsp_show_purchaseline', '=', True)], 'column_invisible': [('parent.flsp_show_purchaseline', '!=', True)]  }" />

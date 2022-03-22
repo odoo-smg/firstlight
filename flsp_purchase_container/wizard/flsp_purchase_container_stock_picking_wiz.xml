@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_purchase_container_stock_picking_wiz_form_view" model="ir.ui.view">
+            <field name="name">Container</field>
+            <field name="model">flsp.purchase.container.stock.picking.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Container">
+                    <h4>Would you like to include this Receipt in a Container?</h4>
+                    <p>Please, select the container below and confirm.</p>
+                    <group>
+                        <field name="container_id" force_save="1" attrs="{'readonly': [('container_id', '!=', False)]}" />
+                        <field name="picking_id" invisible="1" />
+                    </group>
+                    <footer>
+                        <button name="flsp_confirm" type="object" string="Confirm" class="btn-primary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_purchase_container_stock_picking_wiz" model="ir.actions.act_window">
+            <field name="name">FLSP - Include this Receipt in a Container</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp.purchase.container.stock.picking.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

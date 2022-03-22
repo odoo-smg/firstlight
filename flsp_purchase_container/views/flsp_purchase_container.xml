@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Container form view-->
+    <record model="ir.ui.view" id="flsp_purchase_container_form_view">
+        <field name="name">flsp.purchase.container.form</field>
+        <field name="model">flsp.purchase.container</field>
+        <field name="arch" type="xml">
+            <form string="Container Form">
+                <header>
+                    <button name="button_close" string="Close" class="btn-primary" type="object"
+                            status="close" groups="flspticketsystem.group_flspticketsystem_manager"
+                            attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"/>
+                    <field name="status"  options="{'clickable': '1'}" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_picking_move_tree" class="oe_stat_button" icon="fa-arrows-v" type="object" help="List view of products" attrs="{'invisible': [('container_lines', '=', False)]}" >
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Details</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <group>
+                        <field name="name"/>
+                        <field name="expected_date"/>
+                        <field name="responsible"/>
+                        <field name="comments"/>
+                    </group>
+                    <notebook>
+                        <page string="Receipts">
+                            <field name="container_lines" nolabel="1">
+                                <tree editable="bottom" create="true" edit="true" delete="true">
+                                    <field name="container_id" invisible="1"/>
+                                    <field name="purchase_id" />
+                                    <field name="picking_id" domain="['&amp;', ('flsp_purchase_id', '=', purchase_id), ('state', 'not in', ['draft','cancel','done'])]"/>
+                                    <field name="create_date" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="flsp_purchase_container_tree_view">
+        <field name="name">flsp.purchase.container.tree</field>
+        <field name="model">flsp.purchase.container</field>
+        <field name="arch" type="xml">
+            <tree string="Container Tree">
+                <field name="name"/>
+                <field name="expected_date"/>
+                <field name="responsible"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="flsp_purchase_container_action">
+        <field name="name">Container</field>
+        <field name="res_model">flsp.purchase.container</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first Container
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="type_menu" name="Container"
+              parent="purchase.menu_procurement_management"
+              action="flsp_purchase_container_action"
+              groups="flspticketsystem.group_flspticketsystem_manager"/>
+</odoo>
