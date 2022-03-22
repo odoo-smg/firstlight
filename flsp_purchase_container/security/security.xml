@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Show groups-->
+    <record id="flsp_purchase_container_security" model="ir.module.category" >
+        <field name="name">FLSP Container</field>
+        <field name="description">Choose access groups</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="flsp_container_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="flsp_purchase_container_security"/>
+        <!--field name="implied_ids" eval="[(0, ref('base.group_user'))]"/-->
+        <field name="comment">The user will be able to access the container.</field>
+    </record>
+
+    <record id="flsp_container_manager" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="flsp_purchase_container_security"/>
+        <field name="implied_ids" eval="[(4, ref('flsp_container_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">The user will have full access to container.</field>
+    </record>
+</odoo>
