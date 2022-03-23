@@ -2,7 +2,8 @@
 
 import datetime
 from odoo import models, fields, api
-from datetime import datetime, date, timedelta
+from datetime import timedelta
+from datetime import datetime
 from odoo.exceptions import UserError
 
 
@@ -307,7 +308,7 @@ class FlspMrppurchaseLine(models.Model):
             if item:
                 postpone = False
                 if item[4].flsp_start_buy:
-                    if item[4].flsp_start_buy > date.today():
+                    if item[4].flsp_start_buy > fields.Date.today():
                         postpone = True
                 if postpone or route_buy not in item[4].route_ids.ids:
                     continue
@@ -373,7 +374,7 @@ class FlspMrppurchaseLine(models.Model):
             if item:
                 postpone = False
                 if item[4].flsp_start_buy:
-                    if item[4].flsp_start_buy > date.today():
+                    if item[4].flsp_start_buy > fields.Date.today():
                         postpone = True
                 if postpone or route_buy not in item[4].route_ids.ids:
                     continue
@@ -482,7 +483,7 @@ class FlspMrppurchaseLine(models.Model):
         required_by = current_date
         for product in products:
             if product.flsp_start_buy:
-                if product.flsp_start_buy > date.today():
+                if product.flsp_start_buy > fields.Date.today():
                     continue
 
             purchase_planning = self.env['flsp.mrp.purchase.line'].search([('product_id', '=', product.id)])
@@ -510,7 +511,7 @@ class FlspMrppurchaseLine(models.Model):
                         if route_buy not in component.route_ids.ids:
                             continue
                         if product.flsp_start_buy:
-                            if product.flsp_start_buy > date.today():
+                            if product.flsp_start_buy > fields.Date.today():
                                 continue
 
                         purchase_planning = self.env['flsp.mrp.purchase.line'].search(
@@ -564,7 +565,7 @@ class FlspMrppurchaseLine(models.Model):
                 else:
                     not_postpone = True
                     if forecast.product_id.flsp_start_buy:
-                        if forecast.product_id.flsp_start_buy > date.today():
+                        if forecast.product_id.flsp_start_buy > fields.Date.today():
                             not_postpone = False
                     if not_postpone and forecast.product_id.type == 'product' and route_buy in forecast.product_id.route_ids.ids:
 
