@@ -78,5 +78,5 @@
     <menuitem id="type_menu" name="Container"
               parent="purchase.menu_procurement_management"
               action="flsp_purchase_container_action"
-              groups="flspticketsystem.group_flspticketsystem_manager"/>
+              groups="flsp_purchase_container.flsp_container_user"/>
 </odoo>
