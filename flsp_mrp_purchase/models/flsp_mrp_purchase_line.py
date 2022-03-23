@@ -312,6 +312,8 @@ class FlspMrppurchaseLine(models.Model):
                         postpone = True
                 if postpone or route_buy not in item[4].route_ids.ids:
                     continue
+            else:
+                continue
             rationale = "<pre>-----------------------------------------------------------------------------------------------------------------"
             rationale += "<br/>                                        | Movement                                               |  AVG"
             rationale += "<br/>DATE        | QTY         |Balance      |Type |Source  |BOM Level|Mfg Lead time| Doc             | SBS  | SA   |"
@@ -379,6 +381,8 @@ class FlspMrppurchaseLine(models.Model):
                 if postpone or route_buy not in item[4].route_ids.ids:
                     continue
                 new_prod = (item[4] != product)
+            else:
+                continue
             if new_prod:
                 rationale += "</pre>"
                 purchase_line = self._include_prod(supplier_lead_time, product, rationale, current_balance, required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa,
@@ -510,8 +514,8 @@ class FlspMrppurchaseLine(models.Model):
                     for component in forecast_components:
                         if route_buy not in component.route_ids.ids:
                             continue
-                        if product.flsp_start_buy:
-                            if product.flsp_start_buy > fields.Date.today():
+                        if component.flsp_start_buy:
+                            if component.flsp_start_buy > fields.Date.today():
                                 continue
 
                         purchase_planning = self.env['flsp.mrp.purchase.line'].search(

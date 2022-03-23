@@ -10,7 +10,6 @@
     <record id="flsp_container_user" model="res.groups">
         <field name="name">User</field>
         <field name="category_id" ref="flsp_purchase_container_security"/>
-        <!--field name="implied_ids" eval="[(0, ref('base.group_user'))]"/-->
         <field name="comment">The user will be able to access the container.</field>
     </record>
 
