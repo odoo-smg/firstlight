@@ -937,7 +937,7 @@ class FlspMrppurchaseLine(models.Model):
         wip_reserverd = 0
         for each in stock_quant:
             wip_reserverd += each.reserved_quantity
-        stock_quant = self.env['stock.quant'].search(['&', ('product_id', '=', product.id), ('location_id', 'not in', pa_wip_locations)])
+        stock_quant = self.env['stock.quant'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)])
         for each in stock_quant:
             stock_reserverd += each.reserved_quantity
 
