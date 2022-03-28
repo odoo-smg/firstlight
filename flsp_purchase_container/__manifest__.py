@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock', 'purchase', 'mail'],
+    'depends': ['base', 'stock', 'purchase', 'mail', 'purchase_stock'],
 
     # always loaded
     'data': [
@@ -29,5 +29,7 @@
         'views/flsp_purchase_container.xml',
         'views/flsp_purchase_container_stock_picking.xml',
         'wizard/flsp_purchase_container_stock_picking_wiz.xml',
+        'wizard/flsp_purchase_container_po_wiz.xml',
+        'wizard/flsp_purchase_container_po_line_wiz.xml',
     ],
 }

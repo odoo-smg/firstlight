@@ -7,9 +7,7 @@
         <field name="arch" type="xml">
             <form string="Container Form">
                 <header>
-                    <button name="button_close" string="Close" class="btn-primary" type="object"
-                            status="close" groups="flspticketsystem.group_flspticketsystem_manager"
-                            attrs="{'invisible': [('status', 'not in', ['inprogress'])]}"/>
+                    <button name="purchase_wizard" attrs="{'invisible': [('status', '!=', 'overseas')]}" string="PO Wizard" type="object" class="oe_highlight" groups="flsp_purchase_container.flsp_container_manager"/>
                     <field name="status"  options="{'clickable': '1'}" widget="statusbar" />
                 </header>
                 <sheet>

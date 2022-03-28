@@ -8,22 +8,16 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='button_validate']" position="attributes">
-                  <attribute name="attrs">{'invisible': [('flsp_container_id', '!=', False)]}</attribute>
-                </xpath>
-                <xpath expr="//button[@name='action_show_details']" position="attributes">
-                  <attribute name="attrs">{'invisible': [('parent.flsp_container_id', '!=', False)]}</attribute>
+                  <attribute name="attrs">{'invisible': ['|', '|', ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), ('flsp_container_id', '!=', False)]}</attribute>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="attributes">
-                  <attribute name="attrs">{'invisible': [('flsp_container_id', '!=', False)]}</attribute>
+                  <attribute name="attrs">{'invisible': ['|', '|', ('state', 'not in', ('assigned', 'confirmed', 'partially_available', 'draft', 'waiting')), ('is_locked', '=', False), ('flsp_container_id', '!=', False)]}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='move_ids_without_package']" position="attributes">
-                  <attribute name="attrs">{'readonly': [('flsp_container_id', '!=', False)]}</attribute>
-                </xpath>
-                <xpath expr="//field[@name='move_line_nosuggest_ids']" position="attributes">
-                  <attribute name="attrs">{'readonly': [('flsp_container_id', '!=', False)]}</attribute>
+                  <attribute name="attrs">{'readonly': ['|', '|', ('flsp_container_id', '!=', False), '&amp;', ('show_operations', '=', True), '|', ('is_locked', '=', True), ('state', '=', 'done'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)]}</attribute>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="after">
-                  <button name="flsp_container_wizard" string="Container Wizard" groups="flsp_purchase_container.flsp_container_manager" type="object" attrs="{'invisible': ['|', '|', '|',('picking_type_code', '!=', 'incoming'), ('is_locked', '=', False), ('flsp_container_id', '!=', False), ('state', 'in', ['draft','cancel','done'])]}"/>
+                    <button name="flsp_container_wizard" string="Container Wizard" groups="flsp_purchase_container.flsp_container_manager" type="object" attrs="{'invisible': ['|', '|', '|',('picking_type_code', '!=', 'incoming'), ('is_locked', '=', False), ('flsp_container_id', '!=', False), ('state', 'in', ['draft','cancel','done'])]}"/>
                 </xpath>
                 <xpath expr="//field[@name='origin']" position="after">
                     <field name="flsp_container_id" readonly="1"/>
