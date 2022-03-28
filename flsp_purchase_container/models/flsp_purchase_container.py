@@ -42,6 +42,10 @@ class Container(models.Model):
         action['domain'] = [('picking_id', 'in', self.container_lines.picking_id.ids)]
         return action
 
+    def purchase_wizard(self):
+        action = self.env.ref('flsp_purchase_container.launch_flsp_purchase_container_po_wiz').read()[0]
+        return action
+
     @api.depends('expected_date')
     def write(self, values):
         res = super().write(values)

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record id="flsp_purchase_container_po_line_wiz_form_view" model="ir.ui.view">
+            <field name="name">ContainerPOLine</field>
+            <field name="model">flsp.purchase.container.po.line.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Container">
+                    <p>Please, start by selecting the PO:</p>
+                    <group>
+                        <field name="container_id" force_save="1" attrs="{'readonly': [('container_id', '!=', False)]}" />
+                        <field name="purchase_id" force_save="1" attrs="{'readonly': [('container_id', '!=', False)]}" />
+                    </group>
+
+                    <h3>
+                        <field style="color: blue;" name="okay_msg" attrs="{'readonly': [True]}" />
+                        <field style="color: red;" name="user_msg" attrs="{'readonly': [True]}" />
+                    </h3>
+                    <div attrs="{'invisible': [('okay_msg', '=', False)]}" >
+                        <group>
+                            <field name="receipts_handle" widget="radio" />
+                        </group>
+                        <h4>Container Lines</h4>
+                    </div>
+                    <div attrs="{'invisible': [('user_msg', '=', False)]}" >
+                        <h4>PO Lines</h4>
+                    </div>
+                    <div attrs="{'invisible': ['|', ('okay_msg', '!=', False), ('user_msg', '!=', False)]}" >
+                        <h4>PO Lines</h4>
+                    </div>
+                    <group>
+                        <field name="purchase_line_ids" nolabel="1" >
+                            <tree editable="bottom" create="false" delete="false">
+                                <field name="sequence" force_save="1" invisible="1"/>
+                                <field name="product_template_id" force_save="1" attrs="{'readonly': [(True)]}"/>
+                                <field name="product_qty" force_save="1" attrs="{'readonly': [(True)]}"/>
+                                <field name="product_uom" force_save="1" attrs="{'readonly': [(True)]}"/>
+                                <field name="qty_received" force_save="1" attrs="{'readonly': [(True)]}" />
+                                <field name="qty_other_container" force_save="1" attrs="{'readonly': [(True)]}"/>
+                                <field name="qty_container" force_save="1"/>
+                                <field name="date_planned" widget="date" force_save="1" attrs="{'readonly': [(True)]}" />
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="flsp_confirm" type="object" string="Next" class="btn-primary" attrs="{'invisible': [('okay_msg', '!=', False)]}"/>
+                        <button name="flsp_generate" type="object" string="Confirm To Create New Receipts for this PO" class="btn-primary" attrs="{'invisible': [('okay_msg', '=', False)]}"/>
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_purchase_container_po_line_wiz" model="ir.actions.act_window">
+            <field name="name">FLSP - Include from PO</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp.purchase.container.po.line.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>
