@@ -116,7 +116,8 @@ class FlspPoLineWizard(models.TransientModel):
         partner_location = self.env['stock.location'].search([('usage', '=', 'supplier')], limit=1)
 
         #container_id        purchase_id       purchase_line_ids        receipts_handle
-        purchase_lines = self.env['purchase.order.line'].search([('order_id', '=', self.purchase_id.id)]).sorted(lambda r: r.date_planned)
+        #purchase_lines = self.env['purchase.order.line'].search([('order_id', '=', self.purchase_id.id)]).sorted(lambda r: r.date_planned)
+        purchase_lines = self.env['purchase.order.line'].search(['&', ('order_id', '=', self.purchase_id.id), ('product_qty', '>', 0)]).sorted(lambda r: r.date_planned)
 
         if purchase_lines:
             if self.receipts_handle == 'one':
