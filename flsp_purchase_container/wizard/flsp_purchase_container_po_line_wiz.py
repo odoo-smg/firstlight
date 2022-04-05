@@ -73,7 +73,7 @@ class FlspPoLineWizard(models.TransientModel):
 
     def find_other_container(self, po_line, consider_current=False, container=False):
         ret = 0
-        moves = self.env['stock.move'].search([('purchase_line_id', '=', po_line.id)])
+        moves = self.env['stock.move'].search(['&', ('purchase_line_id', '=', po_line.id), ('state', 'not in', ['done', 'cancel'])])
         for move in moves:
             if move.picking_id.flsp_container_id:
                 if consider_current:
