@@ -7,7 +7,7 @@
             <tree string="Open POs" create="false" editable="top">
                 <field name="company_id" invisible="True" />
                 <field name="state" readonly="True"/>
-                <field name="origin" readonly="True"/>
+                <field name="origin" invisible="True" readonly="True"/>
                 <field name="product_id" readonly="True"/>
                 <field name="product_qty" readonly="True"/>
                 <field name="date_expected" readonly="True"/>

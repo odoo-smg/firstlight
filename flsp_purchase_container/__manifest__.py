@@ -8,7 +8,7 @@
         Customizations performed:
 
         - Container
-        - Receipt: new field container 
+        - Receipt: new field container
                    prevents the receipt to be completed.
     """,
 
@@ -31,5 +31,6 @@
         'wizard/flsp_purchase_container_stock_picking_wiz.xml',
         'wizard/flsp_purchase_container_po_wiz.xml',
         'wizard/flsp_purchase_container_po_line_wiz.xml',
+        'views/stock_move.xml',
     ],
 }

@@ -11,4 +11,16 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="flsppurchase_purchase_tree_search" model='ir.ui.view'>
+            <field name="name">flspurchase.purchase.search.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" string="Order" filter_domain="['|', '|', ('name', 'ilike', self), ('partner_ref', 'ilike', self), '|', ('partner_id', 'child_of', self), ('product_id', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
+        
 </odoo>
