@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_purchase_container_stock_move_tree">
+            <field name="name">flsp.purchase.container.stock.move.tree.inherit</field>
+            <field name="model">stock.move</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="flsppurchase.flsp_stock_move_open_po_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="flsp_purchase_id" readonly="1"/>
+                    <field name="flsp_container_id" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="attributes">
+                    <attribute name="attrs">{'invisible': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

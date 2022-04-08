@@ -116,7 +116,6 @@ class FlspPoLineWizard(models.TransientModel):
         partner_location = self.env['stock.location'].search([('usage', '=', 'supplier')], limit=1)
 
         #container_id        purchase_id       purchase_line_ids        receipts_handle
-        #purchase_lines = self.env['purchase.order.line'].search([('order_id', '=', self.purchase_id.id)]).sorted(lambda r: r.date_planned)
         purchase_lines = self.env['purchase.order.line'].search(['&', ('order_id', '=', self.purchase_id.id), ('product_qty', '>', 0)]).sorted(lambda r: r.date_planned)
 
         if purchase_lines:
@@ -138,6 +137,8 @@ class FlspPoLineWizard(models.TransientModel):
                                 'picking_id': stock_picking.id,
                                 'date_expected': line.date_planned,
                                 'purchase_line_id': line.id,
+                                'origin': self.purchase_id.name,
+                                'description_picking': line.name,
                                 'location_id': partner_location.id,
                                 'location_dest_id': picking_type_id.default_location_dest_id.id,
                             })
@@ -146,10 +147,7 @@ class FlspPoLineWizard(models.TransientModel):
                 stock_picking = self.create_stock_picking()
                 current_date = False
                 if stock_picking:
-                    print('********************** running by date')
                     for line in purchase_lines:
-                        print("current_date"+str(current_date))
-                        print(line.date_planned.date())
                         if not current_date:
                             current_date = line.date_planned.date()
 
@@ -172,6 +170,8 @@ class FlspPoLineWizard(models.TransientModel):
                                 'picking_id': stock_picking.id,
                                 'date_expected': line.date_planned,
                                 'purchase_line_id': line.id,
+                                'origin': self.purchase_id.name,
+                                'description_picking': line.name,
                                 'location_id': partner_location.id,
                                 'location_dest_id': picking_type_id.default_location_dest_id.id,
                             })
@@ -231,6 +231,8 @@ class FlspPoLineWizard(models.TransientModel):
                     'product_uom': prod.uom_id.id,
                     'product_uom_qty': line.qty_container,
                     'picking_id': stock_picking.id,
+                    'origin': line.order_id.name,
+                    'description_picking': line.name,
                     'date_expected': datetime.combine(self.container_id.expected_date, time(12, 0, 0)),
                     'purchase_line_id': line.purchase_order_line_id.id,
                     'location_id': partner_location.id,
