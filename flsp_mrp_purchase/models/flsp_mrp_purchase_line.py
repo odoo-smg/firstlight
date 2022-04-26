@@ -362,7 +362,7 @@ class FlspMrppurchaseLine(models.Model):
                         current_balance = product.qty_available
                 else:
                     if not product.flsp_is_wip_stock:
-                        current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                        current_balance = product.qty_available - pa_wip_qty
                     else:
                         current_balance = product.qty_available - wip_reserverd
             rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
@@ -440,7 +440,7 @@ class FlspMrppurchaseLine(models.Model):
                             current_balance = product.qty_available
                     else:
                         if not product.flsp_is_wip_stock:
-                            current_balance = product.qty_available - pa_wip_qty - wip_reserverd
+                            current_balance = product.qty_available - pa_wip_qty
                         else:
                             current_balance = product.qty_available - wip_reserverd
                 rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
