@@ -77,14 +77,14 @@ class FlspPoLineWizard(models.TransientModel):
         for move in moves:
             if move.picking_id.flsp_container_id:
                 if consider_current:
-                    ret += move.product_uom_qty
+                    ret += move.product_qty
                 else:
                     if container:
                         container_id = container.id
                     else:
                         container_id = self.container_id.id
                     if move.picking_id.flsp_container_id.id != container_id:
-                        ret += move.product_uom_qty
+                        ret += move.product_qty
         return ret
 
     def flsp_generate(self):
@@ -94,6 +94,11 @@ class FlspPoLineWizard(models.TransientModel):
             self.create_new_line(receitp)
         self.create_new_receit_from_po_line()
 
+        # adjust qty afterwards to avoid changing previous containers
+        for line in self.purchase_line_ids:
+            if ((line.qty_container + line.qty_other_container) > (line.product_qty - line.qty_received)):
+                line.purchase_order_line_id.product_qty = line.qty_container + line.qty_received + line.qty_other_container
+
     def create_new_line(self, receitp):
         self.env['flsp.purchase.container.line'].create({
                     'container_id': self.container_id.id,
@@ -102,6 +107,7 @@ class FlspPoLineWizard(models.TransientModel):
                 })
 
     def create_new_receit_from_po_line(self):
+        # Create new receipts for the remaining quantity.
         qty = 0
         for line in self.purchase_id.order_line:
             other_container = self.find_other_container(line, True)
@@ -205,21 +211,6 @@ class FlspPoLineWizard(models.TransientModel):
         picking_type_id = self.env['stock.picking.type'].search([('sequence_code', '=', 'IN')], limit=1)
         partner_location = self.env['stock.location'].search([('usage', '=', 'supplier')], limit=1)
 
-        '''
-        # commented to delete later
-        create_val = {
-            'origin': self.purchase_id.name,
-            'partner_id': self.purchase_id.partner_id.id,
-            'picking_type_id': picking_type_id.id,
-            'location_id': partner_location.id,
-            'company_id': self.env.company.id,
-            #'location_id': picking_type_id.default_location_src_id.id,
-            'location_dest_id': picking_type_id.default_location_dest_id.id,
-            'flsp_purchase_id': self.purchase_id.id,
-            'scheduled_date': datetime.combine(self.container_id.expected_date, time(12, 0, 0)),
-        }
-        stock_picking = self.env['stock.picking'].create(create_val)
-        '''
         stock_picking = self.create_stock_picking()
 
         if stock_picking:
@@ -241,9 +232,6 @@ class FlspPoLineWizard(models.TransientModel):
             stock_picking.action_confirm()
 
         return stock_picking
-
-
-
 
     def delete_previous_receits(self):
         if self.purchase_id.order_line:
@@ -270,8 +258,9 @@ class FlspPoLineWizard(models.TransientModel):
         total_qty = 0
         for line in self.purchase_line_ids:
             if line.qty_container:
-                if (line.qty_container > line.product_qty - line.qty_received):
-                    user_msg = 'Please, review product: '+line.product_template_id.default_code+' container quantity is bigger than open (Quantity-Received).'
+                if ((line.qty_container+line.qty_other_container) > (line.product_qty - line.qty_received)):
+                    okay_msg = "Attention: This purchase orders will be updated to match the quantity selected. Please, review it and confirm it."
+                #    user_msg = 'Please, review product: '+line.product_template_id.default_code+' container quantity is bigger than open (Quantity-Received).'
                 total_qty += line.qty_container
                 if not date_line:
                     date_line = line.date_planned.date()
@@ -283,7 +272,8 @@ class FlspPoLineWizard(models.TransientModel):
 
         if not user_msg:
             # Pass
-            okay_msg = "A new receipt will be created for the lines below. Please, review it and confirm it."
+            if not okay_msg:
+                okay_msg = "A new receipt will be created for the lines below. Please, review it and confirm it."
 
         action = self.env.ref('flsp_purchase_container.launch_flsp_purchase_container_po_line_wiz').read()[0]
         if self.purchase_id:
@@ -292,6 +282,7 @@ class FlspPoLineWizard(models.TransientModel):
                 if okay_msg:
                     if line.qty_container <= 0:
                         continue
+
                 line_contex.append([0, 0, {
                     'flsp_purchase_container_po_line_wiz_id': line.id,
                     'sequence': line.sequence,
