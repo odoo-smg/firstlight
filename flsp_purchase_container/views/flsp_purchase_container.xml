@@ -8,7 +8,8 @@
             <form string="Container Form">
                 <header>
                     <button name="purchase_wizard" attrs="{'invisible': [('status', '!=', 'overseas')]}" string="PO Wizard" type="object" class="oe_highlight" groups="flsp_purchase_container.flsp_container_manager"/>
-                    <field name="status"  options="{'clickable': '1'}" widget="statusbar" />
+                    <button name="container_receive" attrs="{'invisible': [('status', '!=', 'in_canada')]}" string="Receive" type="object" class="oe_highlight" groups="flsp_purchase_container.flsp_container_manager" confirm="Are you sure you want to receive all receipts at once?"/>
+                    <field name="status"  options="{'clickable': '1'}"   />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
