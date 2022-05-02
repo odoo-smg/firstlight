@@ -29,7 +29,7 @@ class FlspMrpSubstitutionLine(models.Model):
     def onchange_product_sub_id(self):
         if self.product_substitute_id:
             self.product_substitute_uom_id = self.product_substitute_id.uom_id.id
-            
+
     @api.onchange('product_id')
     def onchange_product_id(self):
         self.product_substitute_qty=self.product_qty
@@ -45,6 +45,16 @@ class FlspMrpSubstitutionLine(models.Model):
     def _compute_product_qty(self):
         ret_val = 0
         bom_line_id = False
+        to_unlink = False
+        for each in self:
+            if not each.bom_line_id:
+                to_unlink = each.id
+                continue
+        if to_unlink:
+            line_to_unlink = self.env["flsp.mrp.substitution.line"].search([("id", "=", to_unlink)])
+            if line_to_unlink:
+                line_to_unlink.unlink()
+
         if self.flsp_bom_id:
             if len(self) == 1:
                 for line in self.flsp_bom_id.bom_line_ids:
