@@ -36,10 +36,11 @@ class FlspMrpSubstitutionLine(models.Model):
 
     @api.depends('product_id')
     def _compute_product_uom_id(self):
-        if self.product_id:
-            self.product_uom_id = self.product_id.uom_id.id
-        else:
-            self.product_uom_id = False
+        for each in self:
+            if each.product_id:
+                each.product_uom_id = each.product_id.uom_id.id
+            else:
+                each.product_uom_id = False
 
     @api.depends('product_id')
     def _compute_product_qty(self):
