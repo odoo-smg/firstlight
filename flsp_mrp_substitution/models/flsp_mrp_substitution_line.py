@@ -45,15 +45,6 @@ class FlspMrpSubstitutionLine(models.Model):
     def _compute_product_qty(self):
         ret_val = 0
         bom_line_id = False
-        to_unlink = False
-        for each in self:
-            if not each.bom_line_id:
-                to_unlink = each.id
-                continue
-        if to_unlink:
-            line_to_unlink = self.env["flsp.mrp.substitution.line"].search([("id", "=", to_unlink)])
-            if line_to_unlink:
-                line_to_unlink.unlink()
 
         if self.flsp_bom_id:
             if len(self) == 1:
@@ -75,3 +66,13 @@ class FlspMrpSubstitutionLine(models.Model):
 
                         else:
                             sub_line.product_qty = 0
+        ## to unlink in case the product has been deleted in the BOM by accident
+        to_unlink = False
+        for each in self:
+            if not each.bom_line_id:
+                to_unlink = each.id
+                continue
+        if to_unlink:
+            line_to_unlink = self.env["flsp.mrp.substitution.line"].search([("id", "=", to_unlink)])
+            if line_to_unlink:
+                line_to_unlink.unlink()
