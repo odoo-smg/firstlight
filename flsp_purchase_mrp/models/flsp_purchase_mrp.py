@@ -16,6 +16,7 @@ class FlspPurchaseMrp(models.Model):
     consider_so = fields.Boolean(string='Consider Sales Orders', default=True)
     consider_po = fields.Boolean(string='Consider Purchase Orders', default=True)
     consider_mo = fields.Boolean(string='Consider Manufacturing Orders', default=False)
+    auto_generated = fields.Boolean(string='Auto Generated', default=False)
     consider_reserved = fields.Boolean(string='Consider Reserved Quantity', default=False)
     date = fields.Datetime(String="Date", default=datetime.now())
     user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user)
