@@ -47,9 +47,9 @@ class FlspPurchaseMrp(models.Model):
         for each in self.with_progress(msg="Calculating Open Movements"):
             # Delete previous lines
             print('open moves')
-            for line in each.purchase_mrp_lines:
-                line.unlink()
-            open_moves = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
+            #for line in each.purchase_mrp_lines:
+            #    line.unlink()
+            #open_moves = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
             print('open moves')
 
         finish_open_moves = datetime.now()
