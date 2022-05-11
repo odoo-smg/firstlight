@@ -103,7 +103,7 @@ class FlspPurchaseMrp(models.Model):
                     if planning.suggested_qty > 0:
                         plan_sub = self.env['flsp.purchase.mrp.line'].search(['&', ('purchase_mrp_id', '=', self.id), ('product_id', '=', each.product_substitute_id.id)])
                         if plan_sub.suggested_qty == 0:
-                            planning.rationale += "</br>Demand zeroed.</br>*** This product can be substituted by: "+each.product_substitute_id.default_code
+                            planning.rationale += "<br/><br/>Demand zeroed.<br/>*** This product can be substituted by: "+each.product_substitute_id.default_code
                             planning.suggested_qty = 0
                             planning.adjusted_qty = 0
                             planning.balance_neg = 0
