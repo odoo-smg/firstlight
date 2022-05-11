@@ -632,8 +632,10 @@ class FlspPurchaseMrp(models.Model):
         stock_quant = self.env['stock.quant'].search(['&', ('product_id', '=', product.id), ('location_id', 'in', pa_wip_locations)])
         for each in stock_quant:
             wip_reserverd += each.reserved_quantity
+        stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', wh_stock_locations), ('product_id', '=', product.id)])
         for each in stock_quant:
             stock_reserverd += each.reserved_quantity
+        stock_reserverd = stock_reserverd - wip_reserverd
 
         order_point = self.env['stock.warehouse.orderpoint'].search(
             ['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
@@ -650,7 +652,7 @@ class FlspPurchaseMrp(models.Model):
         initial_balance_explanation += "<br/>(A) Stock Quantity = " + str(product.qty_available - pa_wip_qty)
         initial_balance_explanation += "<br/>(B) WIP Quantity = " + str(pa_wip_qty)
         initial_balance_explanation += "<br/>(C) Stock Reserved  = " + str(stock_reserverd)
-        initial_balance_explanation += "<br/>(D) WIP Reserved  = " + str(pa_wip_qty)
+        initial_balance_explanation += "<br/>(D) WIP Reserved  = " + str(wip_reserverd)
         if self.consider_wip:
             initial_balance_explanation += "<br/>You choose to consider WIP for the on hand quantity."
             if not self.consider_reserved:
