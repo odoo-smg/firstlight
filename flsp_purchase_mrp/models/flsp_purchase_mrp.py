@@ -41,7 +41,7 @@ class FlspPurchaseMrp(models.Model):
         if not product_from or not product_to:
             product_from = 1 # do not use 0 for start  # 101762-000
             product_to = 999999  # 100010-000
-            #product_from = product_to = 1713 #101507-000 #1000012-000 3 #100003-000
+            #product_from = product_to = 8 #1000008-000
         open_moves = []
         for each in self.with_progress(msg="Calculating Open Movements"):
             # Delete previous lines
@@ -442,11 +442,12 @@ class FlspPurchaseMrp(models.Model):
                     if month_trigger < 12:
                         month_name = next_6_months_2[month_trigger-6]
 
+                total_until = int(planning.delay / 31)+1
+
                 if month_name:
                     rationale += '<br/>Balance below minimal at month:'+month_name
                 else:
                     rationale += '<br/>Balance below minimal at month: out of range because is more than 12 months.'
-                total_until = int(planning.delay / 31)+1
                 count = 0
                 start_val = False
                 final_val = False
@@ -462,7 +463,8 @@ class FlspPurchaseMrp(models.Model):
 
                 rationale += '<br/>(BBM) Balance when below min qty was:'+str(start_val)
                 rationale += '<br/>Lead Time is: '+str(planning.delay)+' days ~ '+str(abs(total_until))+" months."
-                if total_until >= month_trigger and start_val <= planning.product_min_qty:
+
+                if total_until > month_trigger and start_val <= planning.product_min_qty:
                     new_suggested = planning.product_min_qty - start_val
                     rationale += '<br/>The Balance went bellow min before the leadtime, '
                     rationale += '<br/>So, quantity suggested should be (MSQ)-(BBM):'+str(new_suggested)
@@ -470,7 +472,6 @@ class FlspPurchaseMrp(models.Model):
                     rationale += '<br/>Quantity available is enough to produce beyond the next order point.'
                     rationale += '<br/>So, quantity suggested should be zero. '
                     new_suggested = 0
-            print('Calculating final balance for product:'+planning.product_id.default_code)
 
             if not planning.required_by:
                 if month_trigger >= 0:
