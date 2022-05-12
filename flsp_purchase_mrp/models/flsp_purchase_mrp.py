@@ -147,6 +147,7 @@ class FlspPurchaseMrp(models.Model):
             sales_forecast = []
 
         for forecast in sales_forecast.with_progress("sub-operation - Sales Forecast"):
+            forecast._qty_based_off_date()
             forecast_bom = self.env['mrp.bom'].search(
                 [('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
             if forecast_bom:
@@ -967,15 +968,15 @@ class FlspPurchaseMrpLine(models.Model):
     description = fields.Char(string='Description', readonly=True)
     default_code = fields.Char(string='Part #', readonly=True)
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
-    product_id = fields.Many2one('product.product', string='Product', readonly=True)
+    product_id = fields.Many2one('product.product', string='Product', readonly=True, help="Product / Component - Only products that control stock (Storable products) with the flag Routes = 'to buy' will show up in this report.")
     stock_picking = fields.Many2one('stock.picking', string='Stock Picking', readonly=False)
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', readonly=False)
-    product_min_qty = fields.Float('Min. Qty', readonly=True)
+    product_min_qty = fields.Float('Min. Qty', readonly=True, help="When the stock goes below the Min. Quantity specified for this field, the report suggests to buy more.")
     product_max_qty = fields.Float('Max. Qty', readonly=True)
-    qty_multiple = fields.Float('Qty Multiple', readonly=True)
-    product_qty = fields.Float(string='Qty on Hand', readonly=True)
-    reserved = fields.Float(string='Qty Reserved', readonly=True)
-    reserved_wip = fields.Float(string='Qty Reserved WIP', readonly=True)
+    qty_multiple = fields.Float('Qty Multiple', readonly=True, help="The quantity suggested to buy will be rounded up to this multiple. Ex. If the report suggests to buy 34 of a product multiple of 4 the quantity will be adjusted to 36.")
+    product_qty = fields.Float(string='Qty on Hand', readonly=True, help="The total on hand includes WIP+Stock and all reserved quantity.")
+    reserved = fields.Float(string='Qty Reserved', readonly=True, help="Stock only reserved quantity.")
+    reserved_wip = fields.Float(string='Qty Reserved WIP', readonly=True, help="WIP only reserved quantity.")
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
     curr_outs = fields.Float(String="Demand", readonly=True,
                              help="Includes all confirmed sales orders and manufacturing orders")
@@ -985,12 +986,11 @@ class FlspPurchaseMrpLine(models.Model):
     month1_use = fields.Float(String="2020-06 Usage", readonly=True, help="Total usage of last month.")
     month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
     month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
-    suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
-    adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
-    purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
-    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True,
-                                      help="Quantity suggested to buy or produce.")
-    po_qty = fields.Float(string='Qty Open PO')
+    suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity required to buy according to the rationale below.")
+    adjusted_qty = fields.Float(String="Adjusted Qty", help="This quantity is the result of the required quantity after calculated the multiple and the vendor quantity.")
+    purchase_adjusted = fields.Float(string='Adjusted 2nd uom', help="Same as the Required quantity, but using the purchase unit of measure, oposed to the consumption unit of measure.")
+    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True, help="Same as the Adjusted Qty but using the purchase unit of measure, oposed to the consumption unit of measure.")
+    po_qty = fields.Float(string='Qty Open PO', help="The total quantity of this product with open receipts to be received.")
     rfq_qty = fields.Float(string='Qty RFQ')
 
     qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
@@ -1013,13 +1013,13 @@ class FlspPurchaseMrpLine(models.Model):
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    stock_qty = fields.Float(string='Stock Qty', readonly=True)
-    wip_qty = fields.Float(string='WIP Qty', readonly=True)
-    vendor_id = fields.Many2one('res.partner', string='Supplier')
-    vendor_qty = fields.Float(string='Quantity', readonly=True)
-    vendor_price = fields.Float(string='Unit Price', readonly=True)
-    delay = fields.Integer(string="Delivery Lead Time")
-    required_by = fields.Date(String="Required by", readonly=True)
+    stock_qty = fields.Float(string='Stock Qty', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
+    wip_qty = fields.Float(string='WIP Qty', readonly=True, help="Quantity in WH/PA/WIP and sub-locations. The total here includes the WIP Reserved quantity.")
+    vendor_id = fields.Many2one('res.partner', string='Supplier', help="Vendor for this product listed in the Purchase price list.")
+    vendor_qty = fields.Float(string='Quantity', readonly=True, help="The quantity to purchase from this vendor to benefit from the price. This field will update the adjusted quantity using the required quantity as the initial value.")
+    vendor_price = fields.Float(string='Unit Price', readonly=True, help="Price to purchase 1 unit of the product.")
+    delay = fields.Integer(string="Delivery Lead Time", help="Lead time in days between the cofirmation of the purchase order and the receipt of the products in your warehouse. This information will be used to decrease the date when the stock goes below the min. quantity.")
+    required_by = fields.Date(String="Required by", readonly=True, help="This date is calculated as the rationale below. In the happy path this should be the date the stock quantity goes below the min. quantiy decreased by the number of days listed in the Supplier Delivery Lead Time.")
     balance = fields.Float(string='Balance', readonly=True)
     late_delivery = fields.Float(string='Balance', readonly=True)
     total_price = fields.Float(string='Total Price', readonly=True)
@@ -1030,8 +1030,8 @@ class FlspPurchaseMrpLine(models.Model):
     avg_per_sbs = fields.Float(string='Avg per SBS', readonly=True)
     avg_per_ssa = fields.Float(string='Avg per SA', readonly=True)
 
-    uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True)
-    purchase_uom = fields.Many2one('uom.uom', 'Purchase Unit of Measure', readonly=True)
+    uom = fields.Many2one('uom.uom', 'Product Unit of Measure', readonly=True, help="Unit of measure for consumption. This is the unit of measure used in all operations with exception of purchasing when the supplier uses a different unit of measure.")
+    purchase_uom = fields.Many2one('uom.uom', 'Purchase Unit of Measure', readonly=True, help="Supplier unit of measure. This could eventualy be different of the Standard unit of measure.")
 
     qty_month1 = fields.Float(string='January')
     qty_month2 = fields.Float(string='February')
@@ -1072,13 +1072,13 @@ class FlspPurchaseMrpLine(models.Model):
     OpenPO_month11 = fields.Float(string='Open PO November')
     OpenPO_month12 = fields.Float(string='Open PO December')
 
-    six_month_forecast = fields.Float(string='6 Months Forecast')
-    twelve_month_forecast = fields.Float(string='12 Months Forecast')
+    six_month_forecast = fields.Float(string='6 Months Forecast', help="This is the total of the 6 months future sales forecast. The forecast is the expectation of the quantity we will be selling in the future.")
+    twelve_month_forecast = fields.Float(string='12 Months Forecast', help="This is the total of the 12 months future sales forecast. The forecast is the expectation of the quantity we will be selling in the future.")
 
-    six_month_actual = fields.Float(string='6 Months Actual')
-    twelve_month_actual = fields.Float(string='12 Months Actual')
+    six_month_actual = fields.Float(string='6 Months Actual', help="The past 6 months Actual is the real consumption of this product in the past 6 months. It does not includes any inventory adjustments.")
+    twelve_month_actual = fields.Float(string='12 Months Actual', help="The past 12 months Actual is the real consumption of this product in the past 12 months. It does not includes any inventory adjustments.")
 
-    open_demand = fields.Float(string='Open Demand')
+    open_demand = fields.Float(string='Open Demand', help="Is the total of movements of Type Out shown in the list below.")
 
     active = fields.Boolean(default=True)
 

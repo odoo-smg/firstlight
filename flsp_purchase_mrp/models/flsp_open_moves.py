@@ -163,6 +163,7 @@ class FlspOpenMoves(models.Model):
         :returns: dict: keys are components and values are aggregated quantity
         in the product default UoM.
         """
+        route_mfg = self.env.ref('mrp.route_warehouse0_manufacture').id
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
 
         if level is None:
@@ -172,53 +173,48 @@ class FlspOpenMoves(models.Model):
         factor /= bom.product_uom_id._compute_quantity(
             bom.product_qty, bom.product_tmpl_id.uom_id, round=False
         )
-        bom_lines = []
         for line in bom.bom_line_ids:
-            bom_lines.append([line.product_id, line.product_qty, line.product_uom_id])
-        for line in bom.flsp_substitution_line_ids:
-            bom_lines.append([line.product_substitute_id, line.product_substitute_qty, line.product_substitute_uom_id])
-        for line in bom_lines:
-            sub_bom = bom._bom_find(product=line[0])
-            if route_buy in line[0].route_ids.ids:
+            sub_bom = bom._bom_find(product=line.product_id)
+            if route_buy in line.product_id.route_ids.ids:
                 sub_bom = False
             if sub_bom:
                 #if backflush and not line.product_id.product_tmpl_id.flsp_backflush:
-                if totals.get(line[0]):
-                    totals[line[0]]['total'] += (
+                if totals.get(line.product_id):
+                    totals[line.product_id]['total'] += (
                             factor
-                            * line[2]._compute_quantity(
-                        line[1], line[0].uom_id, round=False
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
                     )
                     )
                 else:
-                    totals[line[0]] = {'total': (
+                    totals[line.product_id] = {'total': (
                             factor
-                            * line[2]._compute_quantity(
-                        line[1], line[0].uom_id, round=False
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
                     )
                     ), 'level': level, 'bom': sub_bom.code}
 #                continue
 #                else:
-                new_factor = factor * line[2]._compute_quantity(
-                    line[1], line[0].uom_id, round=False
+                new_factor = factor * line.product_uom_id._compute_quantity(
+                    line.product_qty, line.product_id.uom_id, round=False
                 )
 
                 level += 1
                 self._get_flattened_totals(sub_bom, new_factor, totals, level, backflush)
                 level -= 1
             else:
-                if totals.get(line[0]):
-                    totals[line[0]]['total'] += (
+                if totals.get(line.product_id):
+                    totals[line.product_id]['total'] += (
                             factor
-                            * line[2]._compute_quantity(
-                        line[1], line[0].uom_id, round=False
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
                     )
                     )
                 else:
-                    totals[line[0]] = {'total': (
+                    totals[line.product_id] = {'total': (
                             factor
-                            * line[2]._compute_quantity(
-                        line[1], line[0].uom_id, round=False
+                            * line.product_uom_id._compute_quantity(
+                        line.product_qty, line.product_id.uom_id, round=False
                     )
                     ), 'level': level, 'bom': ''}
         return totals
