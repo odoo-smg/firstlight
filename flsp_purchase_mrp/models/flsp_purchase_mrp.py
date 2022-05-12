@@ -276,10 +276,10 @@ class FlspPurchaseMrp(models.Model):
             count += 1
         for planning in purchase_planning.with_progress("sub-operation - Demand Requirements"):
             six_month_forecast = 0
-            rationale = "<pre>------------------------------------------------- Forecast ----------------------------------------------------<br/>"
-            next_line = "---------------------------------------------------------------------------------------------------------------<br/>"
-            rationale += '        |'
-            next_line += '        |'
+            rationale = "<pre>------------------------------------------------------- Forecast ----------------------------------------------------------<br/>"
+            next_line = "---------------------------------------------------------------------------------------------------------------------------<br/>"
+            rationale += '                    |'
+            next_line += '                    |'
             for month in next_6_months:
                 rationale += month + "|"
             for month in next_6_months_2:
@@ -287,8 +287,8 @@ class FlspPurchaseMrp(models.Model):
             rationale += "<br/>"
             next_line += "<br/>"
             key = current_date.month
-            rationale += 'Forecast|'
-            next_line += 'Forecast|'
+            rationale += 'Forecast Consumption|'
+            next_line += 'Forecast Consumption|'
             count_to_six=0
             for month in next_6_months:
                 field_name = 'qty_month' + str(key)
@@ -308,8 +308,8 @@ class FlspPurchaseMrp(models.Model):
                 key += 1
                 if key > 12:
                     key = 1
-            rationale += '<br/>Actual  |'
-            next_line += '<br/>Actual  |'
+            rationale += '<br/>Actual Consumption  |'
+            next_line += '<br/>Actual Consumption  |'
             key = current_date.month
             for month in next_6_months:
                 field_name = 'consumption_month' + str(key)
@@ -324,8 +324,8 @@ class FlspPurchaseMrp(models.Model):
                 if key > 12:
                     key = 1
 
-            rationale += '<br/>Open POs|'
-            next_line += '<br/>Open POs|'
+            rationale += '<br/>Forecasted Arrivals |'
+            next_line += '<br/>Forecasted Arrivals |'
             key = current_date.month
             for month in next_6_months:
                 field_name = 'OpenPO_month' + str(key)
@@ -340,16 +340,20 @@ class FlspPurchaseMrp(models.Model):
                 if key > 12:
                     key = 1
 
-            rationale += '<br/>Diff    |'
-            next_line += '<br/>Diff    |'
+            rationale += '<br/>Quantity Change     |'
+            next_line += '<br/>Quantity Change     |'
             key = current_date.month
             for month in next_6_months:
                 field_name = 'qty_month' + str(key)
-                diff = getattr(planning, field_name)
+                forecast_total = getattr(planning, field_name)
                 field_name = 'consumption_month' + str(key)
-                diff -= getattr(planning, field_name)
+                consumption_total = getattr(planning, field_name)
                 field_name = 'OpenPO_month' + str(key)
-                diff += getattr(planning, field_name)
+                openPO_total = getattr(planning, field_name)
+                if consumption_total > forecast_total:
+                    diff = openPO_total - consumption_total
+                else:
+                    diff = openPO_total - forecast_total
                 rationale += '{0: <16.2f}|'.format(diff)
                 key += 1
                 if key > 12:
@@ -363,17 +367,17 @@ class FlspPurchaseMrp(models.Model):
                 key += 1
                 if key > 12:
                     key = 1
-            rationale += "<br/>---------------------------------------------------------------------------------------------------------------<br/>"
-            next_line += "<br/>---------------------------------------------------------------------------------------------------------------<br/>"
+            rationale += "<br/>---------------------------------------------------------------------------------------------------------------------------<br/>"
+            next_line += "<br/>---------------------------------------------------------------------------------------------------------------------------<br/>"
             months_to_consider = 13 #int(planning.delay / 31)
             value_to_consider = 0
             if months_to_consider >= 1:
                 months_to_consider += 1
             if months_to_consider <= 0:
                 months_to_consider = 1
-            rationale += 'balance='
+            rationale += 'Balance             '
             if months_to_consider > 6:
-                next_line += 'balance='
+                next_line += 'Balance             '
             key = current_date.month
             count = 1
 
@@ -410,8 +414,8 @@ class FlspPurchaseMrp(models.Model):
                 elif current_month < months_to_consider:
                     if count > 13:
                         if not total_to_print:
-                            next_line += '>| (...)'
-                            total_to_print = True
+                            #next_line += '>| (...)'
+                            total_to_print = False
                     else:
                         if current_month <= 5:
                             if current_month == 5:
@@ -974,7 +978,7 @@ class FlspPurchaseMrpLine(models.Model):
     product_min_qty = fields.Float('Min. Qty', readonly=True, help="When the stock goes below the Min. Quantity specified for this field, the report suggests to buy more.")
     product_max_qty = fields.Float('Max. Qty', readonly=True)
     qty_multiple = fields.Float('Qty Multiple', readonly=True, help="The quantity suggested to buy will be rounded up to this multiple. Ex. If the report suggests to buy 34 of a product multiple of 4 the quantity will be adjusted to 36.")
-    product_qty = fields.Float(string='Qty on Hand', readonly=True, help="The total on hand includes WIP+Stock and all reserved quantity.")
+    product_qty = fields.Float(string='Qty on Hand', readonly=True, help="The total on hand includes WIP+Stock and all reserved quantity. If the product is set to have WIP=Stock the WIP value is already in the total.")
     reserved = fields.Float(string='Qty Reserved', readonly=True, help="Stock only reserved quantity.")
     reserved_wip = fields.Float(string='Qty Reserved WIP', readonly=True, help="WIP only reserved quantity.")
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
