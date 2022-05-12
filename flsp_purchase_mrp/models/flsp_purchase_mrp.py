@@ -635,7 +635,7 @@ class FlspPurchaseMrp(models.Model):
         stock_quant = self.env['stock.quant'].search(['&', ('location_id', 'in', wh_stock_locations), ('product_id', '=', product.id)])
         for each in stock_quant:
             stock_reserverd += each.reserved_quantity
-        stock_reserverd = stock_reserverd - wip_reserverd
+        stock_reserverd = stock_reserverd
 
         order_point = self.env['stock.warehouse.orderpoint'].search(
             ['&', ('product_id', '=', product.id), ('location_id', 'in', wh_stock_locations)], limit=1)
