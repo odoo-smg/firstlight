@@ -11,6 +11,8 @@
                 <field name="product_qty"/>
                 <field name="product_uom"/>
                 <field name="quanty_available"/>
+                <field name="wip_qty"/>
+                <field name="reserved"/>
                 <field name="weeks_available"/>
             </tree>
         </field>
@@ -27,7 +29,7 @@
     </record>
 
     <record id="flsp_mrp_prd_simulation_action" model="ir.actions.act_window">
-        <field name="name">Summarized BOM</field>
+        <field name="name">Production Simulation</field>
         <field name="res_model">report.mrp.prd.simulation</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_id" ref="flsp_mrp_prd_simulation_tree"/>

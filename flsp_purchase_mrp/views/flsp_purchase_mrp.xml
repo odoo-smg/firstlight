@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="flsp_purchase_mrp_form">
+        <field name="name">flsp.purchase.mrp.form</field>
+        <field name="model">flsp.purchase.mrp</field>
+        <field name="arch" type="xml">
+            <form string="MRP purchase Form" create="false" edit="true">
+                <header>
+                    <!-- attrs="{'invisible': [('state', '=', 'done')]}" -->
+                    <button name="run_purchase_mrp"  attrs="{'invisible': [('state', '=', 'done')]}" string="Run" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_purchase_mrp_line" class="oe_stat_button" icon="fa-arrows-v" type="object" help="List Details" >
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Details</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="date" readonly="1"/>
+                        <field name="user_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <group name="supplier" string="Supplier" >
+                            <field name="state" invisible="1"/>
+                            <field name="supplier_lead_time" string="Replace Supplier Lead Time"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="material_purchase" string="What to consider when running the report?" >
+                            <field name="consider_wip" string="WIP Quantity"  />
+                            <field name="consider_forecast" string="Sales Forecast"  />
+                            <field name="consider_so" string="Open Sales Orders"  />
+                            <field name="consider_po" string="Open Purchase Orders"  />
+                            <!--field name="consider_mo" string="Open Manufacturing Orders" /-->
+                            <field name="consider_reserved" string="Quantity Reserved"  />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_purchase_mrp_tree" model="ir.ui.view">
+        <field name="name">To buy from MRP</field>
+        <field name="model">flsp.purchase.mrp</field>
+        <field name="arch" type="xml">
+            <tree string="Suggestion View"  edit="0" delete="0"  >
+                <field name="date" optional="show" />
+                <field name="user_id" optional="show" />
+                <field name="state" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="flsp_purchase_mrp_search_view" model="ir.ui.view">
+        <field name="name">purchase.mrp.search</field>
+        <field name="model">flsp.purchase.mrp</field>
+        <field name="arch" type="xml">
+            <search string="Created by">
+                <field name="user_id" string="User" filter_domain="[('user_id', 'ilike', self)]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('date','&gt;=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="flsp_purchase_mrp_action" model="ir.actions.act_window">
+        <field name="name">Purchase to buy Report</field>
+        <field name="res_model">flsp.purchase.mrp</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <!--field name="view_id" ref="flsp_purchase_mrp_tree"/-->
+        <field name="search_view_id" ref="flsp_purchase_mrp_search_view"/>
+        <field name="context">{'search_default_today': 1}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">Run a new report</p>
+        </field>
+    </record>
+
+    <!--record model="ir.actions.act_window.view" id="flsp_purchase_mrp_action">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="flsp_purchase_mrp_tree"/>
+        <field name="act_window_id" ref="flsp_mrp_purchase_line_action"/>
+    </record-->
+
+    <menuitem id="flsp_purchase_mrp_menu"
+              name="FLSP To Buy from MRP"
+              parent="purchase.purchase_report"
+              sequence="150"
+              action="flsp_purchase_mrp_action"/>
+
+</odoo>
