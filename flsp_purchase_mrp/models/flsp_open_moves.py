@@ -36,7 +36,7 @@ class FlspOpenMoves(models.Model):
         # *******************************************************************************
         if purchase_mrp_id.consider_po:
             open_receipts = self.env['stock.picking'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('picking_type_id', 'in', receipt_stock_type)])
-            for receipt in open_receipts.with_progress("sub-operation - Purchase"):
+            for receipt in open_receipts: # .with_progress("sub-operation - Purchase"):
                 stock_move_product = self.env['stock.move'].search([('picking_id', '=', receipt.id)])
                 for move in stock_move_product:
                     if receipt.origin:
@@ -55,7 +55,7 @@ class FlspOpenMoves(models.Model):
         # *******************************************************************************
         if purchase_mrp_id.consider_so:
             open_deliveries = self.env['stock.picking'].search(['&', ('state', 'not in', ['done', 'cancel', 'draft']), ('picking_type_id', 'in', delivery_stock_type)])
-            for delivery in open_deliveries.with_progress("sub-operation - Sales Orders"):
+            for delivery in open_deliveries: # .with_progress("sub-operation - Sales Orders"):
                 stock_move_product = self.env['stock.move'].search([('picking_id', '=', delivery.id)])
                 for move in stock_move_product:
                     move_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', move.product_id.product_tmpl_id.id)],

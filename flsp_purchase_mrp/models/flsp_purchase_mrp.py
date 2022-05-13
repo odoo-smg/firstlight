@@ -44,7 +44,7 @@ class FlspPurchaseMrp(models.Model):
             product_to = 999999  # 100010-000
             #product_from = product_to = 8 #1000008-000
         open_moves = []
-        for each in self.with_progress(msg="Calculating Open Movements"):
+        for each in self: # .with_progress(msg="Calculating Open Movements"):
             # Delete previous lines
             print('open moves')
             #for line in each.purchase_mrp_lines:
@@ -59,7 +59,7 @@ class FlspPurchaseMrp(models.Model):
 
         print('----------------------->')
 
-        for curr_product in products_to_process.with_progress(msg="Processing and saving the data."):
+        for curr_product in products_to_process: # .with_progress(msg="Processing and saving the data."):
             if route_buy not in curr_product.route_ids.ids:
                 continue
             if not curr_product.default_code:
@@ -73,7 +73,7 @@ class FlspPurchaseMrp(models.Model):
         #process the forecast
         print('-----------------------> FORECASTING')
 
-        for each in self.with_progress(msg="Calculating Open Movements"):
+        for each in self: # .with_progress(msg="Calculating Open Movements"):
             print('process_forecast')
             self.process_forecast(product_from, product_to)
 
@@ -146,7 +146,7 @@ class FlspPurchaseMrp(models.Model):
         else:
             sales_forecast = []
 
-        for forecast in sales_forecast.with_progress("sub-operation - Sales Forecast"):
+        for forecast in sales_forecast: # .with_progress("sub-operation - Sales Forecast"):
             forecast._qty_based_off_date()
             forecast_bom = self.env['mrp.bom'].search(
                 [('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
@@ -274,7 +274,7 @@ class FlspPurchaseMrp(models.Model):
                 next_6_months_2.append(months[key])
             key += 1
             count += 1
-        for planning in purchase_planning.with_progress("sub-operation - Demand Requirements"):
+        for planning in purchase_planning: # .with_progress("sub-operation - Demand Requirements"):
             six_month_forecast = 0
             rationale = "<pre>------------------------------------------------------- Forecast ----------------------------------------------------------<br/>"
             next_line = "---------------------------------------------------------------------------------------------------------------------------<br/>"
@@ -470,7 +470,7 @@ class FlspPurchaseMrp(models.Model):
                 rationale += '<br/>(BBM) Balance when below min qty was:'+str(start_val)
                 rationale += '<br/>Lead Time is: '+str(planning.delay)+' days ~ '+str(abs(total_until))+" months."
 
-                if total_until > month_trigger and start_val <= planning.product_min_qty:
+                if total_until > month_trigger and start_val <= planning.product_min_qty and abs(start_val) > 0.001:
                     new_suggested = planning.product_min_qty - start_val
                     rationale += '<br/>The Balance went bellow min before the leadtime, '
                     rationale += '<br/>So, quantity suggested should be (MSQ)-(BBM):'+str(new_suggested)
