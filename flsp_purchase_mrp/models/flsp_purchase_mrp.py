@@ -551,7 +551,7 @@ class FlspPurchaseMrp(models.Model):
             planning.total_price = required_qty * planning.vendor_price
 
             # Checking supplier quantity:
-            if suggested_qty > 0 and planning.vendor_qty > 0:
+            if suggested_qty > 0.001 and planning.vendor_qty > 0:
                 if suggested_qty < planning.vendor_qty:
                     rationale += "<br/><br/> ** Supplier quantity is bigger than the suggested qty."
                     rationale += "<br/>Adjusted quantity has been changed to: " + str(planning.vendor_qty)
@@ -559,7 +559,7 @@ class FlspPurchaseMrp(models.Model):
 
             print('After Checking supplier quantity:'+str(suggested_qty))
             # checking multiple quantities
-            if planning.qty_multiple > 1 and suggested_qty > 0:
+            if planning.qty_multiple > 1 and suggested_qty > 0.001:
                 rationale += "<br/><br/> ** This product requires multiple quantity of: " + str(planning.qty_multiple)
                 if planning.qty_multiple > suggested_qty:
                     suggested_qty += planning.qty_multiple - suggested_qty

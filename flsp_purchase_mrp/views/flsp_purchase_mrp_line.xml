@@ -114,7 +114,7 @@
             <search string="Product">
                 <field name="description" string="Product" filter_domain="['|', '|', '|', ('default_code', 'ilike', self),('description', 'ilike', self), ('can_be_substituted_by_id.default_code', 'ilike', self), ('substitute_for_id.default_code', 'ilike', self)]"/>
                 <separator/>
-                <filter string="Zero Filter" name="filter_zero" domain="['|', ('adjusted_qty','&gt;', 0.001), ('balance_neg', '&lt;', 0.001)]"/>
+                <filter string="Zero Filter" name="filter_zero" domain="['|', ('adjusted_qty','&gt;', 0), ('balance_neg', '&lt;', 0)]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Supplier" name="vendor" context="{'group_by':'vendor_id'}"/>
