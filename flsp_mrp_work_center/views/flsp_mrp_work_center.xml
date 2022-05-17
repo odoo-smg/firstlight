@@ -132,6 +132,7 @@
               id="flsp_mrp_work_center_kanban_menu"
               parent="mrp.menu_mrp_manufacturing"
               action="flsp_mrp_work_center_kanban_action"
+							sequence="0"
     />
 
 </odoo>
