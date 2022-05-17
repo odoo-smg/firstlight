@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Tree view-->
+	<record id="flsp_mrp_work_center_tree" model="ir.ui.view">
+        <field name="name">flsp.mrp.work.center.tree</field>
+        <field name="model">flsp.mrp.work.center</field>
+        <field name="arch" type="xml">
+            <tree string="FLSP Work Centers">
+                <!--Fields to display on report-->
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="flsp_mrp_work_center_form_view">
+        <field name="name">flsp.mrp.work.center.form</field>
+        <field name="model">flsp.mrp.work.center</field>
+        <field name="arch" type="xml">
+            <form  class="o_mo_products_form">
+                <sheet>
+                    <div>
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flsp_mrp_production_action_dashboard" model="ir.actions.act_window">
+        <field name="name">Manufacturing Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <!--field name="search_view_id" ref="view_mrp_production_filter"/-->
+        <field name="domain">[('flsp_mrp_work_center_id', '=', active_id)]</field>
+    </record>
+
+    <record model="ir.ui.view" id="flsp_mrp_work_center_kanban_view2">
+        <field name="name">flsp.mrp.work.center.kanban</field>
+        <field name="model">flsp.mrp.work.center</field>
+        <field name="arch" type="xml">
+                <kanban create="0">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <field name="mo_count"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                <div class="oe_dropdown_kanban">
+                                    <!-- dropdown menu -->
+                                    <div class="oe_dropdown_toggle">
+                                        <i class="fa fa-bars fa-sm"/>
+                                        <ul class="oe_dropdown_menu">
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </ul>
+                                    </div>
+                                    <div class="oe_clear"></div>
+                                </div>
+                                <div t-attf-class="oe_kanban_content">
+                                    <!--t t-call="analysis_period_title"/-->
+                                    <!-- title -->
+                                    <strong class="o_kanban_record_title"><span><field name="name"/></span></strong>
+                                    <div class="row">
+                                        <div class="col-6 o_kanban_primary_left">
+                                            <!--button class="btn btn-primary" name="action_mo_tree_view" type="object"-->
+                                            <button class="btn btn-primary" name="%(flsp_mrp_production_action_dashboard)d" type="action" context="{'search_default_todo': 1, 'default_picking_type_id': active_id}">
+                                                <span t-if="record.mo_count.value &gt; '0'"><t t-esc="record.mo_count.value"/> To Process</span>
+                                                <span t-if="record.mo_count.value &lt;= '0'">0 To Process</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+        </field>
+    </record>
+
+    <!--Search
+    <record id="flsp_mrp_sales_report_search" model="ir.ui.view">
+        <field name="name">flsp.mrp.sales.report.search</field>
+        <field name="model">flsp.mrp.sales.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Sale Report">
+                <field name="product_id"/>
+                <field name="default_code"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product" context="{'group_by':'product_id'}"/>
+                    <filter string="Order" name="order" context="{'group_by':'order_id'}"/>
+                    <filter string="Customer" name="customer" context="{'group_by':'partner_id'}"/>
+                    <filter string="Delivery Date" name="delivery" context="{'group_by':'commitment_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    -->
+
+    <!--Action-->
+    <record id="flsp_mrp_work_center_action" model="ir.actions.act_window">
+        <field name="name">FLSP Work Centers</field>
+        <field name="res_model">flsp.mrp.work.center</field>
+        <field name="view_mode">tree,form</field>
+        <!--field name="view_id" ref="flsp_wip_responsible_tree"/-->
+        <!--field name="context">{'group_by': ['product_id']}</field-->
+    </record>
+
+    <!--Action-->
+    <record id="flsp_mrp_work_center_kanban_action" model="ir.actions.act_window">
+        <field name="name">Manufacturing Overview</field>
+        <field name="res_model">flsp.mrp.work.center</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="flsp_mrp_work_center_kanban_view2"/>
+        <!--field name="context">{'group_by': ['product_id']}</field-->
+    </record>
+
+    <!--Menuitem-->
+    <menuitem name="FLSP Work Center"
+              id="flsp_mrp_work_center_menu"
+              parent="mrp.menu_mrp_bom"
+              action="flsp_mrp_work_center_action"
+              sequence="300"
+    />
+    <!--Menuitem-->
+    <menuitem name="MOs by Work Center"
+              id="flsp_mrp_work_center_kanban_menu"
+              parent="mrp.menu_mrp_manufacturing"
+              action="flsp_mrp_work_center_kanban_action"
+    />
+
+</odoo>
