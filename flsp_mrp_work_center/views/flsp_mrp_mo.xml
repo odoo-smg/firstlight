@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flsp_mrp_wc_mo_form_view">
+            <field name="name">flsp.mrp.work.center.mo.form.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">120</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='bom_id']" position="before">
+                  <field name="flsp_mrp_work_center_id" string="Work Center" />
+              </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="flsp_mrp_wc_mo_tree_view">
+            <field name="name">flsp.mrp.wc.mo.tree.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='bom_id']" position="before">
+                  <field name="flsp_mrp_work_center_id" string="Work Center" optional="show" />
+              </xpath>
+            </field>
+        </record>
+</odoo>
