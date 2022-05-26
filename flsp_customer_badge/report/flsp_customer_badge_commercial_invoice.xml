@@ -296,7 +296,7 @@
                                         <td name="td_amount_untaxed" style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; border-top-width:2px;" >
                                             <t t-if="print_sub">
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam><![CDATA[&nbsp;]]>
-                                                <span t-esc="my_current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                <span t-esc="current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </t>
                                             <t t-else="">
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/><![CDATA[&nbsp;]]>
@@ -311,7 +311,7 @@
                                         <td name="td_amount_total" style="background-color: white; border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: right; ">
                                             <t t-if="print_sub">
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/><![CDATA[&nbsp;]]>
-                                                <span t-esc="my_current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
+                                                <span t-esc="current_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </t>
                                             <t t-else="">
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"/><![CDATA[&nbsp;]]>
