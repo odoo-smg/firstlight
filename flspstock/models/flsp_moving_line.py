@@ -8,6 +8,7 @@ class flspmovingline(models.Model):
     _check_company_auto = True
 
     flsp_lot_name = fields.Char("Lot name", compute='flsp_comp_lot_name')
+    flsp_part_num = fields.Char('Part#', related='product_id.default_code', readonly=True)
 
     @api.depends('lot_id')
     def flsp_comp_lot_name(self):
