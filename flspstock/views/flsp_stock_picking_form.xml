@@ -80,6 +80,16 @@
                 <xpath expr="//field[@name='date_done']" position="attributes">
                     <attribute name="attrs">{'readonly': False}</attribute>
                 </xpath>
+                <xpath expr="//tree//field[@name='product_id']" position="after">
+                    <field name="flsp_part_num" optional="hide"/>
+                </xpath>
+                <field name="product_id" position="attributes"><attribute name="optional">show</attribute></field>
+                <field name="product_uom_id" position="attributes"><attribute name="optional">show</attribute></field>
+                <field name="location_id" position="attributes"><attribute name="optional">show</attribute></field>
+                <field name="location_dest_id" position="attributes"><attribute name="optional">show</attribute></field>
+                <field name="package_id" position="attributes"><attribute name="optional">hide</attribute></field>
+                <field name="result_package_id" position="attributes"><attribute name="optional">hide</attribute></field>
+                
                 <xpath expr="//label[@for='weight']" position="before">
                      <field name="flsp_delivery_eta" />
                      <field name="flsp_customer_received" />
