@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <record model="ir.ui.view" id="flspbackflush_product_form_view">
+            <field name="name">flsp_account_currency.account.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_untaxed_signed']" position="after">
+                    <field name="amount_untaxed" string="Tax Excluded (USD)" optional="show" />
+                </xpath>
+                <xpath expr="//field[@name='amount_tax_signed']" position="after">
+                    <field name="amount_tax" string="Tax (USD)" optional="show" />
+                </xpath>
+                <xpath expr="//field[@name='amount_total_signed']" position="after">
+                    <field name="amount_total" string="Total (USD)" optional="show" />
+                </xpath>
+                <xpath expr="//field[@name='amount_residual_signed']" position="after">
+                    <field name="amount_residual" string="Amount Due (USD)" optional="show" />
+                </xpath>
+            </field>
+        </record>
+</odoo>
