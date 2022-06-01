@@ -21,5 +21,6 @@
         'security/ir.model.access.csv',
         'views/flsp_purchase_mrp.xml',
         'views/flsp_purchase_mrp_line.xml',
+        'views/flsp_purchase_mrp_product.xml',
     ],
 }

@@ -90,9 +90,9 @@
     </record-->
 
     <menuitem id="flsp_purchase_mrp_menu"
-              name="FLSP To Buy from MRP"
+              name="FLSP MRP purchase"
               parent="purchase.purchase_report"
-              sequence="150"
+              sequence="101"
               action="flsp_purchase_mrp_action"/>
 
 </odoo>

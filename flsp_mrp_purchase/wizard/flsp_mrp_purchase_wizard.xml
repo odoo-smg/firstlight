@@ -86,7 +86,7 @@
         </record>
 
         <menuitem id="flsp_mrp_purchase_menu"
-                  name="FLSP MRP purchase"
+                  name="Legacy FLSP MRP purchase"
                   parent="purchase.purchase_report"
                   sequence="100"
                   action="launch_flsp_mrp_purchase_wizard"/>
