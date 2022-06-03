@@ -26,6 +26,7 @@
 
     # always loaded
     'data': [
+        'security/flsp_user_group.xml',
         'security/ir.model.access.csv',
         'views/flsp_customer_badge_manage_view.xml',
         'views/flsp_customer_badge_request_view.xml',

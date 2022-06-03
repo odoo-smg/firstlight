@@ -152,3 +152,12 @@ class FlspCustomerBadgeRequest(models.Model):
         self.message = 'The request is rejected'
         return {'type': 'ir.actions.act_window_close'}
 
+    def name_get(self):
+        res = []
+        for line in self:
+            if line.customer_id:
+                name = line.customer_id.name
+            else:
+                name = line.id
+            res.append((line.id, name))
+        return res
