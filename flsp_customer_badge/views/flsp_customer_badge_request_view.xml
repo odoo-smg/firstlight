@@ -23,6 +23,35 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="flsp_sales_cb_requests_tree">
+        <field name="name">flsp.sales.cb.request.tree</field>
+        <field name="model">flsp.customer.badge.request</field>
+        <field name="arch" type="xml">
+            <tree string="Flsp Customer Badge Requests">
+                <field name="customer_id"/>
+                <field name="flsp_current_cb_id"/>
+                <field name="flsp_new_cb_id"/>
+                <field name="requester"/>
+                <field name="note"/>
+                <field name="status"/>
+                <field name="responder" string="Approved by" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="flsp_sales_cb_requests_search" model="ir.ui.view">
+        <field name="name">flsp.customer.badge.request.search</field>
+        <field name="model">flsp.customer.badge.request</field>
+        <field name="arch" type="xml">
+            <search string="Customer">
+                <field name="customer_id"/>
+                <separator/>
+                <filter string="To Approve" name="to_approve" domain="[('status','=', 'submitted')]"/>
+            </search>
+        </field>
+    </record>
+
+
     <record model="ir.actions.act_window" id="launch_manage_customer_badge_wizard">
         <field name="name">Manage Customer Badge Request</field>
         <field name="type">ir.actions.act_window</field>
@@ -32,5 +61,24 @@
         <field name="context">{}</field>
         <field name="target">new</field>
     </record>
-</odoo>
 
+    <!--Action-->
+    <record model="ir.actions.act_window" id="flsp_sales_cb_requests_action">
+        <field name="name">Customer Badge Requests</field>
+        <field name="res_model">flsp.customer.badge.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="flsp_sales_cb_requests_search"/>
+        <field name="context">{'search_default_to_approve': 1}</field> <!--Making to do default-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the forecast line
+            </p>
+        </field>
+    </record>
+
+    <!--Menu items-->
+    <menuitem id="flsp_sales_cb_request_menu" name="Customer Badge Requests"
+              parent="sale.sale_order_menu"
+              groups="flsp_customer_badge.group_sale_flsp_cb_approver"
+              action="flsp_customer_badge.flsp_sales_cb_requests_action"/>
+
+</odoo>
