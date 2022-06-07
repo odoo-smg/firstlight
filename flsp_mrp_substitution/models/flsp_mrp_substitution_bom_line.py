@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, exceptions
+from odoo.exceptions import UserError, ValidationError
 
 
 class FlspMrpSubBomLine(models.Model):
