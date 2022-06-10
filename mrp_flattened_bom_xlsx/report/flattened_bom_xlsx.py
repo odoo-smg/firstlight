@@ -45,7 +45,7 @@ class FlattenedBomXlsx(models.AbstractModel):
         # if 'flsp_has_substitute' in self.env['product.template']._fields:
         if 'flsp_substitute' in self.env['mrp.bom.line']._fields:
             #sheet.write(i, 14, bom.product_tmpl_id.flsp_has_substitute or "")
-            sheet.write(i, 15, bom.product_tmpl_id.flsp_has_substitute or "")
+            sheet.write(i, 15, "")
 
         i += 1
         for product, total_qty in requirements.items():
@@ -126,7 +126,8 @@ class FlattenedBomXlsx(models.AbstractModel):
         if 'flsp_backflush' in self.env['product.template']._fields:
             sheet.set_column(14, 14, 10)
             sheet_title.append(_("Backflush"))
-        if 'flsp_has_substitute' in self.env['product.template']._fields:
+        #if 'flsp_has_substitute' in self.env['product.template']._fields:
+        if 'flsp_substitute' in self.env['mrp.bom.line']._fields:
             sheet.set_column(15, 15, 13)
             sheet_title.append(_("Has Substitute"))
 
