@@ -27,41 +27,36 @@ class MrpBom(models.Model):
         )
         for line in self.bom_line_ids:
             sub_bom = self._bom_find(product=line.product_id)
+            if 'flsp_substitute' in self.env['mrp.bom.line']._fields:
+                flsp_substitute = line.flsp_substitute
+            else:
+                flsp_substitute = ""
+
             if sub_bom:
+
+                if 'flsp_bom_plm_valid' in self.env['mrp.bom']._fields:
+                    flsp_bom_plm_valid = sub_bom.flsp_bom_plm_valid
+                else:
+                    flsp_bom_plm_valid = ""
+
                 new_factor = factor * line.product_uom_id._compute_quantity(
                     line.product_qty, line.product_id.uom_id, round=False
                 )
-                #if totals.get(line.product_id):
-                #    totals[line.product_id]['total'] += (
-                #        factor
-                #        * line.product_uom_id._compute_quantity(
-                #            line.product_qty, line.product_id.uom_id, round=False
-                #        )
-                #    )
-                #else:
                 totals[len(totals)+1] = {'total':(
                     factor
                     * line.product_uom_id._compute_quantity(
                         line.product_qty, line.product_id.uom_id, round=False
                     )
-                ), 'level': level, 'bom': sub_bom.code, 'type': sub_bom.type, 'bom_plm': sub_bom.flsp_bom_plm_valid, 'track': line.product_id.tracking, 'prod': line.product_id}
+                ), 'level': level, 'bom': sub_bom.code, 'type': sub_bom.type, 'bom_plm': flsp_bom_plm_valid, 'track': line.product_id.tracking, 'prod': line.product_id, 'substittute': flsp_substitute}
 
                 level += 1
                 sub_bom._get_flattened_totals(new_factor, totals, level)
                 level -= 1
             else:
-                # if totals.get(line.product_id):
-                #    totals[line.product_id]['total'] += (
-                #        factor
-                #        * line.product_uom_id._compute_quantity(
-                #            line.product_qty, line.product_id.uom_id, round=False
-                #        )
-                #    )
-                # else:
                 totals[len(totals)+1] = {'total':(
                     factor
                     * line.product_uom_id._compute_quantity(
                         line.product_qty, line.product_id.uom_id, round=False
                     )
-                ), 'level': level, 'bom': '', 'type': '', 'bom_plm': '', 'track': line.product_id.tracking, 'prod': line.product_id}
+                ), 'level': level, 'bom': '', 'type': '', 'bom_plm': '', 'track': line.product_id.tracking, 'prod': line.product_id, 'substittute': flsp_substitute, }
         return totals
