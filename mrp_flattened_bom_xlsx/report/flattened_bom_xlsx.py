@@ -16,7 +16,6 @@ class FlattenedBomXlsx(models.AbstractModel):
     _description = "Flattened BOM XLSX"
 
     def print_flattened_bom_lines(self, bom, requirements, sheet, row):
-        print('********************print_flattened_bom_lines')
         i = row
         sheet.write(i, 0, bom.product_tmpl_id.name or "")
         sheet.write(i, 1, bom.product_tmpl_id.default_code or "")
@@ -33,10 +32,20 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.write(i, 10, bom.product_tmpl_id.flsp_plm_valid or "")
         sheet.write(i, 11, bom.product_tmpl_id.tracking or "")
         sheet.write(i, 12, bom.type or "")
+
+        open_eco = 0
+        for each in bom.product_tmpl_id.eco_ids:
+            if each.state == 'confirmed':
+                open_eco += 1
+
+        sheet.write(i, 13, open_eco or "")
         if 'flsp_backflush' in self.env['product.template']._fields:
-            sheet.write(i, 13, bom.product_tmpl_id.flsp_backflush or "")
-        if 'flsp_mrp_bttn' in self.env['product.template']._fields:
-            sheet.write(i, 14, bom.product_tmpl_id.flsp_mrp_bttn or "")
+            sheet.write(i, 14, bom.product_tmpl_id.flsp_backflush or "")
+
+        # if 'flsp_has_substitute' in self.env['product.template']._fields:
+        if 'flsp_substitute' in self.env['mrp.bom.line']._fields:
+            #sheet.write(i, 14, bom.product_tmpl_id.flsp_has_substitute or "")
+            sheet.write(i, 15, bom.product_tmpl_id.flsp_has_substitute or "")
 
         i += 1
         for product, total_qty in requirements.items():
@@ -54,15 +63,23 @@ class FlattenedBomXlsx(models.AbstractModel):
             sheet.write(i, 10, total_qty['prod'].flsp_plm_valid or "")
             sheet.write(i, 11, total_qty['prod'].tracking or "")
             sheet.write(i, 12, total_qty['type'] or "")
+
+            open_eco = 0
+            for each in total_qty['prod'].eco_ids:
+                if each.state == 'confirmed':
+                    open_eco += 1
+
+            sheet.write(i, 13, open_eco or "")
             if 'flsp_backflush' in self.env['product.template']._fields:
-                sheet.write(i, 13, total_qty['prod'].flsp_backflush or "")
-            if 'flsp_mrp_bttn' in self.env['product.template']._fields:
-                sheet.write(i, 14, total_qty['prod'].flsp_mrp_bttn or "")
+                sheet.write(i, 14, total_qty['prod'].flsp_backflush or "")
+            #if 'flsp_has_substitute' in self.env['product.template']._fields:
+            if 'flsp_substitute' in self.env['mrp.bom.line']._fields:
+                #sheet.write(i, 14, total_qty['prod'].flsp_has_substitute or "")
+                sheet.write(i, 15, total_qty['substittute'] or "")
             i += 1
         return i
 
     def generate_xlsx_report(self, workbook, data, objects):
-        print('********************generate_xlsx_report')
         workbook.set_properties(
             {"comments": "Created with Python and XlsxWriter from Odoo 13.0"}
         )
@@ -74,66 +91,48 @@ class FlattenedBomXlsx(models.AbstractModel):
         sheet.set_column(1, 1, 15)
         sheet.set_column(2, 2, 30)
         sheet.set_column(3, 3, 40)
-
-        sheet.set_column(4, 6, 10)
-
-        sheet.set_column(7, 7, 25)
+        sheet.set_column(4, 4, 10)
+        sheet.set_column(5, 5, 10)
+        sheet.set_column(6, 6, 10)
+        sheet.set_column(7, 7, 20)
         sheet.set_column(8, 8, 10)
-        sheet.set_column(9, 9, 20)
         sheet.set_column(9, 9, 10)
         sheet.set_column(10, 10, 10)
         sheet.set_column(11, 11, 10)
-        if 'flsp_backflush' in self.env['product.template']._fields:
-            sheet.set_column(12, 12, 10)
-        # if 'flsp_mrp_bttn' in self.env['product.template']._fields:
-        #     sheet.set_column(12, 12, 11)
+        sheet.set_column(12, 12, 10)
+        sheet.set_column(13, 13, 10)
+
         title_style = workbook.add_format(
             {"bold": True, "bg_color": "#FFFFCC", "bottom": 1}
         )
 
-        # if 'flsp_backflush' and 'flsp_mrp_bttn' in self.env['product.template']._fields:
+        sheet_title = [
+            _("BOM Name"),
+            _("Part#"),
+            _("Indented Part#"),
+            _("Product Name"),
+            _("Quantity"),
+            _("UoM"),
+            _("Cost CAD$"),
+            _("BOM Reference"),
+            _("BOM PLM"),
+            _("Legacy Part#"),
+            _("Part PLM"),
+            _("Tracking"),
+            _("Type"),
+            _("Open ECO"),
+        ]
+
         if 'flsp_backflush' in self.env['product.template']._fields:
-            sheet_title = [
-                _("BOM Name"),
-                _("Part#"),
-                _("Indented Part#"),
-                _("Product Name"),
-                _("Quantity"),
-                _("UoM"),
-
-                _("Cost CAD$"),
-
-                _("BOM Reference"),
-                _("BOM PLM"),
-                _("Legacy Part#"),
-                _("Part PLM"),
-                _("Tracking"),
-                _("Type"),
-                _("Backflush"),
-                # _("MRP Valid"),
-            ]
-        else:
-            sheet_title = [
-                _("BOM Name"),
-                _("Part#"),
-                _("Indented Part#"),
-                _("Product Name"),
-                _("Quantity"),
-                _("Unit of Measure"),
-
-                _("Cost CAD$"),
-
-                _("BOM Reference"),
-                _("BOM PLM"),
-                _("Legacy Part#"),
-                _("Part PLM"),
-                _("Tracking"),
-                _("Type"),
-            ]
+            sheet.set_column(14, 14, 10)
+            sheet_title.append(_("Backflush"))
+        if 'flsp_has_substitute' in self.env['product.template']._fields:
+            sheet.set_column(15, 15, 13)
+            sheet_title.append(_("Has Substitute"))
 
         sheet.set_row(0, None, None, {"collapsed": 1})
         sheet.write_row(1, 0, sheet_title, title_style)
-        sheet.freeze_panes(2, 0)
+        sheet.freeze_panes(2, 2)
         i = 2
 
         for o in objects:
