@@ -211,7 +211,7 @@
                                         <spam t-if="line.flsp_pq_check == True" t-field="line.flsp_pq_comment"/>
                                     </td>
                                     <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align: center; ">
-                                        <spam t-field="line.date_planned" t-options='{"widget": "date"}'/>
+                                        <spam t-field="line.flsp_utc_to_local" />
                                     </td>
                                     <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
                                         <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/>
@@ -453,7 +453,7 @@
                                         <spam t-if="line.flsp_pq_check == True" t-field="line.flsp_pq_comment"/>
                                     </td>
                                     <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
-                                        <spam t-field="line.date_planned" t-options='{"widget": "date"}'/>
+                                        <spam t-field="line.flsp_utc_to_local" />
                                     </td>
                                     <td style="border: 2px solid #001f54; font-family: Franklin Gothic Medium; font-size: 14px; font-style: normal; font-weight: lighter; color: #000000; text-align: center; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; ">
                                         <spam t-field="line.product_qty" t-options='{"widget": "integer"}'/>
