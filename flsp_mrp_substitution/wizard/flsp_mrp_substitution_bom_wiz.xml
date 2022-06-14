@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <record id="flsp_mrp_sub_bom_wiz_form_view" model="ir.ui.view">
+            <field name="name">Select BOMs</field>
+            <field name="model">flsp.mrp.sub.bom.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Select">
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="plm_valid" invisible="1" />
+                        </group>
+                        <group>
+                            <field name="substitute_id"/>
+                        </group>
+                    </group>
+                    <h4>Active BOMs:</h4>
+                    <field name="flsp_mrp_bom_line_ids" >
+                        <tree editable="bottom" create="false" delete="false">
+                            <field name="flsp_mrp_sub_product_id" invisible="1" />
+                            <field name="product_plm_valid" invisible="1" />
+                            <field name="substituting" String="Substituting" attrs="{'readonly': [('product_plm_valid', '=', True)]}"/>
+                            <field name="bom_id" readonly="1"/>
+                            <field name="bom_line_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button name="flsp_confirm" attrs="{'invisible': [('plm_valid', '=', True)]}" type="object" string="Confirm Selection" class="btn-primary" />
+                        <button string="Discard" class="btn-default btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_flsp_mrp_sub_bom_wiz" model="ir.actions.act_window">
+            <field name="name">FLSP - Select BOM for Substitution</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">flsp.mrp.sub.bom.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

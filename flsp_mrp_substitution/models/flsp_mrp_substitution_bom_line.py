@@ -3,7 +3,6 @@
 from odoo import models, fields, api, exceptions
 from odoo.exceptions import UserError, ValidationError
 
-
 class FlspMrpSubBomLine(models.Model):
     """
         class_name: FlspMrpSubBomLine
@@ -34,9 +33,10 @@ class FlspMrpSubBomLine(models.Model):
                 raise exceptions.ValidationError("Product with quantity zero cannot be substituted.")
                 self.flsp_substitute = False
 
-
     def unlink(self):
         for line in self:
             if line.flsp_substitute:
                 raise ValidationError('not allowed to delete record with substitution')
         return super(FlspMrpSubBomLine, self).unlink()
+
+
