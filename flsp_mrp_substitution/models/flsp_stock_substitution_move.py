@@ -11,6 +11,7 @@ class FlspSubsStockMove(models.Model):
     _inherit = 'stock.move'
 
     flsp_substitute = fields.Boolean(string="Substitute", compute='_calc_prod_substitute')
+    flsp_was_substituted = fields.Boolean(string="Substituted", default=False)
 
     @api.depends('product_id')
     def _calc_prod_substitute(self):

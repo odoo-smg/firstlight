@@ -31,7 +31,8 @@
 -->
 
               <xpath expr="//tree" position="replace">
-                <tree create="0" delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
+                <tree create="0" delete="0" default_order="is_done,sequence" decoration-bf="flsp_was_substituted" decoration-it="flsp_was_substituted" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
+                    <field name="flsp_was_substituted" invisible="1"/>
                     <field name="product_id" readonly="1" force_save="1"/>
                     <field name="company_id" invisible="1"/>
                     <field name="product_uom_category_id" invisible="1"/>

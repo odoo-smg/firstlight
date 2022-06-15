@@ -92,6 +92,7 @@ class FlspMrpSubstitutionWiz(models.TransientModel):
                 'location_dest_id': stock_move.location_dest_id.id,
                 'procure_method': stock_move.procure_method,
                 #'group_id': stock_move.group_id.id,
+                'flsp_was_substituted': True,
                 'picking_type_id': stock_move.picking_type_id.id,
                 'warehouse_id': stock_move.warehouse_id.id,
                 'state': stock_move.state,
