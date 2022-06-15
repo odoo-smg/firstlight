@@ -114,7 +114,8 @@ class FlspMrpSubsBomWiz(models.TransientModel):
             if should_delete:
                 each.unlink()
 
-        self.env['flsp.mrp.substitution.bom'].apply_substitution(self.product_id)
+        ## This action should be performed at the Autotmated Actions when the ECO is confirmed.
+        ## self.env['flsp.mrp.substitution.bom'].apply_substitution(self.product_id)
 
         return {'type': 'ir.actions.act_window_close'}
 

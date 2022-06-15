@@ -45,8 +45,8 @@
                     <field name="substituting" />
                     <field name="product_id" invisible="1"/>
                     <field name="product_substitute_id"/>
-                    <field name="ratio" />
-                    <field name="expire_date"/>
+                    <!--field name="ratio" />
+                    <field name="expire_date"/-->
                     <button name="bom_selection" class="fa fa-2x fa-check-circle" type="object" />
                 </tree>
             </field>
