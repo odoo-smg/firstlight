@@ -3,12 +3,12 @@
     'name': "FLSP - MRP Substitution",
 
     'summary': """
-        Module purpose is to create Product substitution on Manufacturing orders
+        Module purpose is to create Product substitution on Manufacturing orders 
         """,
 
     'description': """
         Customizations performed:
-            * Manufacturing - Substitute component on manufacturing line
+            * Manufacturing - Substitute component on manufacturing line 
             * Product temp  - Add many2many products on the template for substitution
             * Mrp BOM line  - Show check box if product has substitution
     """,
@@ -31,5 +31,7 @@
         'views/flsp_mrp_substitution_tree_raw_mo.xml',
         'views/flsp_mrp_substitution_change_prod_qty_wiz.xml',
         'views/flsp_mrp_substitution_bom_component.xml',
+        'views/flsp_mrp_substitution_product.xml',
+        'wizard/flsp_mrp_substitution_bom_wiz.xml',
     ],
 }

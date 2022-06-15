@@ -11,6 +11,7 @@ class FlspMrpSubstitutionBom(models.Model):
 
     @api.depends('bom_line_ids')
     def _compute_bom_products_ids(self):
+
         prd_ids = []
         for line in self.bom_line_ids:
             if line.product_id and line.flsp_substitute:
@@ -19,4 +20,3 @@ class FlspMrpSubstitutionBom(models.Model):
             self.flsp_bom_products_ids = self.env["product.product"].search([("id", "in", prd_ids)])
         else:
             self.flsp_bom_products_ids = False
-

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+
+        <!--record model="ir.ui.view" id="product_smg_tree_view">
+            <field name="name">product.template.smg.tree.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree[1]/field[@name='name']" position="after">
+                    <field name="legacy_code" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='uom_id']" position="after">
+                    <field name="flsp_plm_valid" optional="show"/>
+                    <field name="flsp_acc_valid" optional="show"/>
+                </xpath>
+            </field>
+        </record-->
+
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp_mrp_substitution_product_form">
+            <field name="name">flsp.mrp.substitution.product.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">98</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <header>
+                  <button name="flsp_button_bom_substitution" groups="mrp_plm.group_plm_manager" string="Substitution" type="object"/>
+                </header>
+                <notebook position="inside">
+                    <page string="Substitute">
+                        <group string="Substitute Part Number" name="flsp_mrp_substitution" colspan="4" >
+                            <field name="flsp_substitute_ids" nolabel="1"  context="{'tree_view_ref':'flsp_mrp_substitution.flsp_mrp_substitution_tree_view'}" attrs="{'readonly': [('flsp_plm_valid', '=', True)]}" />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="flsp_mrp_substitution_tree_view" model="ir.ui.view">
+            <field name="name">flsp.mrp_substitution.tree.view</field>
+            <field name="model">flsp.mrp.substitution</field>
+            <field name="arch" type="xml">
+                <tree string="Substitute Parts" editable="bottom">
+                    <field name="substituting" />
+                    <field name="product_id" invisible="1"/>
+                    <field name="product_substitute_id"/>
+                    <field name="ratio" />
+                    <field name="expire_date"/>
+                    <button name="bom_selection" class="fa fa-2x fa-check-circle" type="object" />
+                </tree>
+            </field>
+        </record>
+
+</odoo>
