@@ -57,7 +57,10 @@ class FlspMrpSubsBomWiz(models.TransientModel):
                                                                                  ('product_id', '=', product.id),
                                                                                  ('bom_line_id', '=', bom_line.id)])
                 if bom_substituting:
-                    active = bom_substituting.substituting
+                    if bom_substituting.substituting:
+                        active = True
+                    else:
+                        active = False
 
                 # checking active flag in the main product
                 if not substituting:
