@@ -3,7 +3,7 @@ from odoo import models, fields, api, exceptions
 
 class FlspMrpSubstitutionLine(models.Model):
     _name = "flsp.mrp.substitution"
-    _description = 'Substitute products for BOMs'
+    _description = 'Substitute products for BOMs in the product'
 
     product_id = fields.Many2one('product.template', 'Component', default=lambda self: self.env.context.get('active_id'))
     product_substitute_id = fields.Many2one('product.product', 'Substitute', required=True)
