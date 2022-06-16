@@ -78,25 +78,8 @@ class FlspMrpSubstitutionWiz(models.TransientModel):
         if stock_move_lines.exists():
             raise exceptions.ValidationError("It was not possible to unreserve this item.")
         else:
+            self.create_move_from_prd(stock_move)
             #stock_move.create
-            new_move = self.env['stock.move'].create({
-                'name': 'Substitution',
-                'sequence': stock_move.sequence,
-                'reference': stock_move.reference,
-                'raw_material_production_id': self.mo_id.id,
-                'product_id': self.substitute_id.id,
-                'product_uom': self.substitute_id.uom_id.id,
-                'product_uom_qty': self.substitute_qty*self.mo_id.product_qty,
-                'unit_factor': self.substitute_qty,
-                'location_id': stock_move.location_id.id,
-                'location_dest_id': stock_move.location_dest_id.id,
-                'procure_method': stock_move.procure_method,
-                #'group_id': stock_move.group_id.id,
-                'picking_type_id': stock_move.picking_type_id.id,
-                'warehouse_id': stock_move.warehouse_id.id,
-                'state': stock_move.state,
-            })
-            new_move.reference = stock_move.reference
             self.mo_id.flsp_substituted = True
             self.mo_id.message_post(body='-->> Product Substitution: <br/>'
                                     + ' The product ['+stock_move.product_id.default_code+'] '+ stock_move.product_id.name + '<br/>'
@@ -104,6 +87,62 @@ class FlspMrpSubstitutionWiz(models.TransientModel):
                                     , subtype="mail.mt_note")
             stock_move.state = 'draft'
             stock_move.unlink()
+
+    def create_move_from_prd(self, sm):
+        new_moves = []
+        bom = self.env['mrp.bom']._bom_find(product=self.substitute_id)
+        explode = False
+        if bom:
+            if bom.type == 'phantom':
+                explode = True
+        #################################################
+        ##  ********* EXPLODE *************            ##
+        ##  Creates a new item for every component     ##
+        #################################################
+        if explode:
+            for bom_line in bom.bom_line_ids:
+                #if bom_line.product_qty <= 0:
+                #    continue
+                new_move = self.env['stock.move'].create({
+                    'name': 'Substitution',
+                    'sequence': sm.sequence,
+                    'reference': sm.reference,
+                    'raw_material_production_id': self.mo_id.id,
+                    'product_id': bom_line.product_id.id,
+                    'product_uom': bom_line.product_id.uom_id.id,
+                    'product_uom_qty': self.substitute_qty * self.mo_id.product_qty * bom_line.product_qty,
+                    'unit_factor': self.substitute_qty * bom_line.product_qty,
+                    'location_id': sm.location_id.id,
+                    'location_dest_id': sm.location_dest_id.id,
+                    'procure_method': sm.procure_method,
+                    'flsp_was_substituted': True,
+                    'picking_type_id': sm.picking_type_id.id,
+                    'warehouse_id': sm.warehouse_id.id,
+                    'state': sm.state,
+                })
+                new_move.reference = sm.reference
+                new_moves.append(new_move)
+        else:
+            new_move = self.env['stock.move'].create({
+                'name': 'Substitution',
+                'sequence': sm.sequence,
+                'reference': sm.reference,
+                'raw_material_production_id': self.mo_id.id,
+                'product_id': self.substitute_id.id,
+                'product_uom': self.substitute_id.uom_id.id,
+                'product_uom_qty': self.substitute_qty * self.mo_id.product_qty,
+                'unit_factor': self.substitute_qty,
+                'location_id': sm.location_id.id,
+                'location_dest_id': sm.location_dest_id.id,
+                'procure_method': sm.procure_method,
+                'flsp_was_substituted': True,
+                'picking_type_id': sm.picking_type_id.id,
+                'warehouse_id': sm.warehouse_id.id,
+                'state': sm.state,
+            })
+            new_move.reference = sm.reference
+            new_moves.append(new_move)
+        return new_moves
 
     def _get_flattened_totals(self, bom_id, factor=1, totals=None, level=None):
         if totals is None:
