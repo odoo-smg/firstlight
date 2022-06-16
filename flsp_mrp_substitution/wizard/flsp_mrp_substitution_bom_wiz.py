@@ -19,25 +19,25 @@ class FlspMrpSubsBomWiz(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(FlspMrpSubsBomWiz, self).default_get(fields)
-        product_id = self.env.context.get('product_id')
-        substitute_id = self.env.context.get('substitute_id')
-        substituting = self.env.context.get('substituting')
-        product = self.env['product.template'].browse(product_id)
-        if product.exists():
+        from_prd_product_id = self.env.context.get('product_id')
+        from_prd_substitute_id = self.env.context.get('substitute_id')
+        from_prd_substituting = self.env.context.get('substituting')
+        from_prd_product = self.env['product.template'].browse(from_prd_product_id)
+        if from_prd_product.exists():
             if 'product_id' in fields:
-                res['product_id'] = product.id
+                res['product_id'] = from_prd_product.id
             if 'substitute_id' in fields:
-                res['substitute_id'] = substitute_id
+                res['substitute_id'] = from_prd_substitute_id
             if 'plm_valid' in fields:
-                res['plm_valid'] = product.flsp_plm_valid
+                res['plm_valid'] = from_prd_product.flsp_plm_valid
             if 'product_substituting' in fields:
-                res['product_substituting'] = substituting
+                res['product_substituting'] = from_prd_substituting
 
-        product_product = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
+        from_prd_product_product = self.env['product.product'].search([('product_tmpl_id', '=', from_prd_product.id)])
 
-        if product_product.exists():
+        if from_prd_product_product.exists():
             bom_list = []
-            bom_lines = self.env['mrp.bom.line'].search([('product_id', '=', product_product.id)])
+            bom_lines = self.env['mrp.bom.line'].search([('product_id', '=', from_prd_product_product.id)])
             for bom_line in bom_lines:
 
                 # only show active BOMs
@@ -47,23 +47,26 @@ class FlspMrpSubsBomWiz(models.TransientModel):
                 # check in the bom if the product matches with the substitute
                 # only because we could have many substitute products for each component.
                 active = False
-                substitute = self.env["flsp.mrp.substitution.line"].search([('bom_line_id', '=', bom_line.id)])
-                if substitute:
-                    if substitute.product_substitute_id.id == substitute_id:
-                        active = True
+                from_bom_substitute = self.env["flsp.mrp.substitution.line"].search(['&',
+                                                                                     ('bom_line_id', '=', bom_line.id),
+                                                                                     ('product_substitute_id', '=', from_prd_substitute_id)])
+                if from_bom_substitute:
+                    active = True
 
                 # Checking if the selection was saved before
-                bom_substituting = self.env['flsp.mrp.substitution.bom'].search(['&',
-                                                                                 ('product_id', '=', product.id),
-                                                                                 ('bom_line_id', '=', bom_line.id)])
-                if bom_substituting:
-                    if bom_substituting.substituting:
-                        active = True
-                    else:
-                        active = False
+                from_tmp_bom_substituting = self.env['flsp.mrp.substitution.bom'].search(['&', '&',
+                                                                                 ('product_id', '=', from_prd_product.id),
+                                                                                 ('bom_line_id', '=', bom_line.id),
+                                                                                 ('substitute_id', '=', from_prd_substitute_id)])
+                if from_tmp_bom_substituting:
+                    for from_tmp_bom_sub in from_tmp_bom_substituting:
+                        if from_tmp_bom_sub.substituting:
+                            active = True
+                        else:
+                            active = False
 
                 # checking active flag in the main product
-                if not substituting:
+                if not from_prd_substituting:
                     active = False
 
                 bom_list.append([0, 0, {
@@ -71,10 +74,8 @@ class FlspMrpSubsBomWiz(models.TransientModel):
                     'bom_id': bom_line.bom_id.id,
                     'bom_line_id': bom_line.id,
                     'substituting': active,
-                    'product_plm_valid': product.flsp_plm_valid,
+                    'product_plm_valid': from_prd_product.flsp_plm_valid,
                 }])
-                #for each in bom_list:
-                #    print(each)
             res['flsp_mrp_bom_line_ids'] = bom_list
 
         res = self._convert_to_write(res)
