@@ -66,7 +66,7 @@ class FlspwipTranferwiz(models.TransientModel):
             kanban_to_transfer = self.env['flsp.wip.kanban'].search([('completed', '=', False)])
         if kanban_to_transfer:
             for kaban in kanban_to_transfer:
-                stock_quant = self.env['stock.quant'].search([('product_id', '=', kaban.product_id.id)])
+                stock_quant = self.env['stock.quant'].search([('product_id', '=', kaban.product_id.id)], order='location_id')
                 cage_locations = self.env['stock.location'].search(['|', ('complete_name', 'like', 'WH/Stock/E'), ('complete_name', 'like', 'WH/Stock/D')])
                 qa_locations = self.env['stock.location'].search([('complete_name', 'like', 'WH/QA')])
                 wh_locations = self.env['stock.location'].search([('complete_name', 'like', 'WH/Stock')])
@@ -95,65 +95,60 @@ class FlspwipTranferwiz(models.TransientModel):
                             else:
                                 res['quantity_qa'] = stock.quantity
                     if stock.location_id in cage_locations:
+                        if not last_location:
+                            last_location = stock.location_id
+                        if stock.location_id != last_location:
+                            count_locations += 1
+                            last_location = stock.location_id
                         if count_locations == 0:
                             if 'quantity_a' in fields:
                                 if 'quantity_a' in res:
                                     res['quantity_a'] += stock.quantity
                                 else:
                                     res['quantity_a'] = stock.quantity
-                            if 'location_a' in fields:
-                                res['location_a'] = stock.location_id
+                                    res['location_a'] = stock.location_id
                         if count_locations == 1:
                             if 'quantity_b' in fields:
                                 if 'quantity_b' in res:
                                     res['quantity_b'] += stock.quantity
                                 else:
                                     res['quantity_b'] = stock.quantity
-                            if 'location_b' in fields:
-                                res['location_b'] = stock.location_id
+                                    res['location_b'] = stock.location_id
                         if count_locations == 2:
                             if 'quantity_c' in fields:
                                 if 'quantity_c' in res:
                                     res['quantity_c'] += stock.quantity
                                 else:
                                     res['quantity_c'] = stock.quantity
-                            if 'location_c' in fields:
-                                res['location_c'] = stock.location_id
+                                    res['location_c'] = stock.location_id
                         if count_locations == 3:
                             if 'quantity_d' in fields:
                                 if 'quantity_d' in res:
                                     res['quantity_d'] += stock.quantity
                                 else:
                                     res['quantity_d'] = stock.quantity
-                            if 'location_d' in fields:
-                                res['location_d'] = stock.location_id
+                                    res['location_d'] = stock.location_id
                         if count_locations == 4:
                             if 'quantity_e' in fields:
                                 if 'quantity_e' in res:
                                     res['quantity_e'] += stock.quantity
                                 else:
                                     res['quantity_e'] = stock.quantity
-                            if 'location_e' in fields:
-                                res['location_e'] = stock.location_id
+                                    res['location_e'] = stock.location_id
                         if count_locations == 5:
                             if 'quantity_f' in fields:
                                 if 'quantity_f' in res:
                                     res['quantity_f'] += stock.quantity
                                 else:
                                     res['quantity_f'] = stock.quantity
-                            if 'location_f' in fields:
-                                res['location_f'] = stock.location_id
+                                    res['location_f'] = stock.location_id
                         if count_locations == 6:
                             if 'quantity_g' in fields:
                                 if 'quantity_g' in res:
                                     res['quantity_g'] += stock.quantity
                                 else:
                                     res['quantity_g'] = stock.quantity
-                            if 'location_g' in fields:
-                                res['location_g'] = stock.location_id
-                        if stock.location_id != last_location:
-                            count_locations += 1
-                            last_location = stock.location_id
+                                    res['location_g'] = stock.location_id
                     else:
                         if stock.location_id in wh_locations:
                             if 'quantity_wh' in fields:
@@ -250,6 +245,8 @@ class FlspwipTranferwiz(models.TransientModel):
             return action
 
     def wip_transfer(self, prod, location, qty):
+
+
         if not location or not prod or not qty:
             return False
         if qty <= 0:
@@ -311,6 +308,9 @@ class FlspwipTranferwiz(models.TransientModel):
             while remaining_qty > 0:
                 qty_to_do = 0
                 for stock in stock_quant:
+                    if remaining_qty <= 0:
+                        break
+
                     if stock.quantity >= remaining_qty:
                         remaining_qty = 0
                         qty_to_do = qty
@@ -355,7 +355,6 @@ class FlspwipTranferwiz(models.TransientModel):
                         'done_move': True,
                     })
                     stock_picking.button_validate()
-
             ###'lot_id': wip.negative_lot_id.id,
 
         return True
@@ -381,7 +380,9 @@ class FlspwipTranferwiz(models.TransientModel):
 
         self._cr.execute(query)
         retvalue = self._cr.fetchall()
-        returned_registre = retvalue[0]
+        returned_registre = []
+        if retvalue:
+            returned_registre = retvalue[0]
         for line in returned_registre:
             c_ret += line + ', '
 
