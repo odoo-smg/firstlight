@@ -1,7 +1,51 @@
 <odoo>
     <data>
-        <template id="flsp_report_picking_operations"
-        inherit_id="stock.report_picking">
+        <template id="flsp_report_picking_operations" inherit_id="stock.report_picking">
+            <xpath expr="//div[@class='row mt48 mb32']//div[3]" position="after">
+                <t t-if="o.flsp_mo_wip_id.name">
+                    <div class="col-auto">
+                        <strong>MO Number:</strong>
+                        <p t-field="o.flsp_mo_wip_id.name"/>
+                    </div>
+                </t>
+                <t t-else="">
+                </t>
+            </xpath>
+            <xpath expr="//div[@class='row mt48 mb32']//div[3]" position="after">
+                <t t-if="o.flsp_mo_wip_id.date_planned_start">
+                    <div class="col-auto">
+                        <strong>Planned Date:</strong>
+                        <p t-field="o.flsp_mo_wip_id.date_planned_start" t-options="{'widget':'date'}"/>
+                    </div>
+                </t>
+                <t t-else="">
+                </t>
+            </xpath>
+            <xpath expr="//div[@class='row mt48 mb32']//div[3]" position="after">
+                <t t-if="o.flsp_mo_wip_id.product_name">
+                    <div class="col-auto">
+                        <strong>Product Name:</strong>
+                        <p t-field="o.flsp_mo_wip_id.product_id"/>
+                    </div>
+                </t>
+                <t t-else="">
+                </t>
+            </xpath>
+            <xpath expr="//div[@class='row mt48 mb32']//div[3]" position="after">
+                <t t-if="o.flsp_mo_wip_id.product_qty">
+                    <div class="col-auto">
+                        <strong>Quantity to Produce:</strong>
+                        <p t-field="o.flsp_mo_wip_id.product_qty"/>
+                    </div>
+                </t>
+                <t t-else="">
+                </t>
+            </xpath>
+            <xpath expr="//table[@class='table table-sm']//thead//tr//th[4]" position="replace">
+                <th name="th_serial_number" t-if="has_serial_number">
+                    <strong>To</strong>
+                </th>
+            </xpath>
             <xpath expr="//table[@class='table table-sm']//thead//tr//th[5]" position="replace">
                 <th name="th_serial_number" t-if="has_serial_number">
                     <strong>Lot/Serial Number</strong>
