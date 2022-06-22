@@ -1,0 +1,2513 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* flsp_account_reports
+# 
+# Translators:
+# nle_odoo, 2019
+# Ali Alrehawi <alrehawi@hotmail.com>, 2019
+# Akram Alfusayal <akram_ma@hotmail.com>, 2019
+# jahzar <jahzar@gmail.com>, 2019
+# Ali zuaby <ali@zuaby.net>, 2019
+# Osoul <baruni@osoul.ly>, 2019
+# Osama Ahmaro <osamaahmaro@gmail.com>, 2019
+# Yihya Hugirat <hugirat@gmail.com>, 2019
+# Abdulaziz Ayed <aalayed@kacst.edu.sa>, 2019
+# Mustafa Rawi <mustafa@cubexco.com>, 2019
+# amrnegm <amrnegm.01@gmail.com>, 2019
+# Martin Trigaux, 2019
+# hoxhe Aits <hoxhe0@gmail.com>, 2019
+# Ghaith Gammar <g.gammar@saharaifs.net>, 2019
+# Shaima Safar <shaima.safar@open-inside.com>, 2019
+# Abdulmajeed Alomar <majeeed87@gmail.com>, 2019
+# Nisrine Tagri <nta@odoo.com>, 2019
+# Dooreen AlMehdar <doa@odoo.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server saas~12.5+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-27 09:18+0000\n"
+"PO-Revision-Date: 2019-08-26 09:34+0000\n"
+"Last-Translator: Dooreen AlMehdar <doa@odoo.com>, 2020\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_aged_payable_report
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_aged_receivable_report
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_general_ledger_report
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_partner_ledger_report
+msgid "&amp;nbsp;"
+msgstr "&amp;nbsp;"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "(No Group)"
+msgstr "(بلا تجميع)"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#, python-format
+msgid "(copy)"
+msgstr "(نسخ)"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.view_move_form_vat_return
+msgid "-> Refresh"
+msgstr "-> تحديث"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "1 - 30"
+msgstr "1 - 30"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "31 - 60"
+msgstr "31 - 60"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "61 - 90"
+msgstr "61 - 90"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "91 - 120"
+msgstr "91 - 120"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid ""
+"<br/>\n"
+"                Analytic Accounts:"
+msgstr ""
+"<br/>\n"
+"                حسابات تحليلية:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "<br/>Companies:"
+msgstr "<br/>مؤسسات:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template
+msgid ""
+"<i class=\"fa fa-caret-right invisible\" role=\"img\" aria-"
+"label=\"Unfolded\" title=\"Unfolded\"/>"
+msgstr ""
+"<i class=\"fa fa-caret-right invisible\" role=\"img\" aria-"
+"label=\"Unfolded\" title=\"Unfolded\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+msgid "<span class=\"fa fa-bar-chart\"/> Comparison:"
+msgstr "<span class=\"fa fa-bar-chart\"/> مقارنة:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_journals
+msgid ""
+"<span class=\"fa fa-book\"/>\n"
+"            Journals:"
+msgstr ""
+"<span class=\"fa fa-book\"/>\n"
+"            دفاتر اليومية:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "<span class=\"fa fa-calendar\" title=\"Dates\" role=\"img\" aria-label=\"Dates\"/>"
+msgstr "<span class=\"fa fa-calendar\" title=\"Dates\" role=\"img\" aria-label=\"Dates\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_template_aged_partner_balance_line_report
+msgid ""
+"<span class=\"fa fa-circle color-green trust-partner\" role=\"img\" aria-"
+"label=\"Balance is good\" title=\"Balance is good\"/>"
+msgstr ""
+"<span class=\"fa fa-circle color-green trust-partner\" role=\"img\" aria-"
+"label=\"Balance is good\" title=\"Balance is good\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_partner_ledger_report
+msgid ""
+"<span class=\"fa fa-circle color-green trust-partner\" role=\"img\" aria-"
+"label=\"Partner ledger is good\" title=\"Partner ledger is good\"/>"
+msgstr ""
+"<span class=\"fa fa-circle color-green trust-partner\" role=\"img\" aria-"
+"label=\"Partner ledger is good\" title=\"Partner ledger is good\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_template_aged_partner_balance_line_report
+msgid ""
+"<span class=\"fa fa-circle color-red trust-partner\" role=\"img\" aria-"
+"label=\"Balance is bad\" title=\"Balance is bad\"/>"
+msgstr ""
+"<span class=\"fa fa-circle color-red trust-partner\" role=\"img\" aria-"
+"label=\"Balance is bad\" title=\"Balance is bad\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_partner_ledger_report
+msgid ""
+"<span class=\"fa fa-circle color-red trust-partner\" role=\"img\" aria-"
+"label=\"Partner ledger is bad\" title=\"Partner ledger is bad\"/>"
+msgstr ""
+"<span class=\"fa fa-circle color-red trust-partner\" role=\"img\" aria-"
+"label=\"Partner ledger is bad\" title=\"Partner ledger is bad\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_template_aged_partner_balance_line_report
+msgid ""
+"<span class=\"fa fa-circle color-transparent trust-partner\" role=\"img\" "
+"aria-label=\"Balance is normal\" title=\"Balance is normal\"/>"
+msgstr ""
+"<span class=\"fa fa-circle color-transparent trust-partner\" role=\"img\" "
+"aria-label=\"Balance is normal\" title=\"Balance is normal\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_partner_ledger_report
+msgid ""
+"<span class=\"fa fa-circle color-transparent trust-partner\" role=\"img\" "
+"aria-label=\"Partner ledger is normal\" title=\"Partner ledger is normal\"/>"
+msgstr ""
+"<span class=\"fa fa-circle color-transparent trust-partner\" role=\"img\" "
+"aria-label=\"Partner ledger is normal\" title=\"Partner ledger is normal\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_ir_filters
+msgid ""
+"<span class=\"fa fa-filter\"/>\n"
+"            Filters:"
+msgstr ""
+"<span class=\"fa fa-filter\"/>\n"
+"            الفلاتر:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "<span class=\"fa fa-filter\"/> Options:"
+msgstr "<span class=\"fa fa-filter\"/> الخيارات:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_analytic
+msgid "<span class=\"fa fa-folder-open\"/> Analytic"
+msgstr "<span class=\"fa fa-folder-open\"/> تحليلي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_partner
+msgid "<span class=\"fa fa-folder-open\"/> Partners"
+msgstr "<span class=\"fa fa-folder-open\"/> الشركاء"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_account_type
+msgid ""
+"<span class=\"fa fa-user\"/>\n"
+"            Account:"
+msgstr ""
+"<span class=\"fa fa-user\"/>\n"
+"            الحساب:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_footnotes_template
+msgid ""
+"<span class=\"o_flsp_account_reports_footnote_icons\"><i class=\"fa fa-fw fa-"
+"trash-o\" role=\"img\" aria-label=\"Delete\" title=\"Delete\"/></span>"
+msgstr ""
+"<span class=\"o_flsp_account_reports_footnote_icons\"><i class=\"fa fa-fw fa-"
+"trash-o\" role=\"img\" aria-label=\"Delete\" title=\"Delete\"/></span>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid ""
+"<span class=\"o_form_label\">Tax Return Periodicity</span>\n"
+"                        <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" role=\"img\" aria-label=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
+"<span class=\"o_form_label\">دورية الإقرار الضريبي</span>\n"
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" role=\"img\" aria-label=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_main_template
+msgid ""
+"<span class=\"searchIcon\"><i class=\"fa fa-search\" role=\"img\" aria-"
+"label=\"Search\" title=\"Search\"/></span>"
+msgstr ""
+"<span class=\"searchIcon\"><i class=\"fa fa-search\" role=\"img\" aria-"
+"label=\"Search\" title=\"Search\"/></span>"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_account_reports_journal_dashboard_kanban_view_account_manager
+msgid "<span title=\"Latest Statement\">Latest Statement</span>"
+msgstr "<span title=\"آخر الكشوفات\">آخر كشف حساب</span>"
+
+#. module: flsp_account_reports
+#: model:ir.model.constraint,message:flsp_account_reports.constraint_flsp_account_financial_html_report_line_code_uniq
+msgid "A report line with the same code already exists."
+msgstr "يوجد بند في التقرير يحتوي نفس الكود."
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_total_assets0
+msgid "ASSETS"
+msgstr "الأصول"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Account"
+msgstr "الحساب"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_analytic_report
+msgid "Account Analytic Report"
+msgstr "تقرير الحساب التحليلي"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_chart_template
+msgid "Account Chart Template"
+msgstr "قالب مخطط الحساب"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_report
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_tree
+msgid "Account Report"
+msgstr "تقرير الحساب"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_financial_html_report_line
+msgid "Account Report (HTML Line)"
+msgstr "تقرير الحساب (HTML Line)"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_financial_html_report
+msgid "Account Report (HTML)"
+msgstr "تقرير الحساب (HTML)"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_report_footnote
+msgid "Account Report Footnote"
+msgstr "ذيل تقرير الحساب"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_company__account_tax_next_activity_type
+msgid "Account Tax Next Activity Type"
+msgstr ""
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Accounts"
+msgstr "الحسابات"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_analytic_report.py:0
+#, python-format
+msgid "Accounts without a group"
+msgstr "حسابات غير مجمعة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__action_id
+msgid "Action"
+msgstr "إجراء"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_mail_activity_type__category
+msgid "Action to Perform"
+msgstr "إجراء للتنفيذ"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_mail_activity_type__category
+msgid ""
+"Actions may trigger specific behavior like opening calendar view or "
+"automatically mark as done when a document is uploaded"
+msgstr ""
+"قد تؤدي الإجراءات إلى سلوك معين مثل فتح طريقة عرض التقويم أو وضع علامة "
+"\"تم\" عليها تلقائيًا عند تحميل مستند"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_mail_activity
+msgid "Activity"
+msgstr "النشاط"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_mail_activity_type
+msgid "Activity Type"
+msgstr "نوع النشاط"
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Add a note"
+msgstr "إضافة ملاحظة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_company__totals_below_sections
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_config_settings__totals_below_sections
+msgid "Add totals below sections"
+msgstr "إضافة إجمالي تحت الأقسام"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Advance Payments received from customers"
+msgstr "الإيرادات المدفوعة مقدمًا من العملاء"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Advance payments made to suppliers"
+msgstr "المدفوعات المدفوعة مقدمًا للموردين"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_aged_partner
+msgid "Aged Partner Balances"
+msgstr "متأخرات أرصدة الشركاء"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_ap
+#: model:ir.model,name:flsp_account_reports.model_account_aged_payable
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_aged_payable
+#, python-format
+msgid "Aged Payable"
+msgstr "المتأخر المستحق"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_account_reports_journal_dashboard_kanban_view
+msgid "Aged Payables"
+msgstr "المتأخرات المستحقة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_ar
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_aged_receivable
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_aged_receivable
+#, python-format
+msgid "FLSP Aged Receivable"
+msgstr "المتأخر المدين"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_account_reports_journal_dashboard_kanban_view
+msgid "FLSP Aged Receivables"
+msgstr "المتأخرات المدينة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_journals
+msgid "All"
+msgstr "الكل"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__analytic
+msgid "Allow analytic filters"
+msgstr "السماح بالفلاتر التحليلية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__comparison
+msgid "Allow comparison"
+msgstr "السماح بالمقارنة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__show_journal_filter
+msgid "Allow filtering by journals"
+msgstr "السماح بالفلترة من خلال دفاتر اليومية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__show_domain__always
+msgid "Always"
+msgstr "دائمًا"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Amount Currency"
+msgstr "عملة المبلغ"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Analytic Accounts:"
+msgstr "الحسابات التحليلية:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "Analytic Entries"
+msgstr "القيود التحليلية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_analytic_report.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_analytic
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_report_account_analytic
+#, python-format
+msgid "Analytic Report"
+msgstr "تقرير تحليلي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Analytic Tags:"
+msgstr "الوسوم التحليلية:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template
+msgid "Annotate"
+msgstr "تعليق"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__applicable_filters_ids
+msgid "Applicable Filters"
+msgstr "الفلاتر القابلة للتطبيق"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Apply"
+msgstr "تطبيق"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "As of %s"
+msgstr "اعتبارًا من %s"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "As of: %s"
+msgstr "اعتبارًا من %s"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__special_date_changer__to_beginning_of_period
+msgid "At the beginning of the period"
+msgstr "في بداية الفترة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "Audit"
+msgstr "تدقيق"
+
+#. module: flsp_account_reports
+#: model:ir.ui.menu,name:flsp_account_reports.flsp_account_reports_audit_reports_menu
+msgid "Audit Reports"
+msgstr "تقارير التدقيق"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_form
+msgid "Available Filters & Options"
+msgstr "الفلاتر والخيارات المتاحة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_avgcre0
+msgid "Average creditors days"
+msgstr "متوسط أيام الدائنين"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_avdebt0
+msgid "Average debtors days"
+msgstr "متوسط أيام المدينين"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_analytic_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Balance"
+msgstr "الرصيد"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report,name:flsp_account_reports.account_financial_report_balancesheet0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_balancesheet0
+#: model:ir.actions.client,name:flsp_account_reports.flsp_account_financial_html_report_action_2
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_bs
+#: model:ir.ui.menu,name:flsp_account_reports.flsp_account_financial_html_report_menu_2
+msgid "Balance Sheet"
+msgstr "ميزان المراجعة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Balance tax advance payment account"
+msgstr "رصيد حساب الضريبة مسبقة الدفع"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Balance tax current account (payable)"
+msgstr "رصيد حساب الضريبة مسبقة الدفع (مستحق الدفع)"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Balance tax current account (receivable)"
+msgstr "رصيد حساب الضريبة مسبقة الدفع (مستحق)"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_bank_reconciliation
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_bank_reconciliation_with_journal
+#, python-format
+msgid "Bank Reconciliation"
+msgstr "التسوية البنكية"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_bank_reconciliation_report
+msgid "Bank Reconciliation Report"
+msgstr "تقرير التسوية البنكية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_bank_view0
+msgid "Bank and Cash Accounts"
+msgstr "حسابات البنوك والنقدية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Base Amount"
+msgstr "المبلغ الأساسي"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__date_range
+msgid "Based on date ranges"
+msgstr "ارتكازًا لفترة زمنية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_activity.py:0
+#, python-format
+msgid ""
+"Can't post the move with reference %s as its ending date %s does not "
+"correspond to end date of the period."
+msgstr ""
+"لا يمكن ترحيل القيد المحاسبي بمرجع %s لأن تاريخ انتهائها %s لا يتوافق مع "
+"تاريخ انتهاء الفترة."
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_view_report_export_wizard
+#, python-format
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_cash0
+msgid "Cash"
+msgstr "نقدي"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_cash_flow_report
+msgid "Cash Flow Report"
+msgstr "تقرير التدفقات النقدية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_cs
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_cash_flow
+#, python-format
+msgid "Cash Flow Statement"
+msgstr "كشف التدفقات النقدية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash and cash equivalents, beginning of period"
+msgstr "النقد والنقد المعادل، بداية الفترة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash and cash equivalents, closing balance"
+msgstr "النقد والنقد المعادل، الرصيد الختامي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash flows from financing activities"
+msgstr "التدفقات النقدية من الأنشطة التمويلية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash flows from investing & extraordinary activities"
+msgstr "التدفقات النقدية من الأنشطة الاستثمارية وغير العادية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash flows from operating activities"
+msgstr "التدفقات النقدية من الأنشطة التشغيلية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash flows from unclassified activities"
+msgstr "التدفقات النقدية من الأنشطة غير المصنفة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash in"
+msgstr "إيرادات"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash out"
+msgstr "مصروفات"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash paid for operating activities"
+msgstr "مصروفات الأنشطة التشغيلية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_cash_received0
+msgid "Cash received"
+msgstr "أرباح"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Cash received from operating activities"
+msgstr "أرباح الأنشطة التشغيلية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_cash_spent0
+msgid "Cash spent"
+msgstr "أنفق النقدية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_cash_surplus0
+msgid "Cash surplus"
+msgstr "الفائض النقدي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_template_aged_partner_balance_line_report
+msgid "Change expected payment date"
+msgstr "تغيير تاريخ السداد المتوقع"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_coa_report
+msgid "Chart of Account Report"
+msgstr "تقرير الدليل المحاسبي"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__children_ids
+msgid "Children"
+msgstr "الفروع"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_line_form
+msgid "Children Lines"
+msgstr "بنود الفروع"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Closing Journal Entry"
+msgstr "القيد اليومي الختامي"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_closing_bank_balance0
+msgid "Closing bank balance"
+msgstr "رصيد إقفال البنك"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__code
+msgid "Code"
+msgstr "الكود"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Communication"
+msgstr "اتصالات"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_res_company
+msgid "Companies"
+msgstr "الشركات"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Companies:"
+msgstr "المؤسسات:"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__company_id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_line_form
+msgid "Computation"
+msgstr "احتساب"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_res_config_settings
+msgid "Config Settings"
+msgstr "ضبط الإعدادات"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Configure your TAX accounts"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_setup_financial_year_opening_form
+msgid "Configure your tax accounts"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_cj
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_cj
+#, python-format
+msgid "Consolidated Journals"
+msgstr "دفاتر اليومية الموحدة"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_consolidated_journal
+msgid "Consolidated Journals Report"
+msgstr "تقرير دفاتر اليومية الموحدة"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_res_partner
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Controls failed"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_line_form
+msgid "Cosmetics"
+msgstr "مستحضرات التجميل"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_cost_sales0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_direct_costs0
+msgid "Cost of Revenue"
+msgstr "تكاليف الدخل"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__create_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__create_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__create_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__create_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__create_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__create_uid
+msgid "Created by"
+msgstr "أنشئ بواسطة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__create_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__create_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__create_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__create_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__create_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__create_date
+msgid "Created on"
+msgstr "أنشئ في"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#, python-format
+msgid "Crebit"
+msgstr "الدائن"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#, python-format
+msgid "Credit"
+msgstr "الدائن"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Currency"
+msgstr "العملة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_current_assets0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_current_assets_view0
+msgid "Current Assets"
+msgstr "الأصول المتداولة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_current_liabilities0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_current_liabilities1
+msgid "Current Liabilities"
+msgstr "التزامات جارية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_current_year_earnings_line_2
+msgid "Current Year Allocated Earnings"
+msgstr "أرباح السنة الجارية المخصصة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_current_year_earnings_line_1
+msgid "Current Year Earnings"
+msgstr "أرباح السنة الجارية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_current_year_earnings0
+msgid "Current Year Unallocated Earnings"
+msgstr "أرباح السنة الجارية غير المخصصة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_ca_to_l0
+msgid "Current assets to liabilities"
+msgstr "نسبة الأصول المتداولة إلى الالتزامات"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Current balance of account %s"
+msgstr "الرصيد الحالي للحساب %s"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Current balance of accounts %s"
+msgstr "الرصيد الحالي للحسابات %s"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Custom"
+msgstr "مُخصص"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Date :"
+msgstr "تاريخ:"
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Date cannot be empty"
+msgstr "لا يمكن ترك خانة التاريخ فارغة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_account_move_line__next_action_date
+msgid ""
+"Date where the next action should be taken for a receivable item. Usually, "
+"automatically set when sending reminders through the customer statement."
+msgstr ""
+"التاريخ الذي ينبغي فيه اتخاذ الإجراء التالي للبند المستحق. عادةً، يتم تعيينه"
+" تلقائيا عند إرسال تذكير من خلال كشف حساب العميل."
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Date:"
+msgstr "التاريخ:"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#, python-format
+msgid "Debit"
+msgstr "المدين"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_company__account_tax_periodicity
+msgid "Delay units"
+msgstr "وحدات التأخير"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_depreciation0
+msgid "Depreciation"
+msgstr "إهلاك"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_detailed_net_profit0
+msgid "Detailed Net Profit"
+msgstr "صافي الربح بالتفصيل"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#, python-format
+msgid "Details per month"
+msgstr "التفاصيل في الشهر"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_account_reports_journal_dashboard_kanban_view_account_manager
+msgid "Difference"
+msgstr "الفرق"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_aged_partner__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_aged_payable__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_aged_receivable__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_analytic_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_bank_reconciliation_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_cash_flow_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_coa_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_consolidated_journal__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_general_ledger__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_generic_tax_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_partner_ledger__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__display_name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__hierarchy_option
+msgid "Display the hierarchy choice in the report options"
+msgstr "عرض خيار التسلسل الهرمي في خيارات التقرير"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__doc_name
+msgid "Documents Name"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__domain
+msgid "Domain"
+msgstr "النطاق"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid "Download the Data Inalterability Check Report"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Due Date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_equity0
+msgid "EQUITY"
+msgstr "الملكية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__hierarchy_option
+msgid "Enable the hierarchy option"
+msgstr "تفعيل خيار التسلسل الهرمي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "End Date :"
+msgstr "تاريخ النهاية:"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "End of Last Financial Year"
+msgstr "نهاية السنة المالية السابقة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "End of Last Month"
+msgstr "نهاية الشهر الماضي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "End of Last Quarter"
+msgstr "نهاية الربع الماضي"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report,name:flsp_account_reports.account_financial_report_executivesummary0
+#: model:ir.actions.client,name:flsp_account_reports.flsp_account_financial_html_report_action_3
+#: model:ir.ui.menu,name:flsp_account_reports.flsp_account_financial_html_report_menu_3
+msgid "Executive Summary"
+msgstr "الملخص التنفيذي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "Exp. Date"
+msgstr ""
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/xml/flsp_account_report_template.xml:0
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_move_line__expected_pay_date
+#, python-format
+msgid "Expected Payment Date"
+msgstr "تاريخ السداد المتوقع"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_partner.py:0
+#, python-format
+msgid "Expected pay date has been changed from %s to %s"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_partner.py:0
+#, python-format
+msgid "Expected pay date has been changed from %s to %s for invoice %s"
+msgstr "تم تغيير تاريخ السداد المتوقع من %s إلى %s للفاتورة %s"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_account_move_line__expected_pay_date
+msgid ""
+"Expected payment date as manually set through the customer statement (e.g: "
+"if you had the customer on the phone and want to remember the date he "
+"promised he would pay)"
+msgstr ""
+"تاريخ السداد المتوقع كما تم تعيينه يدويًا من خلال كشف حساب العميل (على سبيل "
+"المثال: إذا كان العميل معك هاتفيًا وتريد أن تتذكر التاريخ الذي وعد بأنه "
+"سيدفع فيه)"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_expenses0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_expense0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_less_expenses0
+msgid "Expenses"
+msgstr "المصروفات"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_view_report_export_wizard
+#, python-format
+msgid "Export"
+msgstr "تصدير"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "Export (XLSX)"
+msgstr "تصدير (XLSX)"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_reports_export_wizard_format
+msgid "Export format for accounting's reports"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__export_format_ids
+msgid "Export to"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_reports_export_wizard
+msgid "Export wizard for accounting's reports"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Filter:"
+msgstr "فلتر:"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__applicable_filters_ids
+msgid ""
+"Filters that can be used to filter and group lines in this report. This uses"
+" saved filters on journal items."
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__financial_report_id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__financial_report_id
+msgid "Financial Report"
+msgstr "التقرير المالي"
+
+#. module: flsp_account_reports
+#: model:ir.actions.act_window,name:flsp_account_reports.action_account_financial_report_tree
+#: model:ir.ui.menu,name:flsp_account_reports.menu_account_financial_reports_tree
+msgid "Financial Reports"
+msgstr "التقارير المالية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__figure_type__float
+msgid "Float"
+msgstr "فاصلة عائمة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__show_domain__foldable
+msgid "Foldable"
+msgstr "قابل للطي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template
+msgid "Folded"
+msgstr "مطوي"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__footnotes_ids
+msgid "Footnotes"
+msgstr "التذييل"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__special_date_changer__strict_range
+msgid "Force given dates for all accounts and account types"
+msgstr "إعطاء قيمة إجبارية لمواعيد جميع الحسابات وأنواع الحسابات"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__formulas
+msgid "Formulas"
+msgstr "الصيغ"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid ""
+"From %s\n"
+"to  %s"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__special_date_changer__from_beginning
+msgid "From the beginning"
+msgstr "من البداية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__special_date_changer__from_fiscalyear
+msgid "From the beginning of the fiscal year"
+msgstr "من بداية السنة المالية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "From:"
+msgstr "من:"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__fun_to_call
+msgid "Function to Call"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_general_ledger
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_general_ledger
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+#, python-format
+msgid "General Ledger"
+msgstr "دفتر الأستاذ العام"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_general_ledger
+msgid "General Ledger Report"
+msgstr "تقرير دفتر الحسابات العام"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "General Report"
+msgstr "التقرير العام"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/wizard/report_export_wizard.py:0
+#, python-format
+msgid "Generated Documents"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_generic_tax_report
+msgid "Generic Tax Report"
+msgstr "تقرير الضرائب المبسط"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_gross_profit0
+msgid "Gross Profit"
+msgstr "إجمالي الربح"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_gross_profit0
+msgid "Gross profit"
+msgstr "إجمالي الربح"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_gpmargin0
+msgid "Gross profit margin (gross profit / operating income)"
+msgstr "إجمالي هامش الربح (إجمالي الربح / الدخل التشغيلي)"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options_generic_tax_report
+msgid "Group amounts by tax grid"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__groupby
+msgid "Group by"
+msgstr "تجميع حسب"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#, python-format
+msgid "Groupby should be a field from account.move.line"
+msgstr "ينبغي أن يكون \"التجميع حسب\" حقلًا من account.move.line"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#, python-format
+msgid "Groupby should be a journal item field"
+msgstr "ينبغي أن يكون \"التجميع حسب\" حقلًا يتبع عناصر اليومية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__hide_if_empty
+msgid "Hide If Empty"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__hide_if_zero
+msgid "Hide If Zero"
+msgstr "أخفها إن كانت صفرًا"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Hierarchy"
+msgstr "التسلسل الهرمي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Hierarchy and Subtotals"
+msgstr "التسلسل الهرمي والمجاميع الفرعية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid "How often tax returns have to be made"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_aged_partner__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_aged_payable__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_aged_receivable__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_analytic_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_bank_reconciliation_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_cash_flow_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_coa_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_consolidated_journal__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_general_ledger__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_generic_tax_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_partner_ledger__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Include Unposted Entries"
+msgstr "تضمين القيود غير المُرحلة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Include unposted entries"
+msgstr "تضمين القيود غير المُرحلة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_income0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_totalincome0
+msgid "Income"
+msgstr "الدخل"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_template_coa_table_header
+#, python-format
+msgid "Initial Balance"
+msgstr "الرصيد الافتتاحي"
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/xml/flsp_account_report_template.xml:0
+#, python-format
+msgid "Insert foot note here"
+msgstr "إدراج ذيل هنا"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_move_line__internal_note
+msgid "Internal Note"
+msgstr "ملاحظة داخلية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_move__is_tax_closing
+msgid "Is Tax Closing"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__green_on_positive
+msgid "Is growth good when positive"
+msgstr "هو نمو جيد عندما يكون إيجابيًا"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid ""
+"It seems that you have no entries to post, are you sure you correctly "
+"configured the accounts on your tax groups?"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "JRNL"
+msgstr "JRNL"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_year_op__account_tax_periodicity_journal_id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_company__account_tax_periodicity_journal_id
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_config_settings__account_tax_periodicity_journal_id
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_setup_financial_year_opening_form
+#, python-format
+msgid "Journal"
+msgstr "دفتر اليومية"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_account_move
+msgid "Journal Entries"
+msgstr "القيود اليومية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "Journal Groups"
+msgstr "مجموعات الدفاتر اليومية"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_account_move_line
+msgid "Journal Item"
+msgstr "عنصر اليومية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "Journal Items"
+msgstr "عناصر اليومية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "Journal Items (%s)"
+msgstr "عناصر اليومية (%s)"
+
+#. module: flsp_account_reports
+#: model:ir.actions.server,name:flsp_account_reports.action_journal_items
+msgid "Journal Items by tax"
+msgstr "يومية البنود حسب الضرائب"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#, python-format
+msgid "Journal Name (Code)"
+msgstr "اسم اليومية (الكود)"
+
+#. module: flsp_account_reports
+#: model:ir.actions.act_window,name:flsp_account_reports.action_account_print_journal_menu
+#: model:ir.ui.menu,name:flsp_account_reports.menu_print_journal
+msgid "Journals Audit"
+msgstr "تدقيق دفاتر اليومية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Journals:"
+msgstr "دفاتر اليومية:"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_liabilities_view0
+msgid "LIABILITIES"
+msgstr "التزامات"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_liabilities_and_equity_view0
+msgid "LIABILITIES + EQUITY"
+msgstr "الالتزامات + الملكية"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Last Bank Statement Ending Balance"
+msgstr "آخر رصيد إقفال لكشف الحساب البنكي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Last Financial Year"
+msgstr "السنة المالية السابقة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_aged_partner____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_aged_payable____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_aged_receivable____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_analytic_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_bank_reconciliation_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_cash_flow_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_coa_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_consolidated_journal____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_general_ledger____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_generic_tax_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_partner_ledger____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard____last_update
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format____last_update
+msgid "Last Modified on"
+msgstr "آخر تعديل في"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Last Month"
+msgstr "الشهر الماضي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Last Quarter"
+msgstr "آخر ربع سنة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__write_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__write_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__write_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__write_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__write_uid
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__write_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__write_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__write_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__write_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__write_date
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث في"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__level
+msgid "Level"
+msgstr "مستوى"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__line
+msgid "Line"
+msgstr "بند"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__line_ids
+msgid "Lines"
+msgstr "البنود"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Load more... (%s remaining)"
+msgstr "تحميل المزيد... (متبقي %s("
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_line_form
+msgid "Main Info"
+msgstr "المعلومات الرئيسية"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_report_manager
+msgid "Manage Summary and Footnotes of Reports"
+msgstr "إدارة الملخص وذيول التقارير"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__manager_id
+msgid "Manager"
+msgstr "المدير"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Matching Number"
+msgstr "رقم المطابقة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__generated_menu_id
+msgid "Menu Item"
+msgstr "عنصر في القائمة"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_ir_module_module
+msgid "Module"
+msgstr "الموديول"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "NET"
+msgstr "صافي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__name
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__name
+#, python-format
+msgid "Name"
+msgstr "الاسم"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_reports_export_wizard__doc_name
+msgid "Name to give to the generated documents."
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_net_assets0
+msgid "Net Assets"
+msgstr "صافي الأصول"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_profit0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_net_profit0
+msgid "Net Profit"
+msgstr "صافي الربح"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_net_assets0
+msgid "Net assets"
+msgstr "صافي الأصول"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Net increase in cash and cash equivalents"
+msgstr "صافي الزيادة في النقد والنقد المعادل"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_npmargin0
+msgid "Net profit margin (net profit / income)"
+msgstr "صافي هامش الربح (صافي الربح / الدخل)"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__show_domain__never
+msgid "Never"
+msgstr "مطلقًا"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_move_line__next_action_date
+msgid "Next Action Date"
+msgstr "تاريخ الإجراء التالي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+msgid "No Comparison"
+msgstr "بلا مقارنة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__figure_type__no_unit
+msgid "No Unit"
+msgstr "بلا وحدة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_account_move_line__internal_note
+msgid ""
+"Note you can set through the customer statement about a receivable journal "
+"item"
+msgstr "لاحظ أن بإمكانك من خلال كشف حساب العميل تشريع عنصر يومية مستحق"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Nothing to process"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+msgid "Number of periods :"
+msgstr "عدد الفترات:"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_off_sheet
+msgid "OFF BALANCE SHEET ACCOUNTS"
+msgstr ""
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Odoo Warning"
+msgstr "تحذير من أودو"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#, python-format
+msgid "Older"
+msgstr "أقدم"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Only Show Unreconciled Entries"
+msgstr "عرض القيود غير المسواة فقط"
+
+#. module: flsp_account_reports
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_financial_year_op
+msgid "Opening Balance of Financial Year"
+msgstr "الرصيد الابتدائي للعام المالي"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_income0
+msgid "Operating Income"
+msgstr "الدخل التشغيلي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Operations to Process"
+msgstr "العمليات المُراد إجراؤها"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_other_income0
+msgid "Other Income"
+msgstr "دخل آخر"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "PDF"
+msgstr "PDF"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__parent_id
+msgid "Parent"
+msgstr "الأصل"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__parent_id
+msgid "Parent Menu"
+msgstr "القائمة الأصلية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__parent_path
+msgid "Parent Path"
+msgstr "المسار الأصلي"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__report_id
+msgid "Parent Report Id"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard_format__export_wizard_id
+msgid "Parent Wizard"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_analytic_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Partner"
+msgstr "الشريك"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Partner Categories:"
+msgstr "فئات الشركاء:"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_partner_ledger
+#: model:ir.model,name:flsp_account_reports.model_flsp_account_partner_ledger
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_partner_ledger
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_partner_view_buttons
+#, python-format
+msgid "Partner Ledger"
+msgstr "دفتر الأستاذ العام للشركاء"
+
+#. module: flsp_account_reports
+#: model:ir.ui.menu,name:flsp_account_reports.flsp_account_reports_partners_reports_menu
+msgid "Partner Reports"
+msgstr "تقارير الشركاء"
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Partners"
+msgstr "الشركاء"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_filter_info_template
+msgid "Partners:"
+msgstr "الشركاء:"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Payable"
+msgstr "الدائن"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Payable tax amount"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_current_liabilities_payable
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_creditors0
+msgid "Payables"
+msgstr "الدائنون"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__figure_type__percents
+msgid "Percents"
+msgstr "النسب"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_performance0
+msgid "Performance"
+msgstr "الأداء"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_config_settings.py:0
+#, python-format
+msgid "Periodic Tax Return"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_year_op__account_tax_periodicity
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_config_settings__account_tax_periodicity
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_year_op__account_tax_periodicity
+#: model:ir.model.fields,help:flsp_account_reports.field_res_company__account_tax_periodicity
+#: model:ir.model.fields,help:flsp_account_reports.field_res_config_settings__account_tax_periodicity
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_setup_financial_year_opening_form
+msgid "Periodicity"
+msgstr "التكرار"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_fixed_assets_view0
+msgid "Plus Fixed Assets"
+msgstr "بالإضافة الى الأصول الثابتة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_non_current_assets_view0
+msgid "Plus Non-current Assets"
+msgstr "بالإضافة للأصول غير المتداولة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_non_current_liabilities0
+msgid "Plus Non-current Liabilities"
+msgstr "بالإضافة للالتزامات غير الجارية"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_position0
+msgid "Position"
+msgstr "منصب"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Posted Entries Only"
+msgstr "القيود المُرحلة فقط"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_prepayements0
+msgid "Prepayments"
+msgstr "المصاريف المدفوعة مقدمًا"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+msgid "Previous Period"
+msgstr "الفترة السابقة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_previous_year_earnings0
+msgid "Previous Years Unallocated Earnings"
+msgstr "أرباح السنين الماضية غير المخصصة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__print_on_new_page
+msgid "Print On New Page"
+msgstr "طباعة في صفحة جديدة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "Print Preview"
+msgstr "طباعة المعاينة"
+
+#. module: flsp_account_reports
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_pnl
+msgid "Profit And Loss"
+msgstr "الربح والخسارة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report,name:flsp_account_reports.account_financial_report_profitandloss0
+#: model:ir.actions.client,name:flsp_account_reports.flsp_account_financial_html_report_action_1
+#: model:ir.ui.menu,name:flsp_account_reports.flsp_account_financial_html_report_menu_1
+msgid "Profit and Loss"
+msgstr "الأرباح والخسائر"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_profitability0
+msgid "Profitability"
+msgstr "ربحية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.view_move_form_vat_return
+msgid "Proposition of tax closing journal entry."
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Receivable"
+msgstr "المدين"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "Receivable tax amount"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_debtors0
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_receivable0
+msgid "Receivables"
+msgstr "المدينين"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_aged_payable_report
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_aged_receivable_report
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_partner_ledger_report
+msgid "Reconcile"
+msgstr "تسوية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_account_reports_journal_dashboard_kanban_view
+msgid "Reconciliation Report"
+msgstr "تقرير المصالحة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#, python-format
+msgid "Ref"
+msgstr "رقم الإشارة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_analytic_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Reference"
+msgstr "رقم الإشارة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_year_op__account_tax_periodicity_reminder_day
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_config_settings__account_tax_periodicity_reminder_day
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_setup_financial_year_opening_form
+msgid "Reminder"
+msgstr "تذكير"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_form
+msgid "Report Definition"
+msgstr "تعريف التقرير"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_line_form
+msgid "Report Line"
+msgstr "بند التقرير"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flspview_account_financial_report_line_tree
+msgid "Report Lines"
+msgstr "بنود التقرير"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_reports_export_wizard__report_model
+msgid "Report Model"
+msgstr "نموذج التقرير"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__report_name
+msgid "Report Name"
+msgstr "اسم التقرير"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid "Reporting"
+msgstr "التقارير"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_retained_earnings0
+msgid "Retained Earnings"
+msgstr "الأرباح المحتجزة"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_return_investment0
+msgid "Return on investments (net profit / assets)"
+msgstr "العائد على الاستثمار (صافي الربح / الأصول)"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+msgid "Same Period Last Year"
+msgstr "نفس الفترة العام الماضي"
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Save"
+msgstr "حفظ"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_main_template
+msgid "Search account"
+msgstr "ابحث في الحساب"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__name
+msgid "Section Name"
+msgstr "اسم القسم"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__sequence
+msgid "Sequence"
+msgstr "المسلسل"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__tax_report
+msgid ""
+"Set to True to automatically filter out journal items that have the boolean "
+"field 'tax_exigible' set to False"
+msgstr ""
+"اجعل هذه القيمة صحيحة لتُستبعد تلقائيًا عناصر اليومية ذات القيمة المنطقية "
+"'tax_exigible' خطأ"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_report_executivesummary_st_cash_forecast0
+msgid "Short term cash forecast"
+msgstr "توقعات النقدية قصيرة الأجل"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__debit_credit
+msgid "Show Credit and Debit Columns"
+msgstr "عرض أعمدة الدائن والمدين"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__show_domain
+msgid "Show Domain"
+msgstr "عرض النطاق"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__unfold_all_filter
+msgid "Show unfold all filter"
+msgstr "عرض فلتر كشف الكل"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.view_move_form_vat_return
+msgid "Some controls failed"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__special_date_changer
+msgid "Special Date Changer"
+msgstr "مغير خاص للتاريخ"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_comparison
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Start Date :"
+msgstr "تاريخ البداية:"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_company__account_tax_periodicity_reminder_day
+msgid "Start from"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_res_company__account_tax_original_periodicity_reminder_day
+msgid "Start from original"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_manager__summary
+msgid "Summary"
+msgstr "الملخص"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "TAX"
+msgstr "الضريبة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_config_settings.py:0
+#, python-format
+msgid "TAX Report"
+msgstr ""
+
+#. module: flsp_account_reports
+#. openerp-web
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#: code:addons/flsp_account_reports/static/src/js/flsp_account_reports.js:0
+#, python-format
+msgid "Tags"
+msgstr "الوسوم"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Tax Amount"
+msgstr "قيمة الضريبة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#, python-format
+msgid "Tax Declaration"
+msgstr "الإعلان الضريبي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_gt
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report__tax_report
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_gt
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.view_move_form_vat_return
+#, python-format
+msgid "Tax Report"
+msgstr "تقرير الضريبة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_account_move__tax_report_control_error
+msgid "Tax Report Control Error"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_config_settings.py:0
+#, python-format
+msgid "Tax Report for company %s"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_setup_financial_year_opening_form
+msgid "Tax Return Periodicity"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_config_settings.py:0
+#: code:addons/flsp_account_reports/models/res_config_settings.py:0
+#, python-format
+msgid "Tax Return for %s"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__mail_activity_type__category__tax_report
+msgid "Tax report"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_report_footnote__text
+msgid "Text"
+msgstr "النص"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__generated_menu_id
+msgid "The menu item generated for this report, or None if there isn't any."
+msgstr "عنصر القائمة المنشأ لهذا التقرير، ولا يأخذ قيمة إن لم توجد عناصر."
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_main_template
+msgid "There are"
+msgstr "هناك"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "This Financial Year"
+msgstr "السنة المالية الجارية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "This Quarter"
+msgstr "ربع السنة الجاري"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid ""
+"This allows you to choose the position of totals in your financial reports."
+msgstr "يسمح لك هذا باختيار مكان الإجمالي في تقاريرك المالية."
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "This period is already closed"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "Today"
+msgstr "اليوم"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_aged_partner_balance.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_consolidated_journals.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_general_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_partner_ledger.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_template_coa_table_header
+#, python-format
+msgid "Total"
+msgstr "الإجمالي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Total Virtual GL Balance"
+msgstr "إجمالي الرصيد الدفتري الافتراضي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report_coa.py:0
+#: model:ir.actions.client,name:flsp_account_reports.action_flsp_account_report_coa
+#: model:ir.ui.menu,name:flsp_account_reports.menu_action_flsp_account_report_coa
+#, python-format
+msgid "Trial Balance"
+msgstr "ميزان المراجعة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,field_description:flsp_account_reports.field_flsp_account_financial_html_report_line__figure_type
+msgid "Type"
+msgstr "النوع"
+
+#. module: flsp_account_reports
+#: model:flsp.account.financial.html.report.line,name:flsp_account_reports.account_financial_unaffected_earnings0
+msgid "Unallocated Earnings"
+msgstr "أرباح غير مخصصة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#, python-format
+msgid "Undefined"
+msgstr "غير محدد"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#: code:addons/flsp_account_reports/models/flsp_account_cash_flow_report.py:0
+#, python-format
+msgid "Unexplained Difference"
+msgstr "فرق غير مبرر"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid ""
+"Unexplained Difference = Virtual GL Balance - Last Bank Statement Ending Balance\n"
+"\n"
+"%s + Operations to Process SHOULD BE EQUAL TO Last Bank Statement Ending Balance.\n"
+"\n"
+"If it’s not equal, there is an unexplained difference. It could be due to:\n"
+"  1) Some bank statements not encoded in Odoo yet,\n"
+"  2) Duplicated payments."
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Unfold"
+msgstr "كشف"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Unfold All"
+msgstr "كشف الكل"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template
+msgid "Unfolded"
+msgstr "مكشوف"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "Unreconciled"
+msgstr "غير المسواة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Unreconciled Bank Statement Lines"
+msgstr "بنود كشف الحساب غير المُسوى"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options_generic_tax_report
+msgid "Use Tax Grid"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__flsp_account_financial_html_report_line__special_date_changer__normal
+msgid "Use given dates"
+msgstr "استخدم التواريخ المحددة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Validated Payments not Linked with a Bank Statement Line"
+msgstr "المدفوعات المعتمدة غير المرتبطة ببند كشف حساب بنكي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_activity.py:0
+#, python-format
+msgid "Vat closing from %s to %s"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "View Bank Statement"
+msgstr "عرض كشف الحساب"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "View Bill"
+msgstr "عرض الفاتورة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "View Invoice"
+msgstr "عرض الفاتورة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_general_ledger_report
+msgid "View Journal Entry"
+msgstr "عرض قيد اليومية"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "View Partner"
+msgstr "عرض الشريك"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_caret_options
+msgid "View Payment"
+msgstr "عرض السداد"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid "Virtual GL Balance"
+msgstr "الرصيد الدفتري الافتراضي"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_bank_reconciliation_report.py:0
+#, python-format
+msgid ""
+"Virtual GL Balance = %s + operations to process\n"
+"\n"
+"The Virtual GL Balance represents the cash you'll have once all operations to process will be done."
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report_line__print_on_new_page
+msgid ""
+"When checked this line and everything after it will be printed on a new "
+"page."
+msgstr "عند تحديد هذا، ستمم طباعة هذا السطر وكل ما يليه في صفحة جديدة."
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+msgid ""
+"When ticked, totals and subtotals appear below the sections of the report"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_res_company__totals_below_sections
+#: model:ir.model.fields,help:flsp_account_reports.field_res_config_settings__totals_below_sections
+msgid ""
+"When ticked, totals and subtotals appear below the sections of the report."
+msgstr "عند تحديد هذا، ستُعرض المجاميع والمجاميع الفرعية تحت أقسام التقرير."
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_extra_options
+msgid "With Draft Entries"
+msgstr "مع القيود المسودة"
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_report.py:0
+#, python-format
+msgid "XLSX"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/flsp_account_generic_tax_report.py:0
+#, python-format
+msgid "You can only post tax entries for one company at a time"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/res_partner.py:0
+#: code:addons/flsp_account_reports/models/res_partner.py:0
+#, python-format
+msgid "any"
+msgstr "أي"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_setup_financial_year_opening_form
+msgid "days after period"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__analytic
+msgid "display the analytic filters"
+msgstr "عرض الفلاتر التحليلية"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__comparison
+msgid "display the comparison filter"
+msgstr "عرض فلتر المقارنة"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__show_journal_filter
+msgid "display the journal filter in the report"
+msgstr "عرض فلتر دفتر اليوميات في التقرير"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__unfold_all_filter
+msgid "display the unfold all options in report"
+msgstr "عرض خيارات كشف الكل في التقرير"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__res_company__account_tax_periodicity__monthly
+msgid "monthly"
+msgstr ""
+
+#. module: flsp_account_reports
+#: code:addons/flsp_account_reports/models/account_financial_report.py:0
+#, python-format
+msgid "n/a"
+msgstr "غير محدد"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_report_manager__report_name
+msgid "name of the model of the report"
+msgstr "اسم كائن التقرير"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_main_template
+msgid "prior or included in this period"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_flsp_account_financial_html_report__date_range
+msgid "specify if the report use date_range or single date"
+msgstr "يحدد ما إن كان التقرير يستخدم date_range أم تاريخ منفرد"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_account_move__tax_report_control_error
+msgid "technical field used to know if there was a failed control check"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_account_move__is_tax_closing
+msgid "technical field used to know if this move is the vat closing move"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model:ir.model.fields,help:flsp_account_reports.field_res_company__account_tax_original_periodicity_reminder_day
+msgid ""
+"technical helper to prevent rewriting activity date when saving settings"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_flsp_search_template_date_filter
+msgid "to:"
+msgstr "إلى:"
+
+#. module: flsp_account_reports
+#: model:ir.model.fields.selection,name:flsp_account_reports.selection__res_company__account_tax_periodicity__trimester
+msgid "trimester"
+msgstr ""
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_main_template
+msgid "unposted Journal Entries"
+msgstr "قيود يومية غير مُرحلة"
+
+#. module: flsp_account_reports
+#: model_terms:ir.ui.view,arch_db:flsp_account_reports.flsp_line_template_general_ledger_report
+msgid "⇒ journal items"
+msgstr "-> عناصر دفتر اليومية"
