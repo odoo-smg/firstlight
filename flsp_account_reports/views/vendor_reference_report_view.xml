@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="vendor_reference_report_view" model="ir.ui.view">
+            <field name="name">bill.report.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="invoice_partner_display_name" position="after">
+                    <field name="ref" string="Reference" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_flsp_account_report_ar" model="ir.actions.client">
+            <field name="name">FLSP Aged Receivable (USD)</field>
+            <field name="tag">flsp_account_report</field>
+            <field name="context" eval="{'model': 'flsp.account.aged.receivable'}" />
+        </record>
+
+        <!-- Account Financial Report Menuitems -->
+        <menuitem id="flsp_account_reports_partners_reports_menu" name="FLSP Reports" parent="account.menu_finance_reports" sequence="2"/>
+        <menuitem id="menu_action_flsp_account_report_aged_receivable" name="FLSP Aged Receivable (USD)" action="action_flsp_account_report_ar" parent="flsp_account_reports_partners_reports_menu"/>
+        <!--menuitem id="menu_action_flsp_account_report_aged_receivable" name="FLSP Aged Receivable" action="flsp_account_report" parent="flsp_account_reports_partners_reports_menu"/-->
+    </data>
+</odoo>
