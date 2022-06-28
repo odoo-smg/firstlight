@@ -4,16 +4,16 @@
         <field name="name">flsp.bom.availability.view.tree</field>
         <field name="model">flsp.bom.availability.line</field>
         <field name="arch" type="xml">
-            <tree string="Comparison" create="0" delete="0" edit="0" >
-                <field name="bom_level"/>
-                <field name="product_line_id"/>
-                <field name="has_bom"/>
-                <field name="bom_comp_id"/>
-                <field name="uom_id"/>
-                <field name="product_line_qty"/>
-                <field name="onhand_qty_line"/>
-                <field name="forecast_qty_line"/>
-                <field name="bom_line_id" optional="hide"/>
+            <tree string="Comparison" editable="bottom" create="false"  delete="false" >
+                <field name="bom_level" readonly="1"/>
+                <field name="product_line_id" readonly="1"/>
+                <field name="has_bom" readonly="1"/>
+                <field name="bom_comp_id" readonly="1"/>
+                <field name="uom_id" readonly="1"/>
+                <field name="product_line_qty" readonly="1"/>
+                <field name="onhand_qty_line" readonly="1"/>
+                <field name="forecast_qty_line" readonly="1"/>
+                <field name="bom_line_id" optional="hide" readonly="1"/>
             </tree>
         </field>
     </record>
@@ -25,4 +25,15 @@
         <field name="view_mode">tree</field>
         <field name="view_id" ref="flsp_bom_availability_line_tree"/>
     </record>
+    <record id="flsp_bom_availability_line_demand" model="ir.ui.view">
+        <field name="name">flsp.bom.availability.line.demand</field>
+        <field name="model">flsp.bom.availability.line</field>
+        <field name="inherit_id" ref="flsp_bom_availability.flsp_bom_availability_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="forecast_qty_line" position="after">
+                <field name="comp_on_demand" string="On Demand" optional="show"/>
+            </field>
+        </field>
+    </record>
+
 </odoo>
