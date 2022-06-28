@@ -304,7 +304,7 @@ class FlpsReportAgedPartnerBalance(models.AbstractModel):
                 for partial_line in line.matched_credit_ids:
                     if partial_line.max_date <= date_from:
                         #line_amount -= partial_line.company_id.currency_id._convert(partial_line.amount, user_currency, user_company, date_from)
-                        line_amount += partial_line.amount_currency
+                        line_amount -= partial_line.amount_currency
 
                 if not self.env.company.currency_id.is_zero(line_amount):
                     partners_amount[partner_id] += line_amount
