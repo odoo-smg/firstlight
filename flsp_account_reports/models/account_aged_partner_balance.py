@@ -289,7 +289,7 @@ class FlpsReportAgedPartnerBalance(models.AbstractModel):
                     partners_amount[partner_id] = 0.0
 
                 #line_amount = line.company_id.currency_id._convert(line.balance, user_currency, user_company, date_from)
-                line_amount = line.company_id.currency_id._convert(line.balance, us_currency_id, user_company, line.date)
+                line_amount = line.amount_currency
                 #if print_first and line_amount > 0:
                 #tmp = line.company_id.currency_id._convert(line.balance, us_currency_id, user_company, line.date)
                 #print("Customer: "+line.partner_id.name[:20]+' ---> before: '+ str(line.balance)+" after: "+str(line_amount) + " date:"+str(date_from)+" move date:"+str(line.date)+'Converted on('+str(line.date)+'): '+str(tmp))
@@ -300,11 +300,11 @@ class FlpsReportAgedPartnerBalance(models.AbstractModel):
                 for partial_line in line.matched_debit_ids:
                     if partial_line.max_date <= date_from:
                         #line_amount += partial_line.company_id.currency_id._convert(partial_line.amount, user_currency, user_company, date_from)
-                        line_amount += partial_line.company_id.currency_id._convert(partial_line.amount, us_currency_id, user_company, partial_line.max_date)
+                        line_amount += partial_line.amount_currency
                 for partial_line in line.matched_credit_ids:
                     if partial_line.max_date <= date_from:
                         #line_amount -= partial_line.company_id.currency_id._convert(partial_line.amount, user_currency, user_company, date_from)
-                        line_amount -= partial_line.company_id.currency_id._convert(partial_line.amount, us_currency_id, user_company, partial_line.max_date)
+                        line_amount -= partial_line.amount_currency
 
                 if not self.env.company.currency_id.is_zero(line_amount):
                     partners_amount[partner_id] += line_amount

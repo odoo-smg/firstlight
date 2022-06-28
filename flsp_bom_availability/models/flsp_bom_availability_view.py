@@ -22,6 +22,14 @@ class FlspBomAvailabilityLine(models.Model):
     has_bom = fields.Boolean(string='Has BOM', compute='compute_has_bom')
     onhand_qty_line = fields.Float(string='OnHand Qty', compute='compute_qty')
     forecast_qty_line = fields.Float(string='Forecast Qty', compute='compute_qty')
+    comp_on_demand = fields.Float(string="Compute On Demand", compute="compute_on_demand")
+
+    def compute_on_demand(self):
+        for line in self:
+            latest_calc = line.env['flsp.purchase.mrp'].search(['&', ('create_uid','=',2), ('state','=','done')], order='date desc', limit=1)
+            mrp_line = line.env['flsp.purchase.mrp.line'].search(['&', ('purchase_mrp_id','=',latest_calc.id), ('product_tmpl_id','=', line.product_line_id.product_tmpl_id.id)])
+            line.comp_on_demand = mrp_line.open_demand
+
 
     def init(self):
         query = """
