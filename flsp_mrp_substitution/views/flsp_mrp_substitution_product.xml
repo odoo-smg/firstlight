@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
 
-        <!--record model="ir.ui.view" id="product_smg_tree_view">
+        <record model="ir.ui.view" id="product_smg_tree_view">
             <field name="name">product.template.smg.tree.inherit</field>
             <field name="model">product.template</field>
             <field name="priority">99</field>
             <field name="inherit_id" ref="product.product_template_tree_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//tree[1]/field[@name='name']" position="after">
-                    <field name="legacy_code" optional="show"/>
-                </xpath>
                 <xpath expr="//field[@name='uom_id']" position="after">
-                    <field name="flsp_plm_valid" optional="show"/>
-                    <field name="flsp_acc_valid" optional="show"/>
+                    <field name="flsp_has_substitute" optional="show" />
+
                 </xpath>
             </field>
-        </record-->
+        </record>
 
         <!-- Add instructor field to existing view -->
         <record model="ir.ui.view" id="flsp_mrp_substitution_product_form">
@@ -24,9 +21,9 @@
             <field name="priority">98</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
-                <header>
+                <!--header>
                   <button name="flsp_button_bom_substitution" groups="mrp_plm.group_plm_manager" string="Substitution" type="object"/>
-                </header>
+                </header-->
                 <notebook position="inside">
                     <page string="Substitute">
                         <group string="Substitute Part Number" name="flsp_mrp_substitution" colspan="4" >
@@ -34,6 +31,11 @@
                         </group>
                     </page>
                 </notebook>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="flsp_has_substitute" invisible="1" />
+                    <h1><spam style="color: blue" attrs="{'invisible': [('flsp_has_substitute', '=', False)]}" >****** This product has a substitute part ******</spam></h1>
+                </xpath>
+
             </field>
         </record>
 
@@ -41,14 +43,28 @@
             <field name="name">flsp.mrp_substitution.tree.view</field>
             <field name="model">flsp.mrp.substitution</field>
             <field name="arch" type="xml">
-                <tree string="Substitute Parts" editable="bottom">
+                <tree string="Substitute Parts" editable="bottom" create="0" delete="0">
                     <field name="substituting" />
+                    <field name="product_id" invisible="1"/>
+                    <field name="product_substitute_id"/>
+                    <field name="product_substitute_onhand" />
+                    <field name="product_substitute_openpo"/>
+                    <button name="bom_selection" class="fa fa-2x fa-check-circle" type="object" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="flsp_mrp_substitution_form_view" model="ir.ui.view">
+            <field name="name">flsp.mrp_substitution.tree.view</field>
+            <field name="model">flsp.mrp.substitution</field>
+            <field name="arch" type="xml">
+                <form string="Substitute Parts" >
+                    <field name="substituting" invisible="1"/>
                     <field name="product_id" invisible="1"/>
                     <field name="product_substitute_id"/>
                     <!--field name="ratio" />
                     <field name="expire_date"/-->
-                    <button name="bom_selection" class="fa fa-2x fa-check-circle" type="object" />
-                </tree>
+                </form>
             </field>
         </record>
 
