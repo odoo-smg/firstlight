@@ -7,6 +7,8 @@ class FlspMrpSubstitutionLine(models.Model):
 
     product_id = fields.Many2one('product.template', 'Component', default=lambda self: self.env.context.get('active_id'))
     product_substitute_id = fields.Many2one('product.product', 'Substitute', required=True)
+    product_substitute_onhand = fields.Float(string="On Hand", related='product_substitute_id.qty_available')
+    product_substitute_openpo = fields.Float(string="Open POs", related='product_substitute_id.flsp_open_po_qty')
     ratio = fields.Float("Ratio", required=True, default=1)
     substituting = fields.Boolean("Substituting", default=True)
     expire_date = fields.Date(string="Expire Date", default=False)
@@ -58,7 +60,3 @@ class FlspMrpSubsBomLine(models.Model):
                     if not sub_bom_line.substituting:
                         sub_bom_line.bom_line_id.flsp_substitute = False
                         substitution_line.unlink()
-
-
-
-
