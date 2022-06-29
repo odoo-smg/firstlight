@@ -1,6 +1,8 @@
 from odoo import models, fields, api
 from datetime import datetime
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+
 
 class FlspPurchaseMrp(models.Model):
     _name = 'flsp.purchase.mrp'
@@ -40,58 +42,38 @@ class FlspPurchaseMrp(models.Model):
 
         start_time = datetime.now()
         if not product_from or not product_to:
-            product_from = 1 # do not use 0 for start  # 101762-000
-            product_to = 999999  # 100010-000
-            #product_from = product_to = 8 #1000008-000
+            product_from = 1  # do not use 0 for start
+            product_to = 999999
         open_moves = []
-        for each in self: # .with_progress(msg="Calculating Open Movements"):
+        for each in self:
             # Delete previous lines
-            print('open moves')
             #for line in each.purchase_mrp_lines:
             #    line.unlink()
             open_moves = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
-            print('open moves')
 
         finish_open_moves = datetime.now()
-        print('product from to: ' + str(product_from) + ' - ' + str(product_to))
         products_to_process = self.env['product.product'].search(['&', ('id', '>=', product_from), ('id', '<=', product_to)])
-        print('total products to process  = ' + str(len(products_to_process)))
 
-        print('----------------------->')
-
-        for curr_product in products_to_process: # .with_progress(msg="Processing and saving the data."):
+        for curr_product in products_to_process:
             if route_buy not in curr_product.route_ids.ids:
                 continue
             if not curr_product.default_code:
                 continue
             if curr_product:
                 open_moves_filtered = self.filter_moves(open_moves, curr_product)
-                open_moves_filtered.sort(key=lambda x: (x[4].id, x[7]))  # Sort by product and then date
+                # Sort by product and then date
+                open_moves_filtered.sort(key=lambda x: (x[4].id, x[7]))
                 self.process_moves(curr_product, open_moves_filtered)
 
         finish_process = datetime.now()
-        #process the forecast
-        print('-----------------------> FORECASTING')
 
-        for each in self: # .with_progress(msg="Calculating Open Movements"):
-            print('process_forecast')
+        #process the forecast
+        for each in self:
             self.process_forecast(product_from, product_to)
 
         finish_forecast = datetime.now()
 
-        print("Started at:")
-        print(start_time)
-        print("Open Moves:")
-        print(finish_open_moves)
-        print("Process:")
-        print(finish_process)
-        print("Forecast:")
-        print(finish_forecast)
-        print("Completed at:")
-
         # Checking changes from previous report and substitute parts:
-        #substitute_for_id = fields.Many2one('product.product', string='Substitute for', readonly=True)
-        #can_be_substituted_by_id = fields.Many2one('product.product', string='Can be Substituted by', readonly=True)
         purchase_mrp_product = self.env['flsp.purchase.mrp.line'].search(['&', '&', ('purchase_mrp_id', '=', self.id), ('product_id', '>=', product_from), ('product_id', '<=', product_to)])
         for planning in purchase_mrp_product:  ##delete not used
             subs = self.env['flsp.mrp.substitution.line'].search(['|', ('product_id', '=', planning.product_id.id), ('product_substitute_id', '=', planning.product_id.id)])
@@ -120,17 +102,8 @@ class FlspPurchaseMrp(models.Model):
                             planning.balance_neg = 0
                             planning.negative_by = False
 
-
-            #planning.new_update = True
-            #if previous_plan:
-            #    if previous_plan.product_id == planning.product_id:
-            #        if abs(previous_plan.suggested_qty - planning.suggested_qty) > 0.01 or previous_plan.required_by != planning.required_by:
-            #            planning.new_update = True
-            #previous_plan = planning
-
         self.state = 'done'
         finish_time = datetime.now()
-        print(finish_time)
 
     # ########################################
     # ######## FORECAST   ####################
@@ -146,7 +119,7 @@ class FlspPurchaseMrp(models.Model):
         else:
             sales_forecast = []
 
-        for forecast in sales_forecast: # .with_progress("sub-operation - Sales Forecast"):
+        for forecast in sales_forecast:
             forecast._qty_based_off_date()
             forecast_bom = self.env['mrp.bom'].search(
                 [('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
@@ -182,8 +155,6 @@ class FlspPurchaseMrp(models.Model):
                         late_delivery = 0
                         purchase_line = self._include_prod(self.supplier_lead_time, product, rationale, False, current_date, late_delivery, self.consider_wip, balance_neg, negative_by, 0, 0,
                                                            False, forecasted, 0, 0, self.consider_reserved)
-                        #   include_prod(self, supplier_lead_time, product, rationale, balance,         required_by, late_delivery, consider_wip, balance_neg, negative_by, avg_per_sbs, avg_per_ssa, consumption=False, forecast=False, po_qty=0.0, open_demand=0.0, consider_reserved=False):
-
                     else:
                         purchase_planning.qty_month1 += forecast.qty_month1 * forecast_components[component][
                             'total']
@@ -254,7 +225,6 @@ class FlspPurchaseMrp(models.Model):
                         purchase_planning.qty_month11 += forecast.qty_month11
                         purchase_planning.qty_month12 += forecast.qty_month12
 
-        #, '&', ('product_id', '>=', product_from), ('product_id', '<=', product_to)
         purchase_planning = self.env['flsp.purchase.mrp.line'].search(['&', '&', ('purchase_mrp_id', '=', self.id), ('product_id', '>=', product_from), ('product_id', '<=', product_to)])
         months = ['', 'January         ', 'February        ', 'March           ', 'April           ',
                   'May             ', 'June            ', 'July            ', 'August          ',
@@ -274,7 +244,7 @@ class FlspPurchaseMrp(models.Model):
                 next_6_months_2.append(months[key])
             key += 1
             count += 1
-        for planning in purchase_planning: # .with_progress("sub-operation - Demand Requirements"):
+        for planning in purchase_planning:
             six_month_forecast = 0
             rationale = "<pre>------------------------------------------------------- Forecast ----------------------------------------------------------<br/>"
             next_line = "---------------------------------------------------------------------------------------------------------------------------<br/>"
@@ -369,7 +339,7 @@ class FlspPurchaseMrp(models.Model):
                     key = 1
             rationale += "<br/>---------------------------------------------------------------------------------------------------------------------------<br/>"
             next_line += "<br/>---------------------------------------------------------------------------------------------------------------------------<br/>"
-            months_to_consider = 13 #int(planning.delay / 31)
+            months_to_consider = 13
             value_to_consider = 0
             if months_to_consider >= 1:
                 months_to_consider += 1
@@ -414,18 +384,14 @@ class FlspPurchaseMrp(models.Model):
                 elif current_month < months_to_consider:
                     if count > 13:
                         if not total_to_print:
-                            #next_line += '>| (...)'
                             total_to_print = False
                     else:
                         if current_month <= 5:
                             if current_month == 5:
-                                #rationale += '----------------->'
                                 rationale += '|{0: <16.2f}'.format(month_balance)
                             else:
                                 rationale += '|{0: <16.2f}'.format(month_balance)
-                                #rationale += '-----------------'
                         else:
-                            #next_line += '-----------------'
                             next_line += '|{0: <16.2f}'.format(month_balance)
                 else:
                     rationale += '                 '
@@ -484,13 +450,15 @@ class FlspPurchaseMrp(models.Model):
                     day_required_by = fields.Date.today().day
                     month_required_by = fields.Date.today().month+month_trigger
                     year_required_by = fields.Date.today().year
+
+                    required_by = fields.Date.today() + relativedelta(months=month_trigger)
                     if month_required_by > 12:
                         month_required_by = month_required_by - 12
                         year_required_by+=1
 
                     date_time_str = str(day_required_by)+'/'+str(month_required_by)+'/'+str(year_required_by)
                     rationale += '<br/><br/>-->Considering the date when the balance was below min qty as: '+date_time_str
-                    required_by = datetime.strptime(date_time_str, '%d/%m/%Y')
+
                     required_by = required_by - timedelta(days=planning.delay)
                     rationale += '<br/>After decreasing date with supplier lead-time of: '+str(planning.delay)+' days, the required date should be: '+str(required_by)
                     planning.required_by = required_by
@@ -519,7 +487,6 @@ class FlspPurchaseMrp(models.Model):
                 else:
                     suggested_qty = 0
 
-            print('After min qty balance 1:'+str(suggested_qty))
             suggested_qty = new_suggested
 
 
@@ -540,7 +507,6 @@ class FlspPurchaseMrp(models.Model):
                     else:
                         suggested_qty = planning.balance_neg * (-1)
 
-            print('After negative quantities:'+str(suggested_qty))
             suggested_qty = new_suggested
 
             required_qty = suggested_qty
@@ -557,7 +523,6 @@ class FlspPurchaseMrp(models.Model):
                     rationale += "<br/>Adjusted quantity has been changed to: " + str(planning.vendor_qty)
                     suggested_qty = planning.vendor_qty
 
-            print('After Checking supplier quantity:'+str(suggested_qty))
             # checking multiple quantities
             if planning.qty_multiple > 1 and suggested_qty > 0.001:
                 rationale += "<br/><br/> ** This product requires multiple quantity of: " + str(planning.qty_multiple)
@@ -568,21 +533,6 @@ class FlspPurchaseMrp(models.Model):
                         suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
                 rationale += "<br/>Adjusted quantity has been changed to: " + str(suggested_qty)
 
-            print('After checking multiple quantities:'+str(suggested_qty))
-
-            #if self.consider_wip:
-            #    if self.consider_reserved:
-            #        current_balance = planning.product_qty - planning.reserved
-            #    else:
-            #        current_balance = planning.product_qty
-            #else:
-            #    if self.consider_reserved:
-            #        current_balance = planning.product_qty - planning.wip_qty - planning.reserved_wip
-            #    else:
-            #        current_balance = planning.product_qty - planning.wip_qty
-
-            #if suggested_qty > current_balance:
-            print('Final update:' + str(suggested_qty))
             planning.suggested_qty = required_qty
             planning.adjusted_qty = suggested_qty
             planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(required_qty,
@@ -591,10 +541,6 @@ class FlspPurchaseMrp(models.Model):
                                                                                        planning.product_id.uom_po_id)
             planning.total_price = planning.vendor_price * planning.suggested_qty
             planning.rationale += rationale
-        # if not purchase_planning:
-        #    print(forecast.product_id.name)
-        # else:
-        #    print('product already in there.......')
 
     def filter_moves(self, moves, product):
         filtered_moves = []
@@ -749,7 +695,6 @@ class FlspPurchaseMrp(models.Model):
         #include a new product
         rationale += "</pre>"
         rationale += initial_balance_explanation
-        #rationale += "<br/>   Initial Balance: " + '{0: <12.2f}'.format(initial_balance)
         rationale += "<br/>   (LD) Late Deliveries: " + '{0: <12.2f}'.format(late_delivery)
         rationale += "<br/>   (LP) Late POs: " + '{0: <12.2f}'.format(late_receipts)
         final_balance = initial_balance+late_receipts-late_delivery
@@ -863,10 +808,6 @@ class FlspPurchaseMrp(models.Model):
             if prod_vendor.delay:
                 if prod_vendor.delay > tmp_delay:
                     tmp_delay = prod_vendor.delay
-            #if prod_vendor.delay and prod_vendor.delay > 0:
-                #if not required_by:
-                #    required_by = datetime.now()
-                #required_by = required_by - timedelta(days=tmp_delay)
 
         # check consumption of the component
         six_month_actual = 0
