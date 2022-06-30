@@ -22,6 +22,13 @@ class SalesOrderReport(models.Model):
         data = {}
         data['qty'] = {}
         data['val'] = {}
+        data['orders'] = []
+
+        date_start = datetime.strptime('01/01/'+str(date.today().year)+' 00:00:00', '%d/%m/%Y %H:%M:%S')
+        date_end = datetime.strptime('31/12/'+str(date.today().year)+' 23:59:59', '%d/%m/%Y %H:%M:%S')
+        data['orders'] = self.env['sale.order'].search(['&', ('state', 'in', ['sale', 'done']), '&', ('date_order','>=', date_start), ('date_order','<=', date_end)], order='date_order, name')
+
+
 
         qty_values = self.calc_sales_qty_val()
         dollar_val = self.calc_sales_dollar_val()
@@ -30,6 +37,7 @@ class SalesOrderReport(models.Model):
 
         data['qty']['categ'] = {}
         data['val']['categ'] = {}
+
         product_categories = self.env['product.category'].search([('flsp_weekly_report', '=', True)])
         for product_cateory in product_categories:
             total_categs += 1
@@ -58,6 +66,8 @@ class SalesOrderReport(models.Model):
         data['qty']['salesteam'] = {}
         data['val']['salesteam'] = {}
         sales_teams = self.env['crm.team'].search([])
+        data['qty']['salesteam'][888] = 'Other'
+        data['val']['salesteam'][888] = 'Other'
         for sales_team in sales_teams:
             if sales_team.flsp_weekly_report:
                 data['qty']['salesteam'][sales_team.id] = sales_team
@@ -87,14 +97,15 @@ class SalesOrderReport(models.Model):
             for category in data['qty']['categ']:
                 data['qty']['tr'][tr_count].append('<td class="categ_td" bgcolor="' + data['qty']['categ'][category][1] + '" > ' + data['qty']['categ'][category][0] + ' </td>')
                 data['qty']['tr'][tr_count].append('<td class="categ_td" bgcolor="' + data['qty']['categ'][category][1] + '" > ' + data['qty']['categ'][category][0] + '%</td>')
-            # print(data['qty']['categ'][category][0])  # categ
-            # print(data['qty']['categ'][category][1])  # color
 
         # Data:  Sales Team and Values
         for team in data['qty']['salesteam']:
             tr_count += 1
             data['qty']['tr'][tr_count] = []
-            data['qty']['tr'][tr_count].append('<td class="data_td team_td">'+data['qty']['salesteam'][team].name+'</td>')
+            if team == 888:
+                data['qty']['tr'][tr_count].append('<td class="data_td team_td">Other</td>')
+            else:
+                data['qty']['tr'][tr_count].append('<td class="data_td team_td">'+data['qty']['salesteam'][team].name+'</td>')
             for category in data['qty']['categ']:
                 # data['qty']['tr'][tr_count].append('<td class="total_data_td" bgcolor="' + data['qty']['categ'][category][1] + '" >'+qty_values[team][0][category][0]+'</td>')
                 # data['qty']['tr'][tr_count].append('<td class="total_data_td" bgcolor="' + data['qty']['categ'][category][1] + '" >'+qty_values[team][0][category][1]+'</td>')
@@ -173,14 +184,15 @@ class SalesOrderReport(models.Model):
             for category in data['val']['categ']:
                 data['val']['tr'][tr_count].append('<td class="categ_td" bgcolor="' + data['val']['categ'][category][1] + '" > ' + data['val']['categ'][category][0] + ' </td>')
                 data['val']['tr'][tr_count].append('<td class="categ_td" bgcolor="' + data['val']['categ'][category][1] + '" > ' + data['val']['categ'][category][0] + '%</td>')
-            # print(data['val']['categ'][category][0])  # categ
-            # print(data['val']['categ'][category][1])  # color
 
         # Data:  Sales Team and Values
         for team in data['val']['salesteam']:
             tr_count += 1
             data['val']['tr'][tr_count] = []
-            data['val']['tr'][tr_count].append('<td class="data_td team_td">'+data['val']['salesteam'][team].name+'</td>')
+            if team == 888:
+                data['val']['tr'][tr_count].append('<td class="data_td team_td">Other</td>')
+            else:
+                data['val']['tr'][tr_count].append('<td class="data_td team_td">'+data['val']['salesteam'][team].name+'</td>')
             for category in data['val']['categ']:
                 if dollar_val[team][0][category][3]:
                     data['val']['tr'][tr_count].append('<td class="total_data_td" bgcolor="#00B050">'+dollar_val[team][0][category][0]+'</td>')
@@ -245,6 +257,15 @@ class SalesOrderReport(models.Model):
                 a_ret[key][i][0] = ['0', '0%', 0, False]
                 for product_cateory in product_categories:
                         a_ret[key][i][product_cateory.id] = ['0', '0%', 0, False]
+
+        key = 888
+        a_ret[888] = {}
+        for i in range(0, 13):
+            a_ret[key][i] = {}
+            product_categories = self.env['product.category'].search([('flsp_weekly_report', '=', True)])
+            a_ret[key][i][0] = ['0', '0%', 0, False]
+            for product_cateory in product_categories:
+                a_ret[key][i][product_cateory.id] = ['0', '0%', 0, False]
         ##################################################
         # Filling out array with data                    #
         ##################################################
@@ -265,6 +286,13 @@ class SalesOrderReport(models.Model):
                                 qty = sol.qty_delivered
                             a_ret[so.team_id.id][so.date_order.month][sol.product_id.categ_id.id][2] += qty
                             a_ret[so.team_id.id][0][sol.product_id.categ_id.id][2] += qty
+                            a_ret[0][so.date_order.month][sol.product_id.categ_id.id][2] += qty
+                            a_ret[0][0][sol.product_id.categ_id.id][2] += qty
+                        else:
+                            key = 888
+                            qty = sol.product_uom_qty
+                            a_ret[key][so.date_order.month][sol.product_id.categ_id.id][2] += qty
+                            a_ret[key][0][sol.product_id.categ_id.id][2] += qty
                             a_ret[0][so.date_order.month][sol.product_id.categ_id.id][2] += qty
                             a_ret[0][0][sol.product_id.categ_id.id][2] += qty
                 continue
@@ -362,6 +390,17 @@ class SalesOrderReport(models.Model):
                 a_ret[key][i][0] = ['0', '0%', 0, False]
                 for product_cateory in product_categories:
                         a_ret[key][i][product_cateory.id] = ['0', '0%', 0, False]
+
+        key = 888
+        a_ret[888] = {}
+        for i in range(0, 13):
+            a_ret[key][i] = {}
+            product_categories = self.env['product.category'].search([('flsp_weekly_report', '=', True)])
+            a_ret[key][i][0] = ['0', '0%', 0, False]
+            for product_cateory in product_categories:
+                a_ret[key][i][product_cateory.id] = ['0', '0%', 0, False]
+
+
         ##################################################
         # Filling out array with data                    #
         ##################################################
@@ -381,16 +420,23 @@ class SalesOrderReport(models.Model):
                                                                             limit=1)
                             dollar_val = sol.price_unit * usd_rate.rate
                         qty = 0
+                        if so.state == 'sale':
+                            qty = sol.product_uom_qty * dollar_val
+                        else:
+                            # case the SO is marked as done without delivering some products
+                            qty = sol.qty_delivered * dollar_val
+
                         if 'DEMO' in sol.product_id.name:
-                            if so.state == 'sale':
-                                qty = sol.product_uom_qty * dollar_val
-                            else:
-                                # case the SO is marked as done without delivering some products
-                                qty = sol.qty_delivered * dollar_val
                             a_ret[so.team_id.id][so.date_order.month][sol.product_id.categ_id.id][2] += qty
                             a_ret[so.team_id.id][0][sol.product_id.categ_id.id][2] += qty
                             a_ret[0][so.date_order.month][sol.product_id.categ_id.id][2] += qty
                             a_ret[0][0][sol.product_id.categ_id.id][2] += qty
+                        else:
+                            a_ret[888][so.date_order.month][sol.product_id.categ_id.id][2] += qty
+                            a_ret[888][0][sol.product_id.categ_id.id][2] += qty
+                            a_ret[0][so.date_order.month][sol.product_id.categ_id.id][2] += qty
+                            a_ret[0][0][sol.product_id.categ_id.id][2] += qty
+
                 continue
             sales_order_lines = self.env['sale.order.line'].search([('order_id', '=', so.id)])
             for sol in sales_order_lines:
@@ -477,4 +523,3 @@ class SalesOrderReport(models.Model):
         _logger.info("************ Sending 'FLSP Sales - Unconfirmed Sales Orders' ************")
         self.env['flspautoemails.bpmemails'].send_email(orders, 'SO0018')
         _logger.info("************ 'FLSP Sales - Unconfirmed Sales Orders' DONE ***************")
-        
