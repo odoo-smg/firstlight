@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_flspsales_forecast,flspsales_forecast,model_flsp_sales_forecast,group_flspsalesforecast_manager,1,1,1,1
-access_flspsales_forecast_line,flspsales_forecast_line,model_flsp_sales_forecast_line,group_flspsalesforecast_manager,1,1,1,1
-
+access_flspsales_forecast,flspsales_forecast,model_flsp_sales_forecast,group_flspsalesforecast_manager,1,1,1,0
+access_flspsales_forecast_line,flspsales_forecast_line,model_flsp_sales_forecast_line,group_flspsalesforecast_manager,1,1,1,0
