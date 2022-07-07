@@ -11,6 +11,7 @@ class flspmrpbatchproduction(models.Model):
     _inherit = 'mrp.production'
     _check_company_auto = True
 
+    flsp_batch_list_ids = fields.One2many('flsp.serialnum', compute="flsp_compute_batch_list", string="My made batch")
     flsp_batch_serial_id = fields.Many2one('flsp.serialnum', string="Serial Batch", domain="['&', ('product_id', '=', product_id), '&', ('serial_count', '>=', product_qty), ('id', 'in', flsp_batch_list_ids)]")
     flsp_is_serial = fields.Boolean(string="Is Serial", compute="_flsp_compute_serial")
 
