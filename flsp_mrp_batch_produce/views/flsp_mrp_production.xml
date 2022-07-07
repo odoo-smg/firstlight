@@ -9,6 +9,7 @@
               <xpath expr="//field[@name='bom_id']" position="before">
                   <field name="flsp_is_serial" invisible="1" />
                   <field name="flsp_batch_serial_id" string="Serial Batch" attrs="{'invisible': [('flsp_is_serial', '=', False)]}"/>
+                  <field name="flsp_batch_list_ids" invisible="0" string="---Batch List---"/>
               </xpath>
             </field>
         </record>
