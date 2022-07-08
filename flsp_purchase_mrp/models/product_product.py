@@ -10,8 +10,7 @@ class pruchasemrpprd(models.Model):
 
     def action_view_purchase_mrp(self):
         admin = self.env.ref('base.user_admin')
-        purchase_mrp_id = self.env['flsp.purchase.mrp'].search(['&', ('user_id', '=', admin.id),
-                                                                ('state', '=', 'done')], limit=1, order='id DESC')
+        purchase_mrp_id = self.env['flsp.purchase.mrp'].search([('state', '=', 'done')], limit=1, order='id DESC')
 
         action = self.env.ref('flsp_purchase_mrp.flsp_purchase_mrp_line_action').read()[0]
         action['domain'] = ['&', ('product_id', '=', self.id), ('purchase_mrp_id', '=', purchase_mrp_id.id)]
@@ -23,8 +22,7 @@ class purchasepmrprdtmpl(models.Model):
 
     def action_view_purchase_mrp(self):
         admin = self.env.ref('base.user_admin')
-        purchase_mrp_id = self.env['flsp.purchase.mrp'].search(['&', ('user_id', '=', admin.id),
-                                                                ('state', '=', 'done')], limit=1, order='id DESC')
+        purchase_mrp_id = self.env['flsp.purchase.mrp'].search([('state', '=', 'done')], limit=1, order='id DESC')
         action = self.env.ref('flsp_purchase_mrp.flsp_purchase_mrp_line_action').read()[0]
         action['domain'] = ['&', ('product_tmpl_id', '=', self.id), ('purchase_mrp_id', '=', purchase_mrp_id.id)]
         return action
