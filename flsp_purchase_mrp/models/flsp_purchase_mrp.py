@@ -40,18 +40,24 @@ class FlspPurchaseMrp(models.Model):
     def run_purchase_mrp(self, product_from=False, product_to=False):
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
 
+        ### delete here ########################
+        #product_from = 1021  # do not use 0 for start
+        #product_to = 1021
+        ########################################
+
         start_time = datetime.now()
         if not product_from or not product_to:
             product_from = 1  # do not use 0 for start
             product_to = 999999
         open_moves = []
+        actl_moves = []
         for each in self:
-            # Delete previous lines
-            #for line in each.purchase_mrp_lines:
-            #    line.unlink()
-            open_moves = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
+            res = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
+            open_moves = res[0]
+            actl_moves = res[1]
 
         finish_open_moves = datetime.now()
+        #print('done open moves')
         products_to_process = self.env['product.product'].search(['&', ('id', '>=', product_from), ('id', '<=', product_to)])
 
         for curr_product in products_to_process:
@@ -64,12 +70,19 @@ class FlspPurchaseMrp(models.Model):
                 # Sort by product and then date
                 open_moves_filtered.sort(key=lambda x: (x[4].id, x[7]))
                 self.process_moves(curr_product, open_moves_filtered)
+                if curr_product.flsp_substitute_ids:
+                    for substitute_product in curr_product.flsp_substitute_ids:
+                        self.process_moves(substitute_product.product_substitute_id, open_moves_filtered)
+
+        #print('done processing the moves')
 
         finish_process = datetime.now()
 
         #process the forecast
         for each in self:
-            self.process_forecast(product_from, product_to)
+            self.process_forecast(product_from, product_to, actl_moves)
+
+        #print('done forecast')
 
         finish_forecast = datetime.now()
 
@@ -82,25 +95,25 @@ class FlspPurchaseMrp(models.Model):
                     continue
                 if planning.product_id.id == each.product_id.id:
                     planning.can_be_substituted_by_id = each.product_substitute_id
-                    if planning.suggested_qty > 0:
-                        plan_sub = self.env['flsp.purchase.mrp.line'].search(['&', ('purchase_mrp_id', '=', self.id), ('product_id', '=', each.product_substitute_id.id)])
-                        if plan_sub.suggested_qty == 0:
-                            planning.rationale += "<br/><br/>Demand zeroed.<br/>*** This product can be substituted by: "+each.product_substitute_id.default_code
-                            planning.suggested_qty = 0
-                            planning.adjusted_qty = 0
-                            planning.balance_neg = 0
-                            planning.negative_by = False
+                    # if planning.suggested_qty > 0:
+                    #     plan_sub = self.env['flsp.purchase.mrp.line'].search(['&', ('purchase_mrp_id', '=', self.id), ('product_id', '=', each.product_substitute_id.id)])
+                    #     if plan_sub.suggested_qty == 0:
+                    #         planning.rationale += "<br/><br/>Demand zeroed.<br/>*** This product can be substituted by: "+each.product_substitute_id.default_code
+                    #         planning.suggested_qty = 0
+                    #         planning.adjusted_qty = 0
+                    #         planning.balance_neg = 0
+                    #         planning.negative_by = False
 
                 if planning.product_id.id == each.product_substitute_id.id:
                     planning.substitute_for_id = each.product_id
-                    if planning.suggested_qty > 0:
-                        plan_sub = self.env['flsp.purchase.mrp.line'].search(['&', ('purchase_mrp_id', '=', self.id), ('product_id', '=', each.product_id.id)])
-                        if plan_sub.suggested_qty == 0:
-                            planning.rationale += "</br>Demand zeroed.</br>*** This product can be substituted by: "+each.product_id.default_code
-                            planning.suggested_qty = 0
-                            planning.adjusted_qty = 0
-                            planning.balance_neg = 0
-                            planning.negative_by = False
+                    # if planning.suggested_qty > 0:
+                    #     plan_sub = self.env['flsp.purchase.mrp.line'].search(['&', ('purchase_mrp_id', '=', self.id), ('product_id', '=', each.product_id.id)])
+                    #     if plan_sub.suggested_qty == 0:
+                    #         planning.rationale += "</br>Demand zeroed.</br>*** This product can be substituted by: "+each.product_id.default_code
+                    #         planning.suggested_qty = 0
+                    #         planning.adjusted_qty = 0
+                    #         planning.balance_neg = 0
+                    #         planning.negative_by = False
 
         self.state = 'done'
         finish_time = datetime.now()
@@ -108,7 +121,7 @@ class FlspPurchaseMrp(models.Model):
     # ########################################
     # ######## FORECAST   ####################
     # ########################################
-    def process_forecast(self, product_from, product_to):
+    def process_forecast(self, product_from, product_to, actl_moves):
         route_buy = self.env.ref('purchase_stock.route_warehouse0_buy').id
         current_date = datetime.now()
 
@@ -124,7 +137,8 @@ class FlspPurchaseMrp(models.Model):
             forecast_bom = self.env['mrp.bom'].search(
                 [('product_tmpl_id', '=', forecast.product_id.product_tmpl_id.id)], limit=1)
             if forecast_bom:
-                forecast_components = self.env['flsp.open.moves']._get_flattened_totals(forecast_bom, 1)
+                #_get_flattened_totals(self, bom, factor=1, totals=None, level=None, backflush=False, substitute=False):
+                forecast_components = self.env['flsp.open.moves']._get_flattened_totals(forecast_bom, 1, None, None, False, True)
                 for component in forecast_components:
                     if component.id < product_from or component.id > product_to:
                         continue
@@ -133,7 +147,6 @@ class FlspPurchaseMrp(models.Model):
                     if component.flsp_start_buy:
                         if component.flsp_start_buy > fields.Date.today():
                             continue
-
                     purchase_planning = self.env['flsp.purchase.mrp.line'].search(
                         ['&', ('product_id', '=', component.id), ('purchase_mrp_id', '=', self.id)], limit=1)
                     if not purchase_planning:
@@ -229,6 +242,12 @@ class FlspPurchaseMrp(models.Model):
         months = ['', 'January         ', 'February        ', 'March           ', 'April           ',
                   'May             ', 'June            ', 'July            ', 'August          ',
                   'September       ', 'October         ', 'November        ', 'December        ']
+        months_a = ['', 'January - Actual', 'February-Actual ', 'March - Actual  ', 'April - Actual  ',
+                  'May - Actual    ', 'June - Actual   ', 'July - Actual   ', 'August - Actual ',
+                  'September-Actual', 'October - Actual', 'November-Actual ', 'December-Actual ']
+        months_o = ['', 'January - Open  ', 'February - Open ', 'March - Open    ', 'April - Open    ',
+                  'May - Open      ', 'June - Open     ', 'July - Open     ', 'August - Open   ',
+                  'September - Open', 'October - Open  ', 'November - Open ', 'December - Open ']
         next_6_months = []
         next_6_months_2 = []
         key = current_date.month
@@ -244,25 +263,55 @@ class FlspPurchaseMrp(models.Model):
                 next_6_months_2.append(months[key])
             key += 1
             count += 1
+
         for planning in purchase_planning:
+            actual_month_consumption = 0
+            if planning.product_id.id in actl_moves:
+                actual_month_consumption = actl_moves[planning.product_id.id]
             six_month_forecast = 0
-            rationale = "<pre>------------------------------------------------------- Forecast ----------------------------------------------------------<br/>"
+            rationale = "<pre>------------------------------------------------------------------------ Forecast ----------------------------------------------------------<br/>"
             next_line = "---------------------------------------------------------------------------------------------------------------------------<br/>"
             rationale += '                    |'
             next_line += '                    |'
+            first_month = False
+            key = current_date.month
             for month in next_6_months:
-                rationale += month + "|"
+                if not first_month:
+                    rationale += months_a[key] + "|"
+                    rationale += months_o[key] + "|"
+                    first_month = str(key)
+                else:
+                    rationale += month + "|"
             for month in next_6_months_2:
                 next_line += month + "|"
             rationale += "<br/>"
             next_line += "<br/>"
-            key = current_date.month
             rationale += 'Forecast Consumption|'
             next_line += 'Forecast Consumption|'
-            count_to_six=0
+            count_to_six = 0
+
+            break_current_month = True
+            first_month = False
+
             for month in next_6_months:
-                field_name = 'qty_month' + str(key)
-                rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
+                if break_current_month:
+                    # Actual column should have Forecast = 0
+                    actual_on_month = actual_month_consumption
+                    field_name = 'qty_month' + str(key)
+                    forecast_month = getattr(planning, field_name)
+                    if actual_on_month <= forecast_month:
+                        rationale += '{0: <16.2f}|'.format(actual_on_month)
+                    else:
+                        rationale += '{0: <16.2f}|'.format(forecast_month)
+                    break_current_month = False
+                if not first_month:
+                    first_month = key
+                    field_name = 'qty_month' + str(key)
+                    rationale += '{0: <16.2f}|'.format(getattr(planning, field_name)-actual_on_month)
+                else:
+                    field_name = 'qty_month' + str(key)
+                    rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
+
                 if count_to_six < 6:
                     six_month_forecast += getattr(planning, field_name)
                 count_to_six += 1
@@ -281,7 +330,12 @@ class FlspPurchaseMrp(models.Model):
             rationale += '<br/>Actual Consumption  |'
             next_line += '<br/>Actual Consumption  |'
             key = current_date.month
+            break_current_month = True
             for month in next_6_months:
+                if break_current_month:
+                    # Actual consumption on Open column
+                    rationale += '{0: <16.2f}|'.format(actual_month_consumption)
+                    break_current_month = False
                 field_name = 'consumption_month' + str(key)
                 rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
                 key += 1
@@ -297,7 +351,12 @@ class FlspPurchaseMrp(models.Model):
             rationale += '<br/>Forecasted Arrivals |'
             next_line += '<br/>Forecasted Arrivals |'
             key = current_date.month
+            break_current_month = True
             for month in next_6_months:
+                if break_current_month:
+                    # On Open the forecasted arrival should be 0
+                    rationale += '{0: <16.2f}|'.format(0)
+                    break_current_month = False
                 field_name = 'OpenPO_month' + str(key)
                 rationale += '{0: <16.2f}|'.format(getattr(planning, field_name))
                 key += 1
@@ -313,21 +372,50 @@ class FlspPurchaseMrp(models.Model):
             rationale += '<br/>Quantity Change     |'
             next_line += '<br/>Quantity Change     |'
             key = current_date.month
+            curr_m = key
+            break_current_month = True
             for month in next_6_months:
+                if break_current_month:
+                    field_name = 'qty_month' + str(first_month)
+                    forecast_total = 0 #getattr(planning, field_name)
+                    field_name = 'consumption_month' + str(key)
+                    consumption_total = 0 #getattr(planning, field_name)
+                    field_name = 'OpenPO_month' + str(key)
+                    openPO_total = 0 #getattr(planning, field_name)
+                    if consumption_total > forecast_total:
+                        diff = openPO_total - consumption_total
+                    else:
+                        diff = openPO_total - forecast_total
+                    rationale += '{0: <16.2f}|'.format(diff)
+                    break_current_month = False
+
+                #actual_month_consumption
                 field_name = 'qty_month' + str(key)
                 forecast_total = getattr(planning, field_name)
+
                 field_name = 'consumption_month' + str(key)
                 consumption_total = getattr(planning, field_name)
                 field_name = 'OpenPO_month' + str(key)
                 openPO_total = getattr(planning, field_name)
+                #else:
+                #    consumption_total = 0
+                #    openPO_total = 0
+
                 if consumption_total > forecast_total:
                     diff = openPO_total - consumption_total
                 else:
-                    diff = openPO_total - forecast_total
+                    if curr_m != key:
+                        diff = openPO_total - forecast_total
+                    else:
+                        if actual_month_consumption < forecast_total:
+                            diff = openPO_total - (forecast_total - actual_month_consumption)
+                        else:
+                            diff = openPO_total
                 rationale += '{0: <16.2f}|'.format(diff)
                 key += 1
                 if key > 12:
                     key = 1
+
             for month in next_6_months_2:
                 field_name = 'qty_month' + str(key)
                 diff = getattr(planning, field_name)
@@ -337,7 +425,7 @@ class FlspPurchaseMrp(models.Model):
                 key += 1
                 if key > 12:
                     key = 1
-            rationale += "<br/>---------------------------------------------------------------------------------------------------------------------------<br/>"
+            rationale += "<br/>--------------------------------------------------------------------------------------------------------------------------------------------<br/>"
             next_line += "<br/>---------------------------------------------------------------------------------------------------------------------------<br/>"
             months_to_consider = 13
             value_to_consider = 0
@@ -355,49 +443,72 @@ class FlspPurchaseMrp(models.Model):
             month_balance = planning.balance
             month_trigger = -1
             month_values = []
-
+            break_current_month = True
             for current_month in range(13):
-                count += 1
-                if current_month < months_to_consider:
-                    field_name = 'qty_month' + str(key)
-                    diff = getattr(planning, field_name)
-                    month_balance -= getattr(planning, field_name)
-                    field_name = 'consumption_month' + str(key)
-                    diff -= getattr(planning, field_name)
-                    field_name = 'OpenPO_month' + str(key)
-                    diff += getattr(planning, field_name)
-                    month_balance += getattr(planning, field_name)
-
-                    if diff > 0:
-                        value_to_consider += diff
-                    if diff < 0:
-                        month_balance += diff
-                    if month_balance < planning.product_min_qty:
-                        if month_trigger == -1:
-                            month_trigger = current_month
-                    month_values.append(month_balance)
-                if current_month + 1 == months_to_consider:
-                    if count <= 6:
-                        rationale += '|' + '{0: <16.2f}'.format(month_balance)
-                    else:
-                        next_line += '|' + '{0: <16.2f}'.format(month_balance)
-                elif current_month < months_to_consider:
-                    if count > 13:
-                        if not total_to_print:
-                            total_to_print = False
-                    else:
-                        if current_month <= 5:
-                            if current_month == 5:
-                                rationale += '|{0: <16.2f}'.format(month_balance)
-                            else:
-                                rationale += '|{0: <16.2f}'.format(month_balance)
-                        else:
-                            next_line += '|{0: <16.2f}'.format(month_balance)
+                if break_current_month:
+                    break_current_month = False
+                    rationale += '|' + '{0: <16.2f}'.format(month_balance)
                 else:
-                    rationale += '                 '
-                key += 1
-                if key > 12:
-                    key = 1
+                    count += 1
+                    if current_month < months_to_consider:
+                        #actual_month_consumption
+                        if curr_m == key:
+                            field_name = 'qty_month' + str(key)
+                            diff = getattr(planning, field_name)
+                            if actual_month_consumption < diff:
+                                month_balance -= (getattr(planning, field_name)-actual_month_consumption)
+                            field_name = 'consumption_month' + str(key)
+                            diff -= getattr(planning, field_name)
+                            field_name = 'OpenPO_month' + str(key)
+                            diff += getattr(planning, field_name)
+                            month_balance += getattr(planning, field_name)
+
+                            if diff > 0:
+                                value_to_consider += diff
+                            if diff < 0:
+                                month_balance += diff
+                        else:
+                            field_name = 'qty_month' + str(key)
+                            diff = getattr(planning, field_name)
+                            month_balance -= getattr(planning, field_name)
+                            field_name = 'consumption_month' + str(key)
+                            diff -= getattr(planning, field_name)
+                            field_name = 'OpenPO_month' + str(key)
+                            diff += getattr(planning, field_name)
+                            month_balance += getattr(planning, field_name)
+
+                            if diff > 0:
+                                value_to_consider += diff
+                            if diff < 0:
+                                month_balance += diff
+
+                        month_values.append(month_balance)
+                    if current_month + 1 == months_to_consider:
+                        if count <= 6:
+                            rationale += '|' + '{0: <16.2f}'.format(month_balance)
+                        else:
+                            next_line += '|' + '{0: <16.2f}'.format(month_balance)
+                    elif current_month < months_to_consider:
+                        if count > 13:
+                            if not total_to_print:
+                                total_to_print = False
+                        else:
+                            if current_month <= 6:
+                                if current_month == 6:
+                                    rationale += '|{0: <16.2f}'.format(month_balance)
+                                else:
+                                    rationale += '|{0: <16.2f}'.format(month_balance)
+                            else:
+                                next_line += '|{0: <16.2f}'.format(month_balance)
+                    else:
+                        rationale += '                 '
+
+                    key += 1
+                    if key > 12:
+                        key = 1
+                if month_balance < planning.product_min_qty:
+                    if month_trigger == -1:
+                        month_trigger = current_month - 1
 
             if total_to_print:
                 next_line += '{0: <16.2f}'.format(month_balance)
@@ -645,7 +756,8 @@ class FlspPurchaseMrp(models.Model):
             rationale += '<br/>            |             | ' + '{0: <12.2f}|'.format(
                 current_balance) + '     |        |         |             |Initial Balance  |      |      |'
         else:
-            rationale = "<pre>No open movements for this product."
+            #rationale = "<pre>No open movements for this product."
+            rationale = "<pre>"
         initial_balance = current_balance
         late_receipts = 0
         for item in open_moves:
