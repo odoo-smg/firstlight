@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields
+from odoo.exceptions import UserError
+
 
 class FlspBomAvailabilityLine(models.Model):
     """
@@ -23,6 +25,10 @@ class FlspBomAvailabilityLine(models.Model):
     onhand_qty_line = fields.Float(string='OnHand Qty', compute='compute_qty')
     forecast_qty_line = fields.Float(string='Forecast Qty', compute='compute_qty')
     comp_on_demand = fields.Float(string="Compute On Demand", compute="compute_on_demand")
+    reserved = fields.Float(string="Reserved Qty", compute='compute_qty')
+    stock_qty = fields.Float(string="Stock Qty", compute='compute_qty')
+    wip_qty = fields.Float(string="WIP Qty", compute='compute_qty')
+    mo_qty = fields.Float(string="MO Qty", compute='compute_qty')
 
     def compute_on_demand(self):
         for line in self:
@@ -109,9 +115,41 @@ class FlspBomAvailabilityLine(models.Model):
                 line.has_bom = True
 
     def compute_qty(self):
+        pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
+        if not pa_location:
+            raise UserError('WIP Stock Location is missing')
+        pa_wip_locations = self.env['stock.location'].search([('parent_path', 'like', pa_location + '%')]).ids
+        if not pa_wip_locations:
+            raise UserError('WIP Stock Location is missing')
+
         for line in self:
             line.onhand_qty_line = line.product_line_id.qty_available
             line.forecast_qty_line = line.product_line_id.virtual_available
+            reserved = 0
+            stock_quants = self.env['stock.quant'].search([('product_id', '=', line.product_line_id.id)])
+            for stock_quant in stock_quants:
+                if stock_quant.location_id.usage == 'internal':
+                    reserved += stock_quant.reserved_quantity
+            line.reserved = reserved
+            pa_wip_qty = 0
+            stock_quant = self.env['stock.quant'].search(
+                ['&', ('location_id', 'in', pa_wip_locations), ('product_id', '=', line.product_line_id.id)])
+            for stock_lin in stock_quant:
+                pa_wip_qty += stock_lin.quantity
+
+            line.wip_qty = pa_wip_qty
+            line.stock_qty = line.product_line_id.qty_available - pa_wip_qty
+
+            open_mos = self.env['mrp.production'].search([('state', 'in', ('to_close', 'progress', 'confirmed'))])
+            mo_qty = 0
+            for mo in open_mos:
+                if mo.product_id.id == line.product_line_id.id:
+                    mo_qty += mo.product_qty
+                else:
+                    for mo_line in mo.move_raw_ids:
+                        if mo_line.product_id.id == line.product_line_id.id:
+                            mo_qty += mo_line.product_uom_qty
+            line.mo_qty = mo_qty
 
     class FlspBomAvailability(models.Model):
         """

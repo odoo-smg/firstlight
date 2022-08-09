@@ -31,7 +31,11 @@
         <field name="inherit_id" ref="flsp_bom_availability.flsp_bom_availability_line_tree"/>
         <field name="arch" type="xml">
             <field name="forecast_qty_line" position="after">
-                <field name="comp_on_demand" string="On Demand" optional="show"/>
+                <field name="comp_on_demand" string="Sales Qty" optional="show"/>
+                <field name="reserved" string="Reserved Qty" optional="show"/>
+                <field name="wip_qty" string="WIP Qty" optional="show"/>
+                <field name="stock_qty" string="Stock Qty" optional="show"/>
+                <field name="mo_qty" string="MO Qty" optional="show"/>
             </field>
         </field>
     </record>
