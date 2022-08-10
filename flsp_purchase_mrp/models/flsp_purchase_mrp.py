@@ -51,10 +51,10 @@ class FlspPurchaseMrp(models.Model):
             product_to = 999999
         open_moves = []
         actl_moves = []
-        for each in self:
-            res = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
-            open_moves = res[0]
-            actl_moves = res[1]
+        #for each in self:
+            #res = self.env['flsp.open.moves'].calculate_purchase_mrp(each, product_from, product_to)
+            #open_moves = res[0]
+            #actl_moves = res[1]
 
         finish_open_moves = datetime.now()
         #print('done open moves')
@@ -70,9 +70,9 @@ class FlspPurchaseMrp(models.Model):
                 # Sort by product and then date
                 open_moves_filtered.sort(key=lambda x: (x[4].id, x[7]))
                 self.process_moves(curr_product, open_moves_filtered)
-                if curr_product.flsp_substitute_ids:
-                    for substitute_product in curr_product.flsp_substitute_ids:
-                        self.process_moves(substitute_product.product_substitute_id, open_moves_filtered)
+                #if curr_product.flsp_substitute_ids:
+                #    for substitute_product in curr_product.flsp_substitute_ids:
+                #        self.process_moves(substitute_product.product_substitute_id, open_moves_filtered)
 
         #print('done processing the moves')
 
@@ -265,9 +265,10 @@ class FlspPurchaseMrp(models.Model):
             count += 1
 
         for planning in purchase_planning:
-            actual_month_consumption = 0
-            if planning.product_id.id in actl_moves:
-                actual_month_consumption = actl_moves[planning.product_id.id]
+            actual_month_consumption = self.filter_actuals(planning.product_id.id)
+            #actual_month_consumption = 0
+            #if planning.product_id.id in actl_moves:
+            #    actual_month_consumption = actl_moves[planning.product_id.id]
             six_month_forecast = 0
             rationale = "<pre>------------------------------------------------------------------------ Forecast ----------------------------------------------------------<br/>"
             next_line = "---------------------------------------------------------------------------------------------------------------------------<br/>"
@@ -655,10 +656,32 @@ class FlspPurchaseMrp(models.Model):
 
     def filter_moves(self, moves, product):
         filtered_moves = []
-        for move in moves:
-            if move[4] == product:
-                filtered_moves.append(move)
+        open_moves = self.env['flsp.open.moves'].search([('product_id', '=', product.id)])
+        for move in open_moves:
+            if move.type == 'in':
+                type = 'In   '
+            else:
+                type = 'Out  '
+            if move.source == 'so':
+                source = 'Sales   '
+            elif move.source == 'po':
+                source = 'Purchase'
+            else:
+                source = 'MO      '
+
+            filtered_moves.append([len(filtered_moves) + 1, type, source,
+                                       move.doc,
+                                       move.product_id,
+                                       move.qty, move.uom,
+                                       move.date, move.level, move.lead_time, move.avg_sbs, move.avg_ssa])
         return filtered_moves
+
+    def filter_actuals(self, product):
+        res = 0
+        actual = self.env['flsp.current.month.moves'].search([('product_id', '=', product)])
+        if actual:
+            res = actual.qty
+        return res
 
     def process_moves(self, product, open_moves):
         pa_location = self.env['stock.location'].search([('complete_name', '=', 'WH/PA')]).parent_path
@@ -760,6 +783,7 @@ class FlspPurchaseMrp(models.Model):
             rationale = "<pre>"
         initial_balance = current_balance
         late_receipts = 0
+        current_date_before = current_date.date() + relativedelta(days=-1)
         for item in open_moves:
             if item:
                 if item[4].flsp_start_buy:
@@ -774,7 +798,7 @@ class FlspPurchaseMrp(models.Model):
                 if item[1] == 'Out  ':
                     current_balance -= item[5]
                     # Do not account the past
-                    if current_date < item[7]:
+                    if current_date_before < item[7].date():
                         consumption[item[7].month] += item[5]
                     else:
                         late_delivery += item[5]

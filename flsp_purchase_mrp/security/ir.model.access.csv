@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsp_purchase_mrp,access_flsp_purchase_mrp,model_flsp_purchase_mrp,base.group_user,1,1,1,1
 access_flsp_purchase_mrp_line,access_flsp_purchase_mrp_line,model_flsp_purchase_mrp_line,base.group_user,1,1,1,1
+access_flsp_purchase_mrp_open_moves,access_flsp_purchase_mrp_open_moves,model_flsp_open_moves,base.group_user,1,1,1,1
+access_flsp_purchase_mrp_current_month_moves,access_flsp_purchase_current_month_moves,model_flsp_current_month_moves,base.group_user,1,1,1,1
