@@ -12,10 +12,19 @@ class FlspOpenMoves(models.Model):
     doc = fields.Char(string='Document', readonly=True)
     qty = fields.Float(string='Quantity', readonly=True)
     uom = fields.Many2one('uom.uom', 'U of M', readonly=True)
-    date = fields.Date(String="Date", readonly=True)
+    date = fields.Datetime(string="Date", readonly=True)
     avg_sbs = fields.Float(string='Avg SBS')
     avg_ssa = fields.Float(string='Avg SSA')
+    level = fields.Integer(string='level')
+    lead_time = fields.Integer(string='Lead Time')
     user_id = fields.Many2one('res.users', string="User")
+
+    def clean_up_all(self):
+        for each in self:
+            each.unlink()
+        actual_moves = self.env['flsp.current.month.moves'].search([])
+        for each in actual_moves:
+            each.unlink()
 
     def calculate_purchase_mrp(self, purchase_mrp_id, product_from, product_to):
 
@@ -52,7 +61,17 @@ class FlspOpenMoves(models.Model):
                                        doc,
                                        move.product_id,
                                        move.product_uom_qty, move.product_uom,
-                                       move.date_expected, 0, 0, 0, 0])
+                                       move.date, 0, 0, 0, 0])
+                    self.create({
+                                    'product_id': move.product_id.id,
+                                    'type': 'in',
+                                    'source': 'po',
+                                    'doc': doc,
+                                    'qty': move.product_uom_qty,
+                                    'uom': move.product_uom.id,
+                                    'date': move.date_expected,
+                                })
+
         # *******************************************************************************
         # ***************************** Sales Orders ************************************
         # *******************************************************************************
@@ -68,10 +87,21 @@ class FlspOpenMoves(models.Model):
                         if not move_bom:
                             if move.product_id.id < product_from or move.product_id.id > product_to or route_buy not in move.product_id.route_ids.ids:
                                 continue
+
+                            actual_move = self.env['flsp.current.month.moves'].search([('product_id', '=', move.product_id.id)])
+                            if actual_move:
+                                actual_move.qty += move.product_uom_qty
+                            else:
+                                self.env['flsp.current.month.moves'].create({
+                                            'product_id': move.product_id.id,
+                                            'qty': move.product_uom_qty,
+                                        })
+
                             if move.product_id.id not in actual_mvs:
                                 actual_mvs[move.product_id.id] = move.product_uom_qty
                             else:
                                 actual_mvs[move.product_id.id] += move.product_uom_qty
+
                         else:
                             move_components = self._get_flattened_totals(move_bom, move.product_uom_qty, {}, 0, True)
                             for prod in move_components:
@@ -81,7 +111,15 @@ class FlspOpenMoves(models.Model):
                                     continue
                                 if prod.id < product_from or prod.id > product_to or route_buy not in prod.route_ids.ids:
                                     continue
-                                if move.product_id.id not in actual_mvs:
+                                actual_move = self.env['flsp.current.month.moves'].search([('product_id', '=', prod.id)])
+                                if actual_move:
+                                    actual_move.qty += move_components[prod]['total']
+                                else:
+                                    self.env['flsp.current.month.moves'].create({
+                                                'product_id': prod.id,
+                                                'qty': move_components[prod]['total'],
+                                            })
+                                if prod.id not in actual_mvs:
                                     actual_mvs[prod.id] = move_components[prod]['total']
                                 else:
                                     actual_mvs[prod.id] += move_components[prod]['total']
@@ -110,6 +148,20 @@ class FlspOpenMoves(models.Model):
                                                move.product_id,
                                                move.product_uom_qty, move.product_uom,
                                                delivery.scheduled_date, 0, standard_lead_time, avg_per_sbs, avg_per_ssa])
+                            self.create({
+                                'product_id': move.product_id.id,
+                                'type': 'out',
+                                'source': 'so',
+                                'doc': doc,
+                                'qty': move.product_uom_qty,
+                                'uom': move.product_uom.id,
+                                'date': delivery.scheduled_date,
+                                'level': 0,
+                                'lead_time': standard_lead_time,
+                                'avg_sbs': avg_per_sbs,
+                                'avg_ssa': avg_per_ssa,
+                            })
+
                         else:
                             move_components = self._get_flattened_totals(move_bom, move.product_uom_qty, {}, 0, True)
                             for prod in move_components:
@@ -133,6 +185,19 @@ class FlspOpenMoves(models.Model):
 
                                 if prod.id < product_from or prod.id > product_to or route_buy not in prod.route_ids.ids:
                                     continue
+                                self.create({
+                                    'product_id': prod.id,
+                                    'type': 'out',
+                                    'source': 'so',
+                                    'doc': doc,
+                                    'qty': move_components[prod]['total'],
+                                    'uom': prod.uom_id.id,
+                                    'date': delivery.scheduled_date,
+                                    'level': move_components[prod]['level'],
+                                    'lead_time': standard_lead_time + (indirect_lead_time * move_components[prod]['level']),
+                                    'avg_sbs': avg_per_sbs,
+                                    'avg_ssa': avg_per_ssa,
+                                })
                                 open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
                                                    doc,
                                                    prod,
@@ -151,6 +216,20 @@ class FlspOpenMoves(models.Model):
                                                            standard_lead_time + (
                                                                        indirect_lead_time * move_components[prod][
                                                                    'level']), avg_per_sbs, avg_per_ssa])
+                                        self.create({
+                                            'product_id': substitute_product.id,
+                                            'type': 'out',
+                                            'source': 'so',
+                                            'doc': doc,
+                                            'qty': move_components[prod]['total'],
+                                            'uom': prod.uom_id.id,
+                                            'date': delivery.scheduled_date,
+                                            'level': move_components[prod]['level'],
+                                            'lead_time': standard_lead_time + (
+                                                        indirect_lead_time * move_components[prod]['level']),
+                                            'avg_sbs': avg_per_sbs,
+                                            'avg_ssa': avg_per_ssa,
+                                        })
 
         # *******************************************************************************
         # ************************ Manufacturing Orders *********************************
@@ -214,9 +293,6 @@ class FlspOpenMoves(models.Model):
                                                standard_lead_time + (indirect_lead_time * move_components[prod]['level']),
                                                0, 0])
 
-        print("completed: ")
-        print(len(open_moves))
-        print(actual_mvs)
         return [open_moves, actual_mvs]
 
 
@@ -286,6 +362,12 @@ class FlspOpenMoves(models.Model):
                         ), 'level': level, 'bom': ''}
 
         for line in bom.bom_line_ids:
+
+            # ****** Version 15 ******
+            # sub_bom = bom._bom_find(line.product_id)[line.product_id]
+
+
+            # ****** Version 13 ******
             sub_bom = bom._bom_find(product=line.product_id)
             if route_buy in line.product_id.route_ids.ids:
                 sub_bom = False
@@ -330,3 +412,11 @@ class FlspOpenMoves(models.Model):
                     )
                     ), 'level': level, 'bom': ''}
         return totals
+
+
+class FlspActualMoves(models.Model):
+    _name = 'flsp.current.month.moves'
+    _description = 'Current Month Consumption'
+
+    product_id = fields.Many2one('product.product', string='Product', readonly=True)
+    qty = fields.Float(string='Quantity', readonly=True)
