@@ -17,6 +17,8 @@ class flspstockpicking2(models.Model):
     attachment_ids = fields.Many2many('ir.attachment', 'stock_picking_attachment_rel',
                                       string='Attachments/Pictures',
                                       help='Attach pictures here')
+    location_id = fields.Many2one('stock.location', 'From', check_company=True, required=True, domain=[('usage', '=', 'internal')])
+    location_dest_id = fields.Many2one('stock.location', 'To', check_company=True, required=True, domain=[('usage', '=', 'internal')])
 
     def button_flsp_delivery(self):
         view_id = self.env.ref('flspstock.flsp_delivery_wizard_form_view').id
