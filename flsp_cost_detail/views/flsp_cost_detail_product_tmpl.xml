@@ -9,7 +9,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button class="oe_stat_button" name="action_view_flsp_cost_detail"
-                        type="object" icon="fa-book" help="See the cost detail">
+                        type="object" icon="fa-book" help="See the cost detail"
+                        groups="mrp.group_mrp_user,purchase.group_purchase_user,account.group_account_user,stock.group_stock_user">
                         <div class="o_field_widget o_stat_info">
                             <span class="o_stat_text">Cost Detail</span>
                         </div>
