@@ -65,6 +65,8 @@ class FlspPurchaseMrp(models.Model):
                 continue
             if not curr_product.default_code:
                 continue
+            if curr_product.type in ['service', 'consu']:
+                continue
             if curr_product:
                 open_moves_filtered = self.filter_moves(open_moves, curr_product)
                 # Sort by product and then date
@@ -963,6 +965,9 @@ class FlspPurchaseMrp(models.Model):
             qty_stock = product.qty_available
         else:
             qty_stock = product.qty_available - pa_wip_qty
+
+        if product.type in ['service', 'consu']:
+            return False
 
         ret = self.env['flsp.purchase.mrp.line'].create({
                            'purchase_mrp_id': self.id,
