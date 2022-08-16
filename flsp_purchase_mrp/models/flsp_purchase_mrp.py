@@ -65,6 +65,8 @@ class FlspPurchaseMrp(models.Model):
                 continue
             if not curr_product.default_code:
                 continue
+            if curr_product.type in ['service', 'consu']:
+                continue
             if curr_product:
                 open_moves_filtered = self.filter_moves(open_moves, curr_product)
                 # Sort by product and then date

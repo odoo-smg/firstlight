@@ -55,8 +55,11 @@ class FlspOpenMoves(models.Model):
                         doc = (receipt.origin + '                 ')[0:17]
                     else:
                         doc = '                 '
+                    if move.product_id.type in ['service', 'consu']:
+                        continue
                     if move.product_id.id < product_from or move.product_id.id > product_to or route_buy not in move.product_id.route_ids.ids:
                         continue
+
                     open_moves.append([len(open_moves) + 1, 'In   ', 'Purchase',
                                        doc,
                                        move.product_id,
@@ -85,6 +88,8 @@ class FlspOpenMoves(models.Model):
                     for move in stock_move_product:
                         move_bom = self.env['mrp.bom'].search([('product_tmpl_id', '=', move.product_id.product_tmpl_id.id)],limit=1)
                         if not move_bom:
+                            if move.product_id.type in ['service', 'consu']:
+                                continue
                             if move.product_id.id < product_from or move.product_id.id > product_to or route_buy not in move.product_id.route_ids.ids:
                                 continue
 
@@ -141,6 +146,8 @@ class FlspOpenMoves(models.Model):
                             else:
                                 doc = '                 '
 
+                            if move.product_id.type in ['service', 'consu']:
+                                continue
                             if move.product_id.id < product_from or move.product_id.id > product_to or route_buy not in move.product_id.route_ids.ids:
                                 continue
                             open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
@@ -208,6 +215,8 @@ class FlspOpenMoves(models.Model):
                                      ('flsp_bom_id', '=', move_bom.id)]).product_substitute_id
                                 if subs:
                                     for substitute_product in subs:
+                                        if substitute_product.type in ['service', 'consu']:
+                                            continue
                                         open_moves.append([len(open_moves) + 1, 'Out  ', 'Sales   ',
                                                            doc,
                                                            substitute_product,
