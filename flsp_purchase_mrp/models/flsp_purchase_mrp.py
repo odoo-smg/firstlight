@@ -966,6 +966,9 @@ class FlspPurchaseMrp(models.Model):
         else:
             qty_stock = product.qty_available - pa_wip_qty
 
+        if product.type in ['service', 'consu']:
+            return False
+
         ret = self.env['flsp.purchase.mrp.line'].create({
                            'purchase_mrp_id': self.id,
                            'product_tmpl_id': product.product_tmpl_id.id,
