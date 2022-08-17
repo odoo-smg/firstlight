@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from datetime import datetime
-from datetime import timedelta
+from datetime import timedelta, date
 from dateutil.relativedelta import relativedelta
 
 
