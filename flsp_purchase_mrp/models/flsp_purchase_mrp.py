@@ -647,6 +647,20 @@ class FlspPurchaseMrp(models.Model):
                         suggested_qty += planning.qty_multiple - (suggested_qty % planning.qty_multiple)
                 rationale += "<br/>Adjusted quantity has been changed to: " + str(suggested_qty)
 
+            #####################################################################################
+            # Changed on: 2022-08-17
+            # Changed by: Alexandre Sousa
+            # Requested by: Cam Quan
+            # Approved by: Cam Quan
+            # Details on Ticket #846 in Odoo / Issue #710 in Redmine
+            ##################################################################################### #710 in Redmine
+            if planning.product_id.flsp_start_buy:
+                if planning.product_id.flsp_start_buy > fields.Date.today():
+                    required_qty = 0
+                    suggested_qty = 0
+                    rationale += "<br/>This product has been postponed to purchase until: " + str(planning.product_id.flsp_start_buy)
+            ##################################################################################### #710 in Redmine
+
             planning.suggested_qty = required_qty
             planning.adjusted_qty = suggested_qty
             planning.purchase_adjusted = planning.product_id.uom_id._compute_quantity(required_qty,
