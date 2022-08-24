@@ -13,6 +13,7 @@ class FlspSalesDeliveryMove(models.Model):
     _inherit = "stock.move"
     _check_company_auto = True
 
+    flsp_order_date = fields.Datetime(string='Sales Confirmation', store=True, compute="_compute_flsp_order_date")
     flsp_ship_with = fields.Char(string="Ship with SO", compute="_compute_flsp_ship_with")
     picking_policy = fields.Selection([
         ('direct', 'Yes'),
@@ -21,6 +22,13 @@ class FlspSalesDeliveryMove(models.Model):
         ,help="If you deliver all products at once, the delivery order will be scheduled based on the greatest "
         "product lead time. Otherwise, it will be based on the shortest.")
 
+
+    def _compute_flsp_order_date(self):
+        for each in self:
+            if each.picking_id.sale_id:
+                each.flsp_order_date = each.picking_id.sale_id.date_order
+            else:
+                each.flsp_order_date = False
 
     def _compute_flsp_ship_with(self):
         for each in self:
