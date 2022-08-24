@@ -10,7 +10,7 @@
                   decoration-success="is_week==True"
                   decoration-bf="mo_id==False or date_expected&lt;current_date"
             >
-                <field name="create_date" widget="date" readonly="1"/>
+                <field name="flsp_order_date" widget="date" readonly="1"/>
                 <field name="partner_id" string="Customer" readonly="1"/>
                 <field name="product_id" readonly="1" />
                 <field name="product_uom_qty" string="Qty" readonly="1"/>
