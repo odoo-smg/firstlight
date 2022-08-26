@@ -306,7 +306,17 @@
                                                 <span t-esc="o.amount_untaxed+o.flsp_sale_discount+o.flsp_freight_discount" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </td>
                                         </tr>
+
+                                        <!--
                                         <t t-if="o.flsp_cb_image and o.type != 'out_refund'" >
+                                        #####################################################################################
+                                        # Changed on: 2022-08-26
+                                        # Changed by: Alexandre Sousa
+                                        # Requested by: Tyger Cranwill
+                                        # Approved by:
+                                        # Details on Ticket #857 in Odoo / Issue #729 in Redmine
+                                        #####################################################################################
+                                        -->
                                             <tr class="border-black o_reward_discount">
                                                 <td name="td_reward_discount_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
                                                     <strong>Reward Disc.</strong>
@@ -325,7 +335,7 @@
                                                     <span t-field="o.flsp_freight_discount" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                                 </td>
                                             </tr>
-                                        </t>
+                                        <!--/t-->
                                         <t t-foreach="o.amount_by_group" t-as="amount_by_group">
                                             <tr>
                                                 <t t-if="len(o.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
