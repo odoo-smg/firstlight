@@ -41,7 +41,7 @@
                 </t>
             </t>
         </template>
-        <report id="flsp_serialnum_2x1"
+        <record id="flsp_serialnum_2x1"
             model="flsp.serialnum"
             string="2x1 label (ZPL)"
             report_type="qweb-text"

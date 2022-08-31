@@ -23,7 +23,7 @@ Base report xlsx
     :target: https://runbot.odoo-community.org/runbot/143/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module provides a basic report class to generate xlsx report.
 
@@ -69,7 +69,7 @@ To manipulate the ``workbook`` and ``sheet`` objects, refer to the
 
 A report XML record ::
 
-    <report
+    <record
         id="partner_xlsx"
         model="res.partner"
         string="Print to XLSX"

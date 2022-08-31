@@ -17,7 +17,7 @@ class FlspMtoStockMove(models.Model):
     is_today = fields.Boolean('Today', compute='_compute_shipping_date')
     is_week = fields.Boolean('Week', compute='_compute_shipping_date')
 
-    @api.depends('date_expected')
+    @api.depends('date')
     def _compute_shipping_date(self):
         current_date = datetime.now()
         current_date_str = str(current_date)[0:10]
@@ -26,9 +26,9 @@ class FlspMtoStockMove(models.Model):
         for move in self:
             move.is_today = False
             move.is_week = False
-            if str(move.date_expected)[0:10] == current_date_str:
+            if str(move.date)[0:10] == current_date_str:
                 move.is_today = True
-            elif str(move.date_expected)[0:10] <= date_week_str:
+            elif str(move.date)[0:10] <= date_week_str:
                 move.is_week = True
 
 
@@ -62,9 +62,9 @@ class FlspMtoStockMove(models.Model):
                 'bom_id': bom_id.id,
                 'product_uom_id': item.product_id.uom_id.id,
                 'product_qty': item.product_uom_qty,
-                'date_planned_start': datetime.combine(item.date_expected, datetime.now().time()),
-                'date_planned_finished': datetime.combine(item.date_expected, datetime.now().time()),
-                'date_deadline': datetime.combine(item.date_expected, datetime.now().time()),
+                'date_planned_start': datetime.combine(item.date, datetime.now().time()),
+                'date_planned_finished': datetime.combine(item.date, datetime.now().time()),
+                'date_deadline': datetime.combine(item.date, datetime.now().time()),
                 'location_src_id': mrp_picking_type.default_location_src_id.id if mrp_picking_type else pa_location.id,
                 'location_dest_id': stock_location.id,
                 'origin': item.origin,

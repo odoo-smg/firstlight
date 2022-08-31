@@ -99,9 +99,19 @@ Instructions:
 
     # any module necessary for this one to work correctly
     'depends': ['web'],
+    'assets': {
+            'web.assets_backend': [
+                'inputmask_widget/static/lib/jquery.inputmask/jquery.inputmask.bundle.js',
+                'inputmask_widget/static/src/js/fields.js',
+                'inputmask_widget/static/src/js/registry.js',
+            ],
+        },
 
     # always loaded
-    "data": ['views/inputmask_templates.xml'],
-    "qweb": ['static/src/xml/mask.xml'],
+    #"data": ['views/inputmask_templates.xml'],
+    "qweb": ['inputmask_widget/static/src/xml/mask.xml'],
+    'web.assets_qweb': [
+        'inputmask_widget/static/src/xml/*.xml',
+    ],
     'images': ['static/description/main_screenshot.png']
 }

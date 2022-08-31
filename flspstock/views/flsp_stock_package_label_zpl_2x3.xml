@@ -61,7 +61,7 @@
             </t>
         </template>
 
-        <report
+        <record
             string="Imaging 2 x 3 label(ZPL)"
             id="flsp_stock_package_label_2x3"
             model="stock.quant.package"

@@ -7,8 +7,8 @@
 
     'description': """
            Features:
-               * Apr/22 - Ability to create tickets in HR for employees boarding process 
-               * Apr/23 - Ability to remove assigned from the ticket form view 
+               * Apr/22 - Ability to create tickets in HR for employees boarding process
+               * Apr/23 - Ability to remove assigned from the ticket form view
        """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
@@ -23,7 +23,7 @@
         'security/ir.model.access.csv',
         'views/flsp_tktboarding.xml',
         'views/flsp_removeassign.xml',
-        'demo/demo.xml',
+        #'demo/demo.xml',
         'wizard/employee_wizard.xml',
         'wizard/employee_inherit.xml',
     ],

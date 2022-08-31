@@ -5,11 +5,11 @@
     'summary': """
         Module purpose is to show only available Serial numbers on the production, produce wizard""",
 
-    'description': """ 
+    'description': """
         Customizations performed:
-    
+
         Changes
-            * Mar.26th.2021 - Created the model 
+            * Mar.26th.2021 - Created the model
             * Apr.8th.2021 - Filter SN for all internal transfers
             * Apr.15th.2021 - Modified the model to filter for both the lots and SN
             * Apr.15th.2021 - Create scheduled action if you wish to call check_all_available_sn in stock.production.lot
@@ -29,6 +29,6 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/flsp_mrp_filter_sn.xml',
+        #'views/flsp_mrp_filter_sn.xml',
     ],
 }

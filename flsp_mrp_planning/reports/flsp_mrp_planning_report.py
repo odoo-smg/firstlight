@@ -15,10 +15,10 @@ class FlspMrpPlanningReport(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
-    suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
-    adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
-    start_date = fields.Date(String="Start Date", readonly=True)
-    deadline_date = fields.Date(String="Deadline", readonly=True)
+    suggested_qty = fields.Float(string="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
+    adjusted_qty = fields.Float(string="Adjusted Qty", help="Adjust the quantity to be executed.")
+    start_date = fields.Date(string="Start Date", readonly=True)
+    deadline_date = fields.Date(string="Deadline", readonly=True)
     rationale = fields.Html(string='Rationale')
 
     def init(self):

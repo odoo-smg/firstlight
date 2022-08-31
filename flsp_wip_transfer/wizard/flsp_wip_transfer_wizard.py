@@ -10,8 +10,8 @@ class Flspwipwizard(models.TransientModel):
     _name = 'flsp_wip_transfer.wizard'
     _description = "Wizard: Recalculate Demands"
 
-    consider_days_ahead = fields.Integer(String="Days ahead", default=7, help="Days ahead.")
-    negative_items = fields.Boolean(String="Negative Products", default=False)
+    consider_days_ahead = fields.Integer(string="Days ahead", default=7, help="Days ahead.")
+    negative_items = fields.Boolean(string="Negative Products", default=False)
 
     def flsp_report(self):
         self.ensure_one()

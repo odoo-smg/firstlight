@@ -7,7 +7,7 @@ class FlsppurchaseStockPicking(models.Model):
     _inherit = 'stock.picking'
 
     flsp_purchase_id = fields.Many2one('purchase.order', string="Purchase Order")
-    flsp_show_purchaseline = fields.Boolean(String='Show PO line', compute="_compute_flsp_show_purchaseline")
+    flsp_show_purchaseline = fields.Boolean(string='Show PO line', compute="_compute_flsp_show_purchaseline")
 
     @api.depends('flsp_purchase_id')
     def _compute_flsp_show_purchaseline(self):
@@ -30,7 +30,7 @@ class FlsppurchaseStockPicking(models.Model):
 class FlsppurchaseStockMove(models.Model):
     _inherit = 'stock.move'
 
-    flsp_show_purchaseline = fields.Boolean(String='Show PO line', compute="_compute_flsp_show_purchaseline")
+    flsp_show_purchaseline = fields.Boolean(string='Show PO line', compute="_compute_flsp_show_purchaseline")
 
     @api.depends('picking_id.flsp_show_purchaseline')
     def _compute_flsp_show_purchaseline(self):

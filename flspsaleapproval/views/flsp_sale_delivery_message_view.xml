@@ -13,13 +13,13 @@
                             <field name="delivery_tax" readonly="1"/>
                         </group>
                     </div>
-                    <div attrs="{'invisible': [('delivery_contact', '!=', False), ('delivery_contact.name', '!=', False), ('delivery_contact.phone', '!=', False) ]}">
+                    <!--div attrs="{'invisible': [('delivery_contact', '!=', False), ('delivery_contact.name', '!=', False), ('delivery_contact.phone', '!=', False) ]}">
                         <h4>'Delivery Contact' required</h4>
                         <spam>In order to confirm the Quotation into a Sales Order, the Delivery Contact of the Delivery Address is required, including its 'Name' and 'Phone'.</spam>
                         <group>
                             <field name="delivery_contact" readonly="1"/>
                         </group>
-                    </div>
+                    </div-->
                     <group>
                         <field name="partner_shipping_id"/>
                     </group>

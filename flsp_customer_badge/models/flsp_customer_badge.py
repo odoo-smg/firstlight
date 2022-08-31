@@ -10,7 +10,7 @@ class flspcustomerbadge(models.Model):
     _inherit = ['image.mixin']
     _description = 'FLSP - customer badge model'
 
-    name = fields.Char(String="Badge Name", required=True)
+    name = fields.Char(string="Badge Name", required=True)
 
     image_1920 = fields.Image()
     reward_level = fields.Selection([
@@ -74,4 +74,3 @@ class flspcustomerbadge(models.Model):
         action = self.env.ref('flsp_customer_badge.launch_customers_for_customer_badge').read()[0]
         action['domain'] = [('flsp_cb_id', '=', self.id), ('end_date', '=', False)]
         return action
-

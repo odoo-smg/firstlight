@@ -7,3 +7,9 @@ type_manager,type manager,model_flspticketsystem_type,group_flspticketsystem_man
 ticket_user,ticket user,model_flspticketsystem_ticket,group_flspticketsystem_user,1,1,1,1
 category_user,category user,model_flspticketsystem_category,group_flspticketsystem_user,1,1,1,1
 type_user,type user,model_flspticketsystem_type,group_flspticketsystem_user,1,1,1,1
+
+assign_user,assign user,model_flspticketsystem_assign,group_flspticketsystem_user,1,1,1,1
+assign_manager,assign _manager,model_flspticketsystem_assign,group_flspticketsystem_manager,1,1,1,1
+
+reassign_user,reassign user,model_flspticketsystem_reassign,group_flspticketsystem_user,1,1,1,1
+reassign_manager,reassign _manager,model_flspticketsystem_reassign,group_flspticketsystem_manager,1,1,1,1

@@ -8,7 +8,7 @@ class flspcustomerbadgepartner(models.Model):
     _check_company_auto = True
 
     # fields for customer badge(cb)
-    participate_in_cb = fields.Boolean(String="Participate in Customer Badge", default=True,
+    participate_in_cb = fields.Boolean(string="Participate in Customer Badge", default=True,
                                        help="By unchecking the field, you will not participate in the 'Customer Badge Program'")
     flsp_cb_id = fields.Many2one('flsp.customer.badge', string="Customer Badge")
     flsp_cb_image = fields.Image(related='flsp_cb_id.image_1920', string="Customer Badge Image", readonly=True)

@@ -23,7 +23,7 @@ class SummarizedBomReport(models.Model):
     weeks_available = fields.Float(string="Weeks Available")
     product_qty = fields.Float(string='Qty Req/Week', readonly=True)
     product_uom = fields.Many2one(comodel_name="uom.uom", string='UofM', readonly=True)
-    level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
+    level_bom = fields.Integer(string="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
 
     @api.depends('product_id')
     def _calc_wip_qty(self):

@@ -34,7 +34,7 @@
                             <!--TKT #161-->
                             <field name="name" optional="show"/>
 
-                            <field name="date_expected" optional="hide"/>
+                            <field name="date" optional="hide"/>
                             <!--field name="mo_id" readonly="0" optional="hide"/-->
                             <field name="is_initial_demand_editable" invisible="1"/>
                             <field name="is_quantity_done_editable" invisible="1"/>
@@ -89,7 +89,7 @@
                 <field name="location_dest_id" position="attributes"><attribute name="optional">show</attribute></field>
                 <field name="package_id" position="attributes"><attribute name="optional">hide</attribute></field>
                 <field name="result_package_id" position="attributes"><attribute name="optional">hide</attribute></field>
-                
+
                 <xpath expr="//label[@for='weight']" position="before">
                      <field name="flsp_delivery_eta" />
                      <field name="flsp_customer_received" />

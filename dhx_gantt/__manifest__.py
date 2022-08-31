@@ -22,11 +22,24 @@
         'base',
         'project'
     ],
+    'assets': {
+            'web.assets_backend': [
+                '/dhx_gantt/static/lib/dhtmlxgantt/js/dhtmlxgantt.js',
+                '/dhx_gantt/static/lib/dhtmlxgantt/js/dhtmlxgantt_marker.js',
+                '/dhx_gantt/static/lib/dhtmlxgantt/skins/dhtmlxgantt_material.css',
+                '/dhx_gantt/static/src/js/gantt_model.js',
+                '/dhx_gantt/static/src/js/gantt_renderer.js',
+                '/dhx_gantt/static/src/js/gantt_controller.js',
+                '/dhx_gantt/static/src/js/gantt_view.js',
+                '/dhx_gantt/static/src/js/gantt_action.js',
+                '/dhx_gantt/static/src/css/gantt.css',
+            ],
+        },
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/assets.xml',
+        #'views/assets.xml',
         'views/task_views.xml',
         'views/project_views.xml',
     ],

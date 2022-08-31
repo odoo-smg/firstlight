@@ -12,7 +12,7 @@ class ResCompany(models.Model):
         help='When ticked, totals and subtotals appear below the sections of the report.')
     account_tax_periodicity = fields.Selection([
         ('trimester', 'trimester'),
-        ('monthly', 'monthly')], string="Delay units", help="Periodicity", default='monthly')
+        ('monthly', 'monthly')], string="Delay units", help="Periodicity", default='monthly', ondelete={"onhold": "cascade"})
     account_tax_periodicity_reminder_day = fields.Integer(string='Start from', default=7)
     account_tax_original_periodicity_reminder_day = fields.Integer(string='Start from original', help='technical helper to prevent rewriting activity date when saving settings')
     account_tax_periodicity_journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type', '=', 'general')])

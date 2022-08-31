@@ -49,7 +49,7 @@ class FlspMrpSalesReport(models.Model):
             pt.default_code as default_code,
             case when sm.origin_returned_move_id is null then sml.qty_done else sml.qty_done*(-1) end as qty_delivered,
             case when sm.origin_returned_move_id is not null then sml.qty_done end as qty_returned,
-            case when sm.origin_returned_move_id is null then so.commitment_date else sm.date_expected end as commitment_date,
+            case when sm.origin_returned_move_id is null then so.commitment_date else sm.date end as commitment_date,
             sm.date as effective_date,
             --so.commitment_date as commitment_date,
             so.date_order as date,

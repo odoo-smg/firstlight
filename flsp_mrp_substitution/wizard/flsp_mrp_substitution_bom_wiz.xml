@@ -20,7 +20,7 @@
                         <tree editable="bottom" create="false" delete="false">
                             <field name="flsp_mrp_sub_product_id" invisible="1" />
                             <field name="product_plm_valid" invisible="1" />
-                            <field name="substituting" String="Substituting" attrs="{'readonly': [('product_plm_valid', '=', True)]}"/>
+                            <field name="substituting" string="Substituting" attrs="{'readonly': [('product_plm_valid', '=', True)]}"/>
                             <field name="bom_id" readonly="1"/>
                             <field name="bom_line_id" invisible="1"/>
                         </tree>

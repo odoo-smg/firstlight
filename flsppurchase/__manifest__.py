@@ -23,16 +23,16 @@
     'version': '1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'purchase', 'sale', 'sale_management', 'flsp-base'],
+    'depends': ['base', 'purchase', 'sale', 'sale_management', 'flsp-base', 'flspautoemails'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
         'views/flsp_purchase_view.xml',
         'views/flsp_product_view.xml',
         'views/flsp_purchase_order_line_view.xml',
-        'views/flsp_suggestion_wizard.xml',
-        'report/flsp_purchase_suggestion.xml',
+        #'views/flsp_suggestion_wizard.xml',
+        #'report/flsp_purchase_suggestion.xml',
         'views/flspterms.xml',
         'views/flspterms_vendor.xml',
         'views/flsp_stock_move.xml',

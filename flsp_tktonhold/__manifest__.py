@@ -7,7 +7,7 @@
 
     'description': """
            Customizations performed:
-               * FEB/03 - Added on hold on the ticket  
+               * FEB/03 - Added on hold on the ticket
        """,
     'author': "Sami Byaruhanga",
     'website': "http://www.firstlightsafety.com",
@@ -20,7 +20,7 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/flsp_onhold.xml',
         'views/flsp_onholdwizard.xml',
 

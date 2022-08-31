@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates id="template" xml:space="preserve">
-    <t t-name="FieldMask">
+    <t t-name="inputmask_widget.FieldMask">
         <span t-if="widget.mode === 'readonly'"
               t-att="('contenteditable' in widget.attrsMask) ? widget.attrsMask: undefined"/>
 

@@ -10,14 +10,14 @@ class FlspMrpPlanningWizard(models.TransientModel):
     _name = 'flsp_mrp_planning.wizard'
     _description = "Wizard: Recalculate Planning"
 
-    calculate_sub_levels = fields.Boolean(String="Sub-Levels", default=0, help="Calculate sub-levels of BOM.")
-    standard_lead_time = fields.Integer(String="Lead time", default=14, help="Standard Lead time.")
-    standard_i_lead_time = fields.Integer(String="Lead time Indirect", default=1, help="Standard Indirect Lead time.")
-    standard_queue_time = fields.Integer(String="Lead time", default=1, help="Standard queue time.")
-    orders_to_confirm = fields.Boolean(String="Orders to confirm", default=False)
-    consider_drafts = fields.Boolean(String="Consider Draft MOs", default=True)
-    consider_wip = fields.Boolean(String="Consider WIP balance", default=True)
-    consider_forecast = fields.Boolean(String="Consider Forecast", default=False)
+    calculate_sub_levels = fields.Boolean(string="Sub-Levels", default=0, help="Calculate sub-levels of BOM.")
+    standard_lead_time = fields.Integer(string="Lead time", default=14, help="Standard Lead time.")
+    standard_i_lead_time = fields.Integer(string="Lead time Indirect", default=1, help="Standard Indirect Lead time.")
+    standard_queue_time = fields.Integer(string="Lead time", default=1, help="Standard queue time.")
+    orders_to_confirm = fields.Boolean(string="Orders to confirm", default=False)
+    consider_drafts = fields.Boolean(string="Consider Draft MOs", default=True)
+    consider_wip = fields.Boolean(string="Consider WIP balance", default=True)
+    consider_forecast = fields.Boolean(string="Consider Forecast", default=False)
 
     @api.model
     def default_get(self, fields):

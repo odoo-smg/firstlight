@@ -24,7 +24,7 @@
                 <field name="product_uom_qty" string="Qty" readonly="1"/>
                 <field name="product_uom" string="UofM" readonly="1"/>
                 <field name="sale_id" string="Sales Order" readonly="1"/>
-                <field name="date_expected" string="Shipping Date" readonly="1"/>
+                <field name="date" string="Shipping Date" readonly="1"/>
                 <field name="state" readonly="1"/>
                 <field name="mo_id" readonly="1"/>
                 <field name="company_id" invisible="1" />

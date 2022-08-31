@@ -9,8 +9,8 @@ class FlspMrpNegativeForecastWizard(models.TransientModel):
     _description = "Wizard: Recalculate MRP Negative Forecasted Report"
 
     mo_id = fields.Many2one('mrp.production', string="MO", required=True)
-    calculate_product_flsp_routes = fields.Boolean(String="Calculate Product FLSP Routes", default=0, help="The calculation makes 'Purcahseable' and 'Manufacturable' update-to-date for each product in the report")
-        
+    calculate_product_flsp_routes = fields.Boolean(string="Calculate Product FLSP Routes", default=0, help="The calculation makes 'Purcahseable' and 'Manufacturable' update-to-date for each product in the report")
+
     @api.model
     def default_get(self, fields):
         res = super(FlspMrpNegativeForecastWizard, self).default_get(fields)
@@ -24,7 +24,7 @@ class FlspMrpNegativeForecastWizard(models.TransientModel):
                 _logger.warning("The REQUIRED MO does NOT exist!")
         else:
             _logger.warning("The REQUIRED 'default_mo_id' is None!")
-            
+
         res = self._convert_to_write(res)
         return res
 

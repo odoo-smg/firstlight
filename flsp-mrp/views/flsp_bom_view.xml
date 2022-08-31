@@ -15,7 +15,7 @@
                     </ul>
                     </p>
               </xpath>
-              <xpath expr="//field[@name='routing_id'][1]" position="after">
+              <xpath expr="//field[@name='product_id']" position="after">
                 <field name="flsp_eco_enforce" invisible="1" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
               </xpath>
               <xpath expr="//field[@name='flsp_eco_enforce']" position="after">

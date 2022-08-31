@@ -44,8 +44,8 @@ class flspsalesorder(models.Model):
         ('2', 'FL account and do not Invoice Customer'),
         ('3', 'Customer carrier choice and account'),
     ], string='Shipping Method', copy=False, store=True)
-    flsp_carrier_account = fields.Char(String="Carrier Account")
-    flsp_show_customercode = fields.Boolean(String="Show Customer Code", compute="_compute_flsp_show_customercode")
+    flsp_carrier_account = fields.Char(string="Carrier Account")
+    flsp_show_customercode = fields.Boolean(string="Show Customer Code", compute="_compute_flsp_show_customercode")
 
     @api.depends('partner_id')
     def _compute_flsp_show_customercode(self):
@@ -133,7 +133,7 @@ class flspsalesorderline(models.Model):
     _inherit = 'sale.order.line'
 
     flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number')
-    flsp_prd_tmpl_id = fields.Many2one('product.template', String='Product template', compute='_compute_flsp_prd_tmpl_id')
+    flsp_prd_tmpl_id = fields.Many2one('product.template', string='Product template', compute='_compute_flsp_prd_tmpl_id')
 
     @api.depends('product_id')
     def _compute_flsp_prd_tmpl_id(self):

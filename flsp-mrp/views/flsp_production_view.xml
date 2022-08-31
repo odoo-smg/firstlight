@@ -33,12 +33,12 @@
                         </div>
                     </button>
                 </xpath>
-              <xpath expr="//button[@name='open_produce_product'][1]" position="replace">
+              <!--xpath expr="//button[@name='open_produce_product'][1]" position="replace">
                   <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', ('state', 'in', ('to_close','done')), ('is_locked', '=', False), ('routing_id', '!=', False), ('flsp_material_reserved', '=', False)]}" string="Produce" type="object" class="oe_highlight"/>
               </xpath>
               <xpath expr="//button[@name='open_produce_product'][2]" position="replace">
                    <button name="open_produce_product" attrs="{'invisible': [True]}" string="Produce" type="object" class="oe_highlight"/>
-              </xpath>
+              </xpath-->
               <xpath expr="//button[@name='action_assign']" position="attributes">
                     <attribute name="groups">flsp-mrp.group_mrp_flsp_planner</attribute>
                     <attribute name="attrs">{'invisible': ['|', '|', '|', '|', ('is_locked', '=', False), ('state', 'in', ('draft', 'done', 'cancel')), ('reservation_state', '=', 'assigned'), ('flsp_required_mat_plan', '=', False)]}</attribute>

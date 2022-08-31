@@ -41,7 +41,7 @@
                 </t>
             </t>
         </template>
-        <report id="flsp_action_set_zebra_mrp"
+        <record id="flsp_action_set_zebra_mrp"
             model="mrp.production"
             string="Finished Set Label 2x1 (ZPL)"
             name="flspstock.flsp_mrp_set_zebra_production"

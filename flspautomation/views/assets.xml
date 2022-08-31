@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="assets_backend_flsp" inherit_id="web.assets_backend" name="flsp backend assets">
+    <!--template id="assets_backend_flsp" inherit_id="web.assets_backend" name="flsp backend assets">
         <xpath expr="link[last()]" position="after">
             <script type="text/javascript" src="/flspautomation/tour/flsp.js"></script>
         </xpath>
-    </template>
+    </template-->
 </odoo>

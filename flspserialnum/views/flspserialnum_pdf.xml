@@ -38,7 +38,7 @@
         </template>
 
 
-        <report
+        <record
                 string="Lot/Serial Number (PDF)"
                 id="action_flspserial_num_lot_label"
                 model="flsp.serialnum"

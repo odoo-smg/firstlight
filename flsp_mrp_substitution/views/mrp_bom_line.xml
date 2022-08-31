@@ -6,7 +6,10 @@
             <field name="priority">10</field>
             <field name="inherit_id" ref="mrp_bom_component_menu.mrp_bom_line_tree_view"/>
             <field name="arch" type="xml">
+              <!-- Migration 13-14 changes
               <xpath expr="//field[@name='routing_id']" position="after">
+              -->
+              <xpath expr="//field[@name='attachments_count']" position="after">
                   <field name="flsp_substitute" invisible="0" />
               </xpath>
             </field>

@@ -17,15 +17,15 @@ class Purcahsesupport(models.Model):
     qty_multiple = fields.Float('Qty Multiple', readonly=True)
     product_qty = fields.Float(string='Qty on Hand', readonly=True)
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
-    curr_outs = fields.Float(String="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
-    curr_ins = fields.Float(String="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
-    average_use = fields.Float(String="Avg Use", readonly=True, help="Average usage of the past 3 months.")
-    month1_use = fields.Float(String="2020-06 Usage", readonly=True, help="Total usage of last month.")
-    month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
-    month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
-    suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
-    qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
-    level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
+    curr_outs = fields.Float(string="Demand", readonly=True, help="Includes all confirmed sales orders and manufacturing orders")
+    curr_ins = fields.Float(string="Replenishment", readonly=True, help="Includes all confirmed purchase orders and manufacturing orders")
+    average_use = fields.Float(string="Avg Use", readonly=True, help="Average usage of the past 3 months.")
+    month1_use = fields.Float(string="2020-06 Usage", readonly=True, help="Total usage of last month.")
+    month2_use = fields.Float(string="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
+    month3_use = fields.Float(string="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
+    suggested_qty = fields.Float(string="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
+    qty_rfq = fields.Float(string="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
+    level_bom = fields.Integer(string="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     route_buy = fields.Selection([('buy', 'To Buy'),('na' , 'Non Applicable'),], string='To Buy', readonly=True)
     route_mfg = fields.Selection([('mfg', 'To Manufacture'),('na' , 'Non Applicable'),], string='To Produce', readonly=True)
     state = fields.Selection([
@@ -86,7 +86,7 @@ class Purcahsesupport(models.Model):
                                                where usage = 'production')
                                                and location_dest_id not in (select id from stock_location where usage = 'production') )
                     and    location_dest_id in (select id from stock_location where usage = 'internal')
-                    and    done_move = false
+                    --and    done_move = false
                     group by product_id
                     union all
                     -- sale order confirmed and production
@@ -118,8 +118,9 @@ class Purcahsesupport(models.Model):
         left join (
                     select product_id, sum(qty_done) as avg_use, to_char(date, 'YYYYMM') as month
                     from stock_move_line
-                    where done_move = true
-                    and location_id in (select id from stock_location where usage = 'internal')
+                    where
+                    --done_move = true and
+                    location_id in (select id from stock_location where usage = 'internal')
                     and to_char(date, 'YYYYMM') = to_char((to_date(to_char(current_date, 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')
                     group by product_id, month
                     order by product_id, month
@@ -128,8 +129,9 @@ class Purcahsesupport(models.Model):
         left join (
                     select product_id, sum(qty_done) as avg_use, to_char(date, 'YYYYMM') as month
                     from stock_move_line
-                    where done_move = true
-                    and location_id in (select id from stock_location where usage = 'internal')
+                    where
+                    --done_move = true and
+                    location_id in (select id from stock_location where usage = 'internal')
                     and to_char(date, 'YYYYMM') = to_char((to_date(to_char((to_date(to_char(current_date, 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')
                     group by product_id, month
                     order by product_id, month
@@ -138,8 +140,9 @@ class Purcahsesupport(models.Model):
         left join (
                     select product_id, sum(qty_done) as avg_use, to_char(date, 'YYYYMM') as month
                     from stock_move_line
-                    where done_move = true
-                    and location_id in (select id from stock_location where usage = 'internal')
+                    where
+                    --done_move = true and
+                    location_id in (select id from stock_location where usage = 'internal')
                     and to_char(date, 'YYYYMM') = to_char((to_date(to_char((to_date(to_char((to_date(to_char(current_date, 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')||'01', 'YYYYMMDD') - interval '1 day'), 'YYYYMM')
                     group by product_id, month
                     order by product_id, month

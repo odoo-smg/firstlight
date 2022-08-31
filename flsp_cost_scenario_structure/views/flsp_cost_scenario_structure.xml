@@ -250,7 +250,7 @@
         </t>
     </template>
 
-    <template id="assets_backend" name="mrp assets" inherit_id="web.assets_backend">
+    <!--template id="assets_backend" name="mrp assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/flsp_cost_scenario_structure/static/src/js/report_cost_scenario_structure.js"></script>
         </xpath>
@@ -260,7 +260,7 @@
         <xpath expr="." position="inside">
             <link rel="stylesheet" type="text/scss" href="/flsp_cost_scenario_structure/static/src/scss/flsp_cost_scenario_structure.scss" />
         </xpath>
-    </template>
+    </template-->
 
     <record id="action_report_flsp_cost_bom" model="ir.actions.client">
         <field name="name">BoM Structure</field>

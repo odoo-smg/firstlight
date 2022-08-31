@@ -30,7 +30,7 @@
             </t>
         </template>
 
-        <report
+        <record
             string="1 x 3/4 label(ZPL)"
             id="flsp_serial_report_1x34"
             model="stock.production.lot"

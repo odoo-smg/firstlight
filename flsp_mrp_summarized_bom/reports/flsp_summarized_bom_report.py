@@ -17,7 +17,7 @@ class SummarizedBomReport(models.Model):
     bom_id = fields.Many2one(comodel_name="mrp.bom", string="BOM")
     product_qty = fields.Float(string='Qty required', readonly=True)
     product_uom = fields.Many2one(comodel_name="uom.uom", string='UofM', readonly=True)
-    level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
+    level_bom = fields.Integer(string="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
 
     def name_get(self):
         res = []
@@ -38,8 +38,8 @@ class SummarizedBomReport(models.Model):
         SELECT
             max(id) as id,
             description,
-            default_code, 
-            product_tmpl_id, 
+            default_code,
+            product_tmpl_id,
             product_id,
             max(bom_id) as bom_id,
             sum(product_qty) as product_qty,

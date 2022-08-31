@@ -4,9 +4,9 @@
         <field name="name">flsp.stock.inventory.line.search</field>
         <field name="model">stock.inventory.line</field>
         <field name="arch" type="xml">
-            <search string="search fields">
+            <!--search string="search fields">
                 <field name="product_id"/>
-            </search>
+            </search-->
         </field>
     </record>
 </odoo>

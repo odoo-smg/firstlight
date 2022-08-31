@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <template id="flspserialnum_zebra">
+      <template id="flspserialnum_zebra">
             <t t-foreach="docs" t-as="serial">
                 <t t-foreach="serial.serial_num_line" t-as="move">
                     <t t-translation="off">
@@ -18,14 +17,13 @@
                 </t>
             </t>
         </template>
-        <report id="flsp_serialnum_zebra"
+        <record id="flsp_serialnum_zebra"
             model="flsp.serialnum"
             string="Lot/Serial Number (ZPL)"
             report_type="qweb-text"
             name="flspserialnum.flspserialnum_zebra"
             file="flspserialnum.flspserialnum_zebra"
-        />
-    </data>
+            />
 </odoo>
 
 

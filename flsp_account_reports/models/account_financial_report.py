@@ -1086,11 +1086,12 @@ class FormulaContext(dict):
             return res
         return super(FormulaContext, self).__getitem__(item)
 
-
+'''
 class IrModuleModule(models.Model):
     _inherit = "ir.module.module"
 
     def _update_translations(self, filter_lang=None):
+        return False
         """ Create missing translations after loading the one of flsp.account.financial.html.report
 
         Use the translations of the flsp.account.financial.html.report to translate the linked
@@ -1133,3 +1134,4 @@ class IrModuleModule(models.Model):
         """)
 
         return res
+'''

@@ -233,9 +233,8 @@
         </t>
     </template>
 
-    <template id="assets_backend" name="mrp assets" inherit_id="web.assets_backend">
+    <!--template id="assets_backend" name="mrp assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
-            <!--link rel="stylesheet" type="text/scss" href="/mrp/static/src/scss/mrp_workorder_kanban.scss" /-->
             <script type="text/javascript" src="/flsp_mrp_structure/static/src/js/report_flsp_structure.js"></script>
         </xpath>
     </template>
@@ -244,7 +243,7 @@
         <xpath expr="." position="inside">
             <link rel="stylesheet" type="text/scss" href="/flsp_mrp_structure/static/src/scss/flsp_mrp_structure.scss" />
         </xpath>
-    </template>
+    </template-->
 
     <record id="action_report_flsp_mo_bom" model="ir.actions.client">
         <field name="name">BoM Structure</field>
@@ -253,6 +252,3 @@
     </record>
 
 </odoo>
-
-
-

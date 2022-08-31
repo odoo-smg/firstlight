@@ -49,7 +49,7 @@
                     <field name="product_substitute_id"/>
                     <field name="product_substitute_onhand" />
                     <field name="product_substitute_openpo"/>
-                    <button name="bom_selection" class="fa fa-2x fa-check-circle" type="object" />
+                    <button name="bom_selection" icon="fa-check-circle" type="object" />
                 </tree>
             </field>
         </record>

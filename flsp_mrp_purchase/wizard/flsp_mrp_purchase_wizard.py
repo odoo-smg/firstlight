@@ -11,18 +11,18 @@ class FlspMrppurchaseWizard(models.TransientModel):
     _name = 'flsp_mrp_purchase.wizard'
     _description = "Wizard: Recalculate purchase"
 
-    calculate_sub_levels = fields.Boolean(String="Sub-Levels", default=0, help="Calculate sub-levels of BOM.")
-    standard_lead_time = fields.Integer(String="Lead time", default=14, help="Standard Lead time.")
-    supplier_lead_time = fields.Integer(String="Supplier Lead time", default=0, help="Supplier Lead time.")
-    standard_i_lead_time = fields.Integer(String="Lead time Indirect", default=1, help="Standard Indirect Lead time.")
-    standard_queue_time = fields.Integer(String="Lead time", default=1, help="Standard queue time.")
-    orders_to_confirm = fields.Boolean(String="Orders to confirm", default=False)
-    consider_drafts = fields.Boolean(String="Consider Draft MOs", default=False)
-    consider_wip = fields.Boolean(String="Consider WIP balance", default=False)
-    consider_forecast = fields.Boolean(String="Consider Forecast", default=True)
-    consider_reserved = fields.Boolean(String="Consider Reserved", default=False)
-    consider_mos = fields.Boolean(String="Consider Manufacturing Orders", default=False)
-    consider_sales = fields.Boolean(String="Consider Sales Orders", default=True)
+    calculate_sub_levels = fields.Boolean(string="Sub-Levels", default=0, help="Calculate sub-levels of BOM.")
+    standard_lead_time = fields.Integer(string="Lead time", default=14, help="Standard Lead time.")
+    supplier_lead_time = fields.Integer(string="Supplier Lead time", default=0, help="Supplier Lead time.")
+    standard_i_lead_time = fields.Integer(string="Lead time Indirect", default=1, help="Standard Indirect Lead time.")
+    standard_queue_time = fields.Integer(string="Lead time", default=1, help="Standard queue time.")
+    orders_to_confirm = fields.Boolean(string="Orders to confirm", default=False)
+    consider_drafts = fields.Boolean(string="Consider Draft MOs", default=False)
+    consider_wip = fields.Boolean(string="Consider WIP balance", default=False)
+    consider_forecast = fields.Boolean(string="Consider Forecast", default=True)
+    consider_reserved = fields.Boolean(string="Consider Reserved", default=False)
+    consider_mos = fields.Boolean(string="Consider Manufacturing Orders", default=False)
+    consider_sales = fields.Boolean(string="Consider Sales Orders", default=True)
 
     @api.model
     def default_get(self, fields):

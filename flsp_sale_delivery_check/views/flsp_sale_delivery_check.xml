@@ -5,10 +5,10 @@
         <field name="model">stock.move</field>
         <field name="arch" type="xml">
             <tree string="Monitor View"  default_order='date_expected, sale_id' editable="bottom" create="0" delete="0"
-                  decoration-danger="date_expected&lt;current_date"
+                  decoration-danger="date&lt;current_date"
                   decoration-info="is_today==True"
                   decoration-success="is_week==True"
-                  decoration-bf="mo_id==False or date_expected&lt;current_date"
+                  decoration-bf="mo_id==False or date&lt;current_date"
             >
                 <field name="flsp_order_date" widget="date" readonly="1"/>
                 <field name="partner_id" string="Customer" readonly="1"/>
@@ -16,7 +16,7 @@
                 <field name="product_uom_qty" string="Qty" readonly="1"/>
                 <field name="product_uom" string="UofM" readonly="1"/>
                 <field name="sale_id" string="Sales Order" readonly="1"/>
-                <field name="date_expected" widget="date" string="Shipping Date" readonly="1"/>
+                <field name="date" widget="date" string="Shipping Date" readonly="1"/>
                 <field name="state" readonly="1"/>
                 <field name="mo_id" readonly="1"/>
                 <field name="company_id" invisible="1" />

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="assets_backend" name="FLSP customized Import Assets" inherit_id="web.assets_backend">
+        <!--template id="assets_backend" name="FLSP customized Import Assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
                 <script type="text/javascript" src="/flspsales_forecast/static/src/js/flsp_import.js"></script>
             </xpath>
-        </template>
+        </template-->
     </data>
 </odoo>

@@ -8,7 +8,7 @@ class flspsostockmove(models.Model):
     _inherit = 'stock.move'
 
     flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number', compute="_compute_flsp_customerscode")
-    flsp_show_customercode = fields.Boolean(String="Show Customer Code", compute="_compute_flsp_show_customercode")
+    flsp_show_customercode = fields.Boolean(string="Show Customer Code", compute="_compute_flsp_show_customercode")
 
     def _compute_flsp_show_customercode(self):
         for each in self:
@@ -37,7 +37,7 @@ class flspstockmoveline(models.Model):
     _inherit = 'stock.move.line'
 
     flsp_customerscode = fields.Many2one('flspstock.customerscode', 'Customer Part Number', compute="_compute_flsp_customerscode")
-    flsp_show_customercode = fields.Boolean(String="Show Customer Code", compute="_compute_flsp_show_customercode")
+    flsp_show_customercode = fields.Boolean(string="Show Customer Code", compute="_compute_flsp_show_customercode")
 
     def _compute_flsp_customerscode(self):
         for each in self:

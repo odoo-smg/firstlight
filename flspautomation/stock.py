@@ -7,7 +7,7 @@ class FlspStockAutomation():
      # caller is the test case instance which calls this class to create testing objects
      def __init__(self, caller):
           self.caller = caller
-        
+
      def create_location(self, name_prefix, complete_name, usage, parent_location_id):
           postfix = str(datetime.now())
           aName = name_prefix + '-' + postfix
@@ -18,7 +18,7 @@ class FlspStockAutomation():
                         'location_id': parent_location_id,
                         'active': True,
                })
-        
+
      def create_lot(self, name_prefix, product_id):
           postfix = str(datetime.now())
           aName = name_prefix + '-' + postfix
@@ -67,7 +67,7 @@ class FlspStockAutomation():
                         'name': aName,
                         'company_id': 1,
                         'date': datetime.now(),
-                        'date_expected': datetime.now(),
+                        'date': datetime.now(),
                         'product_id': product_id,
                         'product_uom_qty': product_uom_qty,
                         'product_uom': 1,

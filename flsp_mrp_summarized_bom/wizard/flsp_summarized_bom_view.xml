@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-    <template id="assets_backend" name="flsp assets" inherit_id="web.assets_backend">
+    <!--template id="assets_backend" name="flsp assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
             <link rel="stylesheet" href="/flsp_mrp_summarized_bom/static/src/css/flsp_mrp_summarized_bom.css"/>
         </xpath>
-    </template>
+    </template-->
 
     <record id="flsp_summarized_bom_view_form" model="ir.ui.view">
         <field name="name">flsp.bom.summarized.wizard.form</field>

@@ -196,7 +196,7 @@
     </t>
 </template>
 
-        <report
+        <record
             string="Pallet Manifest"
             id="flsp_pallet_manifest_report"
             model="stock.quant.package"

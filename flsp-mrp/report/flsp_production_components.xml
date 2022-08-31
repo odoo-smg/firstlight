@@ -5,7 +5,7 @@
             id="flsp_mrp_components_xlsx"
             string="Components (Excel)"
             model="mrp.production"
-            name="flsp_mrp_components_xlsx"   
+            name="flsp_mrp_components_xlsx"
             file="Components"
             report_type="xlsx"
             attachment_use="False"

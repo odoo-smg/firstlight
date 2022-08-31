@@ -16,7 +16,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="flsp_sale_tree_view_search">
+        <!--record model="ir.ui.view" id="flsp_sale_tree_view_search">
             <field name="name">flsp.tree.sales.search.inherit</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_sales_order_filter"/>
@@ -26,6 +26,6 @@
                     <filter string="Open Orders Non PPE" domain="['&amp;', ('flsp_SPPEPP_so', '=', False), ('flsp_bpm_status', 'in', ['dd-sale', 'ee-confirmed', 'ff-packed', 'gg-partial'])]" name="flsp_open_sale_order"/>
                 </xpath>
             </field>
-        </record>
+        </record-->
 
 </odoo>

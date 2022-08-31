@@ -11,7 +11,7 @@ class flsppurchaseproductprd(models.Model):
     flsp_open_po_qty = fields.Float(compute='_compute_flsp_open_po_qty', string='Qty Open PO')
     flsp_bom_level = fields.Integer(string='Bom Level')
     flsp_suggested_qty = fields.Float(string="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
-    flsp_adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
+    flsp_adjusted_qty = fields.Float(string="Adjusted Qty", help="Adjust the quantity to be executed.")
     flsp_suggested_state = fields.Selection([
         ('buy', 'To Buy'),
         ('ok' , 'No Action'),

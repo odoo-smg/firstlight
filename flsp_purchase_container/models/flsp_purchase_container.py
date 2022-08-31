@@ -123,7 +123,7 @@ class Container(models.Model):
                     line.picking_id.scheduled_date = datetime.combine(self.expected_date, time(12, 0, 0))
                     if line.picking_id.move_ids_without_package:
                         for move in line.picking_id.move_ids_without_package:
-                            move.date_expected = datetime.combine(self.expected_date, time(12, 0, 0))
+                            move.date = datetime.combine(self.expected_date, time(12, 0, 0))
 
             self.message_post(body='Expected date changed to : ' + str(self.expected_date))
         return res

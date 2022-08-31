@@ -156,9 +156,9 @@ class Flsp_PO_Status(models.Model):
             moves = self.env["stock.move"].search([("purchase_line_id", "in", order.order_line.ids),
                                                    ("state", "not in", ("cancel", "done"))])
             for move in moves:
-                print(move.date_expected)
-                print(move.purchase_line_id.date_planned)
-                move.date_expected = move.purchase_line_id.date_planned
+                #print(move.date_expected)
+                #print(move.purchase_line_id.date_planned)
+                move.date = move.purchase_line_id.date_planned
 
 # CHANGING THE STOCK MOVE DATE BASED OFF THE SCHEDULED DATE.
     @api.depends('flsp_scheduled_date')
@@ -196,9 +196,9 @@ class Flsp_PO_Status(models.Model):
                 ]
             )
             for move in moves:
-                print(move.date_expected)
-                print(move.purchase_line_id.date_planned)
-                move.date_expected = move.purchase_line_id.date_planned
+                #print(move.date_expected)
+                #print(move.purchase_line_id.date_planned)
+                move.date = move.purchase_line_id.date_planned
 
 #            pickings = moves.mapped("picking_id")
 #            pickings_by_date = {}

@@ -50,7 +50,7 @@ class FlspSerialNum(models.Model):
         print(nextlotnum)
         return nextlotnum
 
-    first_serial = fields.Char('First SN', defualt=_default_nextlot) #Onchange fills this when the product number has been selected
+    first_serial = fields.Char('First SN', default=_default_nextlot) #Onchange fills this when the product number has been selected
     serial_num_line = fields.One2many('flsp.serialnumline', 'order_id', string='Serial Num Lines', copy=False, auto_join=True)
 
     def _domain_product_id(self):
@@ -116,7 +116,7 @@ class FlspSerialNum(models.Model):
 
         # existing serial numbers in the range in stock.production.lot
         existing_lots = self.env['stock.production.lot'].search([('name', 'in', lot_names), ('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id)])
-        
+
         # all created serial numbers in stock.production.lot associated with the order_id
         created_lot_names = self.env['flsp.serialnumline'].search([('order_id', '=', self.id)]).mapped('serial_num')
 
@@ -127,7 +127,7 @@ class FlspSerialNum(models.Model):
             for line in lot_names:
                 if not line in existing_lots.mapped('name'):
                     absent_lot_names.append(line)
-            
+
             extra_lot_names = []
             for line in created_lot_names:
                 if not line in lot_names:
@@ -186,7 +186,7 @@ class FlspSerialNum(models.Model):
                     'order_id': self.id,
                     'serial_num': lot.name,
                 })
-                                      
+
     def unlink_serial_num(self, lot_names):
         self.env['stock.production.lot'].search([('product_id', '=', self.product_id.id), ('company_id', '=', self.company_id.id), ('name', 'in', lot_names)]).unlink()
 

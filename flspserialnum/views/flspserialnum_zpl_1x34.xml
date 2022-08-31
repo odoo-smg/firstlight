@@ -23,7 +23,7 @@
                 </t>
             </t>
         </template>
-        <report id="flsp_serialnum_1x34"
+        <record id="flsp_serialnum_1x34"
             model="flsp.serialnum"
             string="1X3/4 label (ZPL)"
             report_type="qweb-text"

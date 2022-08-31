@@ -24,6 +24,12 @@
     # any module necessary for this one to work correctly
     'depends': ['base', 'sale', 'flsp-salesorder'],
 
+    'assets': {
+            'web.assets_backend': [
+                '/flsp_customer_badge/static/tests/tours/customer_badge.js',
+            ],
+        },
+
     # always loaded
     'data': [
         'security/flsp_user_group.xml',
@@ -32,7 +38,7 @@
         'views/flsp_customer_badge_request_view.xml',
         'views/flsp_customer_badge_record_view.xml',
         'views/flsp_customer_badge_view.xml',
-        'views/assets.xml',
+        #'views/assets.xml',
         'views/flsp_customer_badge_partner_view.xml',
         'views/flsp_customer_badge_sale_order_view.xml',
         'views/flsp_customer_badge_account_form.xml',
@@ -42,6 +48,6 @@
         'report/flsp_customer_badge_invoice_with_payments.xml',
         'views/flsp_customer_badge_stock_picking_form.xml',
         'report/flsp_customer_badge_purchase_report.xml',
-        'report/flsp_customer_badge_packing_slip.xml',
+        #'report/flsp_customer_badge_packing_slip.xml',
     ],
 }

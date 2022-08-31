@@ -1,5 +1,5 @@
 <odoo>
-    <report
+    <record
         id="flsp_report_commercial_invoice"
         model="account.move"
         string="Commercial Invoice"

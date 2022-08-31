@@ -54,7 +54,7 @@
                                 <div class="oe_dropdown_kanban">
                                     <!-- dropdown menu -->
                                     <div class="oe_dropdown_toggle">
-                                        <i class="fa fa-bars fa-sm"/>
+                                        <i class="fa fa-bars"/>
                                         <ul class="oe_dropdown_menu">
                                             <ul class="oe_kanban_colorpicker" data-field="color"/>
                                         </ul>

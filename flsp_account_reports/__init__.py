@@ -3,9 +3,10 @@
 
 from odoo import api, SUPERUSER_ID
 
+from . import wizard
 from . import models
 from . import controllers
-from . import wizard
+
 
 def set_periodicity_journal_on_companies(cr, registry):
     env = api.Environment(cr, SUPERUSER_ID, {})

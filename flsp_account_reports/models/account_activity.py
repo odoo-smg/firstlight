@@ -83,7 +83,7 @@ class AccountMove(models.Model):
 class AccountTaxReportActivityType(models.Model):
     _inherit = "mail.activity.type"
 
-    category = fields.Selection(selection_add=[('tax_report', 'Tax report')])
+    category = fields.Selection(selection_add=[('tax_report', 'Tax report')], ondelete={"tax_report": "set default"})
 
 class AccountTaxReportActivity(models.Model):
     _inherit = "mail.activity"

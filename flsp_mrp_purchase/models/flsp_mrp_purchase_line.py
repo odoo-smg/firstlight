@@ -24,24 +24,24 @@ class FlspMrppurchaseLine(models.Model):
     reserved = fields.Float(string='Qty Reserved', readonly=True)
     reserved_wip = fields.Float(string='Qty Reserved WIP', readonly=True)
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
-    curr_outs = fields.Float(String="Demand", readonly=True,
+    curr_outs = fields.Float(string="Demand", readonly=True,
                              help="Includes all confirmed sales orders and manufacturing orders")
-    curr_ins = fields.Float(String="Replenishment", readonly=True,
+    curr_ins = fields.Float(string="Replenishment", readonly=True,
                             help="Includes all confirmed purchase orders and manufacturing orders")
-    average_use = fields.Float(String="Avg Use", readonly=True, help="Average usage of the past 3 months.")
-    month1_use = fields.Float(String="2020-06 Usage", readonly=True, help="Total usage of last month.")
-    month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
-    month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
-    suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
-    adjusted_qty = fields.Float(String="Adjusted Qty", help="Adjust the quantity to be executed.")
+    average_use = fields.Float(string="Avg Use", readonly=True, help="Average usage of the past 3 months.")
+    month1_use = fields.Float(string="2020-06 Usage", readonly=True, help="Total usage of last month.")
+    month2_use = fields.Float(string="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
+    month3_use = fields.Float(string="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
+    suggested_qty = fields.Float(string="Suggested Qty", readonly=True, help="Quantity suggested to buy or produce.")
+    adjusted_qty = fields.Float(string="Adjusted Qty", help="Adjust the quantity to be executed.")
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom')
-    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True,
+    purchase_suggested = fields.Float(string="Suggested 2nd uom", readonly=True,
                                       help="Quantity suggested to buy or produce.")
     po_qty = fields.Float(string='Qty Open PO')
     rfq_qty = fields.Float(string='Qty RFQ')
 
-    qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
-    level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
+    qty_rfq = fields.Float(string="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
+    level_bom = fields.Integer(string="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     route_buy = fields.Selection([('buy', 'To Buy'), ('na', 'Non Applicable'), ], string='To Buy', readonly=True)
     route_mfg = fields.Selection([('mfg', 'To Manufacture'), ('na', 'Non Applicable'), ], string='To Produce',
                                  readonly=True)
@@ -53,8 +53,8 @@ class FlspMrppurchaseLine(models.Model):
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
     type = fields.Char(string='Type', readonly=True)
-    start_date = fields.Date(String="Start Date", readonly=True)
-    deadline_date = fields.Date(String="Deadline", readonly=True)
+    start_date = fields.Date(string="Start Date", readonly=True)
+    deadline_date = fields.Date(string="Deadline", readonly=True)
     rationale = fields.Html(string='Rationale')
     source = fields.Char(string='Source')
     source_description = fields.Char(string='Source Description')
@@ -66,13 +66,13 @@ class FlspMrppurchaseLine(models.Model):
     vendor_qty = fields.Float(string='Quantity', readonly=True)
     vendor_price = fields.Float(string='Unit Price', readonly=True)
     delay = fields.Integer(string="Delivery Lead Time")
-    required_by = fields.Date(String="Required by", readonly=True)
+    required_by = fields.Date(string="Required by", readonly=True)
     balance = fields.Float(string='Balance', readonly=True)
     late_delivery = fields.Float(string='Balance', readonly=True)
     total_price = fields.Float(string='Total Price', readonly=True)
 
     balance_neg = fields.Float(string='Negative Balance', readonly=True)
-    negative_by = fields.Date(String="Negative by", readonly=True)
+    negative_by = fields.Date(string="Negative by", readonly=True)
 
     avg_per_sbs = fields.Float(string='Avg per SBS', readonly=True)
     avg_per_ssa = fields.Float(string='Avg per SA', readonly=True)
@@ -190,7 +190,7 @@ class FlspMrppurchaseLine(models.Model):
                                    doc,
                                    move.product_id,
                                    move.product_uom_qty, move.product_uom,
-                                   move.date_expected, 0, 0, 0, 0])
+                                   move.date, 0, 0, 0, 0])
         # *******************************************************************************
         # ***************************** Sales Orders ************************************
         # *******************************************************************************

@@ -13,13 +13,13 @@ class FLSPBasePartner(models.Model):
     # **********************************************
     # Fields copied from flsp-salesorder module
     # ***********************************************
-    flsp_default_contact = fields.Boolean(String="Default")
+    flsp_default_contact = fields.Boolean(string="Default")
     flsp_shipping_method = fields.Selection([
         ('1', 'FL account and Invoice the Customer'),
         ('2', 'FL account and do not Invoice Customer'),
         ('3', 'Customer carrier choice and account'),
     ], string='Shipping Method', copy=False, store=True)
-    flsp_carrier_account = fields.Char(String="Carrier Account")
+    flsp_carrier_account = fields.Char(string="Carrier Account")
     flsp_user_id = fields.Many2one('res.users', string="Inside Salesperson")
     flsp_dss_user_id = fields.Many2one('res.users', string="Dealer Specialist")
 

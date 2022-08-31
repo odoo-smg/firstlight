@@ -10,7 +10,7 @@
                 <field name="origin" invisible="True" readonly="True"/>
                 <field name="product_id" readonly="True"/>
                 <field name="product_qty" readonly="True"/>
-                <field name="date_expected" readonly="True"/>
+                <field name="date" readonly="True"/>
             </tree>
         </field>
     </record>

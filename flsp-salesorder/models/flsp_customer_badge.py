@@ -9,7 +9,7 @@ class flspcustomerbadge(models.Model):
     _inherit = ['image.mixin']
     _description = 'FLSP - customer badge model'
 
-    name = fields.Char(String="Badge Name", required=True)
+    name = fields.Char(string="Badge Name", required=True)
 
     image_1920 = fields.Image()
     reward_level = fields.Selection([
@@ -25,7 +25,7 @@ class flspcustomerbadge(models.Model):
     sale_discount = fields.Float(string='Rewards Pricing Discount (%)', digits='Discount', default=0.0, help="Discount on sale price")
     freight_units_5_to_10_discount = fields.Float(string='Freight Discount with 5-10 units (%)', digits='Discount', default=0.0, help="Frieght discount for orders of from 5 to 10 units")
     freight_units_over_10_discount = fields.Float(string='Freight Discount with more than 10 units (%)', digits='Discount', default=0.0, help="Frieght discount for orders of more than 10 units. 100% Discount means 'Free freight'.")
-    
+
     _sql_constraints = [
          ('name_unique_flsp',
          'UNIQUE(name)',
@@ -63,4 +63,3 @@ class flspcustomerbadge(models.Model):
             self.image_1920 = self.get_image('PlatinumDealerBadge.png')
         else:
             self.image_1920 = False
-

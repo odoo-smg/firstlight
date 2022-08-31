@@ -33,7 +33,7 @@
                             <h3 t-if="o.move_raw_ids">
                                 Components and Finished Products(FP)
                             </h3>
-                            
+
                             <table class="table table-sm" t-if="o.move_raw_ids">
                                 <t t-set="line_number" t-value="1" />
                                 <thead>
@@ -52,8 +52,8 @@
                                         <t t-foreach="o.move_raw_ids" t-as="move_id">
                                             <tr t-if="not move_id.move_line_ids ">
                                                 <td width="5%" class="text-center">
-                                                    <span t-esc="line_number"/> 
-                                                    <t t-set="line_number" t-value="line_number + 1"/> 
+                                                    <span t-esc="line_number"/>
+                                                    <t t-set="line_number" t-value="line_number + 1"/>
                                                 </td>
                                                 <td width="45%" class="text-left">
                                                     <span t-field="move_id.product_id"/>
@@ -79,8 +79,8 @@
                                             <t t-if="move_id.move_line_ids">
                                                 <tr t-foreach="move_id.move_line_ids" t-as="move_line">
                                                 <td width="5%" class="text-center">
-                                                    <span t-esc="line_number"/> 
-                                                    <t t-set="line_number" t-value="line_number + 1"/> 
+                                                    <span t-esc="line_number"/>
+                                                    <t t-set="line_number" t-value="line_number + 1"/>
                                                 </td>
                                                 <td width="45%" class="text-left">
                                                     <span t-field="move_line.product_id"/>
@@ -118,14 +118,14 @@
                 </t>
             </t>
     </template>
-    
+
     <data>
-        <report 
+        <report
             id="flsp_mrp_component_finished_pdf"
             string="Components x Finished Products (PDF)"
             model="mrp.production"
-            name="flsp-mrp.flsp_production_component_finished"   
-            file="flsp-mrp.report.flsp_production_component_finished" 
+            name="flsp-mrp.flsp_production_component_finished"
+            file="flsp-mrp.report.flsp_production_component_finished"
             report_type="qweb-pdf"
             print_report_name="'Components x Finished Products - %s' % object.name"
         />
@@ -134,7 +134,7 @@
             id="flsp_mrp_component_finished_xlsx"
             string="Components x Finished Products (Excel)"
             model="mrp.production"
-            name="flsp_mrp_component_finished_xlsx"   
+            name="flsp_mrp_component_finished_xlsx"
             file="Components x Finished Products"
             report_type="xlsx"
             attachment_use="False"

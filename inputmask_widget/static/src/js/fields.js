@@ -18,7 +18,8 @@ odoo.define('inputmask_widget.fields', function (require) {
     }
 
     var AbstractFieldMask = {
-        template: "FieldMask",
+        template: "inputmask_widget.FieldMask",
+        xmlDependencies: ['/inputmask_widget/static/src/xml/mask.xml'],
         attrsMask: {},
         maskType: undefined,
         init: function () {

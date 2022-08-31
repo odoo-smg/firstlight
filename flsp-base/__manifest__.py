@@ -26,4 +26,8 @@
     'data': [
         'views/flsp_partner.xml',
     ],
+
+    'installable': True,
+    'auto_install': True,
+
 }

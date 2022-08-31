@@ -100,7 +100,7 @@ class Smgproduct(models.Model):
                 today = date.today()
                 today_30 = date.today() + timedelta(days=30)
                 if start < today:
-                    raise ValidationError('You can use dates in the past for "Postpone Pruchase".')
+                    raise ValidationError('You cannot use dates in the past for "Postpone Pruchase".')
                 #####################################################################################
                 # Changed on: 2022-08-17
                 # Changed by: Alexandre Sousa

@@ -158,10 +158,10 @@ class FlspwipTranferwiz(models.TransientModel):
                                     res['quantity_wh'] = stock.quantity
                 if count_locations == 0:
                     open_pos = self.env['purchase.order.line'].search(['&', ('product_id', '=', kaban.product_id.id), ('state', 'not in', ['draft','cancel', 'done'])]).ids
-                    open_moves = self.env['stock.move'].search(['&', ('purchase_line_id', 'in', open_pos), ('state', 'not in', ['draft', 'cancel', 'done'])]).sorted(lambda r: r.date_expected)
+                    open_moves = self.env['stock.move'].search(['&', ('purchase_line_id', 'in', open_pos), ('state', 'not in', ['draft', 'cancel', 'done'])]).sorted(lambda r: r.date)
                     for move in open_moves:
                         if 'po_date' in fields:
-                            res['po_date'] = move.date_expected
+                            res['po_date'] = move.date
                         break
 
 

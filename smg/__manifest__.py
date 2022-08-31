@@ -27,6 +27,13 @@
     'depends': ['base'],
     'depends': ['web'],
 
+    'assets': {
+            'web.assets_backend': [
+                'smg/static/lib/css/style.css',
+            ],
+        },
+
+
     # always loaded
     'data': [
         'views/WebAssetsBackend.xml',
@@ -34,7 +41,7 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
         'views/WebAssetsBackend.xml',
     ],
     # only loaded in demonstration mode

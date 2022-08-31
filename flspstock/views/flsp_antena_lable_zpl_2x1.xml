@@ -75,7 +75,7 @@
         </template>
 
 
-        <report
+        <record
             string="2 x 1 Antena (ZPL)"
             id="flsp_antena_report_2x1"
             model="stock.production.lot"
@@ -83,7 +83,7 @@
             name="flspstock.flsp_antena_label_2x1_zpl"
             file="flspstock.flsp_antena_label_2x1_zpl"/>
 
-        <report id="flsp_mrp_antena_2x1"
+        <record id="flsp_mrp_antena_2x1"
             model="mrp.production"
             string="2 x 1 Antena (ZPL)"
             report_type="qweb-text"
