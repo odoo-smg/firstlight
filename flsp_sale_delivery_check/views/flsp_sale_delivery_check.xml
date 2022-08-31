@@ -4,7 +4,7 @@
         <field name="name">Sales Delivery Monitor</field>
         <field name="model">stock.move</field>
         <field name="arch" type="xml">
-            <tree string="Monitor View"  default_order='date_expected, sale_id' editable="bottom" create="0" delete="0"
+            <tree string="Monitor View"  default_order='date, sale_id' editable="bottom" create="0" delete="0"
                   decoration-danger="date&lt;current_date"
                   decoration-info="is_today==True"
                   decoration-success="is_week==True"

@@ -23,7 +23,7 @@ class FlspSalesDeliveryMove(models.Model):
         "product lead time. Otherwise, it will be based on the shortest.")
 
 
-    @api.depends('sale_id.date_order', 'date_expected')
+    @api.depends('sale_id.date_order', 'date')
     def _compute_flsp_order_date(self):
         for each in self:
             if each.sale_id:

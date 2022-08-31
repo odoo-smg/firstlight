@@ -72,7 +72,7 @@ class FlspOpenMoves(models.Model):
                                     'doc': doc,
                                     'qty': move.product_uom_qty,
                                     'uom': move.product_uom.id,
-                                    'date': move.date_expected,
+                                    'date': move.date,
                                 })
 
         # *******************************************************************************
