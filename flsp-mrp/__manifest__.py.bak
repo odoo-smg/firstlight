@@ -41,6 +41,4 @@
         'data/flsp_automation.xml',
         'views/flsp_product_form.xml',
     ],
-    'license': 'Other proprietary',
-
 }

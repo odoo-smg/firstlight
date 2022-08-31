@@ -39,6 +39,4 @@
         'views/flsp_product_product_view.xml',
         'views/flsp_eco_view.xml',
     ],
-    'license': 'Other proprietary',
-
 }
