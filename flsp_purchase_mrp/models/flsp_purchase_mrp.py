@@ -980,6 +980,8 @@ class FlspPurchaseMrp(models.Model):
         else:
             qty_stock = product.qty_available - pa_wip_qty
 
+        qty_only_stock = product.qty_available - pa_wip_qty
+
         if product.type in ['service', 'consu']:
             return False
 
@@ -1008,6 +1010,7 @@ class FlspPurchaseMrp(models.Model):
                            'vendor_price': prod_vendor.price,
                            'total_price': prod_vendor.price * suggested_qty,
                            'stock_qty': qty_stock,
+                           'only_stock_qty': qty_only_stock,
                            'wip_qty': pa_wip_qty,
                            'po_qty': po_qty,
                            'rationale': rationale,
@@ -1113,7 +1116,15 @@ class FlspPurchaseMrpLine(models.Model):
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    stock_qty = fields.Float(string='Stock Qty', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
+    stock_qty = fields.Float(string='Qty Stock', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
+    #####################################################################################
+    # Changed on: 2022-09-08
+    # Changed by: Alexandre Sousa
+    # Requested by: Can Quan
+    # Approved by:
+    # Details on Ticket #869 in Odoo / Issue #751 in Redmine
+    #####################################################################################
+    only_stock_qty = fields.Float(string='Stock Qty', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
     wip_qty = fields.Float(string='WIP Qty', readonly=True, help="Quantity in WH/PA/WIP and sub-locations. The total here includes the WIP Reserved quantity.")
     vendor_id = fields.Many2one('res.partner', string='Supplier', help="Vendor for this product listed in the Purchase price list.")
     vendor_qty = fields.Float(string='Quantity', readonly=True, help="The quantity to purchase from this vendor to benefit from the price. This field will update the adjusted quantity using the required quantity as the initial value.")
