@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="flsp_rep_soapprovreq">
+    <template id="flsp_rep_soapprovreq_action">
         <t t-set="data_report_margin_top" t-value="30"/>
         <t t-set="data_report_header_spacing" t-value="20"/>
         <t t-set="data_report_dpi" t-value="110"/>
