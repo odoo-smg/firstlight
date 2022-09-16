@@ -9,20 +9,20 @@ class FlspMrpWipWiz(models.TransientModel):
     _name = 'flsp.mrp.wip.wiz'
     _description = "Components to be transferred from Stock to WIP"
 
-    mo_id = fields.Many2one('mrp.production', string="MO", required=True)
-    mo_name = fields.Char(related='mo_id.name', string="MO name", readonly=True)
-    bom_id = fields.Many2one(related='mo_id.bom_id', string="Bill of Material", readonly=True)
-    flsp_wip_transfer_ids = fields.One2many(related='mo_id.flsp_wip_transfer_ids', string="Transfer Created: ")
-    bom_products = fields.One2many(comodel_name='flsp.mrp.wip.wiz.product', inverse_name='production_id',
-                                   string="products in BoM structure", readonly=False)
-    bom_missed = fields.One2many(comodel_name='flsp.mrp.wip.wiz.comp', inverse_name='production_id',
-                                   string="products in BoM structure", readonly=False)
-    new_mo_ids = fields.One2many(comodel_name='mrp.production', inverse_name='id', string="New MOs")
-    bom_level = fields.Integer(string="BOM Level")
+    #mo_id = fields.Many2one('mrp.production', string="MO", required=True)
+    #mo_name = fields.Char(related='mo_id.name', string="MO name", readonly=True)
+    #bom_id = fields.Many2one(related='mo_id.bom_id', string="Bill of Material", readonly=True)
+    #flsp_wip_transfer_ids = fields.One2many(related='mo_id.flsp_wip_transfer_ids', string="Transfer Created: ")
+    #bom_products = fields.One2many(comodel_name='flsp.mrp.wip.wiz.product', inverse_name='production_id',
+    #                               string="products in BoM structure", readonly=False)
+    #bom_missed = fields.One2many(comodel_name='flsp.mrp.wip.wiz.comp', inverse_name='production_id',
+    #                               string="products in BoM structure", readonly=False)
+    #new_mo_ids = fields.One2many(comodel_name='mrp.production', inverse_name='id', string="New MOs")
+    #bom_level = fields.Integer(string="BOM Level")
 
-    show_missing = fields.Boolean(string="Show Missing Only", default=True)
-    show_sublevels = fields.Boolean(string="Show Sub-levels", default=False)
-    wip_id = fields.Many2one('stock.picking', string="Transfer Created Old: ")
+    #show_missing = fields.Boolean(string="Show Missing Only", default=True)
+    #show_sublevels = fields.Boolean(string="Show Sub-levels", default=False)
+    #wip_id = fields.Many2one('stock.picking', string="Transfer Created Old: ")
 
     @api.model
     def default_get(self, fields):
@@ -340,35 +340,35 @@ class FlspMrpWipWizProduct(models.TransientModel):
     _description = "Product in the BoM structure for wip transfer"
 
     selected = fields.Boolean('Selected')
-    production_id = fields.Many2one('flsp.mrp.wip.wiz')
-    product_id = fields.Many2one('product.product', store=True, string='Product')
-    part_number = fields.Char(related='product_id.default_code')
-    product_name = fields.Char(related='product_id.name')
-    stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
-    wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
-    reserved_qty = fields.Float('Reserved', default=0.0, digits='Product Unit of Measure', readonly=True)
-    remaining_qty = fields.Float('Required', default=0.0, digits='Product Unit of Measure', readonly=True)
-    mo_required_qty = fields.Float('MO Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
-    adjusted_qty = fields.Float('Adjusted', default=0.0, digits='Product Unit of Measure', required=True)
-    bom_level = fields.Integer(string="BOM Level")
-    flsp_sd_location = fields.Many2one('stock.location', string='Standard Location', related='product_id.flsp_sd_location')
-    is_missing = fields.Boolean(string="Is Missing", default=True)
+    #production_id = fields.Many2one('flsp.mrp.wip.wiz')
+    #product_id = fields.Many2one('product.product', store=True, string='Product')
+    #part_number = fields.Char(related='product_id.default_code')
+    #product_name = fields.Char(related='product_id.name')
+    #stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #reserved_qty = fields.Float('Reserved', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #remaining_qty = fields.Float('Required', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #mo_required_qty = fields.Float('MO Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #adjusted_qty = fields.Float('Adjusted', default=0.0, digits='Product Unit of Measure', required=True)
+    #bom_level = fields.Integer(string="BOM Level")
+    #flsp_sd_location = fields.Many2one('stock.location', string='Standard Location', related='product_id.flsp_sd_location')
+    #is_missing = fields.Boolean(string="Is Missing", default=True)
 
 class FlspMrpWipWizProduct(models.TransientModel):
     _name = 'flsp.mrp.wip.wiz.comp'
     _description = "Missed Component in the BoM structure for wip transfer"
 
     selected = fields.Boolean('Selected')
-    production_id = fields.Many2one('flsp.mrp.wip.wiz')
-    product_id = fields.Many2one('product.product', store=True, string='Product')
-    part_number = fields.Char(related='product_id.default_code')
-    product_name = fields.Char(related='product_id.name')
-    stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
-    wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
-    reserved_qty = fields.Float('Reserved', default=0.0, digits='Product Unit of Measure', readonly=True)
-    remaining_qty = fields.Float('Required', default=0.0, digits='Product Unit of Measure', readonly=True)
-    mo_required_qty = fields.Float('MO Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
-    adjusted_qty = fields.Float('Adjusted', default=0.0, digits='Product Unit of Measure', required=True)
-    bom_level = fields.Integer(string="BOM Level")
-    flsp_sd_location = fields.Many2one('stock.location', string='Standard Location', related='product_id.flsp_sd_location')
-    is_missing = fields.Boolean(string="Is Missing", default=True)
+    #production_id = fields.Many2one('flsp.mrp.wip.wiz')
+    #product_id = fields.Many2one('product.product', store=True, string='Product')
+    #part_number = fields.Char(related='product_id.default_code')
+    #product_name = fields.Char(related='product_id.name')
+    #stock_qty = fields.Float('Stock Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #wip_qty = fields.Float('WIP Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #reserved_qty = fields.Float('Reserved', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #remaining_qty = fields.Float('Required', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #mo_required_qty = fields.Float('MO Required Qty', default=0.0, digits='Product Unit of Measure', readonly=True)
+    #adjusted_qty = fields.Float('Adjusted', default=0.0, digits='Product Unit of Measure', required=True)
+    #bom_level = fields.Integer(string="BOM Level")
+    #flsp_sd_location = fields.Many2one('stock.location', string='Standard Location', related='product_id.flsp_sd_location')
+    #is_missing = fields.Boolean(string="Is Missing", default=True)
