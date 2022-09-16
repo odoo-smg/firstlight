@@ -16,10 +16,11 @@
 
     # always loaded
     'data': [
-        'views/flsp_inv_count_list_view.xml',
-        'views/product_template.xml',
-        'security/inventory_security.xml',
-        'security/ir.model.access.csv',
-        'views/flsp_stock_quant_tree_view.xml',
+        #'views/flsp_inv_count_list_view.xml',
+        #'views/product_template.xml',
+        #'security/inventory_security.xml',
+        #'security/ir.model.access.csv',
+        #'views/flsp_stock_quant_tree_view.xml',
     ],
+    'license': 'Other proprietary',
 }

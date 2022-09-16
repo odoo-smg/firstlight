@@ -61,6 +61,6 @@ class FlspMrpProductTemplate(models.Model):
     flsp_mrp_delivery_method = fields.Selection([
         ('kanban', 'Kanban'),
         ('kitting', 'Kitting')], string='Method', copy=False,
-        store=True, tracking=True,
+        store=True,
         help=" * Kanban will be replenished using the report Kanban.\n"
              " * Kitting will be transferred from Stock to WIP based on MOs.\n")

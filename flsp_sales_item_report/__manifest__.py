@@ -21,4 +21,5 @@
     'data': [
         'views/flsp_sales_item_report.xml',
     ],
+    'license': 'Other proprietary',
 }

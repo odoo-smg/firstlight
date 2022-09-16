@@ -43,9 +43,7 @@
         'views/task_views.xml',
         'views/project_views.xml',
     ],
-    'qweb': [
-        "static/src/xml/gantt.xml",
-    ],
+    'qweb': ['static/src/xml/gantt.xml'],
     'images': [
         'images/screenshot_1.png'
     ],

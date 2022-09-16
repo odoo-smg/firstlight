@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <report
+    <!--report
             string="FLSP - Weekly Sales by Salesperson"
             id="flsp_weeklysalesorder_report"
             model="report.flspautoemails.flsp_weeklysalesorder_report"
@@ -9,9 +9,18 @@
             file="flspautoemails.flsp_weeklysalesorder_report"
             report_type="qweb-pdf"
             groups="account.group_account_manager"
-            print_report_name="'Weekly Sales'" />
+            print_report_name="'Weekly Sales'" /-->
 
-    <template id="flsp_weeklysalesorder_report">
+    <record id="flsp_rep_weeklysalesorder" model="ir.actions.report">
+        <field name="name">FLSP - Weekly Sales by Salesperson</field>
+        <field name="model">report.flspautoemails.flsp_rep_weeklysalesorder</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flspautoemails.flsp_rep_weeklysalesorder</field>
+        <field name="report_file">flspautoemails.flsp_rep_weeklysalesorder</field>
+        <field name="print_report_name">'Weekly Sales'</field>
+    </record>
+
+    <template id="flsp_rep_weeklysalesorder">
         <t t-set="data_report_margin_top" t-value="30"/>
         <t t-set="data_report_header_spacing" t-value="20"/>
         <t t-set="data_report_dpi" t-value="110"/>

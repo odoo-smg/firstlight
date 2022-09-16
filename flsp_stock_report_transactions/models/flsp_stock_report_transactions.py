@@ -8,7 +8,7 @@ from odoo import api, models
 
 
 class FlspStockReportTransactions(models.AbstractModel):
-    _name = 'report.flsp_stock_report_transactions.transrep'
+    _name = 'report.flsp_stock_report_transactions.flsp_transrep'
     _description = 'FLSP - Stock Transactions'
 
     @api.model

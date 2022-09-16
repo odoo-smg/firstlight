@@ -20,7 +20,8 @@ class FlspPurchaseMrp(models.Model):
     consider_mo = fields.Boolean(string='Consider Manufacturing Orders', default=False)
     auto_generated = fields.Boolean(string='Auto Generated', default=False)
     consider_reserved = fields.Boolean(string='Consider Reserved Quantity', default=False)
-    date = fields.Datetime(String="Date", default=datetime.now())
+    #date = fields.Datetime(string="Date", default=datetime.now())
+    date = fields.Datetime(string="Date", default=fields.Datetime.now())
     user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user)
     state = fields.Selection([('new', 'New'), ('done', 'Calculated')], default="new", string='Status', readonly=True)
     purchase_mrp_lines = fields.One2many(comodel_name='flsp.purchase.mrp.line', inverse_name='purchase_mrp_id', string="Items")
@@ -980,6 +981,8 @@ class FlspPurchaseMrp(models.Model):
         else:
             qty_stock = product.qty_available - pa_wip_qty
 
+        qty_only_stock = product.qty_available - pa_wip_qty
+
         if product.type in ['service', 'consu']:
             return False
 
@@ -1008,6 +1011,7 @@ class FlspPurchaseMrp(models.Model):
                            'vendor_price': prod_vendor.price,
                            'total_price': prod_vendor.price * suggested_qty,
                            'stock_qty': qty_stock,
+                           'only_stock_qty': qty_only_stock,
                            'wip_qty': pa_wip_qty,
                            'po_qty': po_qty,
                            'rationale': rationale,
@@ -1078,23 +1082,23 @@ class FlspPurchaseMrpLine(models.Model):
     reserved = fields.Float(string='Qty Reserved', readonly=True, help="Stock only reserved quantity.")
     reserved_wip = fields.Float(string='Qty Reserved WIP', readonly=True, help="WIP only reserved quantity.")
     qty_mo = fields.Float(string='Qty of Draft MO', readonly=True)
-    curr_outs = fields.Float(String="Demand", readonly=True,
+    curr_outs = fields.Float(string="Demand", readonly=True,
                              help="Includes all confirmed sales orders and manufacturing orders")
-    curr_ins = fields.Float(String="Replenishment", readonly=True,
+    curr_ins = fields.Float(string="Replenishment", readonly=True,
                             help="Includes all confirmed purchase orders and manufacturing orders")
-    average_use = fields.Float(String="Avg Use", readonly=True, help="Average usage of the past 3 months.")
-    month1_use = fields.Float(String="2020-06 Usage", readonly=True, help="Total usage of last month.")
-    month2_use = fields.Float(String="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
-    month3_use = fields.Float(String="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
-    suggested_qty = fields.Float(String="Suggested Qty", readonly=True, help="Quantity required to buy according to the rationale below.")
-    adjusted_qty = fields.Float(String="Adjusted Qty", help="This quantity is the result of the required quantity after calculated the multiple and the vendor quantity.")
+    average_use = fields.Float(string="Avg Use", readonly=True, help="Average usage of the past 3 months.")
+    month1_use = fields.Float(string="2020-06 Usage", readonly=True, help="Total usage of last month.")
+    month2_use = fields.Float(string="2020-05 Usage", readonly=True, help="Total usage of 2 months ago.")
+    month3_use = fields.Float(string="2020-04 Usage", readonly=True, help="Total usage of 3 months ago.")
+    suggested_qty = fields.Float(string="Suggested Qty", readonly=True, help="Quantity required to buy according to the rationale below.")
+    adjusted_qty = fields.Float(string="Adjusted Qty", help="This quantity is the result of the required quantity after calculated the multiple and the vendor quantity.")
     purchase_adjusted = fields.Float(string='Adjusted 2nd uom', help="Same as the Required quantity, but using the purchase unit of measure, oposed to the consumption unit of measure.")
-    purchase_suggested = fields.Float(String="Suggested 2nd uom", readonly=True, help="Same as the Adjusted Qty but using the purchase unit of measure, oposed to the consumption unit of measure.")
+    purchase_suggested = fields.Float(string="Suggested 2nd uom", readonly=True, help="Same as the Adjusted Qty but using the purchase unit of measure, oposed to the consumption unit of measure.")
     po_qty = fields.Float(string='Qty Open PO', help="The total quantity of this product with open receipts to be received.")
     rfq_qty = fields.Float(string='Qty RFQ')
 
-    qty_rfq = fields.Float(String="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
-    level_bom = fields.Integer(String="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
+    qty_rfq = fields.Float(string="RFQ Qty", readonly=True, help="Total Quantity of Requests for Quotation.")
+    level_bom = fields.Integer(string="BOM Level", readonly=True, help="Position of the product inside of a BOM.")
     route_buy = fields.Selection([('buy', 'To Buy'), ('na', 'Non Applicable'), ], string='To Buy', readonly=True)
     route_mfg = fields.Selection([('mfg', 'To Manufacture'), ('na', 'Non Applicable'), ], string='To Produce',
                                  readonly=True)
@@ -1106,26 +1110,34 @@ class FlspPurchaseMrpLine(models.Model):
         ('mfg', 'To Manufacture'),
     ], string='State', readonly=True)
     type = fields.Char(string='Type', readonly=True)
-    start_date = fields.Date(String="Start Date", readonly=True)
-    deadline_date = fields.Date(String="Deadline", readonly=True)
+    start_date = fields.Date(string="Start Date", readonly=True)
+    deadline_date = fields.Date(string="Deadline", readonly=True)
     rationale = fields.Html(string='Rationale')
     source = fields.Char(string='Source')
     source_description = fields.Char(string='Source Description')
     calculated = fields.Boolean('Calculated Flag')
 
-    stock_qty = fields.Float(string='Stock Qty', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
+    stock_qty = fields.Float(string='Qty in Stock', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
+    #####################################################################################
+    # Changed on: 2022-09-08
+    # Changed by: Alexandre Sousa
+    # Requested by: Can Quan
+    # Approved by:
+    # Details on Ticket #869 in Odoo / Issue #751 in Redmine
+    #####################################################################################
+    only_stock_qty = fields.Float(string='Stock Qty', readonly=True, help="Quantity in WH/Stock and sub-locations. The total here includes the Stock Reserved quantity. Also, the QA quantity.")
     wip_qty = fields.Float(string='WIP Qty', readonly=True, help="Quantity in WH/PA/WIP and sub-locations. The total here includes the WIP Reserved quantity.")
     vendor_id = fields.Many2one('res.partner', string='Supplier', help="Vendor for this product listed in the Purchase price list.")
     vendor_qty = fields.Float(string='Quantity', readonly=True, help="The quantity to purchase from this vendor to benefit from the price. This field will update the adjusted quantity using the required quantity as the initial value.")
     vendor_price = fields.Float(string='Unit Price', readonly=True, help="Price to purchase 1 unit of the product.")
     delay = fields.Integer(string="Delivery Lead Time", help="Lead time in days between the cofirmation of the purchase order and the receipt of the products in your warehouse. This information will be used to decrease the date when the stock goes below the min. quantity.")
-    required_by = fields.Date(String="Required by", readonly=True, help="This date is calculated as the rationale below. In the happy path this should be the date the stock quantity goes below the min. quantiy decreased by the number of days listed in the Supplier Delivery Lead Time.")
+    required_by = fields.Date(string="Required by", readonly=True, help="This date is calculated as the rationale below. In the happy path this should be the date the stock quantity goes below the min. quantiy decreased by the number of days listed in the Supplier Delivery Lead Time.")
     balance = fields.Float(string='Balance', readonly=True)
     late_delivery = fields.Float(string='Balance', readonly=True)
     total_price = fields.Float(string='Total Price', readonly=True)
 
     balance_neg = fields.Float(string='Negative Balance', readonly=True)
-    negative_by = fields.Date(String="Negative by", readonly=True)
+    negative_by = fields.Date(string="Negative by", readonly=True)
 
     avg_per_sbs = fields.Float(string='Avg per SBS', readonly=True)
     avg_per_ssa = fields.Float(string='Avg per SA', readonly=True)

@@ -196,13 +196,22 @@
     </t>
 </template>
 
-        <record
+        <!--record
             string="Pallet Manifest"
             id="flsp_pallet_manifest_report"
             model="stock.quant.package"
             report_type="qweb-pdf"
             name="flspstock.flsp_pallet_manifest"
-            file="flspstock.flsp_pallet_manifest"/>
+            file="flspstock.flsp_pallet_manifest"/-->
 
+        <record id="flsp_pallet_manifest_report" model="ir.actions.report">
+            <field name="name">Pallet Manifest</field>
+            <field name="model">stock.quant.package</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flspstock.flsp_pallet_manifest</field>
+            <field name="report_file">flspstock.flsp_pallet_manifest</field>
+            <field name="binding_model_id" ref="model_stock_quant_package"/>
+            <field name="binding_type">report</field>
+        </record>
 </data>
 </odoo>

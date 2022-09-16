@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <report
+        <!--report
             string="FLSP Mfg - BoM Structure"
             id="action_flspmfg_bom_structure"
             model="mrp.bom"
@@ -9,7 +9,16 @@
             file="flspmfg.report_mybom_structure"
             report_type="qweb-pdf"
             print_report_name="'mfg - Bom Structure flsp'"
-        />
+        /-->
+        <record id="action_flspmfg_bom_structure" model="ir.actions.report">
+            <field name="name">FLSP Mfg - BoM Structure</field>
+            <field name="model">mrp.bom</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flspmfg.report_mybom_structure</field>
+            <field name="report_file">flspmfg.report_mybom_structure</field>
+            <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
+            <field name="binding_type">report</field>
+        </record>
 
         <template id="report_mybom_structure">
             <t t-set="data_report_margin_top" t-value="12"/>

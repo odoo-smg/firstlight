@@ -48,4 +48,5 @@
     #'demo': [
     #    'demo/demo.xml',
     #],
+    'license': 'Other proprietary',
 }

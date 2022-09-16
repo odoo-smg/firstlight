@@ -22,7 +22,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'flsp-salesorder'],
+    'depends': ['base', 'sale', 'purchase', 'account_accountant'],
 
     'assets': {
             'web.assets_backend': [
@@ -48,6 +48,7 @@
         'report/flsp_customer_badge_invoice_with_payments.xml',
         'views/flsp_customer_badge_stock_picking_form.xml',
         'report/flsp_customer_badge_purchase_report.xml',
-        #'report/flsp_customer_badge_packing_slip.xml',
+        'report/flsp_customer_badge_packing_slip.xml',
     ],
+    'license': 'Other proprietary',
 }

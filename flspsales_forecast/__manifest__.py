@@ -28,4 +28,5 @@
         'views/flspsales_forecast.xml',
         'views/assets.xml',
     ],
+    'license': 'Other proprietary',
 }

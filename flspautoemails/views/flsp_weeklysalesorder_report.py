@@ -8,7 +8,7 @@ from odoo import api, models
 
 
 class ReportSalesbysalesperson(models.AbstractModel):
-    _name = 'report.flspautoemails.flsp_weeklysalesorder_report'
+    _name = 'report.flspautoemails.flsp_rep_weeklysalesorder'
     _description = 'Weekly Sales by Salesperson'
 
     @api.model

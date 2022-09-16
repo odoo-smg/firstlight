@@ -17,7 +17,7 @@ class FlspSpecification(models.Model):
     _description = "Flsp Specification"
     _rec_name = "flsp_specification_name"  # Helps to name the form view with this name
 
-    flsp_specification_name = fields.Char(string="Name", required="1", tracking=True)
+    flsp_specification_name = fields.Char(string="Name", required="1")
     flsp_specification_desc = fields.Char(string="Description")
     flsp_specification_img = fields.Many2many('ir.attachment', string='Attachment',
         help='Add the attachment')

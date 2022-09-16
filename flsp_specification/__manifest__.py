@@ -26,4 +26,5 @@
         'views/flsp_specification.xml',
         'views/pdct_temp.xml',
     ],
+    'license': 'Other proprietary',
 }

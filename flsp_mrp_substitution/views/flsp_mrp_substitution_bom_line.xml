@@ -36,9 +36,12 @@
                         <tree editable="bottom">
                             <field name="company_id" invisible="1"/>
                             <field name="sequence" widget="handle"/>
-                            <field name="product_id" domain="[('id','in',parent.flsp_bom_products_ids)]" context="{'bom_line_ids':parent.bom_line_ids, 'product_ids':parent.flsp_bom_products_ids}" attrs="{'readonly': [(False)]}" options="{'no_open':True,'no_create': True}"/>
-                            <field name="product_qty" attrs="{'readonly': [(True)]}" context="{'bom_line_ids':parent.bom_line_ids, 'bom':parent}"/>
-                            <field name="product_uom_id" attrs="{'readonly': [(True)]}" context="{'bom_line_ids':parent.bom_line_ids}"/>
+                            <!--field name="product_id" domain="[('id','in',parent.flsp_bom_products_ids)]" context="{'bom_line_ids':parent.bom_line_ids, 'product_ids':parent.flsp_bom_products_ids}" attrs="{'readonly': [(False)]}" options="{'no_open':True,'no_create': True}"/-->
+                            <field name="product_id"  attrs="{'readonly': [(False)]}" options="{'no_open':True,'no_create': True}"/>
+                            <!--field name="product_qty" attrs="{'readonly': [(True)]}" context="{'bom_line_ids':parent.bom_line_ids, 'bom':parent}"/-->
+                            <field name="product_qty" attrs="{'readonly': [(True)]}" />
+                            <!--field name="product_uom_id" attrs="{'readonly': [(True)]}" context="{'bom_line_ids':parent.bom_line_ids}"/-->
+                            <field name="product_uom_id" attrs="{'readonly': [(True)]}" />
                             <field name="product_substitute_id" />
                             <field name="product_substitute_qty" />
                             <field name="product_substitute_uom_id" />

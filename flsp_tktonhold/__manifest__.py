@@ -25,4 +25,5 @@
         'views/flsp_onholdwizard.xml',
 
     ],
+    'license': 'Other proprietary',
 }

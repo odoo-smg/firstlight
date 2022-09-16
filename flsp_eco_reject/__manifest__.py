@@ -25,4 +25,5 @@
         'views/flsp_eco_reject.xml',
     ],
 
+    'license': 'Other proprietary',
 }

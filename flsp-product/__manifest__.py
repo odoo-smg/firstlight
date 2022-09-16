@@ -47,4 +47,5 @@
         'report/flsp_cost_scenario_wiz.xml',
         'report/flsp_cost_scenario.xml',
     ],
+    'license': 'Other proprietary',
 }

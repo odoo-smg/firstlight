@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 flspstock_customerscode,flspstock.customerscode,model_flspstock_customerscode,base.group_user,1,1,1,1
 access_flsp_negative_forecast_stock,access_flsp_negative_forecast_stock,model_flsp_negative_forecast_stock,base.group_user,1,1,1,1
-
+flspstock.access_flspstock_package,access_flspstock_package,flspstock.model_flspstock_package,base.group_user,1,1,1,1
+flspstock.access_flspstock_deliverywizard,access_flspstock_deliverywizard,flspstock.model_flspstock_deliverywizard,base.group_user,1,1,1,1
+flspstock.access_flsp_negative_forecast_wizard,access_flsp_negative_forecast_wizard,flspstock.model_flsp_negative_forecast_wizard,base.group_user,1,1,1,1
 

@@ -27,4 +27,5 @@
         'wizard/employee_wizard.xml',
         'wizard/employee_inherit.xml',
     ],
+    'license': 'Other proprietary',
 }

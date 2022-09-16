@@ -21,7 +21,7 @@ To manipulate the ``workbook`` and ``sheet`` objects, refer to the
 
 A report XML record ::
 
-    <record
+    <report
         id="partner_xlsx"
         model="res.partner"
         string="Print to XLSX"

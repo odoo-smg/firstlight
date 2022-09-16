@@ -19,4 +19,5 @@
     'data': [
         'views/assets.xml',
     ],
+    'license': 'Other proprietary',
 }

@@ -26,4 +26,5 @@
     'data': [
         'views/account_move.xml',
     ],
+    'license': 'Other proprietary',
 }

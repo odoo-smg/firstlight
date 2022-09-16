@@ -16,9 +16,10 @@
 
     # always loaded
     'data': [
-        'wizard/flsp_mrp_planning_wizard.xml',
-        'reports/flsp_mrp_planning_report.xml',
-        'security/ir.model.access.csv',
-        'views/flsp_mrp_planning_line.xml',
+        #'wizard/flsp_mrp_planning_wizard.xml',
+        #'reports/flsp_mrp_planning_report.xml',
+        #'security/ir.model.access.csv',
+        #'views/flsp_mrp_planning_line.xml',
     ],
+    'license': 'Other proprietary',
 }

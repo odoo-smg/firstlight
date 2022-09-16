@@ -61,15 +61,7 @@ class FlspSerialMrpWizardTwo(models.TransientModel):
 
     mo_id = fields.Many2one('mrp.production', string="MO", required=True)
     is_locked = fields.Boolean('Is Locked', related='mo_id.is_locked')
-    mo_state = fields.Selection([
-        ('draft', 'Draft'),
-        ('confirmed', 'Confirmed'),
-        ('planned', 'Planned'),
-        ('progress', 'In Progress'),
-        ('to_close', 'To Close'),
-        ('done', 'Done'),
-        ('cancel', 'Cancelled')], string='State',
-        related='mo_id.state')
+    mo_state = fields.Selection(string='State', related='mo_id.state')
 
     mo_name = fields.Char(related='mo_id.name', string="MO name", readonly=True)
     bom_id = fields.Many2one(related='mo_id.bom_id', string="Bill of Material", readonly=True)
@@ -129,13 +121,5 @@ class FlspMrpSerialLineTwo(models.TransientModel):
     product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', default=1.0)
     flsp_serial_mrp_id = fields.Many2one('flsp.serial.mrp.two', string='Flsp Serial MRP')
 
-    mo_state = fields.Selection([
-        ('draft', 'Draft'),
-        ('confirmed', 'Confirmed'),
-        ('planned', 'Planned'),
-        ('progress', 'In Progress'),
-        ('to_close', 'To Close'),
-        ('done', 'Done'),
-        ('cancel', 'Cancelled')], string='State',
-        related='mo_id.state')
+    mo_state = fields.Selection(string='State', related='mo_id.state')
     is_locked = fields.Boolean('Is Locked', related='mo_id.is_locked')

@@ -8,7 +8,7 @@ class FlspNegativeForecastStock(models.Model):
     _description = "Negative Forecasted Stock"
 
     product_id = fields.Many2one('product.product', string='Product')
-    product_name = fields.Char(related='product_id.display_name', string='Product')
+    product_name = fields.Char(related='product_id.display_name', string='Product Name')
     description = fields.Char(string='Description', readonly=True)
     default_code = fields.Char(string='Part #', readonly=True)
     purcahseable = fields.Selection(related='product_id.flsp_route_buy', string='Purcahseable')

@@ -8,8 +8,8 @@
                 <form string="Approve">
                     <group>
                         <group>
-                            <field name="order_id"/>
-                            <field name="partner_id"/>
+                            <field name="order_id" force_save="1"/>
+                            <field name="partner_id" force_save="1"/>
                         </group>
                     </group>
                     <h4>Order Lines</h4>

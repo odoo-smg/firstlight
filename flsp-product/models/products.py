@@ -367,7 +367,8 @@ class Smgproduct(models.Model):
 
     def update_scenario_price_from_bom(self, product, costMap, boms_to_recompute=False):
         product.ensure_one()
-        bom = self.env['mrp.bom']._bom_find(product=product)
+        bom = self.env['mrp.bom']._bom_find(product)[product]
+        #bom = self.env['mrp.bom']._bom_find(product=product)
 
         # for given product, use prod_depended_list with product ids to detect loop based on bom dependency
         prod_depended_list = []
@@ -402,12 +403,12 @@ class Smgproduct(models.Model):
 
         # calculate the cost based on the bom
         totals = [0, 0, 0, 0, 0, 0, 0]
-        for opt in bom.routing_id.operation_ids:
-            duration_expected = (
-                    opt.workcenter_id.time_start +
-                    opt.workcenter_id.time_stop +
-                    opt.time_cycle)
-            totals[0] += (duration_expected / 60) * opt.workcenter_id.costs_hour
+        #for opt in bom.routing_id.operation_ids:
+        #    duration_expected = (
+        #            opt.workcenter_id.time_start +
+        #            opt.workcenter_id.time_stop +
+        #            opt.time_cycle)
+        #    totals[0] += (duration_expected / 60) * opt.workcenter_id.costs_hour
         for line in bom.bom_line_ids:
             # print(' ->child: '+line.product_id.display_name + ' -  qty: '+str(line.product_qty) + ' std: '+str(line.product_id.standard_price)+ ' pref: '+str(line.product_id.flsp_pref_cost)+' best: '+str(line.product_id.flsp_best_cost)+'  worst: '+str(line.product_id.flsp_worst_cost))
             if line._skip_bom_line(product):
@@ -551,7 +552,10 @@ class Smgproduct(models.Model):
         product_id = self.env['product.product'].search([('product_tmpl_id', '=', product.id)], limit=1).id
         purchase_lines = self.env['purchase.order.line'].search(['&', ('state', '=', 'purchase'), ('product_id', '=', product_id)], limit=1).sorted(lambda r: r.create_date)
         for line in purchase_lines:
-            price_unit = line.product_uom._compute_price(line.price_unit, line.product_id.uom_id)
+            if line.product_uom:
+                price_unit = line.product_uom._compute_price(line.price_unit, line.product_id.uom_id)
+            else:
+                continue
             if line.currency_id.id == cad.id:
                 ret = price_unit
             else:

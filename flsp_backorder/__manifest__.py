@@ -26,4 +26,5 @@
     'data': [
         # 'security/ir.model.access.csv',
     ],
+    'license': 'Other proprietary',
 }

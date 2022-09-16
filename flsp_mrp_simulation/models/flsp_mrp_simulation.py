@@ -15,7 +15,7 @@ class FlspMrpSimulatedProduct(models.Model):
     product_id = fields.Many2one('product.product', string='Product', required=True)
     required_qty = fields.Float(string='Qty Required')
     onhand_qty = fields.Float(related='product_id.qty_available', string='Qty on Hand')
-    cost = fields.Float(related='product_id.product_tmpl_id.standard_price', string='Cost', default=0.0)
+    cost = fields.Float(related='product_id.product_tmpl_id.standard_price', string='Cost')
     bom_cost = fields.Float(string='BOM Cost', default=False)
 
     @api.onchange('product_id')
@@ -32,7 +32,7 @@ class FlspMrpSubProduct(models.Model):
     required_qty = fields.Float(string='Qty Required')
     onhand_qty = fields.Float(related='product_id.qty_available', string='Qty on Hand')
     diff_qty = fields.Float(string='Diff Qty')
-    cost = fields.Float(related='product_id.product_tmpl_id.standard_price', string='Cost', default=0.0)
+    cost = fields.Float(related='product_id.product_tmpl_id.standard_price', string='Cost')
 
     @api.onchange('product_id')
     def onchange_product_id(self):
@@ -118,7 +118,8 @@ class FlspMrpPlanningLine(models.Model):
             self.total_onhand_value += sp.cost * sp.onhand_qty
 
     def get_bom(self, product):
-        return self.env['mrp.bom']._bom_find(product=product)
+        #return self.env['mrp.bom']._bom_find(product=product)
+        return self.env['mrp.bom']._bom_find(product)[product]
 
     def calculate_full_sub_products(self, valid_simulated_products):
         # runtime_prod_map is used to map products to its onhand_qty

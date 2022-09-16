@@ -30,4 +30,5 @@
     ],
     "uninstall_hook": "uninstall_hook",
 
+    'license': 'Other proprietary',
 }

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <odoo>
-        <record model="ir.ui.view" id="flsp_salesorder_form_view">
+
+        <!--record model="ir.ui.view" id="flsp_salesorder_form_view">
+            <field name="name">sales.order.flsp.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="priority">100</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml"-->
+        <record model="ir.ui.view" id="flsp_1salesorder_form_view">
             <field name="name">sales.order.flsp.form.inherit</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">95</field>
             <field name="arch" type="xml">
+
               <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="flsp_bpm_status" invisible="1"/>
               </xpath>
@@ -25,7 +34,7 @@
                 <field name="flsp_customerscode" domain="[('partner_id', '=', parent.partner_id), ('product_id', '=', flsp_prd_tmpl_id)]" options="{'no_create': True, 'no_create_edit':True}" attrs="{'column_invisible': [('parent.flsp_show_customercode', '!=', True)]}"/>
                 <field name="flsp_prd_tmpl_id" invisible="1"/>
               </xpath>
-              <xpath expr="//field[@name='amount_total']" position="after">
+              <xpath expr="//field[@name='tax_totals_json']" position="after">
                 <field name="flsp_amount_deposit"/>
               </xpath>
               <xpath expr="//label[@for='commitment_date']" position="before">
@@ -40,13 +49,16 @@
               <xpath expr="//form/sheet/group/group/field[@name='partner_shipping_id']" position="attributes">
                   <attribute name="context">{'default_type':'delivery', 'show_address': 1}</attribute>
               </xpath>
+
             </field>
         </record>
+</odoo>
 
-        <record model="ir.actions.act_window" id="salesorder_list_action">
+
+
+        <!--record model="ir.actions.act_window" id="salesorder_list_action">
             <field name="name">Quotation</field>
             <field name="res_model">sale.order</field>
             <field name="view_mode">tree,form</field>
-        </record>
+        </record-->
 
-</odoo>

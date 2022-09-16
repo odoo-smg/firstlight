@@ -6,11 +6,11 @@
             <field name="priority">100</field>
             <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
             <field name="arch" type="xml">
-              <xpath expr="//field[@name='move_line_ids']/tree" position="attributes">
+              <!--xpath expr="//field[@name='move_line_ids']/tree" position="attributes">
                   <attribute name="decoration-success"></attribute>
                   <attribute name="decoration-danger"></attribute>
                   <attribute name="default_order">lot_produced_ids, lot_id</attribute>
-              </xpath>
+              </xpath-->
             </field>
         </record>
 </odoo>

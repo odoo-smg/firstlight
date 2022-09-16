@@ -22,4 +22,5 @@
         'security/ir.model.access.csv',
         'reports/flsp_mrp_prd_simulation_report.xml',
     ],
+    'license': 'Other proprietary',
 }

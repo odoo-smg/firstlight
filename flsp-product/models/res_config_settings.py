@@ -7,7 +7,8 @@ _logger = logging.getLogger(__name__)
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    flsp_part_init = fields.Char(string="First Digit Part #", implied_group='product.template.flsp_part_init', default='1')
+    #flsp_part_init = fields.Char(string="First Digit Part #", implied_group='product.template.flsp_part_init', default='1')
+    flsp_part_init = fields.Char(string="First Digit Part #", default='1')
 
     @api.model
     def get_values(self):

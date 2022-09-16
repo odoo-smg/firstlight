@@ -11,16 +11,6 @@ class smgproductprd(models.Model):
     _check_company_auto = True
 
     flsp_acc_valid   = fields.Boolean(string="Accounting Validated", readonly=True, copy=False)
-    attachment_ids = fields.Many2many('ir.attachment', 'product_attachment_rel','drawing_id', 'attachment_id',
-        string='Attachments',
-        compute='_get_product_attachment',
-        store=False,
-        help='Attachments are linked to a document through model / res_id and to the message '
-             'through this field.')
-    x_studio_specification = fields.Binary(string='Specification', store=False, compute='_get_specification_attachment')
-    x_studio_drawing = fields.Binary(string="Drawing", store=False, compute='_get_drawing_attachment')
-    x_studio_drawing_filename = fields.Char(string="Drawing Filename", store=False)
-    x_studio_specification_filename = fields.Char(string="Specification Filename", store=False)
 
     def button_acc_valid(self):
         self.product_tmpl_id.flsp_acc_valid = True
@@ -33,16 +23,6 @@ class smgproductprd(models.Model):
     def _get_product_attachment(self):
         products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
         self.attachment_ids = products.attachment_ids
-
-    def _get_specification_attachment(self):
-        products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
-        self.x_studio_specification = products.x_studio_specification
-        self.x_studio_specification_filename = products.x_studio_specification_filename
-
-    def _get_drawing_attachment(self):
-        products = self.env['product.template'].search([('id', '=', self.product_tmpl_id.id)])
-        self.x_studio_drawing_filename = products.x_studio_drawing_filename
-        self.x_studio_drawing = products.x_studio_drawing
 
     @api.model
     def recalculateCost(self):
@@ -91,7 +71,8 @@ class smgproductprd(models.Model):
 
     def calculate_price_from_bom(self, costMap, boms_to_recompute=False):
         self.ensure_one()
-        bom = self.env['mrp.bom']._bom_find(product=self)
+        #bom = self.env['mrp.bom']._bom_find(product=self)
+        bom = self.env['mrp.bom']._bom_find(self)[self]
 
         # for given product, use prod_depended_list with product ids to detect loop based on bom dependency
         prod_depended_list = []
@@ -124,12 +105,12 @@ class smgproductprd(models.Model):
 
         # calculate the cost based on the bom
         total = 0
-        for opt in bom.routing_id.operation_ids:
-            duration_expected = (
-                opt.workcenter_id.time_start +
-                opt.workcenter_id.time_stop +
-                opt.time_cycle)
-            total += (duration_expected / 60) * opt.workcenter_id.costs_hour
+        #for opt in bom.routing_id.operation_ids:
+        #    duration_expected = (
+        #        opt.workcenter_id.time_start +
+        #        opt.workcenter_id.time_stop +
+        #        opt.time_cycle)
+        #    total += (duration_expected / 60) * opt.workcenter_id.costs_hour
         for line in bom.bom_line_ids:
             if line._skip_bom_line(self):
                 continue

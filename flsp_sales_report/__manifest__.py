@@ -26,4 +26,5 @@
         'views/flsp_crm_team_form.xml',
         'views/flsp_unconfirmed_sale_orders.xml',
     ],
+    'license': 'Other proprietary',
 }

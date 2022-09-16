@@ -30,4 +30,5 @@
         # 'views/filter.xml',
         # 'views/templates.xml',
     ],
+    'license': 'Other proprietary',
 }

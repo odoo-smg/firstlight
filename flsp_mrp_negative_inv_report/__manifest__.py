@@ -23,4 +23,5 @@
         'security/ir.model.access.csv',
         'views/flsp_negative_inv.xml',
     ],
+    'license': 'Other proprietary',
 }

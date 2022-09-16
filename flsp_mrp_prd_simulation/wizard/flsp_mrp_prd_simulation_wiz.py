@@ -187,7 +187,7 @@ class FlspMRPBomSummarizedLines(models.Model):
     _description = "MRP Summarized BOM Details"
 
     description = fields.Char(string='Description', readonly=True)
-    default_code = fields.Char(string='Part #', readonly=True)
+    default_code = fields.Char(string='Product Code', readonly=True)
     product_tmpl_id = fields.Many2one('product.template', string='Part #', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     bom_id = fields.Many2one(comodel_name="mrp.bom", string="BOM")

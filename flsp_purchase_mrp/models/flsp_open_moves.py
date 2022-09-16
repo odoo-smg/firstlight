@@ -373,11 +373,11 @@ class FlspOpenMoves(models.Model):
         for line in bom.bom_line_ids:
 
             # ****** Version 15 ******
-            # sub_bom = bom._bom_find(line.product_id)[line.product_id]
+            sub_bom = bom._bom_find(line.product_id)[line.product_id]
 
 
             # ****** Version 13 ******
-            sub_bom = bom._bom_find(product=line.product_id)
+            #sub_bom = bom._bom_find(product=line.product_id)
             if route_buy in line.product_id.route_ids.ids:
                 sub_bom = False
             if sub_bom:

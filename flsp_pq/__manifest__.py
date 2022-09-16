@@ -27,4 +27,5 @@
         'views/flsp_pqcomment.xml',
 
     ],
+    'license': 'Other proprietary',
 }

@@ -34,4 +34,5 @@
         'demo/demo1.xml',
     ],
 
-  }
+    'license': 'Other proprietary',
+}

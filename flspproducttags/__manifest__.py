@@ -22,6 +22,7 @@
         'views/product_tags.xml',
         'views/product_template.xml',
         ],
+    'license': 'Other proprietary',
 }
 
 

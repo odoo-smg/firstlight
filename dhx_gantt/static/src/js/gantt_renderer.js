@@ -20,6 +20,7 @@ odoo.define('dhx_gantt.GanttRenderer', function (require) {
     // });
 
     var GanttRenderer = AbstractRenderer.extend({
+        xmlDependencies: ['/dhx_gantt/static/src/xml/gantt.xml'],
         template: "dhx_gantt.gantt_view",
         ganttApiUrl: "/gantt_api",
         date_object: new Date(),

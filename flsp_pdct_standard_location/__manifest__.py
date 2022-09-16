@@ -26,4 +26,5 @@
         'security/ir.model.access.csv',
         'views/flsp_pdct_standard_location.xml',
     ],
+    'license': 'Other proprietary',
 }

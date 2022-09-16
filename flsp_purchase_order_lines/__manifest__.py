@@ -23,4 +23,5 @@
     ],
 
     'installable': True,
+    'license': 'Other proprietary',
 }

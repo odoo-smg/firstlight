@@ -50,7 +50,7 @@ class flspdailysalesorder(models.Model):
             _logger.warning('Template "flspautoemails.flsp_dailysalesorder_tmpl" was not found. Cannot send Daily Sales Order Report.')
             return
 
-        weekly_report = self.pool.get('report.flspautoemails.flsp_weeklysalesorder_report')
+        weekly_report = self.pool.get('report.flspautoemails.flsp_rep_weeklysalesorder')
         sale_ids = self.search([], limit=1).ids
         data = weekly_report._get_report_values(self, sale_ids)
 
@@ -77,7 +77,7 @@ class flspdailysalesorder(models.Model):
     @api.model
     def _weeklysalesorder_report(self):
         sale_ids = self.search([], limit=1).ids
-        return self.env.ref('flspautoemails.flsp_weeklysalesorder_report').report_action(sale_ids)
+        return self.env.ref('flspautoemails.flsp_rep_weeklysalesorder').report_action(sale_ids)
 
     @api.model
     def _apprvreq_email(self):
@@ -116,4 +116,4 @@ class flspdailysalesorder(models.Model):
             if len(sale_orders) == 0:
                 sale_orders = [0]
 
-        return self.env.ref('flspautoemails.flsp_soapprovreq_report').report_action(sale_orders)
+        return self.env.ref('flspautoemails.flsp_rep_soapprovreq').report_action(sale_orders)

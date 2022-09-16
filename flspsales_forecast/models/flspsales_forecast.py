@@ -29,11 +29,11 @@ class FlspSalesForecast(models.Model):
     company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company)
     product_id = fields.Many2one('product.product', string='Product',
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
-        change_default=True, tracking=True)
+        change_default=True)
     product_default_code = fields.Char(related='product_id.default_code', string='Part #', store=True)
 
     # User table to fill
-    forecast_line = fields.One2many('flsp.sales.forecast.line', 'order_id', string='Order Lines', copy=True, nauto_join=True)
+    forecast_line = fields.One2many('flsp.sales.forecast.line', 'order_id', string='Order Lines', copy=True, auto_join=True)
 
     # Note: only need to call compute in 1 function. it depends on other fields and updating the qty any ways
     qty_month1 = fields.Float(string='January', compute='_qty_based_off_date', store=True)
@@ -730,7 +730,7 @@ class FlspSalesForecastLine(models.Model):
 
     source = fields.Selection([('S', 'Internal'), ('E', 'External')], string="Source")
     customer = fields.Many2one(
-        'res.partner', string='Customer', change_default=True, index=True, tracking=1,
+        'res.partner', string='Customer', change_default=True, index=True,
         domain=[('customer_rank', '!=', 0)],)
         # domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", domain=[('customer_rank', '!=', 0)],)
     company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company)

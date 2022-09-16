@@ -16,9 +16,10 @@
                     </t>
                     <h2>Products</h2>
                     <div class="row mt16 o_settings_container">
-                        <div class="col-12 col-lg-6 o_setting_box" title="Firts Ligh Safety Products - Products.">
-                          <div class="o_setting_left_pane"/>
-                          <div class="o_setting_right_pane">
+                        <!--div class="col-12 col-lg-6 o_setting_box" title="Firts Ligh Safety Products - Products."-->
+                        <div class="col-12 col-lg-6 o_setting_box" id="flsp_first_digit" data-string="flsp-product-left" data-key="flsp-product-left">
+                          <div class="o_setting_left_pane" />
+                          <div class="o_setting_right_pane" >
                               <span class="o_form_label">First Digit of Part #</span>
                               <div class="text-muted">
                                   First Character used for part number
@@ -27,6 +28,8 @@
                                   <field name="flsp_part_init"/>
                               </div>
                           </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" data-string="flsp-product-right" data-key="flsp-product-right">
                         </div>
                     </div>
                 </div>

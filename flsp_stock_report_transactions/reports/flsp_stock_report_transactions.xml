@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <report
-            id="action_flsp_stock_transactions_xlsx"
-            string="FLSP - Stock Transactions (Excel)"
-            model="report.flsp_stock_report_transactions.transrep_xlsx"
-            name="flsp_stock_report_transactions.transrep_xlsx"
-            file="FLSP - Stock Transactions"
-            report_type="xlsx"
-            attachment_use="False"
-    />
+    <data>
+        <record id="action_flsp_stock_transactions_xlsx" model="ir.actions.report">
+            <field name="name">FLSP - Stock Transactions (Excel)</field>
+            <field name="model">report.flsp_stock_report_transactions.transrep_xlsx</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">flsp_stock_report_transactions.transrep_xlsx</field>
+            <field name="report_file">FLSP - Stock Transactions</field>
+            <field name="print_report_name">'Stock Transactions'</field>
+        </record>
+        <!--report
+                id="action_flsp_stock_transactions_xlsx"
+                string="FLSP - Stock Transactions (Excel)"
+                model="report.flsp_stock_report_transactions.transrep_xlsx"
+                name="flsp_stock_report_transactions.transrep_xlsx"
+                file="FLSP - Stock Transactions"
+                report_type="xlsx"
+                attachment_use="False"
+        /-->
 
-    <report
-            string="FLSP - Stock Transactions"
-            id="transrep"
-            model="report.flsp_stock_report_transactions.transrep"
-            name="flsp_stock_report_transactions.transrep"
-            file="flsp_stock_report_transactions.transrep"
-            report_type="qweb-pdf"
-            print_report_name="'Stock Transactions'" />
+        <record id="flsp_transrep_action" model="ir.actions.report">
+            <field name="name">FLSP - Stock Transactions</field>
+            <field name="model">report.flsp_stock_report_transactions.flsp_transrep</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flsp_stock_report_transactions.flsp_transrep</field>
+            <field name="report_file">flsp_stock_report_transactions.flsp_transrep</field>
+            <field name="print_report_name">'Stock Transactions'</field>
+        </record>
+        <!--report
+                string="FLSP - Stock Transactions"
+                id="transrep"
+                model="report.flsp_stock_report_transactions.transrep"
+                name="flsp_stock_report_transactions.transrep"
+                file="flsp_stock_report_transactions.transrep"
+                report_type="qweb-pdf"
+                print_report_name="'Stock Transactions'" /-->
 
-    <template id="transrep">
+    </data>
+
+    <template id="flsp_transrep">
         <t t-set="data_report_margin_top" t-value="30"/>
         <t t-set="data_report_header_spacing" t-value="20"/>
         <t t-set="data_report_dpi" t-value="110"/>

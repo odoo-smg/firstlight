@@ -28,4 +28,5 @@
         'views/flspqualitystage.xml',
         'views/flspquality_salesorder.xml',
     ],
+    'license': 'Other proprietary',
 }

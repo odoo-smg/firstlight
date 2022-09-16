@@ -23,4 +23,5 @@
         'views/flsp_purchase_mrp_line.xml',
         'views/flsp_purchase_mrp_product.xml',
     ],
+    'license': 'Other proprietary',
 }

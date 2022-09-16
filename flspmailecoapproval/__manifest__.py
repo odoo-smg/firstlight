@@ -31,4 +31,5 @@
         'data/approveecotemplate.xml',
         'data/cron.xml',
     ],
+    'license': 'Other proprietary',
 }

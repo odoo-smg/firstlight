@@ -13,29 +13,7 @@ class flspsalesorderline(models.Model):
     flsp_ship_date = fields.Datetime('Shipping Date', store=True)
     flsp_date_order = fields.Datetime('Order Date', store=True, readonly=True, related="order_id.date_order")
     is_today = fields.Boolean('Today', compute='_compute_shipping_date')
-    flsp_bpm_status = fields.Selection([
-        ('quote', 'Quote'),
-        ('wait', 'Waiting Approval'),
-        ('approved', 'Disc.Approved'),
-        ('sale', 'Sales Order'),
-        ('confirmed', 'Delivery Confirmed'),
-        ('packed', 'Packed'),
-        ('shipped', 'Shipped'),
-        ('partial', 'Partially Shipped'),
-        ('tracking', 'Tracking Assigned'),
-        ('delivered', 'Delivered'),
-        ('cancel', 'Cancelled'),
-        ('aa-quote', 'Quote'),
-        ('bb-wait', 'Waiting Approval'),
-        ('cc-approved', 'Disc.Approved'),
-        ('dd-sale', 'Sales Order'),
-        ('ee-confirmed', 'Shipping Confirmed'),
-        ('ff-packed', 'Packed'),
-        ('gg-partial', 'Partially Shipped'),
-        ('hh-shipped', 'Shipped'),
-        ('ii-tracking', 'Tracking Assigned'),
-        ('jj-delivered', 'Delivered'),
-        ('kk-cancel', 'Cancelled'), ], string='Status', readonly=True, related="order_id.flsp_bpm_status")
+    flsp_bpm_status = fields.Selection(string='Status', readonly=True, related="order_id.flsp_bpm_status")
 
     @api.depends('order_partner_id')
     def _compute_shipping_date(self):

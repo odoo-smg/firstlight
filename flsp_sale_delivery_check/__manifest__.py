@@ -19,4 +19,5 @@
         'views/flsp_sale_delivery_check.xml',
         'views/sales_delivery_sales_view.xml',
     ],
+    'license': 'Other proprietary',
 }

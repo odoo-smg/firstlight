@@ -2,3 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flspmp_posuggestion,flsppurchase.report.purchase.suggestion,model_report_purchase_suggestion,base.group_user,1,1,1,1
 access_flspmp_posupport,flsppurchase.report.suggestion.support,model_report_flsppurchase_auxview,base.group_user,1,1,1,1
 access_flsp_terms,flsp.terms,model_flsp_terms,base.group_user,1,1,1,1
+flsppurchase.access_flsppurchase_suggestionwizard,access_flsppurchase_suggestionwizard,flsppurchase.model_flsppurchase_suggestionwizard,base.group_user,1,1,1,1
+flsppurchase.access_report_flsppurchase_auxview,access_report_flsppurchase_auxview,flsppurchase.model_report_flsppurchase_auxview,base.group_user,1,1,1,1
+flsppurchase.access_flsp_terms,access_flsp_terms,flsppurchase.model_flsp_terms,base.group_user,1,1,1,1
+flsppurchase.access_report_purchase_suggestion,access_report_purchase_suggestion,flsppurchase.model_report_purchase_suggestion,base.group_user,1,1,1,1

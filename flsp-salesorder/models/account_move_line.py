@@ -17,3 +17,12 @@ class flspaccountmoveline(models.Model):
         super(flspaccountmoveline, self)._copy_data_extend_business_fields(values)
         values['sale_line_ids'] = [(6, None, self.sale_line_ids.ids)]
         values['flsp_customerscode'] = self.flsp_customerscode
+
+
+class FixMigrationAccount(models.Model):
+    _inherit = 'account.move'
+
+    # This action was created during the migration to 15
+    # Some xml is calling this action and giving an error
+    def button_process_edi_web_services(self):
+        print('chekcing')

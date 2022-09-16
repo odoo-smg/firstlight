@@ -26,4 +26,5 @@
         'security/ir.model.access.csv',
         'views/vending_report.xml',
     ],
+    'license': 'Other proprietary',
 }

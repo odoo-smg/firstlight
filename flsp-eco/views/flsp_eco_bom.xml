@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+        <!-- Add instructor field to existing view -->
+        <record model="ir.ui.view" id="flsp-eco_bom_form_view">
+            <field name="name">flsp-eco.bom.form.inherit</field>
+            <field name="model">mrp.bom</field>
+            <field name="priority">100</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='type']" position="replace">
+                    <field name="type" widget="radio"/>
+                    <p colspan="2" class="oe_grey oe_edit_only" attrs="{'invisible': [('type','!=','phantom')]}">
+                    <ul>
+                        This option can only be selected for consumable products.
+                    </ul>
+                    </p>
+              </xpath>
+              <xpath expr="//field[@name='product_id']" position="after">
+                <field name="flsp_eco_enforce" invisible="1" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
+              </xpath>
+              <xpath expr="//field[@name='flsp_eco_enforce']" position="after">
+                <field name="flsp_bom_plm_valid" readonly="1" />
+              </xpath>
+              <xpath expr="//field[@name='attachments_count']" position="after">
+                <field name="flsp_plm_valid" />
+                <field name="parent_product_tmpl_id" invisible="1"/>
+              </xpath>
+
+              <xpath expr="//field[@name='version']" position="attributes">
+                <attribute name="attrs">{'readonly': [(True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='consumption']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_qty'][1]" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='product_uom_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+              <xpath expr="//field[@name='bom_line_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('flsp_bom_plm_valid', '=', True)]}</attribute>
+              </xpath>
+
+            </field>
+        </record>
+</odoo>

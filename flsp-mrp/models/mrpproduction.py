@@ -28,7 +28,7 @@ class flspproduction(models.Model):
         ('done', 'Done'),
         ('cancel', 'Cancelled')], string='State',
         compute='_compute_state', copy=False, index=True, readonly=True,
-        store=True, tracking=True,
+        store=True,
         help=" * Draft: The MO is not confirmed yet.\n"
              " * Confirmed: The MO is confirmed, the stock rules and the reordering of the components are trigerred.\n"
              " * Planned: The WO are planned.\n"
@@ -39,7 +39,8 @@ class flspproduction(models.Model):
 
     flsp_required_mat_plan = fields.Boolean("Required Material", default=False)
     flsp_material_reserved = fields.Boolean("Material Reserved", default=False)
-    flsp_wip_transfer_ids = fields.One2many('stock.picking', inverse_name='flsp_mo_wip_id', string="Transfer Created: ")
+    #flsp_wip_transfer_ids = fields.One2many('stock.picking', inverse_name='flsp_mo_wip_id', string="Transfer Created: ")
+    flsp_wip_transfer_ids = fields.One2many('stock.picking', string="Transfer Created: ")
     flsp_wip_transfer_count = fields.Integer(string='WIP Count', compute="_compute_flsp_wip_transfer_count")
 
 

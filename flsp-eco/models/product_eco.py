@@ -10,6 +10,10 @@ class flspproducts(models.Model):
     # New fields to control ECO enforcement
     flsp_eco_enforce = fields.Many2one('mrp.eco', string="ECO", store=False)
     flsp_plm_valid   = fields.Boolean(string="PLM Validated")
+    x_studio_specification = fields.Binary(string='Specification')
+    x_studio_drawing = fields.Binary(string="Drawing")
+    x_studio_drawing_filename = fields.Char(string="Drawing Filename")
+    x_studio_specification_filename = fields.Char(string="Specification Filename")
 
     @api.onchange('flsp_eco_enforce')
     def flsp_eco_enforce_onchange(self):

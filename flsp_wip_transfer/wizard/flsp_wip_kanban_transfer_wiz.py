@@ -300,7 +300,6 @@ class FlspwipTranferwiz(models.TransientModel):
                 'origin': 'KANBAN-WIP',
                 'location_dest_id': wip_location.id,
                 'state': 'assigned',
-                'done_move': True,
             })
             stock_picking.button_validate()
         else:
@@ -352,7 +351,6 @@ class FlspwipTranferwiz(models.TransientModel):
                         'origin': 'KANBAN-WIP',
                         'location_dest_id': wip_location.id,
                         'state': 'assigned',
-                        'done_move': True,
                     })
                     stock_picking.button_validate()
             ###'lot_id': wip.negative_lot_id.id,

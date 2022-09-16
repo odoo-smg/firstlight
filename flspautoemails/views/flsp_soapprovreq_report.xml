@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="flsp_soapprovreq_report">
+    <template id="flsp_rep_soapprovreq">
         <t t-set="data_report_margin_top" t-value="30"/>
         <t t-set="data_report_header_spacing" t-value="20"/>
         <t t-set="data_report_dpi" t-value="110"/>
@@ -12,7 +12,7 @@
         </t>
     </template>
 
-    <report
+    <!--report
             string="Approval Request"
             id="flsp_soapprovreq_report"
             model="report.flspautoemails.flsp_soapprovreq_report"
@@ -20,9 +20,17 @@
             file="flspautoemails.flsp_soapprovreq_report"
             report_type="qweb-pdf"
             groups="account.group_account_manager"
-            print_report_name="'Approval Request'" />
+            print_report_name="'Approval Request'" /-->
+    <record id="flsp_rep_soapprovreq" model="ir.actions.report">
+        <field name="name">Approval Request</field>
+        <field name="model">report.flspautoemails.flsp_rep_soapprovreq</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flspautoemails.flsp_rep_soapprovreq</field>
+        <field name="report_file">flspautoemails.flsp_rep_soapprovreq</field>
+        <field name="print_report_name">'Approval Request'</field>
+    </record>
 
-    <report id="flsp_soapprovreq_record" model="ir.actions.server">
+    <record id="flsp_soapprovreq_record" model="ir.actions.server">
     <field name="name">Approval Request</field>
     <field name="type">ir.actions.server</field>
     <field name="model_id" ref="model_sale_order"/>

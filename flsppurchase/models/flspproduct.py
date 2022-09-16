@@ -35,7 +35,7 @@ class flsppurchaseproductprd(models.Model):
     flsp_qty     = fields.Float(string="On Hand", readonly=True)
     flsp_desc = fields.Char(string='Desc.', readonly=True)
     flsp_default_code = fields.Char(string='Part #', readonly=True)
-    flsp_type = fields.Char(string='Type', readonly=True)
+    flsp_type = fields.Char(string='FLSP Product Type', readonly=True)
 
 
     def _flsp_call_report_wizard(self):

@@ -41,12 +41,23 @@
                 </t>
             </t>
         </template>
-        <record id="flsp_action_set_zebra_mrp"
+        <!--record id="flsp_action_set_zebra_mrp"
             model="mrp.production"
             string="Finished Set Label 2x1 (ZPL)"
             name="flspstock.flsp_mrp_set_zebra_production"
             file="flspstock.flsp_mrp_set_zebra_production"
             report_type="qweb-text"
-        />
+        /-->
+
+        <record id="flsp_action_set_zebra_mrp" model="ir.actions.report">
+            <field name="name">Finished Set Label 2x1 (ZPL)</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">flspstock.flsp_mrp_set_zebra_production</field>
+            <field name="report_file">flspstock.flsp_mrp_set_zebra_production</field>
+            <field name="binding_model_id" ref="model_mrp_production"/>
+            <field name="binding_type">report</field>
+        </record>
+
     </data>
 </odoo>

@@ -6,7 +6,7 @@ from odoo import models
 
 
 class MrpBom(models.Model):
-    """ Defines bills of material for a product or a product template """
+    """Defines bills of material for a product or a product template"""
 
     _inherit = "mrp.bom"
 
@@ -26,7 +26,7 @@ class MrpBom(models.Model):
             self.product_qty, self.product_tmpl_id.uom_id, round=False
         )
         for line in self.bom_line_ids:
-            sub_bom = self._bom_find(product=line.product_id)
+            sub_bom = self._bom_find(line.product_id)[line.product_id]
             if 'flsp_substitute' in self.env['mrp.bom.line']._fields:
                 flsp_substitute = line.flsp_substitute
             else:

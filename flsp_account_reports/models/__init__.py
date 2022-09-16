@@ -10,7 +10,7 @@ from . import account_analytic_report
 from . import account_consolidated_journals
 from . import account_cash_flow_report
 from . import res_partner
-from . import res_company
+#from . import res_company
 from . import account_move_line
 from . import account_report_coa
 from . import account_aged_partner_balance

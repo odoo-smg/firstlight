@@ -88,7 +88,7 @@
     </template>
 
     <data>
-        <report
+        <!--report
             id="flsp_stock_quant_reservation_report"
             string="Quantity Reservation Report"
             model="stock.quant"
@@ -96,6 +96,16 @@
             file="flspstock.report.flsp_reservation_report"
             report_type="qweb-pdf"
             print_report_name="'Qty Reservation Report - %s' % object.id"
-        />
+        /-->
+        <record id="flsp_stock_quant_reservation_report" model="ir.actions.report">
+            <field name="name">Quantity Reservation Report</field>
+            <field name="model">stock.quant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flspstock.flsp_reservation_report</field>
+            <field name="report_file">flspstock.report.flsp_reservation_report</field>
+            <field name="print_report_name">'Qty Reservation Report - %s' % object.id</field>
+            <field name="binding_model_id" ref="model_stock_quant"/>
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>

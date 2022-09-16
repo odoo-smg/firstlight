@@ -27,7 +27,7 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/flsp_po_print.xml', #for printing PO to FLSP Standards
         'views/flsp_po_status.xml', #for adding status in tree and dates in form
         'views/flsp_delivery_address.xml', #for adding the delivery address
@@ -36,4 +36,5 @@
         'security/flsp_user_group.xml',
         'views/flsppurchase_status_stock_picking.xml',
     ],
+    'license': 'Other proprietary',
 }

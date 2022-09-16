@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
-    <t t-name="flsp_cost_scenario_structure.flsp_button">
+    <t t-name="flsp_cost_scenario_structure.flsp_button" owl="1">
         <div class="o_list_buttons o_mrp_bom_report_buttons">
             <button type="button" class="btn btn-primary o_cost_scenario_unfold">Unfold</button>
             <button type="button" class="btn btn-primary o_cost_scenario_fold">Fold</button>

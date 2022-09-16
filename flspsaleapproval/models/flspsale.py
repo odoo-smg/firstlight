@@ -40,7 +40,7 @@ class SalesOrder(models.Model):
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
-        ], string='Discount Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
+        ], string='Discount Status', readonly=True, copy=False, index=True, default='draft')
 
     sale_order_template_id = fields.Many2one(
         'sale.order.template', 'Quotation Template',

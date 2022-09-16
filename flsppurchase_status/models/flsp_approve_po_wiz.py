@@ -32,7 +32,7 @@ class FlspApprovepowiz(models.TransientModel):
                 'price_unit': po_line.price_unit,
                 'discount': 0,
                 'po_order_line_id': po_line.id,
-                'tax_id': po_line.taxes_id.id,
+                'tax_id': po_line.taxes_id.ids,
                 'order_id': po_line.order_id.id,
                 'price_subtotal': po_line.price_subtotal,
             }])
@@ -69,7 +69,7 @@ class FlspPOline(models.TransientModel):
 
     flsp_po_line_product_id = fields.Many2one('flsp.approve.po.wiz')
     po_order_line_id = fields.Many2one('purchase.order.line', string='Purchase Order Line')
-    order_id = fields.Many2one('purchase.order', string='Order Reference', required=True, ondelete='cascade', index=True, copy=False)
+    order_id = fields.Many2one('purchase.order', string='Order Reference', ondelete='cascade', index=True, copy=False)
 
     sequence = fields.Integer(string='Sequence', default=10)
     product_id = fields.Many2one('product.product', string='Product')

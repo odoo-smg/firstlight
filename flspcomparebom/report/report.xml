@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <report
+    <!--report
         id="report_compare_bom_xlx"
         string="BOM Compare Excel"
         model="flsp.comparebom.view"
         report_type="xlsx"
         name="flspcomparebom.bom_compare_xls"
-        file="flspcomparebom.bom_compare_xls"/>
+        file="flspcomparebom.bom_compare_xls"/-->
+    <data>
+        <record id="report_compare_bom_xlx" model="ir.actions.report">
+            <field name="name">BOM Compare Excel</field>
+            <field name="model">flsp.comparebom.view</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">flspcomparebom.bom_compare_xls</field>
+            <field name="report_file">flspcomparebom.bom_compare_xls</field>
+            <!--field name="print_report_name">'Tender - %s' % (object.name)</field-->
+            <!--field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field-->
+        </record>
+    </data>
 </odoo>

@@ -2,3 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsppdctsub_flsppdctsub,flsppdctsub.flsppdctsub,model_flsp_mrp_substitution_line,base.group_user,1,1,1,1
 access_flsp_mrp_substitution,flsp.mrp.substitution,model_flsp_mrp_substitution,base.group_user,1,1,1,1
 access_flsp_mrp_substitution_bom,flsp.mrp.substitution.bom,model_flsp_mrp_substitution_bom,base.group_user,1,1,1,1
+access_flsp_mrp_sub_bom_wiz,flsp.mrp.sub.bom.wiz,model_flsp_mrp_sub_bom_wiz,base.group_user,1,1,1,1
+access_flsp_mrp_substitution_wiz,flsp_mrp_substitution.wiz,model_flsp_mrp_substitution_wiz,base.group_user,1,1,1,1
+access_flsp_mrp_substitution_wiz_line,flsp_mrp_substitution.wiz.line,model_flsp_mrp_substitution_wiz_line,base.group_user,1,1,1,1
+flsp_mrp_substitution.access_flsp_mrp_sub_bom_line_wiz,access_flsp_mrp_sub_bom_line_wiz,flsp_mrp_substitution.model_flsp_mrp_sub_bom_line_wiz,base.group_user,1,0,0,0

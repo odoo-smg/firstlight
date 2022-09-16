@@ -20,4 +20,5 @@
         'views/flsp_mrp_work_center.xml',
         'views/flsp_mrp_mo.xml',
     ],
+    'license': 'Other proprietary',
 }

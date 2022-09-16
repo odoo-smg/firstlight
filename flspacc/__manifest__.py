@@ -32,4 +32,5 @@
         'views/flsp_partner_view.xml',
         'views/flsp_credit_report.xml',
     ],
+    'license': 'Other proprietary',
 }

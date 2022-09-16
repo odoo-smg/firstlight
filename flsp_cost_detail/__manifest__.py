@@ -34,4 +34,5 @@
         'views/flsp_cost_detail_product_tmpl.xml',
         'views/flsp_cost_detail.xml',
     ],
+    'license': 'Other proprietary',
 }

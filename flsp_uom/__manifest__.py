@@ -25,4 +25,5 @@
         'views/flsp_uom.xml',
         'views/flsp_uom_category.xml',
     ],
+    'license': 'Other proprietary',
 }

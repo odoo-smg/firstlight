@@ -22,4 +22,5 @@
         'security/ir.model.access.csv',
         'reports/flsp_summarized_bom_report.xml',
     ],
+    'license': 'Other proprietary',
 }

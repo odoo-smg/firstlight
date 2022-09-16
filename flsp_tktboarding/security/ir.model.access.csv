@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_flsp_tktboarding,flsp_tktboarding,model_flspticketsystem_boarding,base.group_user,1,1,1,1
+flsp_tktboarding.access_flsp_tktboarding_wizard,access_flsp_tktboarding_wizard,flsp_tktboarding.model_flsp_tktboarding_wizard,base.group_user,1,1,1,1

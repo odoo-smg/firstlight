@@ -36,7 +36,7 @@ class FlspCompareBomView(models.Model):
     active2 = fields.Boolean(string='Active2')
     product_uom_id2 = fields.Many2one('uom.uom', 'Product UoM 2', readonly=True)
 
-    bom_line = fields.One2many('flsp.comparebom.line', 'order_id', string='Order Lines', copy=True, nauto_join=True)
+    bom_line = fields.One2many('flsp.comparebom.line', 'order_id', string='Order Lines', copy=True, auto_join=True)
 
 
     def init(self):

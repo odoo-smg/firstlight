@@ -33,9 +33,8 @@ class flspCustomerBadgeaccountmove(models.Model):
     @api.depends('state')
     def _compute_annual_cumulative(self):
         for invoice in self:
-            customer_invoices = self.env["account.move"].search(
-                [("partner_id", "=", invoice.partner_id.id), ("state", "=", "posted"), ('type', '=', 'out_invoice')],
-                order='invoice_date')
+            #customer_invoices = self.env["account.move"].search([("partner_id", "=", invoice.partner_id.id), ("state", "=", "posted"), ('type', '=', 'out_invoice')], order='invoice_date')
+            customer_invoices = self.env["account.move"].search([("partner_id", "=", invoice.partner_id.id), ("state", "=", "posted"), ('move_type', '=', 'out_invoice')], order='invoice_date')
             if len(customer_invoices) == 0:
                 continue
 
@@ -106,3 +105,8 @@ class flspCustomerBadgeaccountmove(models.Model):
     flsp_realtime_cb = fields.Many2one('flsp.customer.badge', string="Realtime Customer Badge",
                                        compute=_compute_realtime_cb, store=True)
     flsp_realtime_cb_discount = fields.Char(string="Customer Badge Disc.", compute=_compute_realtime_cb, store=True)
+
+    # This action was created during the migration to 15
+    # Some xml is calling this action and giving an error
+    def button_process_edi_web_services(self):
+        print('button_process_edi_web_services')

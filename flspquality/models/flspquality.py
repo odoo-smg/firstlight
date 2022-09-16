@@ -32,7 +32,7 @@ class FlspQuality(models.Model):
     action_corrective = fields.Html('Corrective Action')
     action_preventive = fields.Html('Preventive Action')
 
-    created_by = fields.Many2one('res.users', 'Created By', tracking=True, default=lambda self: self.env.user)
+    created_by = fields.Many2one('res.users', 'Created By', default=lambda self: self.env.user)
     partner_id = fields.Many2one('res.partner', 'Customer', domain=[('customer_rank', '!=', 0)], check_company=True)
     product_tmpl_id = fields.Many2one('product.template', 'Product', check_company=True,
         domain="[('type', 'in', ['consu', 'product']), '|', ('company_id', '=', False), ('company_id', '=', company_id)]")
@@ -46,7 +46,7 @@ class FlspQuality(models.Model):
     reason = fields.Many2one('flsp.qualityreason', ondelete='cascade', required=True, string="Root Cause")
     stage_id = fields.Many2one('flsp.qualitystage', 'Stage', ondelete='restrict',
         group_expand='_read_group_stage_ids',
-        default=lambda self: self.env['flsp.qualitystage'].search([], limit=1).id, tracking=True)
+        default=lambda self: self.env['flsp.qualitystage'].search([], limit=1).id)
     sale_id = fields.Many2one('sale.order', 'S/O', domain="[('order_line.product_id', '=', product_id)]")
 
     @api.model

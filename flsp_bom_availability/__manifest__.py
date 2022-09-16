@@ -24,4 +24,5 @@
         'wizard/flsp_bom_availability_wizard.xml',
 
     ],
+    'license': 'Other proprietary',
 }

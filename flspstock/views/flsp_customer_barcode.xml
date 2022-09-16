@@ -77,21 +77,39 @@
             </t>
         </template>
 
-        <record id="flsp_action_customer_barcode"
+        <!--record id="flsp_action_customer_barcode"
             model="stock.picking"
             string="Customer Barcodes (ZPL)"
             name="flspstock.flsp_customer_barcode"
             file="flspstock.flsp_customer_barcode"
             report_type="qweb-text"
-        />
+        /-->
+        <record id="flsp_action_customer_barcode" model="ir.actions.report">
+            <field name="name">Customer Label(2x1)</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">flspstock.flsp_customer_barcode</field>
+            <field name="report_file">flspstock.flsp_customer_barcode</field>
+            <field name="binding_model_id" ref="model_stock_picking"/>
+            <field name="binding_type">report</field>
+        </record>
 
-        <record id="flsp_action_customer_barcode_mrp"
+        <!--record id="flsp_action_customer_barcode_mrp"
             model="mrp.production"
             string="Customer Label(2x1)"
             name="flspstock.flsp_customer_barcode_mrp"
             file="flspstock.flsp_customer_barcode_mrp"
             report_type="qweb-text"
-        />
+        /-->
+        <record id="flsp_action_customer_barcode_mrp" model="ir.actions.report">
+            <field name="name">Customer Label(2x1)</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">flspstock.flsp_customer_barcode_mrp</field>
+            <field name="report_file">flspstock.flsp_customer_barcode_mrp</field>
+            <field name="binding_model_id" ref="model_mrp_production"/>
+            <field name="binding_type">report</field>
+        </record>
 
     </data>
 </odoo>

@@ -1,11 +1,22 @@
 <odoo>
-    <report
+    <!--report
         id="report_products"
         model="product.template"
         string="FLSP - Product List"
         name="flspmfg.report_product_view"
         file="flspmfg.report_product"
-        report_type="qweb-pdf" />
+        report_type="qweb-pdf" /-->
+
+        <record id="report_products" model="ir.actions.report">
+            <field name="name">FLSP - Product List</field>
+            <field name="model">product.template</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flspmfg.report_product_view</field>
+            <field name="report_file">flspmfg.report_product</field>
+            <field name="binding_model_id" ref="model_product_template"/>
+            <field name="binding_type">report</field>
+        </record>
+
 
     <template id="report_product_view">
         <t t-set="data_report_margin_top" t-value="12"/>

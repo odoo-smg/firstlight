@@ -7,7 +7,7 @@
             <t t-set="data_report_dpi" t-value="90"/> <!-- this value is used on sandbox -->
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
-                    <t t-set="lang" t-value="doc.invoice_user_id.sudo().lang if doc.type in ('in_invoice', 'in_refund') else doc.partner_id.lang"/>
+                    <t t-set="lang" t-value="doc.invoice_user_id.sudo().lang if doc.move_type in ('in_invoice', 'in_refund') else doc.partner_id.lang"/>
                     <t t-call="flsp_customer_badge.flsp_customer_badge_invoice_report" t-lang="lang"/>
                 </t>
             </t>
@@ -30,7 +30,7 @@
                     </t>
                 </t>
 
-                <t t-esc="company.update_scss()"/>
+                <!--t t-esc="company.update_scss()"/-->
 
                 <div class="header" style="background-image: url('flsp_customer_badge/static/src/img/topbar.png'); background-repeat: no-repeat; background-size: 100%; background-position: center; border: none; position: absolute; top: 30px; right: 30px; left: 30px; height:120px; ">
                     <div style="border: none; border-collapse: collapse; font-family:Franklin Gothic Medium; font-size:14px; font-weight:normal; color:white; word-spacing:2px; text-align: right; vertical-align: middle; padding:20px 10px 0px 0px; " >
@@ -47,7 +47,7 @@
                     <t t-set="o" t-value="o.with_context(lang=lang)" />
                     <table style="border: none; height:45px; width: 100%; border-collapse: collapse;">
                         <tr>
-                            <t t-if="o.type == 'out_invoice' and o.state == 'posted'">
+                            <t t-if="o.move_type == 'out_invoice' and o.state == 'posted'">
                                 <td style="width:210px; vertical-align: middle; text-align: left;">
                                     <div>
                                         <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">INVOICE</span>
@@ -56,7 +56,7 @@
                                     </div>
                                 </td>
                             </t>
-                            <t t-if="o.type == 'out_invoice' and o.state == 'draft'">
+                            <t t-if="o.move_type == 'out_invoice' and o.state == 'draft'">
                                 <td style="width:210px; vertical-align: middle; text-align: left;">
                                     <div>
                                         <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Draft Invoice</span>
@@ -65,7 +65,7 @@
                                     </div>
                                 </td>
                             </t>
-                            <t t-if="o.type == 'out_invoice' and o.state == 'cancel'">
+                            <t t-if="o.move_type == 'out_invoice' and o.state == 'cancel'">
                                 <td style="width:210px; vertical-align: middle; text-align: left;">
                                     <div>
                                         <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Cancelled Invoice</span>
@@ -74,7 +74,7 @@
                                     </div>
                                 </td>
                             </t>
-                            <t t-if="o.type == 'out_refund'">
+                            <t t-if="o.move_type == 'out_refund'">
                                 <td style="width:210px; vertical-align: middle; text-align: left;">
                                     <div>
                                         <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Credit Note</span>
@@ -83,7 +83,7 @@
                                     </div>
                                 </td>
                             </t>
-                            <t t-if="o.type == 'in_refund'">
+                            <t t-if="o.move_type == 'in_refund'">
                                 <td style="width:210px; vertical-align: middle; text-align: left;">
                                     <div>
                                         <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Vendor Credit Note</span>
@@ -92,7 +92,7 @@
                                     </div>
                                 </td>
                             </t>
-                            <t t-if="o.type == 'in_invoice'">
+                            <t t-if="o.move_type == 'in_invoice'">
                                 <td style="width:210px; vertical-align: middle; text-align: left;">
                                     <div>
                                         <span style="font-size:38px; font-weight: bold; color:#001f54; font-family:Franklin Gothic Medium;">Vendor Bill</span>
@@ -306,7 +306,7 @@
                                                 <span t-esc="o.amount_untaxed+o.flsp_sale_discount+o.flsp_freight_discount" t-options='{"widget": "float", "decimal_precision": "2"}'/>
                                             </td>
                                         </tr>
-                                        <t t-if="o.flsp_cb_image and o.type != 'out_refund'" >
+                                        <t t-if="o.flsp_cb_image and o.move_type != 'out_refund'" >
                                             <tr class="border-black o_reward_discount">
                                                 <td name="td_reward_discount_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
                                                     <strong>Reward Disc.</strong>
@@ -326,7 +326,7 @@
                                                 </td>
                                             </tr>
                                         </t>
-                                        <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                        <!--t t-foreach="o.amount_by_group" t-as="amount_by_group">
                                             <tr>
                                                 <t t-if="len(o.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
                                                     <td>
@@ -351,7 +351,7 @@
                                                     </td>
                                                 </t>
                                             </tr>
-                                        </t>
+                                        </t-->
                                         <tr class="border-black o_total">
                                             <td name="td_amount_total_label" style="font-size: 16px; background-color: white; border: 2px solid #001f54; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; vertical-align: top; text-align:center; color: #001f54; font-family: Franklin Gothic Medium; font-style: normal; font-weight: bolder; text-align: right; ">
                                                 <strong>Total</strong>

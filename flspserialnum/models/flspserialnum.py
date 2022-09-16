@@ -18,7 +18,7 @@ class FlspSerialNum(models.Model):
     _check_company_auto = True
 
     product_id = fields.Many2one('product.product', 'Product', domain=lambda self: self._domain_product_id(), required=True, check_company=True)
-    company_id = fields.Many2one('res.company', 'Company',  stored=True, index=True,
+    company_id = fields.Many2one('res.company', 'Company',  store=True, index=True,
                                  default=lambda self: self.env['res.company'].browse(
                                      self.env['res.company']._company_default_get('flsp.serialnum'))
                                 )

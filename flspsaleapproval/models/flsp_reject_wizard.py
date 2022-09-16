@@ -40,9 +40,7 @@ class Saleflsprejectwizard(models.TransientModel):
         self.order_id.write({'flsp_approval_approved': False})
         self.order_id.write({'flsp_approval_requested': False})
 
-        self.order_id.message_post(
-            body='Order Rejected: ' + self.reject_reason,
-            subtype="mail.mt_note")
+        self.order_id.message_post(body='Order Rejected: ' + self.reject_reason)
         #self.order_id.message_post_with_view(
         #    'flspsaleapproval.flsp_salesapprv_rejected',
         #    subtype_id=self.env.ref('mail.mt_note').id)

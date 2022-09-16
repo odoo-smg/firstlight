@@ -29,8 +29,10 @@ class approveeconote(models.Model):
         #products = self.env['product.template'].search([('create_date', '<=', date.today() + relativedelta(days=-7)), '|', ('company_id', '=', False), ('company_id', '=', default_company_id)])
         products = self.env['product.template'].search(['|',('flsp_plm_valid', '=', False),('flsp_acc_valid','=',False)])
         total_prd = self.env['product.template'].search_count(['|',('flsp_plm_valid', '=', False),('flsp_acc_valid','=',False)])
-        rendered_body = template.render({'products': products, 'totalprd': total_prd}, engine='ir.qweb')
-        body = self.env['mail.thread']._replace_local_links(rendered_body)
+        #rendered_body = template.render({'products': products, 'totalprd': total_prd}, engine='ir.qweb')
+        rendered_body = template._render({'products': products, 'totalprd': total_prd}, engine='ir.qweb')
+        #body = self.env['mail.thread']._replace_local_links(rendered_body)
+        body = self.env['mail.render.mixin']._replace_local_links(rendered_body)
 
         if total_prd > 0:
             self.env['mail.mail'].create({

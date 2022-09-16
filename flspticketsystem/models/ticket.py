@@ -32,7 +32,7 @@ class Ticket(models.Model):
     detailed_description = fields.Text(string="Detailed Description", required=True,
         help='Please provide a detailed description.\n "A problem well-stated is half-solved" - Charles Kettering')
     status = fields.Selection([('open', 'Open'), ('inprogress', 'In Progress'), ('close', 'Closed')],
-        default='open', eval=True)
+        default='open')
 
     # Admin related fields
     responsible = fields.Many2one('res.users', ondelete='set null', string="Responsible", index=True,

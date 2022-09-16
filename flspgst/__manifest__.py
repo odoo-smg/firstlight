@@ -25,4 +25,5 @@
     'data': [
         'views/flsp_company_form.xml',
     ],
+    'license': 'Other proprietary',
 }

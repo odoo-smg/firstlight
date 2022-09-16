@@ -12,7 +12,7 @@ class SummarizedBomReport(models.Model):
 
     description = fields.Char(string='Description', readonly=True)
     default_code = fields.Char(string='Part #', readonly=True)
-    product_tmpl_id = fields.Many2one('product.template', string='Product', readonly=True)
+    product_tmpl_id = fields.Many2one('product.template', string='Product Template', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     bom_id = fields.Many2one(comodel_name="mrp.bom", string="BOM")
     product_qty = fields.Float(string='Qty required', readonly=True)

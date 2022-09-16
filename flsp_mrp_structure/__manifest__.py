@@ -12,12 +12,13 @@
     'website': "http://www.smartrendmfg.com",
     "category": "Manufacture",
     'version': '0.1',
-    'depends': ['base', 'mrp', 'sale', 'purchase', 'stock'],
+    'depends': [],
 
     # always loaded
     'data': [
-        'views/flsp_mrp_structure.xml',
-        'views/production_form_view.xml',
+        #'views/flsp_mrp_structure.xml',
+        #'views/production_form_view.xml',
     ],
-    'qweb': ['static/src/xml/flsp_mrp.xml'],
+    #'qweb': ['static/src/xml/flsp_mrp.xml'],
+    'license': 'Other proprietary',
 }

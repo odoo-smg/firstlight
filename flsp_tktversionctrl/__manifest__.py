@@ -23,4 +23,5 @@
         # 'security/ir.model.access.csv',
         'views/flsp_versionctrl.xml',
     ],
+    'license': 'Other proprietary',
 }

@@ -25,7 +25,7 @@ class FlspSerialMrpAlertWiz(models.TransientModel):
 
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     bom_id = fields.Many2one('mrp.bom', string='Bill of Material', readonly=True)
-    mo_id = fields.Many2one('mrp.production', string="MO", requiredreadonly=True)
+    mo_id = fields.Many2one('mrp.production', string="MO", required=True, readonly=True)
 
     def flsp_button_serial_mrp_two(self):
         action = self.env.ref('flsp_serial_mrp.launch_flsp_serial_mrp_wiz_two').read()[0]

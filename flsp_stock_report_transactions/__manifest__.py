@@ -21,6 +21,8 @@
     # always loaded
     'data': [
         'wizard/flsp_stock_report_transactions_wizard.xml',
-        #'reports/flsp_stock_report_transactions.xml',
+        'reports/flsp_stock_report_transactions.xml',
+        'security/ir.model.access.csv',
     ],
+    'license': 'Other proprietary',
 }

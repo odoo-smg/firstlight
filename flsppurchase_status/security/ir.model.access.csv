@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+flsppurchase_status.access_flsp_po_line_wiz,access_flsp_po_line_wiz,flsppurchase_status.model_flsp_po_line_wiz,base.group_user,1,1,1,1
+flsppurchase_status.access_flsp_approve_po_wiz,access_flsp_approve_po_wiz,flsppurchase_status.model_flsp_approve_po_wiz,base.group_user,1,1,1,1
+flsppurchase_status.access_flsp_reject_po_wiz,access_flsp_reject_po_wiz,flsppurchase_status.model_flsp_reject_po_wiz,base.group_user,1,1,1,1

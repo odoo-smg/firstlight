@@ -30,12 +30,22 @@
             </t>
         </template>
 
-        <record
+        <!--record
             string="2 x 1 label(ZPL)"
             id="flsp_serial_report_2x1"
             model="stock.production.lot"
             report_type="qweb-text"
             name="flspstock.flsp_serial_label_2x1_zpl"
-            file="flspstock.flsp_serial_label_2x1_zpl"/>
+            file="flspstock.flsp_serial_label_2x1_zpl"/-->
+
+        <record id="flsp_serial_report_2x1" model="ir.actions.report">
+            <field name="name">2 x 1 label(ZPL)</field>
+            <field name="model">stock.production.lot</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">flspstock.flsp_serial_label_2x1_zpl</field>
+            <field name="report_file">flspstock.flsp_serial_label_2x1_zpl</field>
+            <field name="binding_model_id" ref="model_stock_production_lot"/>
+            <field name="binding_type">report</field>
+        </record>
 </data>
 </odoo>

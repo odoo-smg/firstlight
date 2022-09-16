@@ -12,7 +12,7 @@
                             <field name="product_id"/>
                             <field name="product_min_qty"/>
                             <field name="qty_multiple"/>
-                            <field name="stock_qty"/>
+                            <field name="only_stock_qty"/>
                             <field name="reserved"/>
                             <field name="wip_qty"/>
                             <field name="reserved_wip"/>
@@ -79,7 +79,7 @@
                 <field name="product_tmpl_id" optional="show" />
                 <field name="default_code" optional="hide"/>
                 <field name="description" optional="hide"/>
-                <field name="stock_qty"/>
+                <field name="only_stock_qty"/>
                 <field name="reserved" optional="hide"/>
                 <field name="wip_qty"/>
                 <field name="reserved_wip" optional="hide"/>

@@ -5,6 +5,8 @@ class CompareBomXLS(models.AbstractModel):
     _name = 'report.flspcomparebom.bom_compare_xls'
     _inherit = 'report.report_xlsx.abstract'
 
+    _description = "BOM Comparison on Excel"
+
     def generate_xlsx_report(self, workbook, data, lines):
         sheet = workbook.add_worksheet("BOM Comparison")
         bold = workbook.add_format({'bold': True})

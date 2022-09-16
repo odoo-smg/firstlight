@@ -30,8 +30,10 @@ class newprodemail(models.Model):
         products = self.env['product.template'].search([('create_date', '>=', date.today() + relativedelta(days=-7))])
         total_prd = self.env['product.template'].search_count([('create_date', '>=', date.today() + relativedelta(days=-7))])
 
-        rendered_body = template.render({'products': products}, engine='ir.qweb')
-        body = self.env['mail.thread']._replace_local_links(rendered_body)
+        #rendered_body = template.render({'products': products}, engine='ir.qweb')
+        rendered_body = template._render({'products': products}, engine='ir.qweb')
+        #body = self.env['mail.thread']._replace_local_links(rendered_body)
+        body = self.env['mail.render.mixin']._replace_local_links(rendered_body)
 
         if total_prd > 0:
             self.env['mail.mail'].create({

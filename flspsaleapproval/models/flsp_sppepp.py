@@ -38,8 +38,10 @@ class flspsppeppmsg(models.TransientModel):
     partner_id = fields.Many2one('res.partner', string='Customer', readonly=True)
     amount_total = fields.Float(string='Category Total', readonly=True)
     total_required = fields.Float(string='Total Required', readonly=True)
-    flspsppepp_category_id = fields.Many2one('product.category', related='company_id.flspsppepp_category_id', readonly=True, default=lambda self: self.env.company.flspsppepp_category_id)
-    flsp_percent_sppepp = fields.Float(related='company_id.flsp_percent_sppepp', string="Percent of Deposit", readonly=True, default=lambda self: self.env.company.flsp_percent_sppepp)
+    #flspsppepp_category_id = fields.Many2one('product.category', related='company_id.flspsppepp_category_id', readonly=True, default=lambda self: self.env.company.flspsppepp_category_id)
+    flspsppepp_category_id = fields.Many2one('product.category', related='company_id.flspsppepp_category_id', readonly=True)
+    #flsp_percent_sppepp = fields.Float(related='company_id.flsp_percent_sppepp', string="Percent of Deposit", readonly=True, default=lambda self: self.env.company.flsp_percent_sppepp)
+    flsp_percent_sppepp = fields.Float(related='company_id.flsp_percent_sppepp', string="Percent of Deposit", readonly=True)
 
 
     def sppepp_approve(self):

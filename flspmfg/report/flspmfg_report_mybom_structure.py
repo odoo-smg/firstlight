@@ -44,24 +44,27 @@ class ReportMyBomStructure(models.AbstractModel):
         res['lines']['report_type'] = 'html'
         res['lines']['report_structure'] = 'all'
         res['lines']['has_attachments'] = res['lines']['attachments'] or any(component['attachments'] for component in res['lines']['components'])
-        res['lines'] = self.env.ref('mrp.report_mrp_bom').render({'data': res['lines']})
+        #res['lines'] = self.env.ref('mrp.report_mrp_bom').render({'data': res['lines']})
+        res['lines'] = self.env.ref('mrp.report_mrp_bom')._render({'data': res['lines']})
         return res
 
     @api.model
     def get_bom(self, bom_id=False, product_id=False, line_qty=False, line_id=False, level=False):
         lines = self._get_bom(bom_id=bom_id, product_id=product_id, line_qty=line_qty, line_id=line_id, level=level)
-        return self.env.ref('mrp.report_mrp_bom_line').render({'data': lines})
+        #return self.env.ref('mrp.report_mrp_bom_line').render({'data': lines})
+        return self.env.ref('mrp.report_mrp_bom_line')._render({'data': lines})
 
     @api.model
     def get_operations(self, bom_id=False, qty=0, level=0):
         bom = self.env['mrp.bom'].browse(bom_id)
-        lines = self._get_operation_line(bom.routing_id, float_round(qty / bom.product_qty, precision_rounding=1, rounding_method='UP'), level)
+        lines = [] #self._get_operation_line(bom.routing_id, float_round(qty / bom.product_qty, precision_rounding=1, rounding_method='UP'), level)
         values = {
             'bom_id': bom_id,
             'currency': self.env.company.currency_id,
             'operations': lines,
         }
-        return self.env.ref('mrp.report_mrp_operation_line').render({'data': values})
+        #return self.env.ref('mrp.report_mrp_operation_line').render({'data': values})
+        return self.env.ref('mrp.report_mrp_operation_line')._render({'data': values})
 
     @api.model
     def _get_report_data(self, bom_id, searchQty=0, searchVariant=False):
@@ -106,7 +109,7 @@ class ReportMyBomStructure(models.AbstractModel):
         else:
             product = bom.product_tmpl_id
             attachments = self.env['mrp.document'].search([('res_model', '=', 'product.template'), ('res_id', '=', product.id)])
-        operations = self._get_operation_line(bom.routing_id, float_round(bom_quantity / bom.product_qty, precision_rounding=1, rounding_method='UP'), 0)
+        operations = [] #self._get_operation_line(bom.routing_id, float_round(bom_quantity / bom.product_qty, precision_rounding=1, rounding_method='UP'), 0)
         company = bom.company_id or self.env.company
         lines = {
             'bom': bom,
@@ -115,7 +118,7 @@ class ReportMyBomStructure(models.AbstractModel):
             'currency': company.currency_id,
             'product': product,
             'code': bom and bom.display_name or '',
-            'price': product.uom_id._compute_price(product.with_context(force_company=company.id).standard_price, bom.product_uom_id) * bom_quantity,
+            'price': product.uom_id._compute_price(product.standard_price, bom.product_uom_id) * bom_quantity,
             'total': sum([op['total'] for op in operations]),
             'level': level or 0,
             'operations': operations,
@@ -137,7 +140,7 @@ class ReportMyBomStructure(models.AbstractModel):
             if line._skip_bom_line(product):
                 continue
             company = bom.company_id or self.env.company
-            price = line.product_id.uom_id._compute_price(line.product_id.with_context(force_company=company.id).standard_price, line.product_uom_id) * line_quantity
+            price = line.product_id.uom_id._compute_price(line.product_id.standard_price, line.product_uom_id) * line_quantity
             if line.child_bom_id:
                 factor = line.product_uom_id._compute_quantity(line_quantity, line.child_bom_id.product_uom_id) / line.child_bom_id.product_qty
                 sub_total = self._get_price(line.child_bom_id, factor, line.product_id)
@@ -168,31 +171,31 @@ class ReportMyBomStructure(models.AbstractModel):
     def _get_operation_line(self, routing, qty, level):
         operations = []
         total = 0.0
-        for operation in routing.operation_ids:
-            operation_cycle = float_round(qty / operation.workcenter_id.capacity, precision_rounding=1, rounding_method='UP')
-            duration_expected = operation_cycle * operation.time_cycle + operation.workcenter_id.time_stop + operation.workcenter_id.time_start
-            total = ((duration_expected / 60.0) * operation.workcenter_id.costs_hour)
-            operations.append({
-                'level': level or 0,
-                'operation': operation,
-                'name': operation.name + ' - ' + operation.workcenter_id.name,
-                'duration_expected': duration_expected,
-                'total': self.env.company.currency_id.round(total),
-            })
+        #for operation in routing.operation_ids:
+        #    operation_cycle = float_round(qty / operation.workcenter_id.capacity, precision_rounding=1, rounding_method='UP')
+        #    duration_expected = operation_cycle * operation.time_cycle + operation.workcenter_id.time_stop + operation.workcenter_id.time_start
+        #    total = ((duration_expected / 60.0) * operation.workcenter_id.costs_hour)
+        #    operations.append({
+        #        'level': level or 0,
+        #        'operation': operation,
+        #        'name': operation.name + ' - ' + operation.workcenter_id.name,
+        #        'duration_expected': duration_expected,
+        #        'total': self.env.company.currency_id.round(total),
+        #    })
         return operations
 
     def _get_price(self, bom, factor, product):
         price = 0
-        if bom.routing_id:
+        #if bom.routing_id:
             # routing are defined on a BoM and don't have a concept of quantity.
             # It means that the operation time are defined for the quantity on
             # the BoM (the user produces a batch of products). E.g the user
             # product a batch of 10 units with a 5 minutes operation, the time
             # will be the 5 for a quantity between 1-10, then doubled for
             # 11-20,...
-            operation_cycle = float_round(factor, precision_rounding=1, rounding_method='UP')
-            operations = self._get_operation_line(bom.routing_id, operation_cycle, 0)
-            price += sum([op['total'] for op in operations])
+            #operation_cycle = float_round(factor, precision_rounding=1, rounding_method='UP')
+        operations = [] #self._get_operation_line(bom.routing_id, operation_cycle, 0)
+         #   price += sum([op['total'] for op in operations])
 
         for line in bom.bom_line_ids:
             if line._skip_bom_line(product):

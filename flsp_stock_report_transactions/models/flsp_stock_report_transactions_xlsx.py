@@ -12,6 +12,7 @@ class FlspStockReportTransactionsXlsx(models.AbstractModel):
     _description = 'FLSP - Stock Transactions Excel'
 
     def generate_xlsx_report(self, workbook, data, objects):
+        print('excel rep')
         workbook.set_properties(
             {"comments": "Created with Python and XlsxWriter from Odoo 13.0"}
         )
@@ -20,6 +21,7 @@ class FlspStockReportTransactionsXlsx(models.AbstractModel):
         self.generate_stock_transaction_content(workbook, data)
 
     def generate_introduction(self, workbook, input_data):
+        print('excel rep')
         # create introduction sheet
         sheet = workbook.add_worksheet(_("Transaction Selections"))
         sheet.set_landscape()
@@ -54,8 +56,9 @@ class FlspStockReportTransactionsXlsx(models.AbstractModel):
         sheet.write(2, 3, lot)
 
     def generate_stock_transaction_content(self, workbook, input_data):
+        print('excel rep')
         # get content data at first
-        transactions = self.env['report.flsp_stock_report_transactions.transrep']._get_report_values(False, data=input_data)
+        transactions = self.env['report.flsp_stock_report_transactions.flsp_transrep']._get_report_values(False, data=input_data)
 
         # create sheet for content
         sheet = workbook.add_worksheet(_("Stock Transactions"))

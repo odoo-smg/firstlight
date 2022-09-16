@@ -23,4 +23,5 @@
         'wizard/flsp_wip_kanban_wiz.xml',
         'wizard/flsp_wip_kanban_transfer_wiz.xml',
     ],
+    'license': 'Other proprietary',
 }

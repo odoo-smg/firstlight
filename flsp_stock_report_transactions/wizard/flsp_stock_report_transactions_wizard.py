@@ -23,7 +23,8 @@ class FlspStockReportTransactionsWiz(models.TransientModel):
 
     def flsp_report(self):
         [data] = self.read()
-        return self.env.ref('flsp_stock_report_transactions.transrep').report_action(self, data=data)
+        return self.env.ref('flsp_stock_report_transactions.flsp_transrep_action').report_action(self, data=data)
+        #return self.env.ref('account_batch_payment.action_print_batch_payment').report_action(self, config=False)
 
 
         # self.ensure_one()
@@ -34,4 +35,5 @@ class FlspStockReportTransactionsWiz(models.TransientModel):
 
     def flsp_report_excel(self):
         [data] = self.read()
+        print('calling rep')
         return self.env.ref('flsp_stock_report_transactions.action_flsp_stock_transactions_xlsx').report_action(self, data=data)

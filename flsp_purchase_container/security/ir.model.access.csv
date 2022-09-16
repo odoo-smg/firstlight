@@ -3,3 +3,7 @@ flsp_container_manager,flsp.purchase.container.manager,model_flsp_purchase_conta
 flsp_container_user,flsp.purchase.container.user,model_flsp_purchase_container,flsp_container_user,1,1,1,0
 flsp_container_line_manager,flsp.purchase.container.line.manager,model_flsp_purchase_container_line,flsp_container_manager,1,1,1,1
 flsp_container_line_user,flsp.purchase.container.line.user,model_flsp_purchase_container_line,flsp_container_user,1,1,1,0
+flsp_purchase_container_po_line_wiz,flsp.purchase.container.po.line.wiz,model_flsp_purchase_container_po_line_wiz,flsp_container_user,1,1,1,0
+flsp_purchase_container_po_line_line_wiz,flsp.purchase.container.po.line.line.wiz,model_flsp_purchase_container_po_line_line_wiz,flsp_container_user,1,1,1,0
+flsp_purchase_container_po_wiz,flsp.purchase.container.po.wiz,model_flsp_purchase_container_po_wiz,flsp_container_user,1,1,1,0
+flsp_purchase_container_stock_picking_wiz,flsp.purchase.container.stock.picking.wiz,model_flsp_purchase_container_stock_picking_wiz,flsp_container_user,1,1,1,0

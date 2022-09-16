@@ -6,7 +6,7 @@ class Picking(models.Model):
     _check_company_auto = True
 
     flsp_container_id = fields.Many2one('flsp.purchase.container', 'Container', compute='_container')
-    flsp_show_validate = fields.Boolean('Show Validate', compute='_compute_flsp_show_validate', default=True)
+    flsp_show_validate = fields.Boolean('Show Validate picking', compute='_compute_flsp_show_validate', default=True)
 
     def _compute_flsp_show_validate(self):
         if self.flsp_container_id:

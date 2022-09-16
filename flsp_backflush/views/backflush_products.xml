@@ -7,7 +7,8 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//label[@for='sale_delay']" position="before">
-                    <field name="flsp_backflush" class="oe_inline" style="vertical-align:baseline"/>
+                    <field name="flsp_show_backflush" invisible="1"/>
+                    <field name="flsp_backflush" attrs="{'invisible': [('flsp_show_backflush', '=', False)]}" groups="mrp_plm.group_plm_manager"  class="oe_inline" style="vertical-align:baseline"/>
                 </xpath>
             </field>
         </record>

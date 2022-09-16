@@ -9,6 +9,8 @@ var QWeb = core.qweb;
 var _t = core._t;
 
 var FlspBomReport = stock_report_generic.extend({
+    xmlDependencies: ['/flsp_cost_scenario_structure/static/src/xml/flsp_cost_scenario_structure.xml'],
+    //template: "flsp_cost_scenario_structure.flsp_button",
     events: {
         'click .o_mrp_bom_unfoldable': '_onClickUnfold',
         'click .o_mrp_bom_foldable': '_onClickFold',

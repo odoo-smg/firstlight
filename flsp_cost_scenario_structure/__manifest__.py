@@ -28,4 +28,5 @@
         'views/flsp_bom_form_view.xml',
     ],
     'qweb': ['static/src/xml/flsp_cost_scenario_structure.xml'],
+    'license': 'Other proprietary',
 }

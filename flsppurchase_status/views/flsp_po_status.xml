@@ -3,7 +3,8 @@
     <record id="flsp_po_status_tree" model="ir.ui.view" >
         <field name="name">flsp.po.status.tree</field>
         <field name="model">purchase.order</field>
-        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <!--field name="inherit_id" ref="purchase.purchase_order_tree"/-->
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
         <field name="arch" type="xml">
             <!--Adding the po status on tree form-->
             <xpath expr="//field[@name='amount_total']" position="after">
@@ -35,8 +36,8 @@
     </record>
 
 
-    <record id="flsp_po_status_form" model="ir.ui.view" >
-        <field name="name">flsp.po.status.form</field>
+    <record id="flsp_approve_po_status_form" model="ir.ui.view" >
+        <field name="name">flsp.approve.po.status.form</field>
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
@@ -45,7 +46,7 @@
                 <button name="button_flsp_draft" type="object" string="Set to Draft" states="purchase"/>
                 <button name="button_flsp_approve" type="object" groups="flsppurchase_status.group_purchase_approve" string="Approve Order" class="btn-primary" states="to approve"/>
             </header>
-            <xpath expr="//group/field[@name='date_approve']" position="after">
+            <xpath expr="//group/field[@name='effective_date']" position="after">
                 <field name="flsp_scheduled_date" attrs="{'invisible': 1, 'readonly': [('flsp_po_status','in','received')]}"/> <!--[('state','!=','purchase')]-->
                 <field name="flsp_vendor_confirmation_date" attrs="{'invisible': [('state','!=','purchase')], 'readonly': [('flsp_po_status','in','received')]}"/>
                 <field name="flsp_po_status" widget="selection" invisible="1"/> <!--DOING THIS SO IT REFELECTS MY STATUS CHANGE IN THE TREE VIEW-->

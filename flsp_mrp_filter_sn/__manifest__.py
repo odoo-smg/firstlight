@@ -31,4 +31,5 @@
         # 'security/ir.model.access.csv',
         #'views/flsp_mrp_filter_sn.xml',
     ],
+    'license': 'Other proprietary',
 }

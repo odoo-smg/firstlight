@@ -61,12 +61,23 @@
             </t>
         </template>
 
-        <record
+        <!--record
             string="Imaging 2 x 3 label(ZPL)"
             id="flsp_stock_package_label_2x3"
             model="stock.quant.package"
             report_type="qweb-text"
             name="flspstock.flsp_stock_package_label_zpl_2x3"
-            file="flspstock.flsp_stock_package_label_zpl_2x3"/>
+            file="flspstock.flsp_stock_package_label_zpl_2x3"/-->
+
+        <record id="flsp_stock_package_label_2x3" model="ir.actions.report">
+            <field name="name">Imaging 2 x 3 label(ZPL)</field>
+            <field name="model">stock.quant.package</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">flspstock.flsp_stock_package_label_zpl_2x3</field>
+            <field name="report_file">flspstock.flsp_stock_package_label_zpl_2x3</field>
+            <field name="binding_model_id" ref="model_stock_quant_package"/>
+            <field name="binding_type">report</field>
+        </record>
+
 </data>
 </odoo>

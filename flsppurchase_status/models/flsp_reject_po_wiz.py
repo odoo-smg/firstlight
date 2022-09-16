@@ -36,9 +36,9 @@ class FlsprejectPowiz(models.TransientModel):
         self.order_id.write({'state': 'draft'})
         self.order_id.write({'flsp_po_status': 'request'})
 
-        self.order_id.message_post(
-            body='Order Rejected: ' + self.reject_reason,
-            subtype="mail.mt_note")
+        #self.order_id.message_post(body='Order Rejected: ' + self.reject_reason, subtype="mail.mt_note")
+        self.order_id.message_post(body='Order Rejected: ' + self.reject_reason)
+
         self.env['flspautoemails.bpmemails'].send_email(self, 'P00007')
 
         return {'type': 'ir.actions.act_window_close'}

@@ -45,7 +45,7 @@
                 </t>
             </t>
 
-            <t t-esc="company.update_scss()"/>
+            <!--t t-esc="company.update_scss()"/-->
 
 
             <div class="header" style="background-image: url('flsp_customer_badge/static/src/img/topbar.png'); background-repeat: no-repeat; background-size: 100%; background-position: center; border: none; position: absolute; top: 30px; right: 30px; left: 30px; height:120px; ">

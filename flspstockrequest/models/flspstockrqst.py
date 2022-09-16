@@ -23,13 +23,12 @@ class FlspStockRequest(models.Model):
                                'Transfers product from WH/STOCK to WH/PA/WIP**')
     name = fields.Char('Request Number', readonly=True, index=True, copy=False, default='New')
     date_order = fields.Datetime(string='Request Date', required=True, readonly=True, default=fields.Datetime.now)
-    request_by = fields.Many2one('res.users', string="Requested by", required=True, index=True, default=lambda self: self.env.user,
-                                 tracking=True)
+    request_by = fields.Many2one('res.users', string="Requested by", required=True, index=True, default=lambda self: self.env.user)
     material_handler = fields.Many2one('res.users', ondelete='set null', string="Material Handler", index=True)
     # domain=lambda self: [('groups_id', 'in', self.env.ref('flspticketsystem.group_flspticketsystem_manager').id)],
-    need_by = fields.Datetime(string='Need by', required=True, tracking=True)
+    need_by = fields.Datetime(string='Need by', required=True)
     order_line = fields.One2many('flspstock.request.line', 'order_id', string='Order Lines', copy=True, auto_join=True)
-    status = fields.Selection([('request', 'Request'), ('confirm', 'Confirmed'), ('done', 'Done')], default='request', eval=True, copy=False)
+    status = fields.Selection([('request', 'Request'), ('confirm', 'Confirmed'), ('done', 'Done')], default='request', copy=False)
     is_done = fields.Boolean(store=True, compute='request_complete')
     dest_location = fields.Many2one('stock.location', string="Destination Location")
     #if we want to change dest location we simply call self in button confirm as dest location

@@ -17,6 +17,6 @@ class FlspTktMsg(models.Model):
     _rec_name = "id"
 
     #id = fields.Integer()
-    start_date = fields.Date(string="Request date", default=fields.Date.today, required=True, tracking=True,
+    start_date = fields.Date(string="Request date", default=fields.Date.today, required=True,
         help='Request date is set to default on today\'s date')
-    assign_date = fields.Date(string="Assign Date", tracking=True)
+    assign_date = fields.Date(string="Assign Date")

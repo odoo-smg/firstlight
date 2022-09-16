@@ -16,9 +16,10 @@
 
     # always loaded
     'data': [
-        'views/flsp_mrp_batch.xml',
-        'views/flsp_mrp_production.xml',
+        #'views/flsp_mrp_batch.xml',
+        #'views/flsp_mrp_production.xml',
         #'views/flsp_mrp_produce.xml',
-        'views/flsp_report_mrporder.xml',
+        #'views/flsp_report_mrporder.xml',
     ],
+    'license': 'Other proprietary',
 }

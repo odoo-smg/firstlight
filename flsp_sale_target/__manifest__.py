@@ -29,4 +29,5 @@
         'views/flsp_category_target.xml',
         'views/partner_tags.xml',
     ],
+    'license': 'Other proprietary',
 }

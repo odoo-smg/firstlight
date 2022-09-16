@@ -6,14 +6,19 @@
         </template>
 
         <!-- QWEB Report use paperformat -->
-        <report
+        <record id="dynamic_label" model="ir.actions.report">
+            <field name="name">Dynamic Label</field>
+            <field name="model">flsp.dynamic.label.wizard</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">flsp_dynamic_label.report_label</field>
+        </record>
+        <!--report
             id="dynamic_label"
             model="flsp.dynamic.label.wizard"
             string="Dynamic Label"
             menu="False"
             report_type="qweb-text"
             name="flsp_dynamic_label.report_label"
-            />
-
+            /-->
     </data>
 </odoo>

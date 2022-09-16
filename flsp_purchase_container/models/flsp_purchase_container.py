@@ -24,8 +24,7 @@ class Container(models.Model):
         default=lambda self: self.env.user)
     comments = fields.Text(string="Comments")
     status = fields.Selection([('overseas', 'Overseas'), ('at_sea', 'At Sea'),
-                               ('in_canada', 'In Canada'), ('received', 'Received')],
-                                default='overseas', eval=True)
+                               ('in_canada', 'In Canada'), ('received', 'Received')], default='overseas')
     received_date = fields.Date(string="Received Date", readonly=True)
 
     attachment_ids = fields.Many2many('ir.attachment', string='Attachments',

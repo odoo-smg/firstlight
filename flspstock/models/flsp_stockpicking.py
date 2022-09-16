@@ -75,16 +75,16 @@ class flspstockpicking2(models.Model):
             if float_compare(qty_to_transfer, 0, precision_digits=precision_digits) <= 0:
                 raise UserError(_("Please update quantity in 'Done' or 'Reserved' with a number bigger than 0."))
 
-            if line.location_id and line.location_id.active and line.location_id.usage == 'internal':
+            #if line.location_id and line.location_id.active and line.location_id.usage == 'internal':
                 # only check available_qty_in_source_location when the location is 'Internal'
-                available_qty_in_source_location = self.env['stock.quant'].get_flsp_stock_quantity(line.product_id, line.location_id, line.lot_id, line.package_id)
-                if float_compare(available_qty_in_source_location, qty_to_transfer, precision_digits=precision_digits) == -1:
-                    raise UserError(
-                        _( """There is not enough quantity available in the Source Location.
-    %s pieces of %s are remaining in location %s, but you want to transfer %s pieces.
-    Please adjust your quantities or correct your stock with an inventory adjustment."""
-                        )
-                        % (available_qty_in_source_location, "[" + line.product_id.default_code + "] " + line.product_id.name, line.location_id.name, qty_to_transfer)
-                    )
+                #available_qty_in_source_location = self.env['stock.quant'].get_flsp_stock_quantity(line.product_id, line.location_id, line.lot_id, line.package_id)
+                #if float_compare(available_qty_in_source_location, qty_to_transfer, precision_digits=precision_digits) == -1:
+                #                    raise UserError(
+        #                        _( """There is not enough quantity available in the Source Location.
+    #%s pieces of %s are remaining in location %s, but you want to transfer %s pieces.
+    #Please adjust your quantities or correct your stock with an inventory adjustment."""
+                ##                        )
+                #        % (available_qty_in_source_location, "[" + line.product_id.default_code + "] " + line.product_id.name, line.location_id.name, qty_to_transfer)
+        #                    )
 
         return super(flspstockpicking2, self).button_validate()

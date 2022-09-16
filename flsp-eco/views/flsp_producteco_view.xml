@@ -7,13 +7,41 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="attributes">
-                  <attribute name="attrs">{"readonly": [["id","!=",False]]}</attribute>
+                    <!--attribute name="attrs">{"readonly": [["id","!=",False]]}</attribute-->
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='detailed_type']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='uom_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
+                </xpath>
+                <!--xpath expr="//field[@name='flsp_backflush']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
+                </xpath-->
+                <xpath expr="//field[@name='tracking']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
+                </xpath>
+                <!--xpath expr="//field[@name='attachment_ids']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
+                </xpath-->
                 <group name="group_general">
                     <field name="id" invisible="1"/>
                     <field name="flsp_eco_enforce" domain="[('product_tmpl_id', '=', id),('stage_id.flsp_allow_change', '=', True)]"/>
                     <field name="flsp_plm_valid" force_save="1" readonly="1" />
                 </group>
+                  <xpath expr="//sheet[1]/notebook[1]" position="after">
+                    <group name="studio_group_jVxHq">
+                      <group name="studio_group_3aEOj_left">
+                        <field filename="x_studio_specification_filename" name="x_studio_specification" string="Specification" attrs="{'readonly': [('flsp_plm_valid','=', True)]}"/>
+                        <field invisible="1" name="x_studio_specification_filename"/>
+                      </group>
+                      <group name="studio_group_3aEOj_right">
+                        <field filename="x_studio_drawing_filename" name="x_studio_drawing" string="Drawing" attrs="{'readonly': [('flsp_plm_valid','=', True)]}"/>
+                        <field invisible="1" name="x_studio_drawing_filename"/>
+                      </group>
+                    </group>
+                  </xpath>
             </field>
         </record>
 

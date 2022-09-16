@@ -20,18 +20,19 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mrp', 'stock', 'flsp-mrp'],
+    'depends': ['base', 'mrp', 'stock', 'flsppurchase'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'views/flsp_mrp_substitution_wiz.xml',
         'views/flsp_mrp_substitution_bom_line.xml',
-        'views/flsp_mrp_substitution_production.xml',
+        #'views/flsp_mrp_substitution_production.xml',
         #'views/flsp_mrp_substitution_tree_raw_mo.xml',
         'views/flsp_mrp_substitution_change_prod_qty_wiz.xml',
         'views/flsp_mrp_substitution_bom_component.xml',
         'views/flsp_mrp_substitution_product.xml',
         'wizard/flsp_mrp_substitution_bom_wiz.xml',
     ],
+    'license': 'Other proprietary',
 }

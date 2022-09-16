@@ -20,12 +20,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mrp', 'sale', 'stock', 'delivery'],
+    'depends': ['base', 'mrp', 'mrp_plm', 'sale', 'stock', 'delivery', 'flsp-product'],
 
     # always loaded
     'data': [
         'views/backflush_products.xml',
-        #'views/backflush_production.xml',
-        #'views/production.xml',
+        'views/flsp_settings.xml',
+        'views/backflush_production.xml',
     ],
+    'license': 'Other proprietary',
 }

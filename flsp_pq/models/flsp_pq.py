@@ -29,7 +29,7 @@ class Flsp_PQ(models.Model):
     """
     _inherit = 'purchase.order'
 
-    flsp_pq_check = fields.Boolean(string='PQ', help='Check box if its a PQ', default=False, track_visibility=True)
+    flsp_pq_check = fields.Boolean(string='PQ', help='Check box if its a PQ', default=False)
     flsp_pq_name = fields.Char(string='PQ Reference', index=True, copy=False, )
 
 

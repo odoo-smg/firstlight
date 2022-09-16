@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_flsp_stock_report_transactions_wizard,flsp_stock_report_transactions_wizard,model_flsp_stock_report_transactions_wizard,base.group_user,1,1,1,1
+
+

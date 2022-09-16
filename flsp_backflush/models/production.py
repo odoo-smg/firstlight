@@ -10,30 +10,21 @@ class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
     flsp_qty_backflushed = fields.Float(string="Qty Backflushed")
+    show_flsp_backflush = fields.Boolean(string="Show Backflush", related="product_id.flsp_show_backflush")
 
-    def open_produce_product(self):
-        self.ensure_one()
-        self.action_assign()
-        res = super(MrpProduction, self).open_produce_product()
-        #if self.product_id.tracking in ['none', 'lot']:
-            # needs the total quantity
-        raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
-        for move in raw_moves:
-            if move.flsp_backflush:
-                qtt_to_wip = move.product_uom_qty - move.reserved_availability
-                if qtt_to_wip > 0:
-                    self.create_wip_qty(move.product_id, qtt_to_wip)
-                    self.action_assign()
-#        else:
-#            # needs only qty to produce 1
-            #            raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
-            #for move in raw_moves:
-                    #                if move.flsp_backflush:
-                    #qtt_to_wip = move.product_uom_qty - move.reserved_availability
-                    #if qtt_to_wip > 0:
-                        #                        self.create_wip_qty(move.product_id, 1)
-                        #self.action_assign()
-        return res
+    # Deprecated on Odoo 15 * Button produce is gone
+    #def open_produce_product(self):
+    #    self.ensure_one()
+    #    self.action_assign()
+    #    res = super(MrpProduction, self).open_produce_product()
+    #    raw_moves = self.env['stock.move'].search([('raw_material_production_id', '=', self.id)])
+    #    for move in raw_moves:
+    #        if move.flsp_backflush:
+    #            qtt_to_wip = move.product_uom_qty - move.reserved_availability
+    #            if qtt_to_wip > 0:
+    #                self.create_wip_qty(move.product_id, qtt_to_wip)
+    #                self.action_assign()
+    #    return res
 
     def button_mark_done(self):
         self.ensure_one()
@@ -44,12 +35,13 @@ class MrpProduction(models.Model):
         res = super(MrpProduction, self).button_mark_done()
         return res
 
-    def post_inventory(self):
-        self.ensure_one()
-        self.action_assign()
-        self.backflush_partials_flsp()
-        res = super(MrpProduction, self).post_inventory()
-        return res
+    # Deprecated on Odoo 15 * Button Post Inventory is gone
+    #def post_inventory(self):
+    #    self.ensure_one()
+    #    self.action_assign()
+    #    self.backflush_partials_flsp()
+    #    res = super(MrpProduction, self).post_inventory()
+    #    return res
 
     def backflush_partials_flsp(self):
 
@@ -226,7 +218,9 @@ class MrpProduction(models.Model):
             if line.product_id and line.product_id.type == 'consu' and line.product_id.flsp_backflush:
                 continue
 
-            sub_bom = bom._bom_find(product=line.product_id)
+
+            #sub_bom = bom._bom_find(product=line.product_id)
+            sub_bom = bom._bom_find(line.product_id)[line.product_id]
             if sub_bom:
                 if not line.product_tmpl_id.flsp_backflush:
                     if totals.get(line.product_id):

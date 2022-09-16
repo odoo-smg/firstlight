@@ -16,7 +16,7 @@ class FlspTktOnhold(models.Model):
     other_notes = fields.Text(string='Other Notes')
     # OnHold fields
     status = fields.Selection(selection_add=[('onhold', 'On Hold')], ondelete={"onhold": "set default"})
-    reason = fields.Text(string='OnHold reason', tracking=True)
+    reason = fields.Text(string='OnHold reason')
     onhold_date = fields.Date(string="OnHold Date")
     onhold_user = fields.Many2one('res.users', ondelete='cascade', string="OnHold by")
 

@@ -38,6 +38,7 @@
         'views/flsp_eco_type_form_view.xml',
         'views/flsp_product_product_view.xml',
         'views/flsp_eco_view.xml',
+        'views/flsp_eco_bom.xml',
     ],
     'license': 'Other proprietary',
 

@@ -16,10 +16,11 @@
 
     # always loaded
     'data': [
-        'wizard/flsp_mrp_purchase_wizard.xml',
-        'reports/flsp_mrp_purchase_report.xml',
-        'security/ir.model.access.csv',
-        'views/flsp_mrp_purchase_line.xml',
-        'views/flsp_product_mrp_purchase.xml',
+        #'wizard/flsp_mrp_purchase_wizard.xml',
+        #'reports/flsp_mrp_purchase_report.xml',
+        #'security/ir.model.access.csv',
+        #'views/flsp_mrp_purchase_line.xml',
+        #'views/flsp_product_mrp_purchase.xml',
     ],
+    'license': 'Other proprietary',
 }

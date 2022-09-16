@@ -18,7 +18,6 @@ class FlspProductAutomation():
                         categ_id=categ_id,
                         uom_id=uom_id,
                         uom_po_id=uom_po_id,
-                        tracking=tracking,
                         standard_price=standard_price,
                         sale_line_warn=sale_line_warn,
                         purchase_line_warn=purchase_line_warn,

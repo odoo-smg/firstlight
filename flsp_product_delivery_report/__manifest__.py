@@ -26,4 +26,5 @@
         'wizard/delivery_report_wizard_view.xml',
 
     ],
+    'license': 'Other proprietary',
 }

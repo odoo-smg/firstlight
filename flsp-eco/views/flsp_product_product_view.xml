@@ -17,6 +17,9 @@
                         </div>
                     </button>
                 </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('flsp_plm_valid', '=', True)]}</attribute>
+                </xpath>
             </field>
         </record>
 </odoo>

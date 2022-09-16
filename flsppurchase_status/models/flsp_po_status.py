@@ -36,7 +36,7 @@ class Flsp_PO_Status(models.Model):
         ('received', 'Received'),
         ('to_approve', 'To Approve'),
         ('late', 'Late')],
-        string='FLSP Status', tracking=True, eval=True, store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
+        string='FLSP Status', store=True) #default='request',, eval=True, ('partial', 'Partially Received'),
 
     # Dates
     flsp_scheduled_date = fields.Datetime(string="FLSP Scheduled Date",
@@ -304,8 +304,8 @@ class Flsp_PO_Statusline(models.Model):
     _inherit = 'purchase.order.line'
     _check_company_auto = True
 
-    date_planned = fields.Datetime(string='Scheduled Date', index=True, tracking=True)
-    product_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True, tracking=True)
+    date_planned = fields.Datetime(string='Scheduled Date', index=True)
+    product_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True)
 
     def name_get(self):
         res = []

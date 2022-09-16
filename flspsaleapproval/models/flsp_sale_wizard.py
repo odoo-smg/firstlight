@@ -100,7 +100,7 @@ class FlspSOline(models.TransientModel):
 
     flsp_sale_line_product_id = fields.Many2one('flspsaleapproval.saleflspwizard')
     sale_order_line_id = fields.Many2one('sale.order.line', string='Sales Order Line')
-    order_id = fields.Many2one('sale.order', string='Order Reference', required=True, ondelete='cascade', index=True, copy=False)
+    order_id = fields.Many2one('sale.order', string='Order Reference', ondelete='cascade', index=True, copy=False)
 
     sequence = fields.Integer(string='Sequence', default=10)
     product_template_id = fields.Many2one('product.template', string='Product Template')

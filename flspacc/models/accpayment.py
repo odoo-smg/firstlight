@@ -15,7 +15,7 @@ class flsp_payment(models.Model):
 
     credit_card_payment = fields.Boolean(string='Credit Card Payment')
 
-    currency_so_id = fields.Many2one('res.currency', compute='_compute_currency', string="Currency")
+    currency_so_id = fields.Many2one('res.currency', compute='_compute_currency', string="Currency so")
 
     @api.depends('flsp_quote_id', 'credit_card_payment')
     def _compute_amount_required(self):

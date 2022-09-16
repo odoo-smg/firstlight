@@ -26,4 +26,5 @@
         'security/ir.model.access.csv',
         'views/flspstockrqst.xml',
     ],
+    'license': 'Other proprietary',
 }

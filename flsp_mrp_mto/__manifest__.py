@@ -18,4 +18,5 @@
     'data': [
         'views/flsp_mrp_mto.xml',
     ],
+    'license': 'Other proprietary',
 }

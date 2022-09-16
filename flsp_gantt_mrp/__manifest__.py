@@ -33,4 +33,5 @@
         "static/src/xml/gantt.xml",
     ],
 
+    'license': 'Other proprietary',
 }
