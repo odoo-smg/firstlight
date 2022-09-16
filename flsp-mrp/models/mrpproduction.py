@@ -40,7 +40,7 @@ class flspproduction(models.Model):
     flsp_required_mat_plan = fields.Boolean("Required Material", default=False)
     flsp_material_reserved = fields.Boolean("Material Reserved", default=False)
     #flsp_wip_transfer_ids = fields.One2many('stock.picking', inverse_name='flsp_mo_wip_id', string="Transfer Created: ")
-    flsp_wip_transfer_ids = fields.One2many('stock.picking', string="Transfer Created: ")
+    #flsp_wip_transfer_ids = fields.One2many('stock.picking', string="Transfer Created: ")
     flsp_wip_transfer_count = fields.Integer(string='WIP Count', compute="_compute_flsp_wip_transfer_count")
 
 
