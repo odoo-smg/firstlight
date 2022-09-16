@@ -43,7 +43,7 @@
         'views/flsp_customer_badge_sale_order_view.xml',
         'views/flsp_customer_badge_account_form.xml',
         'report/flsp_customer_badge_commercial_invoice.xml',
-        'report/flsp_customer_badge_sales_report.xml',
+        #'report/flsp_customer_badge_sales_report.xml',
         'report/flsp_customer_badge_invoice_report.xml',
         'report/flsp_customer_badge_invoice_with_payments.xml',
         'views/flsp_customer_badge_stock_picking_form.xml',
