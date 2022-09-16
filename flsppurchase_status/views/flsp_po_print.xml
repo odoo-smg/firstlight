@@ -44,7 +44,7 @@
                     </t>
                 </t>
 
-                <t t-esc="company.update_scss()"/>
+                <!--t t-esc="company.update_scss()"/-->
 
 <!--            TRYING TO MERGE-->
                 <div class="header">
@@ -435,7 +435,7 @@
                     </t>
                 </t>
 
-                <t t-esc="company.update_scss()"/>
+                <!--t t-esc="company.update_scss()"/-->
 
 <!--                TRYING TO MERGE-->
                 <div class="header">

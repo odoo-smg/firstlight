@@ -21,7 +21,7 @@
                         </t>
                     </t>
 
-                    <t t-esc="company.update_scss()"/>
+                    <!--t t-esc="company.update_scss()"/-->
                     <div class="header">
                         <div class="row">
                         <table style="background-image: url('flspsaleapproval/static/src/img/topbar_invoice.jpg'); height: 166px; width: 1116px; border-collapse: collapse">
