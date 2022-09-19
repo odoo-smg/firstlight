@@ -81,7 +81,8 @@ class FlspStockRequest(models.Model):
                          # 'partner_id': self.request_by.partner_id.id,
                          }
             stock_picking = self.env['stock.picking'].create(creat_val)
-            self.message_post(body='Created Stock Transfer: '+stock_picking.name, subtype="mail.mt_note")
+            #self.message_post(body='Created Stock Transfer: '+stock_picking.name, subtype="mail.mt_note")
+            self.message_post(body='Created Stock Transfer: '+stock_picking.name)
             # pick_lines = []
             for line in self.order_line:
                 # move_lines = \

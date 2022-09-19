@@ -42,6 +42,6 @@ class Saleflspcancelwizard(models.TransientModel):
         self.order_id.wiz_cancel_confirm()
 
         self.order_id.message_post(
-            body='Order Cancelled: ' + self.cancel_reason,
-            subtype="mail.mt_note")
+            body='Order Cancelled: ' + self.cancel_reason)
+            #subtype="mail.mt_note")
         return {'type': 'ir.actions.act_window_close'}

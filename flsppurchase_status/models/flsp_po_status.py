@@ -166,7 +166,8 @@ class Flsp_PO_Status(models.Model):
         res = super().write(values)
         log_msg = False
         if "flsp_vendor_confirmation_date" in values:
-            self.message_post(body='Vendor Confirmed on: ' + str(self.flsp_vendor_confirmation_date), subtype="mail.mt_note")
+            #self.message_post(body='Vendor Confirmed on: ' + str(self.flsp_vendor_confirmation_date), subtype="mail.mt_note")
+            self.message_post(body='Vendor Confirmed on: ' + str(self.flsp_vendor_confirmation_date))
         elif "order_line" in values:
             self.change_stock_scheduled_date()
 
@@ -183,7 +184,8 @@ class Flsp_PO_Status(models.Model):
                     if "date_planned" in line[2]:
                         log_msg = True
             if log_msg or "date_planned" in values['order_line']:
-                self.message_post(body=msg_body, subtype="mail.mt_note")
+                #self.message_post(body=msg_body, subtype="mail.mt_note")
+                self.message_post(body=msg_body)
         return res
 
 

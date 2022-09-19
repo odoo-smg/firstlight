@@ -83,8 +83,8 @@ class FlspMrpSubstitutionWiz(models.TransientModel):
             self.mo_id.flsp_substituted = True
             self.mo_id.message_post(body='-->> Product Substitution: <br/>'
                                     + ' The product ['+stock_move.product_id.default_code+'] '+ stock_move.product_id.name + '<br/>'
-                                    + ' was substituted by ['+self.substitute_id.default_code+'] '+ self.substitute_id.name
-                                    , subtype="mail.mt_note")
+                                    + ' was substituted by ['+self.substitute_id.default_code+'] '+ self.substitute_id.name)
+            #                        , subtype="mail.mt_note")
             stock_move.state = 'draft'
             stock_move.unlink()
 
