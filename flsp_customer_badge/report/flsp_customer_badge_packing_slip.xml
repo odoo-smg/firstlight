@@ -16,11 +16,11 @@
     </template>
 
     <template id="flsp_customer_badge_packing_slip">
-        <t t-call="web.basic_layout">
+        <!--t t-call="web.basic_layout">
             <t t-if="not o" t-set="o" t-value="doc"/>
 
             <t t-if="not company">
-                <!-- Multicompany -->
+
                 <t t-if="company_id">
                     <t t-set="company" t-value="company_id"/>
                 </t>
@@ -31,10 +31,6 @@
                     <t t-set="company" t-value="res_company"/>
                 </t>
             </t>
-
-            <!--t t-esc="company.update_scss()"/-->
-
-
 
                 <div class="header" style="background-image: url('flsp_customer_badge/static/src/img/topbar.png'); background-repeat: no-repeat; background-size: 100%; background-position: center; border: none; position: absolute; top: 30px; right: 30px; left: 30px; height:120px; ">
                     <div style="border: none; border-collapse: collapse; font-family:Franklin Gothic Medium; font-size:14px; font-weight:normal; color:white; word-spacing:2px; text-align: right; vertical-align: middle; padding:20px 10px 0px 0px; " >
@@ -290,7 +286,7 @@
                     </div>
                 </div>
             </div>
-         </t>
+         </t-->
     </template>
 
 </odoo>

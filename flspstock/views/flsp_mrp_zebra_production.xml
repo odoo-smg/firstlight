@@ -5,7 +5,7 @@
             <t t-foreach="docs" t-as="production">
                 <t t-foreach="production.move_finished_ids" t-as="move">
                     <t t-foreach="move.move_line_ids" t-as="move_line">
-                        <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit'">
+                        <t t-if="move_line.product_uom_id.category_id.name == 'unit'">
                             <t t-set="qty" t-value="int(move_line.qty_done)"/>
                         </t>
                         <t t-else="">
