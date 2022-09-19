@@ -11,7 +11,7 @@
     'author': "Alexandre Sousa",
     'website': "http://www.smartrendmfg.com",
     "category": "Manufacture",
-    'version': '0.1',
+    'version': '15.1',
     'depends': [],
 
     # always loaded
@@ -25,6 +25,6 @@
             '/flsp_mrp_structure/static/src/scss/flsp_mrp_structure.scss',
         ],
     },
-    #'qweb': ['static/src/xml/flsp_mrp.xml'],
+    'qweb': ['static/src/xml/flsp_mrp.xml'],
     'license': 'Other proprietary',
 }
