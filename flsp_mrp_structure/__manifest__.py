@@ -19,6 +19,12 @@
         #'views/flsp_mrp_structure.xml',
         #'views/production_form_view.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            '/flsp_mrp_structure/static/src/js/report_flsp_structure.js',
+            '/flsp_mrp_structure/static/src/scss/flsp_mrp_structure.scss',
+        ],
+    },
     #'qweb': ['static/src/xml/flsp_mrp.xml'],
     'license': 'Other proprietary',
 }
