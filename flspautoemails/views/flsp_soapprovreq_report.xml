@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="flsp_rep_soapprovreq_action">
+    <template id="flsp_rep_soapprovreq_new">
         <t t-set="data_report_margin_top" t-value="30"/>
         <t t-set="data_report_header_spacing" t-value="20"/>
         <t t-set="data_report_dpi" t-value="110"/>
@@ -21,12 +21,12 @@
             report_type="qweb-pdf"
             groups="account.group_account_manager"
             print_report_name="'Approval Request'" /-->
-    <record id="flsp_rep_soapprovreq" model="ir.actions.report">
+    <record id="flsp_rep_soapprovreq_action" model="ir.actions.report">
         <field name="name">Approval Request</field>
-        <field name="model">report.flspautoemails.flsp_rep_soapprovreq</field>
+        <field name="model">report.flspautoemails.flsp_rep_soapprovreq_new</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">flspautoemails.flsp_rep_soapprovreq</field>
-        <field name="report_file">flspautoemails.flsp_rep_soapprovreq</field>
+        <field name="report_name">flspautoemails.flsp_rep_soapprovreq_new</field>
+        <field name="report_file">flspautoemails.flsp_rep_soapprovreq_new</field>
         <field name="print_report_name">'Approval Request'</field>
     </record>
 

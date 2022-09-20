@@ -116,4 +116,4 @@ class flspdailysalesorder(models.Model):
             if len(sale_orders) == 0:
                 sale_orders = [0]
 
-        return self.env.ref('flspautoemails.flsp_rep_soapprovreq').report_action(sale_orders)
+        return self.env.ref('flspautoemails.flsp_rep_soapprovreq_action').report_action(sale_orders)
