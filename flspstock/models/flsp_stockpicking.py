@@ -56,6 +56,9 @@ class flspstockpicking2(models.Model):
             }
         }
 
+    #######################################################################
+    # Ticket #892 Redmine issue #774 - By Alexandre Sousa on 2022-09-22
+    #######################################################################
     # def button_validate(self):
     #     """
     #         Purpose:    Check qty before validation
