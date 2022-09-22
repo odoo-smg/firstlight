@@ -254,6 +254,9 @@
                                             <t t-else="">
                                                 <spam t-field="o.currency_id.name"/><spam t-field="o.currency_id.symbol"> </spam> <span t-field="line.price_subtotal" t-options='{"widget": "float", "decimal_precision": "2"}' ></span>
                                                 <span t-field="line.price_total" t-options='{"widget": "float", "decimal_precision": "2"}' groups="account.group_show_line_subtotals_tax_included"/>
+                                                <!-- Ticket #894 Redmine Issue #777 - Commercial invoice not accounting for all product on total -->
+                                                <t t-set="print_sub" t-value="True" />
+                                                <t t-set="my_current_subtotal" t-value="my_current_subtotal + line.price_total" />
                                             </t>
                                         </td>
                                     </t>
