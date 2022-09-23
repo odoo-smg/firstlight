@@ -23,16 +23,16 @@ class FlspCostDetProductTmpl(models.Model):
         prd_id = False
         reg = 0
         total_reg = 0
-        for each in cost_det_list:
-            prd_id = each.product_id
-            reg = reg + 1
-        if prd_id:
-            query = "select count(*) as total from flsp_cost_detail_view where product_id = '" + str(prd_id.id) + "'"
-            self._cr.execute(query)
-            retvalue = self._cr.fetchall()
-            if retvalue:
-                total_reg = retvalue[0][0]
-
+        #for each in cost_det_list:
+        #    if not prd_id:
+        #        prd_id = each.product_id
+        #    reg = reg + 1
+        #if prd_id:
+        query = "select count(*) as total from flsp_cost_detail_view where product_tmpl_id = '" + str(self.id) + "'"
+        self._cr.execute(query)
+        retvalue = self._cr.fetchall()
+        if retvalue:
+            total_reg = reg = retvalue[0][0]
         product = False
         reg = 1
         last_balance = False
@@ -72,16 +72,66 @@ class FlspCostDetProductTmpl(models.Model):
 #                        current_cost = abs(line.value) / abs(line.product_qty)
 #                else:
 
-            cost_detail_move = self.env['flsp.cost.detail'].search([('stock_move_line_id', '=', line.stock_move_line_id.id)])
-            cost_detail_value = self.env['flsp.cost.detail'].search([('stock_valuation_layer_id', '=', line.stock_valuation_layer_id.id)])
-            if line.stock_move_line_id and cost_detail_move:
-                cost_detail_move.balance = current_balance
-                cost_detail_move.cost = current_cost
-                cost_detail_move.seq = reg
-            elif line.stock_valuation_layer_id and cost_detail_value:
-                cost_detail_value.balance = current_balance
-                cost_detail_value.cost = current_cost
-                cost_detail_value.seq = reg
+            cost_detail_value = False
+            cost_detail_move = False
+            if line.stock_valuation_layer_id:
+                cost_detail_value = self.env['flsp.cost.detail'].search([('stock_valuation_layer_id', '=', line.stock_valuation_layer_id.id)])
+                if cost_detail_value:
+                    cost_detail_value.balance = current_balance
+                    cost_detail_value.cost = current_cost
+                    cost_detail_value.seq = reg
+                else:
+                    self.env['flsp.cost.detail'].create({
+                        'picking_type_id': line.picking_type_id.id,
+                        'date': line.date,
+                        'location_id': line.location_id.id,
+                        'location_dest_id': line.location_dest_id.id,
+                        'reference': line.reference,
+                        'origin': line.origin,
+                        'qty_done': line.qty_done,
+                        'price_unit': line.price_unit,
+                        'product_qty': line.product_qty,
+                        'value': line.value,
+                        'unit_cost': line.unit_cost,
+                        'product_id': line.product_id.id,
+                        'product_tmpl_id': line.product_tmpl_id.id,
+                        'balance': current_balance,
+                        'cost': current_cost,
+                        'seq': reg,
+                        'stock_move_line_id': line.stock_move_line_id.id,
+                        'stock_valuation_layer_id': line.stock_valuation_layer_id.id,
+                    })
+            elif line.stock_move_line_id:
+                cost_detail_move = self.env['flsp.cost.detail'].search([('stock_move_line_id', '=', line.stock_move_line_id.id)])
+                if cost_detail_move:
+                    cost_detail_move.balance = current_balance
+                    cost_detail_move.cost = current_cost
+                    cost_detail_move.seq = reg
+                else:
+                    self.env['flsp.cost.detail'].create({
+                        'picking_type_id': line.picking_type_id.id,
+                        'date': line.date,
+                        'location_id': line.location_id.id,
+                        'location_dest_id': line.location_dest_id.id,
+                        'reference': line.reference,
+                        'origin': line.origin,
+                        'qty_done': line.qty_done,
+                        'price_unit': line.price_unit,
+                        'product_qty': line.product_qty,
+                        'value': line.value,
+                        'unit_cost': line.unit_cost,
+                        'product_id': line.product_id.id,
+                        'product_tmpl_id': line.product_tmpl_id.id,
+                        'balance': current_balance,
+                        'cost': current_cost,
+                        'seq': reg,
+                        'stock_move_line_id': line.stock_move_line_id.id,
+                        'stock_valuation_layer_id': line.stock_valuation_layer_id.id,
+                    })
+            #elif line.stock_valuation_layer_id and cost_detail_value:
+            #    cost_detail_value.balance = current_balance
+            #    cost_detail_value.cost = current_cost
+            #    cost_detail_value.seq = reg
             else:
                 self.env['flsp.cost.detail'].create({
                     'picking_type_id': line.picking_type_id.id,
