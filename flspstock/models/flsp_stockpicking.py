@@ -56,24 +56,27 @@ class flspstockpicking2(models.Model):
             }
         }
 
-    def button_validate(self):
-        """
-            Purpose:    Check qty before validation
-            Note:       Original method is defined in addons\stock\models\stock_picking.py
-        """
-        self.ensure_one()
-        if not self.move_lines and not self.move_line_ids:
-            raise UserError(_('Please add some items to move.'))
+    #######################################################################
+    # Ticket #892 Redmine issue #774 - By Alexandre Sousa on 2022-09-22
+    #######################################################################
+#    def button_validate(self):
+#        """
+#            Purpose:    Check qty before validation
+#            Note:       Original method is defined in addons\stock\models\stock_picking.py
+#        """
+#        self.ensure_one()
+#        if not self.move_lines and not self.move_line_ids:
+#            raise UserError(_('Please add some items to move.'))
 
         # Check qty required with available_qty_in_source_location
-        for line in self.move_line_ids:
-            qty_to_transfer = line.qty_done
-            if not qty_to_transfer:
-                qty_to_transfer = line.product_uom_qty
+#        for line in self.move_line_ids:
+#            qty_to_transfer = line.qty_done
+#            if not qty_to_transfer:
+#                qty_to_transfer = line.product_uom_qty
 
-            precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
-            if float_compare(qty_to_transfer, 0, precision_digits=precision_digits) <= 0:
-                raise UserError(_("Please update quantity in 'Done' or 'Reserved' with a number bigger than 0."))
+#            precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+#            if float_compare(qty_to_transfer, 0, precision_digits=precision_digits) <= 0:
+#                raise UserError(_("Please update quantity in 'Done' or 'Reserved' with a number bigger than 0."))
 
             #if line.location_id and line.location_id.active and line.location_id.usage == 'internal':
                 # only check available_qty_in_source_location when the location is 'Internal'
@@ -87,4 +90,4 @@ class flspstockpicking2(models.Model):
                 #        % (available_qty_in_source_location, "[" + line.product_id.default_code + "] " + line.product_id.name, line.location_id.name, qty_to_transfer)
         #                    )
 
-        return super(flspstockpicking2, self).button_validate()
+#        return super(flspstockpicking2, self).button_validate()
