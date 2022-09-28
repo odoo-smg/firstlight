@@ -23,7 +23,7 @@
     'version': '1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'purchase', 'sale', 'sale_management', 'flsp-base'],
+    'depends': ['base', 'purchase', 'sale', 'sale_management', 'flsp-base', 'purchase_requisition'],
 
     # always loaded
     'data': [
@@ -36,5 +36,7 @@
         'views/flspterms.xml',
         'views/flspterms_vendor.xml',
         'views/flsp_stock_move.xml',
+        'report/flsppurchase_blanket_report.xml',
+        'report/flsppurchase_purchase_report.xml',
     ],
 }
