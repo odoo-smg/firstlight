@@ -14,7 +14,7 @@ class flspmrpbom(models.Model):
 
     @api.onchange('flsp_eco_enforce')
     def flsp_eco_enforce_onchange(self):
-        self.flsp_plm_valid = False
+        self.flsp_bom_plm_valid = False
         return {
             'value': {
                 'flsp_bom_plm_valid': False

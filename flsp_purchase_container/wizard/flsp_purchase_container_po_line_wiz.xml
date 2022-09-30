@@ -37,6 +37,8 @@
                                 <field name="qty_received" force_save="1" attrs="{'readonly': [(True)]}" />
                                 <field name="qty_other_container" force_save="1" attrs="{'readonly': [(True)]}"/>
                                 <field name="qty_container" force_save="1"/>
+                                <field name="purchase_order_line_id" invisible="1" force_save="1"/>
+                                <field name="name" invisible="1" force_save="1"/>
                                 <field name="date_planned" widget="date" force_save="1" attrs="{'readonly': [(True)]}" />
                             </tree>
                         </field>
